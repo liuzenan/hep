@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteBase /CmpOnline
+RewriteCond $1 !^(index\.php|images|javascript|stylesheets|uploads|robots\.txt)
+RewriteRule ^(.*)$ /index.php/$1 [L]
