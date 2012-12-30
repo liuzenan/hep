@@ -3,10 +3,16 @@
 class Login extends CI_Controller{
 
 	public function index(){
-		$data['active'] = 1;
-
 		if(!$this->session->userdata('user_id')){
-			$this->fitbitphp->initSession("http://54.251.40.149/fitbit/index.php/login");
+			$this->fitbitphp->initSession(base_url() . "login/callBack");
+			$this->callBack();
+		}else{
+			redirect(base_url() . "home");
+		}
+	}
+
+	public function callBack(){
+			$this->fitbitphp->initSession(base_url() . "login/callBack");
 			$xml = $this->fitbitphp->getProfile();
 			$username =(string) $xml->user->displayName;
 			$fitbit_id =(string) $xml->user->encodedId;
@@ -14,7 +20,6 @@ class Login extends CI_Controller{
 			$oauth_secret = $this->fitbitphp->getOAuthSecret();
 			$profile_pic =(string) $xml->user->avatar;
 			$gender =(string) $xml->user->gender;
-
 			$query = $this->db->query("SELECT fitbit_id FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
 			//check if user is in database
 			$user_exist = true;
@@ -26,9 +31,8 @@ class Login extends CI_Controller{
 				$this->db->query($sql);
 				$user_exist = false;
 			}
-
 			//set session data
-			$query = $this->db->query("SELECT id FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
+			$query = $this->db->query("SELECT id, email FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
 			if($query->num_rows()>0){
 				$row = $query->row();
 				$userdata = array(
@@ -39,120 +43,52 @@ class Login extends CI_Controller{
 								'username' => $username,
 								'avatar' => $profile_pic
 							);		
-				$this->session->set_userdata($userdata);
+			$this->session->set_userdata($userdata);
 
-				//get user tracker data from fitbit, this might be slow... need to optimize later
-				if(!$user_exist){
-					//$this->getActivites();
-					//$this->getSleep();
-					//$this->setFeeds();
-					//$this->initPosts();
-					//$this->addSubscription();
+			if($user_exist){
+				//update user authen token and secret
+				$authData=array(
+					'oauth_token'=>$oauth_token,
+					'oauth_secret'=>$oauth_secret
+				);
+
+				$this->db->where('id',$this->session->userdata('user_id'));
+				$this->db->update('user', $authData);
+
+				//check if email is in database
+				if($row->email==NULL){
+					redirect(base_url() . "signup");
+				}else{
+					redirect(base_url() . "home");
 				}
-				//redirect(base_url() . "index.php/home");
 			}else{
-				echo "something was wrong";
-			}			
-		}else{
-			//redirect(base_url() . "index.php/home");
+				$this->load->view("loading");
+			}
+
 		}
 
 	}
 
-	private function getActivites(){
-		/**
-		*
-		*	'tracker_caloriesOut', 'tracker_steps', 'tracker_distance', 'tracker_floors', 'tracker_elevation'
-     	*   'tracker_activeScore', 'tracker_activityCalories', 'tracker_minutesSedentary', 'tracker_minutesLightlyActive'
-		*	'tracker_minutesVeryActive', "tracker_minutesFairlyActive"
-		*
-		*/
-		if($this->session->userdata('oauth_token')&&$this->session->userdata('oauth_secret')){
-			$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
-			$basedate = 'today';
-			$period = 'max';
-
-			$tracker_caloriesOut = $this->fitbitphp->getTimeSeries('tracker_caloriesOut', $basedate, $period);
-			$tracker_steps = $this->fitbitphp->getTimeSeries('tracker_steps', $basedate, $period);
-			$tracker_distance = $this->fitbitphp->getTimeSeries('tracker_distance', $basedate, $period);
-			$tracker_floors = $this->fitbitphp->getTimeSeries('tracker_floors', $basedate, $period);
-			$tracker_elevation = $this->fitbitphp->getTimeSeries('tracker_elevation', $basedate, $period);
-			$tracker_activeScore = $this->fitbitphp->getTimeSeries('tracker_activeScore', $basedate, $period);
-			$tracker_activityCalories = $this->fitbitphp->getTimeSeries('tracker_activityCalories', $basedate, $period);
-			$tracker_minutesSedentary = $this->fitbitphp->getTimeSeries('tracker_minutesSedentary', $basedate, $period);
-			$tracker_minutesLightlyActive = $this->fitbitphp->getTimeSeries('tracker_minutesLightlyActive', $basedate, $period);
-			$tracker_minutesFairlyActive = $this->fitbitphp->getTimeSeries('tracker_minutesFairlyActive', $basedate, $period);
-			$tracker_minutesVeryActive = $this->fitbitphp->getTimeSeries('tracker_minutesVeryActive', $basedate, $period);		
-
-			$activitiesData = array();
-
-			foreach($tracker_caloriesOut as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_caloriesOut'] = $value->value;
-			}
-
-			foreach($tracker_steps as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_steps'] = $value->value;				
-			}
-
-			foreach($tracker_distance as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_distance'] = $value->value;				
-			}
-
-			foreach($tracker_floors as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_floors'] = $value->value;				
-			}
-
-			foreach($tracker_elevation as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_elevation'] = $value->value;				
-			}
-
-			foreach($tracker_activeScore as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_activeScore'] = $value->value;				
-			}
-
-			foreach($tracker_activityCalories as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_activityCalories'] = $value->value;				
-			}
-
-			foreach($tracker_minutesSedentary as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_minutesSedentary'] = $value->value;				
-			}
-
-			foreach($tracker_minutesLightlyActive as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_minutesLightlyActive'] = $value->value;				
-			}
-
-			foreach($tracker_minutesFairlyActive as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_minutesFairlyActive'] = $value->value;				
-			}
-
-			foreach($tracker_minutesVeryActive as $value){
-				$currentDate = $value->dateTime;
-				$activitiesData[$currentDate]['tracker_minutesVeryActive'] = $value->value;				
-			}
-
-			//insert into database
-			foreach($activitiesData as $key=>$value){
-				$sql = "INSERT INTO Activity(user_id, date, steps, floors, calories, active_score, distance, elevation, min_sedentary, min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
-						VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['tracker_steps'] . ", " . $value['tracker_floors'] . ", " . $value['tracker_caloriesOut'] . ", " . $value['tracker_activeScore'] . ", " . $value['tracker_distance'] . ", " . $value['tracker_elevation'] . ", " . $value['tracker_minutesSedentary'] . ", " . $value['tracker_minutesLightlyActive'] . ", " . $value['tracker_minutesFairlyActive'] . ", " . $value['tracker_minutesVeryActive'] . ", " . $value['tracker_activityCalories'] . ")";	
-				$this->db->query($sql);	
-			}
-
-
-		}else{
-			echo 'something was wrong';
+	public function firstRun(){
+		//get user tracker data from fitbit, this might be slow... need to optimize later
+		try{
+			$this->getActivites();
+			$this->getSleep();
+			$this->setFeeds();
+			$this->initPosts();
+			$this->addSubscription();	
+			$msg['success'] = true;
+		} catch (Exception $E){
+			$msg['success'] = false;
 		}
 
+		echo json_encode($msg);
+	}
+
+	private function getActivites(){
+		$user_id = $this->session->userdata('user_id');
+		$this->load->model('Activities_model','activities');
+		$this->activities->sync_activity('today', '2012-12-01', $user_id);
 	}
 
 	private function getSleep(){
@@ -167,7 +103,7 @@ class Login extends CI_Controller{
 		if($this->session->userdata('oauth_token')&&$this->session->userdata('oauth_secret')){
 			$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
 			$basedate = 'today';
-			$period = 'max';
+			$period = '2012-12-01';
 
 			$startTime = $this->fitbitphp->getTimeSeries('startTime', $basedate, $period);
 			$timeInBed = $this->fitbitphp->getTimeSeries('timeInBed', $basedate, $period);
@@ -267,9 +203,9 @@ class Login extends CI_Controller{
 
 			foreach($stepsData as $value){
 				if($value['steps']>=0){
-					$timeStr = $value['date'] . ' 23:59:00';
+					$timeStr = $value['date'] . ' 23:59:59';
 					$sql = "INSERT INTO Post(user_id, type, time, description)
-							VALUES (" . $user_id . ", 'activity', '". $timeStr . "', 'took " . $value['steps'] . " steps and he burned " . $value['calories'] . " calories.')";
+							VALUES (" . $user_id . ", 0, '". $timeStr . "', 'took " . $value['steps'] . " steps and he burned " . $value['calories'] . " calories.')";
 					$this->db->query($sql);
 				}else{
 					echo "something was wrong";
@@ -279,8 +215,14 @@ class Login extends CI_Controller{
 	}
 
 	private function addSubscription(){
-		$user_id = $this->session->userdata('user_id');
-		$this->fitbitphp->addSubscription($user_id);
 
+		try {
+			$user_id =(string) $this->session->userdata('user_id');
+			$activity_id = $user_id . "-activities";
+			$sleep_id = $user_id . "-sleep";
+			$this->fitbitphp->addSubscription($activity_id, "/activities", "activities");
+			$this->fitbitphp->addSubscription($sleep_id, "/sleep", "sleep");
+		} catch (Exception $e) {
+		}
 	}
 }

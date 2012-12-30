@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/fitbit/';
+$config['base_url']	= 'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/';
 
 /*
 |--------------------------------------------------------------------------

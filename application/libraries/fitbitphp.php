@@ -397,6 +397,29 @@ class FitBitPHP
     }
 
 
+    //get activities goals
+
+    public function getActivityDailyGoals(){
+        $headers = $this->getHeaders();
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "user/-/activities/goals/daily.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $E) {
+        }
+
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            if ($xml)
+                return $xml;
+            else
+                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        } else {
+            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
     /**
      * Get user recent activities
      *
@@ -1695,6 +1718,36 @@ class FitBitPHP
 
 
     /**
+    *    get intraday timeseries
+    *
+    *   calories, floors, steps, elevation
+    *   
+    *
+    *
+    */
+
+    public function getIntradayTimeSeries($type, $date){
+        $headers = $this->getHeaders();
+        try {
+            $this->oauth->fetch($this->baseApiUrl . "user/-/activities/". $type ."/date/". $date ."/1d.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+        } catch (Exception $e) {
+        }
+
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if (!strcmp($responseInfo['http_code'], '200')) {
+            $xml = simplexml_load_string($response);
+            if ($xml)
+                return $xml;
+            else
+                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        } else {
+            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }
+    }
+
+
+    /**
      * Launch TimeSeries requests
      *
      * Allowed types are:
@@ -1908,6 +1961,40 @@ class FitBitPHP
         } else {
             throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
+    }
+
+    /**
+    *
+    * Get list of badges
+    *
+    *@throws FitBitException
+    *@return SimpleXMLElement
+    */
+    public function getBadges($user_id=null)
+    {
+        $headers = $this->getHeaders();
+        try{
+            if($user_id==null){
+                $this->oauth->fetch($this->baseApiUrl . "user/-/badges.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+            }else{
+                $this->oauth->fetch($this->baseApiUrl . "user/" . $user_id . "/badges.xml", null, OAUTH_HTTP_METHOD_GET, $headers);
+            }
+            
+        } catch(Exception $E) {
+        }
+
+        $response = $this->oauth->getLastResponse();
+        $responseInfo = $this->oauth->getLastResponseInfo();
+        if(!strcmp($responseInfo['http_code'], '200')){
+            $xml = simplexml_load_string($response);
+            if($xml)
+                return $xml;
+            else
+                throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }else{
+            throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
+        }
+
     }
 
     /**

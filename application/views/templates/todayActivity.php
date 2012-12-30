@@ -3,33 +3,47 @@
 				<p><strong>Today's Activity</strong></p>
 				<div class="row-fluid">
 					<div class="span2">
-						<img src="<?php echo $avatar ?>" alt="">
+						<div class="row-fluid">
+							<img src="<?php echo $avatar ?>" alt="">
+						</div>				
+						<p><strong><?php echo $displayName ?></strong></p>
 					</div>
 					<div class="span10">
-						<p><strong><?php echo $displayName ?></strong></p>
-						<span class="label">Beginner</span>
 						<div class="row-fluid">
-							<div class="span5">
-								<p><?php echo $steps ?> steps taken today</p>
+								<p><strong><?php echo $exp ?> EXP/1000 EXP Level 1</strong></p>
 								<div class="progress progress-info progress-striped">
-									<div class="bar" style="width: <?php echo floor($steps/$stepsGoal*100); ?>%"></div>
+									<div class="bar" style="width: <?php echo floor($exp/1000*100); ?>%"></div>
 								</div>
-								<p><?php echo $floors ?> floors climbed today</p>
+						</div>		
+						<div class="row-fluid">
+							<div class="span3">
+								<span class="activityIcon steps"></span>
+								<p><small>Took <?php echo $steps ?> steps</small></p>
 								<div class="progress progress-info progress-striped">
-									<div class="bar" style="width: <?php echo floor($floors/$floorsGoal*100); ?>%"></div>
-								</div>
-							</div>
-							<div class="span5">
-								<p><?php echo $distance ?> km traveled today</p>
-								<div class="progress progress-info progress-striped">
-									<div class="bar" style="width: <?php echo floor($distance/$distanceGoal*100); ?>%"></div>
-								</div>
-								<p><?php echo $calories ?> calories burned today</p>
-								<div class="progress progress-info progress-striped">
-									<div class="bar" style="width: <?php echo floor($calories/$caloriesGoal*100); ?>%"></div>
+									<div class="bar" style="width: <?php echo floor($steps/40000*100); ?>%"></div>
 								</div>
 							</div>
-							<div class="span2"></div>
+							<div class="span3">
+								<span class="activityIcon distance"></span>
+								<p><small>Travelled <?php echo $distance ?> km</small></p>
+								<div class="progress progress-info progress-striped">
+									<div class="bar" style="width: <?php echo floor($distance/5*100); ?>%"></div>
+								</div>								
+							</div>
+							<div class="span3">
+								<span class="activityIcon floors"></span>
+								<p><small>Climbed <?php echo $floors ?> floors</small></p>
+								<div class="progress progress-info progress-striped">
+									<div class="bar" style="width: <?php echo floor($floors/20*100); ?>%"></div>
+								</div>								
+							</div>
+							<div class="span3">
+								<span class="activityIcon calories"></span>
+								<p><small>Burned <?php echo $calories ?> calories</small></p>
+								<div class="progress progress-info progress-striped">
+									<div class="bar" style="width: <?php echo floor($calories/2000*100); ?>%"></div>
+								</div>
+							</div>
 						</div>
 					</div>				
 				</div>

@@ -7,7 +7,7 @@ class Activity extends CI_Controller {
 		$data['active'] = 2;
 		$data['activeTab'] = 1;
 		if($this->session->userdata('user_id')){
-			$data['displayName'] = $this->session->userdata('username');
+			$data['displayName'] = $this->session->userdata('name');
 			$user_id = $this->session->userdata('user_id');
 			$query = $this->db->query("SELECT * FROM Activity WHERE user_id='". $user_id ."'");
 			$stepsData= array();
@@ -22,7 +22,7 @@ class Activity extends CI_Controller {
 			$this->load->view('activity', $data);
 			$this->load->view('templates/footer');			
 		}else{
-			redirect(base_url() . "index.php/login");
+			redirect(base_url() . "login");
 		}
 
 	}
@@ -47,7 +47,7 @@ class Activity extends CI_Controller {
 			$this->load->view('activity', $data);
 			$this->load->view('templates/footer');			
 		}else{
-			redirect(base_url() . "index.php/login");
+			redirect(base_url() . "login");
 		}
 	}
 
@@ -71,7 +71,7 @@ class Activity extends CI_Controller {
 			$this->load->view('activity', $data);
 			$this->load->view('templates/footer');			
 		}else{
-			redirect(base_url() . "index.php/login");
+			redirect(base_url() . "login");
 		}
 	}
 
@@ -95,7 +95,7 @@ class Activity extends CI_Controller {
 			$this->load->view('activity', $data);
 			$this->load->view('templates/footer');			
 		}else{
-			redirect(base_url() . "index.php/login");
+			redirect(base_url() . "login");
 		}
 	}
 
@@ -119,7 +119,7 @@ class Activity extends CI_Controller {
 			$this->load->view('activity', $data);
 			$this->load->view('templates/footer');			
 		}else{
-			redirect(base_url() . "index.php/login");
+			redirect(base_url() . "login");
 		}
 	}
 

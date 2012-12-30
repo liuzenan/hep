@@ -8,7 +8,7 @@
   <body>
   	<div class="container">
 	    <h1>HEP Platform</h1>
-	    <p><a href="http://localhost/fitbit/index.php/login/" class="btn btn-large btn-primary">Login with Fitbit</a></p>
+	    <p><a href="<?php echo base_url() . 'login'?>" class="btn btn-large btn-primary">Login with Fitbit</a></p>
   	</div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/fitbit/assets/js/bootstrap.min.js"></script>

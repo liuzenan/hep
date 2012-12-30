@@ -3,49 +3,44 @@
 class Home extends CI_Controller{
 
 	public function index(){
-		$data['active'] = 1;
-		$this->output->cache(200);
+		$data['active'] = 0;
+		//$this->output->cache(200);
 
 		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "index.php/login");
+			redirect(base_url() . "login");
 		}else{
 			$user_id = $this->session->userdata('user_id');
 			$query = $this->db->query("SELECT * FROM User WHERE id = '" . $user_id . "'");
 
 			if($query->num_rows()>0){
 				$row = $query->row();
-				$displayName = $row->username;
+				if($this->session->userdata('name')){
+					$displayName = $this->session->userdata('name');
+				}else{
+					$displayName = $row->first_name . ' ' . $row->last_name;
+				}
+
+				$this->session->set_userdata('name', $displayName);
+				$this->session->set_userdata('username', $row->username);
 				$gender =$row->gender;
 				$avatar = $row->profile_pic;
 
 
 				$data['avatar'] = $avatar;
+				$this->session->set_userdata('avatar', $avatar);
 				$data['gender'] = $gender;
 				$data['displayName'] = $displayName;
 
-				$date = new DateTime();
-				$dateStr = $date->format('Y-m-d');
-				$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
-
-				$activity = $this->fitbitphp->getActivities($date);
-
-				//get activities goal
-				$data['activeGoal'] = $activity->goals->activeScore;
-				$data['caloriesGoal'] = $activity->goals->caloriesOut;
-				$data['distanceGoal'] = $activity->goals->distance;
-				$data['floorsGoal'] = $activity->goals->floors;
-				$data['stepsGoal'] = $activity->goals->steps;
-
+				$dateStr = date("Y-m-d");
 				//get activities data
 				$activityQuery = $this->db->query("SELECT * FROM Activity WHERE user_id='" . $user_id ."' and date='" . $dateStr . "'");
 				if($activityQuery->num_rows()>0){
 					$activityRow = $activityQuery->row();
 					$data['activescore'] = $activityRow->active_score;
-					$data['calories'] = $activityRow->calories;
+					$data['calories'] = $activityRow->activity_calories;
 					$data['distance'] = $activityRow->distance;
 					$data['floors'] = $activityRow->floors;
 					$data['steps'] = $activityRow->steps;
-
 				}else{
 					$data['activescore'] = 0;
 					$data['calories'] = 0;
@@ -54,11 +49,12 @@ class Home extends CI_Controller{
 					$data['steps'] = 0;
 				}
 
-				$postsSql= "SELECT User.username AS username, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description
+				$postsSql= "SELECT User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
 								FROM Subscription
 								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
 								INNER JOIN User ON User.id = Post.user_id
 								WHERE Subscription.user_id = '" . $user_id . "'
+								AND Post.time <= NOW()
 								ORDER BY Post.time DESC";
 
 				$postsQuery = $this->db->query($postsSql);
@@ -66,10 +62,11 @@ class Home extends CI_Controller{
 				if($postsQuery->num_rows()>0){
 					foreach($postsQuery->result() as $row){
 						$currentPost = array(
-							'username' => $row->username,
+							'username' => $row->first_name . ' ' . $row->last_name,
 							'profile_pic' => $row->profile_pic,
 							'time' => $row->time,
-							'description' => $row->description
+							'description' => $row->description,
+							'type' =>$row->type
 						);
 
 						array_push($posts, $currentPost);
@@ -77,6 +74,7 @@ class Home extends CI_Controller{
 				}
 
 				$data['posts'] = $posts;
+				$data['exp'] = $this->getExp();
 
 				$this->load->view('templates/header', $data);
 				$this->load->view('home', $data);
@@ -87,6 +85,77 @@ class Home extends CI_Controller{
 				//error
 			}
 		
+		}
+	}
+
+	private function getExp(){
+		$user_id = $this->session->userdata('user_id');
+		
+		$sql = "SELECT sum(achievement.points) AS total_points
+				FROM achievement
+				INNER JOIN userachievement
+				ON achievement.id = userachievement.achievement_id
+				WHERE userachievement.user_id = " . $user_id;
+		$query = $this->db->query($sql);
+
+		if($query->num_rows()>0){
+			$total_points = $query->row()->total_points;
+		}	
+
+		return $total_points;
+	}
+
+	public function postMessage(){
+		if(!$this->session->userdata('user_id')){
+			redirect(base_url() . "login");
+		}else{
+			$msg = $this->input->post('message');
+			if($msg){
+				$sql = "INSERT INTO Post(user_id, type, description)
+						VALUES (" . $this->session->userdata('user_id') . ", 1, " . $this->db->escape($msg) . ")";
+				$this->db->query($sql);
+
+				$last_id = $this->db->insert_id();
+
+				$postsSql= "SELECT User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
+								FROM Subscription
+								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
+								INNER JOIN User ON User.id = Post.user_id
+								WHERE Post.id = '" . $last_id  . "'";
+
+				$postsQuery = $this->db->query($postsSql);
+				if($postsQuery->num_rows()>0){
+					$row = $postsQuery->row(); 
+					$time = $row->time;
+					date_default_timezone_set('UTC'); 
+					$timestamp = strtotime((string) $time); 
+					$posts = array(
+							'username' => $row->first_name . ' ' . $row->last_name,
+							'profile_pic' => $row->profile_pic,
+							'time' => $timestamp,
+							'description' => $row->description,
+							'type' =>$row->type
+					);
+					$data = array(
+						'success'=>true,
+						'posts'=>$posts
+
+					);
+					echo json_encode($data);
+
+				}else{
+					$data = array(
+						'success'=>false
+					);
+					echo json_encode($data);
+				}
+
+			}else{
+					$data = array(
+						'success'=>false
+					);
+					echo json_encode($data);
+			}
 		}
 	}
 }
