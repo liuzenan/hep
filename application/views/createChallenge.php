@@ -9,14 +9,14 @@
 						<div class="row-fluid">
 							<div class="span6">
 								<label for="title">Event Title</label>
-								<input type="text" class="required" name="title" id="title">
+								<input type="text" class="required input-block-level" name="title" id="title">
 								<label for="description">description</label>
-								<textarea name="description" class="required" rows="10" id="description"></textarea>
+								<textarea name="description" class="required input-block-level" rows="13" id="description"></textarea>
 							</div>
 							<div class="span6">
 								<label>Event Date</label>
-								<div class="input-append date datepicker" id="date" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
-									<input size="16" type="text" class="required" value="12-02-2012">
+								<div class="input-append date datepicker" id="date" data-date="2013-01-01" data-date-format="yyyy-mm-dd">
+									<input size="12" type="text" class="required" value="2013-01-01">
 									<span class="add-on"><i class="icon-th"></i></span>
 								</div>
 								<label for="time">Time</label>

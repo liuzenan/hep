@@ -93,15 +93,29 @@ jQuery(document).ready(function($) {
 		$.ajax({
 			type:'POST',
 			url:'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/newChallenge',
+			dataType:'json',
 			data:{
 				title: $('#title').val(),
 				description: $('#description').val(),
 				date: $('#date').data('date'),
 				time: $('#time').val(),
 				frequency: $('#frequency').val(),
-				location: $('#location').val()
+				location: $('#location').val(),
+				level: $('#level').val()
+			}
+		}).done(function(msg){
+			if(msg.success){
+				alert("event successfully created");
+				window.location.replace('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges');
+			}else{
+				alert("event not created, please check your inputs");
 			}
 		});
+	});
+
+	$('#cancelEvent').click(function(event){
+		event.preventDefault();
+		window.location.replace('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges');
 	});
 
 });

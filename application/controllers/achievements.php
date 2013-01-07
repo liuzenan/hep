@@ -26,6 +26,8 @@ class Achievements extends CI_Controller {
 			$data['active'] = 2;
 			$data['displayName'] = $this->session->userdata('name');
 			$data['avatar'] = $this->session->userdata('avatar');
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
 			//echo print_r($data['badges']);
 			$this->load->view('templates/header', $data);
 			$this->load->view('achievements', $data);
@@ -57,11 +59,21 @@ class Achievements extends CI_Controller {
 				$currentBadge['description'] = $row->description;
 				$currentBadge['points'] = $row->points;
 				$currentBadge['badge_pic'] = $row->badge_pic;
-				foreach($mybadge as $badge){
-					if(!strcmp($currentBadge['id'],$badge->achi_id)){
-						$currentBadge['times']=$badge->num_times;
+				try {
+					if(isset($mybadge)&&sizeof($mybadge)>0){
+						foreach($mybadge as $badge){
+							if(!strcmp($currentBadge['id'],$badge->achi_id)){
+								$currentBadge['times']=$badge->num_times;
+							}		
+
+						}						
 					}
+					
+				} catch (Exception $e) {
+					
 				}
+				
+
 				array_push($resultSet, $currentBadge);
 			}
 		}
@@ -95,10 +107,18 @@ class Achievements extends CI_Controller {
 				$currentBadge['description'] = $row->description;
 				$currentBadge['points'] = $row->points;
 				$currentBadge['badge_pic'] = $row->badge_pic;
-				foreach($mybadge as $badge){
-					if(!strcmp($currentBadge['id'],$badge->achi_id)){
-						$currentBadge['times']=$badge->num_times;
+				try {
+					if(isset($mybadge)&&sizeof($mybadge)>0){
+						foreach($mybadge as $badge){
+							if(!strcmp($currentBadge['id'],$badge->achi_id)){
+								$currentBadge['times']=$badge->num_times;
+							}		
+
+						}						
 					}
+					
+				} catch (Exception $e) {
+					
 				}
 				array_push($resultSet, $currentBadge);
 			}

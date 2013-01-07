@@ -1,5 +1,4 @@
-		<div class="row-fluid">
-			<div class="span12 well">
+			<div class="span6 well">
 				<div class="row-fluid">
 					<div class="span12">
 						<textarea id="messageBox" name="compose" row="4" class="input-block-level" placeholder="Write a new message..."></textarea>
@@ -39,4 +38,3 @@
 					</div>	
 				</div>
 			</div>
-		</div>

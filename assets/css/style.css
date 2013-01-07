@@ -12,6 +12,10 @@
 	border-bottom: 1px solid #ccc;
 }
 
+.newsFeed>li:last-child, .challenge>li:last-child{
+	border-bottom: 0;
+}
+
 span.activityIcon{
 	width:25px;
 	height:25px;
@@ -37,4 +41,10 @@ span.activityIcon.floors{
 
 .achievementItem.active h4, .achievementItem.active p{
 	color: inherit;
+}
+
+.achievementItem{
+	margin-top: 0 !important;
+	margin-bottom:1px !important;
+	border-radius: 0;
 }

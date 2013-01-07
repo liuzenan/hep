@@ -18,6 +18,8 @@ class Stats extends CI_Controller {
 			$data['avatar'] = $this->session->userdata('avatar');
 			$data['stats'] = $this->getStats();
 			$data['currentTab'] = "statistics";
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
 
 			$this->load->view("templates/header", $data);
 			$this->load->view("stats", $data);
@@ -30,13 +32,15 @@ class Stats extends CI_Controller {
 			$data['displayName'] = $this->session->userdata('name');
 			$data['avatar'] = $this->session->userdata('avatar');
 			$data['chartTitle'] = 'Steps';
-			date_default_timezone_set('UTC');
+			date_default_timezone_set('Asia/Singapore');
 			$currentDate = date('Y-m-d');
-			$weekBegin = date('Y-m-d', strtotime('this week', time()));
+			$weekBegin = date('Y-m-d', time()-604800);
 
 			$data['startDate'] = $weekBegin;
 			$data['currentActivity'] = $this->getActivity('steps', $weekBegin, $currentDate);
 			$data['currentTab'] = "history";
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
 
 			$this->load->view("templates/header", $data);
 			$this->load->view("stats", $data);

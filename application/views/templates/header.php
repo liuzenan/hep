@@ -6,6 +6,7 @@
     <link href="/fitbit/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="/fitbit/assets/css/style.css">
     <link rel="stylesheet" href="/fitbit/assets/css/datepicker.css">
+    <link rel="stylesheet" href="/fitbit/assets/css/timepicker.css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/fitbit/assets/js/highcharts.js"></script>
   </head>

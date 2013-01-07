@@ -105,8 +105,29 @@ class Challenges extends CI_Controller {
 
 
 	public function newChallenge(){
-		
+		if($this->session->userdata('user_id')){
+			try {
+				$title = $this->input->post('title');
+				$description = $this->input->post('description');
+				$date = $this->input->post('date');
+				$time = $this->input->post('time');
+				$frequency = $this->input->post('frequency');
+				$location = $this->input->post('location');
+				$level = $this->input->post('level');
 
+				$sql = "INSERT INTO event(title, description, creator, `date`, frequency, time, location, min_level)
+						VALUES (". $this->db->escape($title) .", ". $this->db->escape($description) .", ". $this->session->userdata('user_id') .", '". $date ."', '". $frequency ."', '". $time ."', '". $location ."', '". $level ."')";
+				$this->db->query($sql);	
+				$msg['success'] = true;
+			} catch (Exception $e) {
+				$msg['success'] = false;
+			}
+
+		}else{
+			$msg['success'] = false;
+		}
+
+		echo json_encode($msg);
 	}
 
 	public function joinEvent(){
@@ -435,6 +456,8 @@ class Challenges extends CI_Controller {
 			$data['avatar'] = $this->session->userdata('avatar');
 			$data['currentEventTab'] = $eventTab;
 			$data['currentWorkoutTab'] = $workOutTab;
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
 			$this->load->view('templates/header', $data);
 			$this->load->view('challenges', $data);
 			$this->load->view('templates/footer');
@@ -456,6 +479,8 @@ class Challenges extends CI_Controller {
 			$data['avatar'] = $this->session->userdata('avatar');
 			$data['currentEventTab'] = $eventTab;
 			$data['currentWorkoutTab'] = $workOutTab;
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
 			$this->load->view('templates/header', $data);
 			$this->load->view('myChallenges', $data);
 			$this->load->view('templates/footer');
@@ -465,6 +490,8 @@ class Challenges extends CI_Controller {
 			$data['active'] = 1;
 			$data['displayName'] = $this->session->userdata('name');
 			$data['avatar'] = $this->session->userdata('avatar');
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
 			$this->load->view('templates/header', $data);
 			$this->load->view('createChallenge', $data);
 			$this->load->view('templates/footer');

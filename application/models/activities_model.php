@@ -7,6 +7,45 @@ class Activities_model extends CI_Model{
 	}
 
 
+	function getDailyActivityData($user_id, $date){
+		$sql = "SELECT * FROM activity
+				WHERE user_id=". $user_id ." AND date='". $date ."'";
+
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			return $query->row();
+		}
+	}
+
+
+	function getDailySleepData($user_id, $date){
+		$sql = "SELECT * FROM sleep
+				WHERE user_id=". $user_id ." AND date='". $date ."'";
+
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			return $query->row();
+		}
+	}
+
+	function getLifetimeActivityData($user_id){
+		$sql = "SELECT sum(steps) AS total_steps, sum(floors) AS total_floors, sum(calories) AS total_calories, sum(active_score) AS total_activescore, sum(distance) AS total_distance, sum(elevation) AS total_elevation, sum(activity_calories) AS total_activitycalories
+				FROM activity
+				WHERE user_id=". $user_id ."
+				GROUP BY user_id";
+
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			return $query->row();
+		}
+	}
+
+	function getLifetimeSleepData($user_id){
+		
+
+	}
+
+
 	function get_activity($startDate, $endDate){
 		try {
 			if($this->session->userdata('user_id')){
