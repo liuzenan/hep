@@ -48,3 +48,77 @@ span.activityIcon.floors{
 	margin-bottom:1px !important;
 	border-radius: 0;
 }
+
+.today-activity{
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.badgelist{
+	border-radius: 0 !important;
+	margin-bottom: 1px;
+}
+
+.newsfeed{
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.smalltext{
+	display:inline-block;
+}
+
+.control-bottons{
+	margin-bottom: 10px;
+}
+
+.studentItem .media-object{
+	height:50px !important;
+	width:50px !important;
+}
+
+.challenge .media{
+	padding-bottom: 20px;
+}
+
+.challenge>.media:last-child{
+	padding-bottom: 0;
+}
+
+.signup{
+	margin-top: 100px;
+}
+
+#submitbtn{
+	margin-top: 10px;
+}
+.linkfacebook{
+	margin-top: 100px;
+}
+
+.skip{
+	margin-top: 20px;
+}
+
+.maintitle{
+	text-align: center;
+	margin-top: 100px;
+}
+
+.loginbtn{
+	text-align: center;
+	margin-top: 40px;
+}
+
+.wrapper{
+	background: url(../img/running_background.jpg) no-repeat center center fixed;
+	background-size: cover;
+	-moz-background-size:cover;
+	-o-background-size:cover;
+	position:absolute;
+	display:block;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+}

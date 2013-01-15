@@ -6,78 +6,23 @@
 				<tr>
 					<th>Rank</th>
 					<th>Name</th>
-					<th>Total Level</th>
+					<th>Total Points</th>
 				</tr>
 			</thead>
 			<tbody>
+				<?php 
+					$n=0;
+					foreach($leader as $row){ 
+						$n++;
+				?>
 				<tr>
-					<td>1</td>
-					<td>Antares</td>
-					<td>20</td>
+					<td><?php echo $n ?></td>
+					<td><?php echo $row->house ?></td>
+					<td><?php echo $row->total_points ?></td>
 				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Steps</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th>Name</th>
-					<th>Total Level</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td>Antares</td>
-					<td>20</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Floors</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th>Name</th>
-					<th>Total Level</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td>Antares</td>
-					<td>20</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Sleep</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th>Name</th>
-					<th>Total Level</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td>Antares</td>
-					<td>20</td>
-				</tr>
+				<?php 
+				}
+				 ?>
 			</tbody>
 		</table>
 	</div>

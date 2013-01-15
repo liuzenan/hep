@@ -17,6 +17,70 @@ class Activities_model extends CI_Model{
 		}
 	}
 
+	function getExp($user_id){
+		
+		$sql = "SELECT sum(activity.steps) AS total_steps, sum(activity.floors) AS total_floors, sum(activity.active_score) AS total_score
+				FROM activity
+				WHERE activity.user_id = " . $user_id . "
+				GROUP BY activity.user_id";
+
+		$query1 = $this->db->query($sql);
+
+		$sql = "SELECT sum(efficiency) AS total_eff
+				FROM sleep
+				WHERE sleep.user_id = " . $user_id . "
+				GROUP BY sleep.user_id";
+		$query2 = $this->db->query($sql);
+
+		if($query2->num_rows()>0&&$query1->num_rows()>0){
+			$result = $query1->row();
+			$steps = $result->total_steps;
+			$floors = $result->total_floors;
+			$score = $result->total_score;
+
+			$result2 = $query2->row();
+			$eff = $result2->total_eff;
+			$this->load->helper('level');
+			$expPoint = getExpPoints(intval($steps), intval($floors), intval($score), intval($eff));
+			return $expPoint;
+		}
+		
+	}
+
+	function updateExp($user_id){
+		$sql = "SELECT sum(activity.steps) AS total_steps, sum(activity.floors) AS total_floors, sum(activity.active_score) AS total_score
+				FROM activity
+				WHERE activity.user_id = " . $user_id . "
+				GROUP BY activity.user_id";
+
+		$query1 = $this->db->query($sql);
+
+		$sql = "SELECT sum(efficiency) AS total_eff
+				FROM sleep
+				WHERE sleep.user_id = " . $user_id . "
+				GROUP BY sleep.user_id";
+		$query2 = $this->db->query($sql);
+
+		if($query2->num_rows()>0&&$query1->num_rows()>0){
+			$result = $query1->row();
+			$steps = $result->total_steps;
+			$floors = $result->total_floors;
+			$score = $result->total_score;
+
+			$result2 = $query2->row();
+			$eff = $result2->total_eff;
+			$this->load->helper('level');
+			$expPoint = getExpPoints(intval($steps), intval($floors), intval($score), intval($eff));
+			
+
+			$sql="UPDATE user
+					SET points = " . $expPoint . "
+					WHERE id = " . $user_id;
+
+			$this->db->query($sql);
+			return $expPoint;
+		}
+	}
 
 	function getDailySleepData($user_id, $date){
 		$sql = "SELECT * FROM sleep

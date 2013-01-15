@@ -60,17 +60,13 @@ class Leaderboard extends CI_Controller {
 	}
 
 	private function getTopStudent(){
-		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, house.name AS house, sum(achievement.points) AS total_points
+		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, house.name AS house, user.points AS total_points
 				FROM user
-				INNER JOIN userachievement
-				ON user.id= userachievement.user_id
-				INNER JOIN achievement
-				ON userachievement.achievement_id = achievement.id
 				INNER JOIN house
 				ON user.house_id = house.id
 				WHERE user.phantom=0 AND user.staff=0
-				GROUP BY user.id
-				ORDER BY total_points DESC";
+				ORDER BY total_points DESC
+				LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -79,15 +75,11 @@ class Leaderboard extends CI_Controller {
 	}
 
 	private function getTopTutors(){
-		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, sum(achievement.points) AS total_points
+		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, user.points AS total_points
 				FROM user
-				INNER JOIN userachievement
-				ON user.id= userachievement.user_id
-				INNER JOIN achievement
-				ON userachievement.achievement_id = achievement.id
 				WHERE user.phantom=0 AND user.staff=1
-				GROUP BY user.id
-				ORDER BY total_points DESC";
+				ORDER BY total_points DESC
+				LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -104,7 +96,8 @@ class Leaderboard extends CI_Controller {
 				ON user.house_id = house.id
 				WHERE user.phantom=0 AND user.staff=0
 				GROUP BY user.id
-				ORDER BY total_steps DESC";
+				ORDER BY total_steps DESC
+				LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -120,7 +113,8 @@ class Leaderboard extends CI_Controller {
 				ON user.id=activity.user_id
 				WHERE user.phantom=0 AND user.staff=1
 				GROUP BY user.id
-				ORDER BY total_steps DESC";
+				ORDER BY total_steps DESC
+				LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -137,7 +131,8 @@ class Leaderboard extends CI_Controller {
 				ON user.house_id = house.id
 				WHERE user.phantom=0 AND user.staff=0
 				GROUP BY user.id
-				ORDER BY total_floors DESC";
+				ORDER BY total_floors DESC
+				LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -152,7 +147,8 @@ class Leaderboard extends CI_Controller {
 				ON user.id=activity.user_id
 				WHERE user.phantom=0 AND user.staff=1
 				GROUP BY user.id
-				ORDER BY total_floors DESC";
+				ORDER BY total_floors DESC
+				LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -169,7 +165,8 @@ class Leaderboard extends CI_Controller {
 				ON user.house_id = house.id
 				WHERE user.phantom=0 AND user.staff=0 AND sleep.efficiency>0
 				GROUP BY user.id
-				ORDER BY avg_sleep DESC";	
+				ORDER BY avg_sleep DESC
+				LIMIT 0, 10";	
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -185,7 +182,8 @@ class Leaderboard extends CI_Controller {
 				ON user.id=sleep.user_id
 				WHERE user.phantom=0 AND user.staff=1 AND sleep.efficiency>0
 				GROUP BY user.id
-				ORDER BY avg_sleep DESC";	
+				ORDER BY avg_sleep DESC
+				LIMIT 0, 10";	
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -195,12 +193,8 @@ class Leaderboard extends CI_Controller {
 
 
 	private function getTopHouse(){
-		$sql = "SELECT house.name AS house, sum(achievement.points) AS total_points
+		$sql = "SELECT house.name AS house, sum(user.points) AS total_points
 				FROM user
-				INNER JOIN userachievement
-				ON user.id= userachievement.user_id
-				INNER JOIN achievement
-				ON userachievement.achievement_id = achievement.id
 				INNER JOIN house
 				ON user.house_id = house.id
 				WHERE user.phantom=0 AND user.staff=0

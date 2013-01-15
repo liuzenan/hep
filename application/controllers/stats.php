@@ -26,18 +26,19 @@ class Stats extends CI_Controller {
 			$this->load->view("templates/footer");
 	}
 
-	public function history(){
+	public function history($type='steps'){
 		$this->output->cache(200);
 			$data['active'] = 5;
 			$data['displayName'] = $this->session->userdata('name');
 			$data['avatar'] = $this->session->userdata('avatar');
-			$data['chartTitle'] = 'Steps';
-			date_default_timezone_set('Asia/Singapore');
+			$data['chartTitle'] = $type;
+			date_default_timezone_set('UTC');
 			$currentDate = date('Y-m-d');
-			$weekBegin = date('Y-m-d', time()-604800);
+			$weekBegin = date('Y-m-d', strtotime($currentDate)-604800);
 
 			$data['startDate'] = $weekBegin;
-			$data['currentActivity'] = $this->getActivity('steps', $weekBegin, $currentDate);
+			$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate);
+			$data['activeActivity'] = $type;
 			$data['currentTab'] = "history";
 			$data['isAdmin'] = $this->session->userdata('isadmin');
 			$data['isLeader'] = $this->session->userdata('isleader');
@@ -88,6 +89,12 @@ class Stats extends CI_Controller {
 					break;
 			}
 
+			if(count($activity)<7){
+				$num = count($activity);
+				for($num;$num<7;$num++){
+					array_push($activity, 0);
+				}
+			}
 			return $activity;
 		}
 	}

@@ -214,6 +214,10 @@ class Login extends CI_Controller{
 		}
 	}
 
+	private function facebookLogin(){
+		$facebookUsername = $this->input->post('username');
+	}
+
 	private function addSubscription(){
 
 		try {

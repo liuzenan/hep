@@ -13,6 +13,89 @@ class Challenges extends CI_Controller {
 		}
 	}
 
+	public function viewevent($event_id){
+		if(!$this->session->userdata('user_id')){
+			redirect(base_url() . "login");
+		}else{
+			$query = $this->db->query('SELECT * FROM event WHERE id=' . $event_id);
+			if($query->num_rows()>0){
+				$data['event'] = $query->row();
+
+				$sql = "SELECT user.id, user.first_name, user.last_name, user.profile_pic
+						FROM user
+						INNER JOIN eventparticipant
+						ON user.id = eventparticipant.user_id
+						WHERE eventparticipant.event_id = " . $event_id;
+
+				$query = $this->db->query($sql);
+				if($query->num_rows()>0){
+					$data['participants'] = $query->result();
+				}
+
+				$sql = "SELECT user.id, user.first_name, user.last_name, user.profile_pic, eventcomment.comment, eventcomment.time_created
+						FROM eventcomment
+						INNER JOIN user
+						ON eventcomment.user_id = user.id
+						WHERE eventcomment.event_id = " . $event_id . "
+						ORDER BY eventcomment.time_created DESC";
+
+				$query = $this->db->query($sql);
+				if($query->num_rows()>0){
+					$data['comments'] = $query->result();
+				}
+
+				$query = $this->db->query("SELECT * FROM eventparticipant WHERE user_id=" . $this->session->userdata('user_id') . " AND event_id=". $event_id);
+				if($query->num_rows()>0){
+					$data['joined'] = true;
+				}else{
+					$data['joined'] = false;
+				}
+
+			$data['active'] = 1;
+			$data['displayName'] = $this->session->userdata('name');
+			$data['avatar'] = $this->session->userdata('avatar');
+			$data['isAdmin'] = $this->session->userdata('isadmin');
+			$data['isLeader'] = $this->session->userdata('isleader');
+			$this->load->view('templates/header', $data);
+			$this->load->view('viewChallenge', $data);
+			$this->load->view('templates/footer');
+
+			}
+
+
+		}
+	}
+
+	public function postComment(){
+		$comment = $this->input->post('message');
+		$event_id = $this->input->post('event_id');
+		if($comment&&$event_id){
+			try {
+			$sql = "INSERT INTO eventcomment(event_id, user_id, comment)
+					VALUES (". $event_id .", ". $this->session->userdata('user_id') .", ". $this->db->escape($comment) .")";
+
+			$this->db->query($sql);
+
+			$data = array(
+						'success'=>true
+					);
+			echo json_encode($data);				
+			} catch (Exception $e) {
+				$data = array(
+						'success'=>false
+					);
+				echo json_encode($data);	
+			}
+
+		}else{
+				$data = array(
+						'success'=>false
+					);
+				echo json_encode($data);
+		}
+
+	}
+
 	public function recentEvents(){
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");

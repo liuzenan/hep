@@ -6,7 +6,7 @@
 			<li class="<?php if($active==5) echo "active" ?>"><a href="<?php echo base_url() . 'stats'?>">Personal Stats</a></li>
 			<hr>
 			<?php if($isLeader==1) {?>
-			<li class="<?php if($active==6) echo "active" ?>"><a href="<?php echo base_url() . 'studentlist'?>">Student List</a></li>
+			<li class="<?php if($active==6) echo "active" ?>"><a href="<?php echo base_url() . 'manage/studentList'?>">Student List</a></li>
 			<?php } ?>
 			<?php if($isAdmin==1) {?>
 			<li class="<?php if($active==7) echo "active" ?>"><a href="<?php echo base_url() . 'manage'?>">Manage users</a></li>

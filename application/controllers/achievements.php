@@ -11,16 +11,11 @@ class Achievements extends CI_Controller {
 	}
 
 	public function daily(){
-		$data['achievements'] = $this->getDailyBadges();
+		$data['achievements'] = $this->getBadges();
 		$data['currentTab'] = 'daily';
 		$this->loadPage($data);
 	}
 
-	public function lifetime(){
-		$data['achievements'] = $this->getLifeTimeBadges();
-		$data['currentTab'] = 'lifetime';
-		$this->loadPage($data);
-	}
 
 	private function loadPage($data){
 			$data['active'] = 2;
@@ -34,13 +29,12 @@ class Achievements extends CI_Controller {
 			$this->load->view('templates/footer');
 	}
 
-	private function getDailyBadges(){
+	private function getBadges(){
 		$user_id = $this->session->userdata('user_id');
 		$sql = "SELECT achievement.id as achi_id, count(userachievement.achievement_id) as num_times
 				FROM achievement
 				INNER JOIN userachievement
 				ON achievement.id=userachievement.achievement_id
-				WHERE achievement.type ='daily'
 				AND userachievement.user_id=". $user_id ."
 				GROUP BY userachievement.achievement_id";
 		$query = $this->db->query($sql);
@@ -48,7 +42,7 @@ class Achievements extends CI_Controller {
 			$mybadge = $query->result();
 		}
 
-		$query = $this->db->query("SELECT * FROM achievement WHERE achievement.type ='daily'");
+		$query = $this->db->query("SELECT * FROM achievement");
 		$resultSet = array();
 		if($query->num_rows()>0){
 			foreach($query->result() as $row){
@@ -57,7 +51,6 @@ class Achievements extends CI_Controller {
 				$currentBadge['id'] = $row->id;
 				$currentBadge['name'] = $row->name;
 				$currentBadge['description'] = $row->description;
-				$currentBadge['points'] = $row->points;
 				$currentBadge['badge_pic'] = $row->badge_pic;
 				try {
 					if(isset($mybadge)&&sizeof($mybadge)>0){
@@ -78,52 +71,6 @@ class Achievements extends CI_Controller {
 			}
 		}
 
-		return $resultSet;
-
-	}
-
-	private function getLifeTimeBadges(){
-		$user_id = $this->session->userdata('user_id');
-		$sql = "SELECT achievement.id as achi_id, count(userachievement.achievement_id) as num_times
-				FROM achievement
-				INNER JOIN userachievement
-				ON achievement.id=userachievement.achievement_id
-				WHERE achievement.type ='daily'
-				AND userachievement.user_id=". $user_id ."
-				GROUP BY userachievement.achievement_id";
-		$query = $this->db->query($sql);
-		if($query->num_rows()>0){
-			$mybadge = $query->result();
-		}
-
-		$query = $this->db->query("SELECT * FROM achievement WHERE achievement.type ='lifetime'");
-		$resultSet = array();
-		if($query->num_rows()>0){
-			foreach($query->result() as $row){
-				$currentBadge = array();
-				$currentBadge['times'] = 0;
-				$currentBadge['id'] = $row->id;
-				$currentBadge['name'] = $row->name;
-				$currentBadge['description'] = $row->description;
-				$currentBadge['points'] = $row->points;
-				$currentBadge['badge_pic'] = $row->badge_pic;
-				try {
-					if(isset($mybadge)&&sizeof($mybadge)>0){
-						foreach($mybadge as $badge){
-							if(!strcmp($currentBadge['id'],$badge->achi_id)){
-								$currentBadge['times']=$badge->num_times;
-							}		
-
-						}						
-					}
-					
-				} catch (Exception $e) {
-					
-				}
-				array_push($resultSet, $currentBadge);
-			}
-		}
-
-		return $resultSet;
+		return $resultSet;	
 	}
 }

@@ -4,6 +4,7 @@
     <title>Fitbit App</title>
     <!-- Bootstrap -->
     <link href="/fitbit/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+     <link rel="stylesheet" href="/fitbit/assets/css/style.css">
   </head>
   <body>
   <div id="fb-root"></div>
@@ -54,34 +55,33 @@
             if (response.authResponse) {
                 // connected
             $("#facebookbtn").attr("disabled","disabled");
-            $("#facebookbtn").html("Connected");
+            $("#facebookbtn").html("Redirecting...");
             FB.api('/me',function(response){
 
               $.ajax({
                 url:"<?php echo base_url() . 'signup/fbLogin' ?>",
                 type:"POST",
                 data:{
-                  username: response.username,
-                  email: response.email,
-                  firstname: response.first_name,
-                  lastname: response.last_name
+                  username: response.username
                 }
               }).done(function(msg){
-                console.log('data saved: ' + msg);
-              });
-            });
 
-            FB.api('/me?fields=picture.width(100).height(100)', function(response){
+                FB.api('/me?fields=picture.width(100).height(100)', function(response){
 
-              $.ajax({
-                url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
-                type:"POST",
-                data:{
-                  profile_pic: response.picture.data.url
-                }
+                  $.ajax({
+                    url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
+                    type:"POST",
+                    data:{
+                      profile_pic: response.picture.data.url
+                    }
 
-              }).done(function(msg){
-                console.log('data saved: ' + msg);
+                  }).done(function(msg){
+                    console.log('data saved: ' + msg);
+
+                    window.location.replace("<?php echo base_url() . 'home' ?>");
+                  });
+                });
+
               });
             });
 
@@ -93,11 +93,11 @@
   }
   </script>
   <div class="container">
-    <div class="row-fluid">
+    <div class="row-fluid linkfacebook">
       <div class="span4 offset4">
         <button class="btn btn-large btn-block btn-primary" id="facebookbtn">Link with Facebook</button>
       </div>
-      <div class="span4"><p><a href="<?php echo base_url() . 'home' ?>">Skip</a></p></div>
+      <div class="span4 skip"><p><a href="<?php echo base_url() . 'home' ?>">Skip</a></p></div>
     </div>
   </div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>

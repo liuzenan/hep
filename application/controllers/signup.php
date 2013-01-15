@@ -24,16 +24,10 @@ class Signup extends CI_Controller{
 	public function fbLogin(){
 		if($this->session->userdata('user_id')){
 			$username = $this->input->post('username');
-			$email = $this->input->post('email');
-			$firstname = $this->input->post('firstname');
-			$lastname = $this->input->post('lastname');
 
-			if($username&&$email&&$firstname&&$lastname){
+			if($username){
 				$data=array(
-					'username'=>$username,
-					'first_name'=>$firstname,
-					'last_name'=>$lastname,
-					'email'=>$email
+					'username'=>$username
 					);
 				$this->db->where('id',$this->session->userdata('user_id'));
 				$this->db->update('user', $data);
@@ -71,7 +65,7 @@ class Signup extends CI_Controller{
 			$email = $this->input->post("email");
 			$house = $this->input->post("house");
 			
-			if($firstname&&$lastname&&$email&&$house){
+			if($firstname&&$lastname&&$email){
 				$data=array();
 
 				$data['first_name'] = $firstname;

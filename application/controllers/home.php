@@ -59,19 +59,21 @@ class Home extends CI_Controller{
 					$data['steps'] = 0;
 				}
 
-				$postsSql= "SELECT User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
+				$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
 								FROM Subscription
 								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
 								INNER JOIN User ON User.id = Post.user_id
 								WHERE Subscription.user_id = '" . $user_id . "'
 								AND Post.time <= NOW()
-								ORDER BY Post.time DESC";
+								ORDER BY Post.time DESC
+								LIMIT 0, 5";
 
 				$postsQuery = $this->db->query($postsSql);
 				$posts = array();
 				if($postsQuery->num_rows()>0){
 					foreach($postsQuery->result() as $row){
 						$currentPost = array(
+							'user_id' => $row->post_user_id,
 							'username' => $row->first_name . ' ' . $row->last_name,
 							'profile_pic' => $row->profile_pic,
 							'time' => $row->time,
@@ -84,11 +86,25 @@ class Home extends CI_Controller{
 				}
 
 				$data['posts'] = $posts;
-				$data['exp'] = $this->getExp();
+				$this->load->model('Activities_model','activities');
+				$data['exp'] = $this->activities->updateExp($this->session->userdata('user_id'));
+				$data['badges'] = $this->getBadges();
+				$data['challenges'] = $this->getChallenges();
+				$data['avg_points'] = $this->getAverage();
 
 				$this->load->helper('level');
 				$data['level'] = getLevel(intval($data['exp']));
+				$avg_level = getLevel(floor($data['avg_points']->avg_points));
+				if($avg_level>$data['level']){
+					$data['bar_type'] = 0;
+				}else if($avg_level==$data['level']){
+					$data['bar_type'] = 1;
+				}else{
+					$data['bar_type'] = 2;
+				}
+
 				$data['nextlevelpoints'] = getNextLevelPoints($data['level']+1);
+				$data['currentLevelPoints'] = getNextLevelPoints($data['level']);
 
 				$this->load->view('templates/header', $data);
 				$this->load->view('home', $data);
@@ -102,38 +118,42 @@ class Home extends CI_Controller{
 		}
 	}
 
-	private function getExp(){
-		$user_id = $this->session->userdata('user_id');
-		
-		$sql = "SELECT sum(activity.steps) AS total_steps, sum(activity.floors) AS total_floors, sum(activity.active_score) AS total_score
-				FROM activity
-				WHERE activity.user_id = " . $user_id . "
-				GROUP BY activity.user_id";
+	private function getBadges(){
+		$sql = "SELECT badge_pic
+				FROM achievement
+				INNER JOIN userachievement
+				ON achievement.id = userachievement.achievement_id
+				WHERE userachievement.user_id = " . $this->session->userdata('user_id');
 
-		$query1 = $this->db->query($sql);
 
-		$sql = "SELECT sum(efficiency) AS total_eff
-				FROM sleep
-				WHERE sleep.user_id = " . $user_id . "
-				GROUP BY sleep.user_id";
-		$query2 = $this->db->query($sql);
-
-		if($query2->num_rows()>0&&$query1->num_rows()>0){
-			$result = $query1->row();
-			$steps = $result->total_steps;
-			$floors = $result->total_floors;
-			$score = $result->total_score;
-
-			$result2 = $query2->row();
-			$eff = $result2->total_eff;
-			$this->load->helper('level');
-			$expPoint = getExpPoints(intval($steps), intval($floors), intval($score), intval($eff));
-			return $expPoint;
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			return $query->result();
 		}
-		
+	}
+
+	private function getChallenges(){
+		$sql = "SELECT event.id, event.title, event.date, event.time, event.event_image
+				FROM event
+				INNER JOIN eventparticipant
+				ON event.id = eventparticipant.event_id
+				WHERE eventparticipant.user_id = " . $this->session->userdata('user_id');
+
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			return $query->result();
+		}
 	}
 
 	private function getAverage(){
+		$sql = "SELECT avg(points) AS avg_points
+				FROM user
+				WHERE phantom=0";
+
+		$query = $this->db->query($sql);
+		if($query->num_rows()>0){
+			return $query->row();
+		}
 		
 	}
 
@@ -149,7 +169,7 @@ class Home extends CI_Controller{
 
 				$last_id = $this->db->insert_id();
 
-				$postsSql= "SELECT User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
+				$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
 								FROM Subscription
 								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
 								INNER JOIN User ON User.id = Post.user_id
@@ -162,6 +182,7 @@ class Home extends CI_Controller{
 					date_default_timezone_set('UTC'); 
 					$timestamp = strtotime((string) $time); 
 					$posts = array(
+							'user_id' => $row->post_user_id,
 							'username' => $row->first_name . ' ' . $row->last_name,
 							'profile_pic' => $row->profile_pic,
 							'time' => $timestamp,

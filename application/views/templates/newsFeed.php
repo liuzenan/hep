@@ -1,4 +1,5 @@
-			<div class="span6 well">
+
+			<div class="span7 newsfeed well">
 				<div class="row-fluid">
 					<div class="span12">
 						<textarea id="messageBox" name="compose" row="4" class="input-block-level" placeholder="Write a new message..."></textarea>
@@ -17,11 +18,11 @@
 						<ul class="media-list newsFeed" id="newsFeed">
 							<?php foreach($posts as $post){ ?>
 							<li class="media">
-								<a href="#" title="" class="pull-left post-profile">
+								<a href="<?php echo base_url() . "profile/viewprofile/" . $post['user_id'] ?>" title="" class="pull-left post-profile">
 									<img src="<?php echo $post['profile_pic'] ?>" alt="">
 								</a>
 								<div class="media-body">
-									<p class="media-heading"><strong><?php echo $post['username'] ?></strong></p>
+									<a href="<?php echo base_url() . "profile/viewprofile/" . $post['user_id'] ?>"><p class="media-heading"><strong><?php echo $post['username'] ?></strong></p></a>
 									<p><?php echo htmlentities($post['description']) ?></p>
 									<p><small><span data-livestamp="<?php 
 									if($post['type']=="0"){
@@ -37,4 +38,6 @@
 						</ul>
 					</div>	
 				</div>
-			</div>
+			</div>	
+
+

@@ -6,6 +6,7 @@
 				<tr>
 					<th>Rank</th>
 					<th>Name</th>
+					<th>Points</th>
 					<th>Level</th>
 				</tr>
 			</thead>
@@ -38,7 +39,7 @@
 				<tr>
 					<th>Rank</th>
 					<th>Name</th>
-					<th>Level</th>
+					<th>Steps</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -68,7 +69,7 @@
 				<tr>
 					<th>Rank</th>
 					<th>Name</th>
-					<th>Level</th>
+					<th>Floors</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -97,7 +98,7 @@
 				<tr>
 					<th>Rank</th>
 					<th>Name</th>
-					<th>Level</th>
+					<th>Avg. Sleep Efficiency</th>
 				</tr>
 			</thead>
 			<tbody>

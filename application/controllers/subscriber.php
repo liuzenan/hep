@@ -19,6 +19,8 @@ class Subscriber extends CI_Controller {
 						$date = $data['date'];
 						$this->getActivities($user_id, $date);
 						$this->updateAchievement($user_id, $date);
+						$this->load->model('Activities_model','activities');
+						$this->activities->updateExp($user_id);
 					}else{
 						
 					}
@@ -141,100 +143,8 @@ class Subscriber extends CI_Controller {
 		$this->load->model('Activities_model','activities');
 		$this->load->model('User_model','usermodel');
 
-		$dailyActivityData = $this->activities->getDailyActivityData($user_id, $date);
-		$dailySleepData = $this->activities->getDailySleepData($user_id, $date);
-
 		$lifetimeActivityData = $this->activities->getLifetimeActivityData($user_id);
 
-		if($dailyActivityData){
-			$dailySteps = intval($dailyActivityData->steps);
-			$dailyFloors = intval($dailyActivityData->floors);
-			$dailyCalories = intval($dailyActivityData->calories);
-
-
-			$sql = "SELECT id FROM achievement
-					WHERE type='daily' AND activity='steps'
-					AND min_val<=" . $dailySteps;
-
-			$query = $this->db->query($sql);
-
-
-			echo $dailySteps;
-			echo "\n";
-			echo $dailyFloors;
-			echo "\n";
-			echo $dailyCalories;
-
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-					$this->usermodel->insertAchievement($user_id, $row->id, $date);
-				}
-			}
-
-			$sql = "SELECT id FROM achievement
-					WHERE type='daily' AND activity='floors'
-					AND min_val<=" . $dailyFloors;
-
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-					$this->usermodel->insertAchievement($user_id, $row->id, $date);
-				}
-			}
-
-			$sql = "SELECT id FROM achievement
-					WHERE type='daily' AND activity='calories'
-					AND min_val<=" . $dailyCalories;
-
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-					$this->usermodel->insertAchievement($user_id, $row->id, $date);
-				}
-			}
-		}
-
-		if($dailySleepData){
-			$dailySleepEff = intval($dailySleepData->efficiency);
-			$dailySleepStartTime = intval($dailySleepData->start_time);
-			$dailySleepTime = intval($dailySleepData->time_asleep);
-
-			$sql = "SELECT id FROM achievement
-					WHERE type='daily' AND activity='sleepeff'
-					AND min_val<=" . $dailySleepEff;
-
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-					$this->usermodel->insertAchievement($user_id, $row->id, $date);
-				}
-			}
-
-
-			$sql = "SELECT id FROM achievement
-					WHERE type='daily' AND activity='asleeptime'
-					AND min_val<=" . $dailySleepTime;
-
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-					$this->usermodel->insertAchievement($user_id, $row->id, $date);
-				}
-			}
-
-		}
-		
-		if($lifetimeActivityData){
 
 			$lifetimeDistance = intval($lifetimeActivityData->total_distance);
 			$lifetimeFloors = intval($lifetimeActivityData->total_floors);
@@ -243,7 +153,7 @@ class Subscriber extends CI_Controller {
 
 
 			$sql = "SELECT id FROM achievement
-					WHERE type='lifetime' AND activity='distance'
+					WHERE activity='distance'
 					AND min_val<=" . $lifetimeDistance;
 
 			$query = $this->db->query($sql);
@@ -262,7 +172,7 @@ class Subscriber extends CI_Controller {
 			}
 
 			$sql = "SELECT id FROM achievement
-					WHERE type='lifetime' AND activity='floors'
+					WHERE activity='floors'
 					AND min_val<=" . $lifetimeFloors;
 
 			$query = $this->db->query($sql);
@@ -277,7 +187,6 @@ class Subscriber extends CI_Controller {
 					}
 				}
 			}
-		}
 	}
 
 	private function getUserKeyPair($userId){

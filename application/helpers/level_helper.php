@@ -3,7 +3,7 @@
 if ( ! function_exists('getLevel')){
 	function getLevel($points){
 
-		$coeff = 0.1;
+		$coeff = 0.3;
 		$level = floor($coeff*sqrt($points));
 		return $level;
 	}	
@@ -14,7 +14,7 @@ if ( ! function_exists('getNextLevelPoints')){
 
 	function getNextLevelPoints($level){
 
-		$coeff = 0.1;
+		$coeff = 0.3;
 		$points = ceil(($level/$coeff)*($level/$coeff));
 
 		return $points;

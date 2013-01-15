@@ -23,6 +23,28 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	$("#postComment").click(function(event){
+		var msg = $("#messageBox").val();
+		console.log(msg);
+		if(msg.length<=140&&msg.length>0){
+			$.ajax({
+				type:'POST',
+				url:'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/postComment',
+				dataType:'json',
+				data:{
+					message: msg,
+					event_id: $('#postComment').data('id')
+				}
+			}).done(function(msg){
+				if(msg.success==true){
+					window.location.reload();
+				}else{
+					$("#alertContainer").html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong>Your message is not posted.</div>');
+				}
+			});
+		}
+	});
+
 	//check word limit
 	$("#messageBox").keyup(function(event){
 		var msgbox = event.target;
@@ -31,7 +53,7 @@ jQuery(document).ready(function($) {
 
 	//joinevents
 	$('.joinbtn').click(function(event){
-		var eventId = $(this).parent().parent().data("eventId");
+		var eventId = $(this).data("id");
 		if(eventId){
 			$.ajax({
 				type:'POST',
@@ -42,9 +64,9 @@ jQuery(document).ready(function($) {
 				}
 			}).done(function(msg){
 				if(msg.success){
-					alert("success");
+					window.location.reload();
 				}else{
-					alert("not joined");
+					alert("There's an error, we are working to fix it. Sorry!");
 				}
 			});
 		}
