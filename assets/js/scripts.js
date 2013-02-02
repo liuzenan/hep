@@ -1,3 +1,4 @@
+var base_url = 'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/';
 jQuery(document).ready(function($) {
 
 	$(".example").popover({
@@ -11,7 +12,7 @@ jQuery(document).ready(function($) {
 		if(msg.length<=800&&msg.length>0){
 			$.ajax({
 				type:'POST',
-				url:'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/postMessage',
+				url:base_url+'forum/postMessage',
 				dataType:'json',
 				data:{
 					thread_id: $("#postMessage").data("threadId"),
@@ -31,13 +32,13 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var data = $("#newThreadForm").serializeArray();
 		data.push({name: 'topic_id', value: $("#newThreadForm").data("topicId")});
-		$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/createThread', data, function(msg){
+		$.post(base_url+'forum/createThread', data, function(msg){
 			if (msg.success == true) {
-				window.location.href = 'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/discussion/' + msg.thread_id;
+				window.location.href = base_url+'forum/discussion/' + msg.thread_id;
 			} else {
 				if (msg.login == true) {
 				}else {
-					window.location.href = "http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/login"
+					window.location.href = base_url+"login"
 				};
 			}
 		}, 'json');
@@ -49,7 +50,7 @@ jQuery(document).ready(function($) {
 		if(msg.length<=800&&msg.length>0){
 			$.ajax({
 				type:'POST',
-				url:'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/postComment',
+				url:base_url+'challenges/postComment',
 				dataType:'json',
 				data:{
 					message: msg,
@@ -77,7 +78,7 @@ jQuery(document).ready(function($) {
 		if(eventId){
 			$.ajax({
 				type:'POST',
-				url:'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/joinEvent',
+				url:base_url+'challenges/joinEvent',
 				dataType:'json',
 				data:{
 					event_id:eventId
@@ -94,35 +95,35 @@ jQuery(document).ready(function($) {
 
 	$('#allChallenges').on("click", "#recentWorkouts",function(event){
 		event.preventDefault();
-		$("#workouts").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/recentWorkouts");
+		$("#workouts").load(base_url+"challenges/recentWorkouts");
 	});
 	$('#allChallenges').on("click", "#popularWorkouts",  function(event){
 		event.preventDefault();
-		$("#workouts").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/popularWorkouts");
+		$("#workouts").load(base_url+"challenges/popularWorkouts");
 	});
 	$('#allChallenges').on("click", "#recentEvents", function(event){
 		event.preventDefault();
-		$("#events").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/recentEvents");
+		$("#events").load(base_url+"challenges/recentEvents");
 	});
 	$('#allChallenges').on("click", "#popularEvents", function(event){
 		event.preventDefault();
-		$("#events").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/popularEvents");
+		$("#events").load(base_url+"challenges/popularEvents");
 	});
 	$('#myChallenges').on("click", "#recentWorkouts",function(event){
 		event.preventDefault();
-		$("#workouts").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/myRecentWorkouts");
+		$("#workouts").load(base_url+"challenges/myRecentWorkouts");
 	});
 	$('#myChallenges').on("click", "#popularWorkouts",  function(event){
 		event.preventDefault();
-		$("#workouts").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/myPopularWorkouts");
+		$("#workouts").load(base_url+"challenges/myPopularWorkouts");
 	});
 	$('#myChallenges').on("click", "#recentEvents", function(event){
 		event.preventDefault();
-		$("#events").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/myRecentEvents");
+		$("#events").load(base_url+"challenges/myRecentEvents");
 	});
 	$('#myChallenges').on("click", "#popularEvents", function(event){
 		event.preventDefault();
-		$("#events").load("http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/myPopularEvents");
+		$("#events").load(base_url+"challenges/myPopularEvents");
 	});
 
 
@@ -134,7 +135,7 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 		$.ajax({
 			type:'POST',
-			url:'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges/newChallenge',
+			url:base_url+'challenges/newChallenge',
 			dataType:'json',
 			data:{
 				title: $('#title').val(),
@@ -148,7 +149,7 @@ jQuery(document).ready(function($) {
 		}).done(function(msg){
 			if(msg.success){
 				alert("event successfully created");
-				window.location.replace('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges');
+				window.location.replace(base_url+'challenges');
 			}else{
 				alert("event not created, please check your inputs");
 			}
@@ -157,7 +158,7 @@ jQuery(document).ready(function($) {
 
 	$('#cancelEvent').click(function(event){
 		event.preventDefault();
-		window.location.replace('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/challenges');
+		window.location.replace(base_url+'challenges');
 	});
 
 
@@ -167,7 +168,7 @@ jQuery(document).ready(function($) {
 		var action = clicked.data("actionValue");
 		var thread_id = clicked.parent().parent().data('threadId');
 		if (action=="up") {
-			$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/upvote',{thread_id: thread_id}, function(data){
+			$.post(base_url+'forum/upvote',{thread_id: thread_id}, function(data){
 				if (data.success) {
 					$('.thread-post .vote-button').removeClass("vote-enabled").addClass("vote-disabled");
 					$('.thread-post .vote-button').unbind('click');
@@ -175,7 +176,7 @@ jQuery(document).ready(function($) {
 				};
 		}, "json");
 		} else {
-			$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/downvote',{thread_id: thread_id}, function(data){
+			$.post(base_url+'forum/downvote',{thread_id: thread_id}, function(data){
 				if (data.success) {
 					$('.thread-post .vote-button').removeClass("vote-enabled").addClass("vote-disabled");
 					$('.thread-post .vote-button').unbind('click');
@@ -194,7 +195,7 @@ jQuery(document).ready(function($) {
 		var post_control = clicked.parent().children(".vote-button");
 		var vote_count = clicked.parent().children(".vote-count");
 		if (action=="up") {
-			$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/upvote',{post_id: post_id}, function(data){
+			$.post(base_url+'forum/upvote',{post_id: post_id}, function(data){
 				if (data.success) {
 					post_control.removeClass("vote-enabled").addClass("vote-disabled");
 					post_control.unbind('click');
@@ -202,7 +203,7 @@ jQuery(document).ready(function($) {
 				};
 		}, "json");
 		} else {
-			$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/downvote', {post_id: post_id}, function(data){
+			$.post(base_url+'forum/downvote', {post_id: post_id}, function(data){
 				if (data.success) {
 					post_control.removeClass("vote-enabled").addClass("vote-disabled");
 					post_control.unbind('click');
@@ -218,7 +219,7 @@ jQuery(document).ready(function($) {
 		var clicked = $(this);
 		var thread_id = clicked.parent().parent().parent().data('threadId');
 
-		$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/markspam',{thread_id: thread_id}, function(data){
+		$.post(base_url+'forum/markspam',{thread_id: thread_id}, function(data){
 				if (data.success) {
 					clicked.removeClass("flag-enabled").addClass("flag-disabled");
 					clicked.unbind('click');
@@ -231,7 +232,7 @@ jQuery(document).ready(function($) {
 		var clicked = $(this);
 		var post_id = clicked.parent().parent().parent().data('postId');
 
-		$.post('http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/forum/markspam',{post_id: post_id}, function(data){
+		$.post(base_url+'forum/markspam',{post_id: post_id}, function(data){
 				if (data.success) {
 					clicked.removeClass("flag-enabled").addClass("flag-disabled");
 					clicked.unbind('click');

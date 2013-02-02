@@ -2,13 +2,11 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<div class="row-fluid">
-			<div class="span12">
-				<ul class="media-list achievements">
+				<ul class="thumbnails achievements">
 					<?php foreach($achievements as $badge){
 						$this->load->view("templates/achievementItem", $badge);
 					} ?>
 				</ul>
-			</div>
 		</div>
 	</div>
 </div>
