@@ -1,3 +1,29 @@
+p{
+	margin: 0 0 1em;
+}
+
+#user-notification{
+	display: block;
+	position: absolute;
+	top: 3px;
+	right: 4px;
+}
+
+.form-horizontal .control-group {
+	margin-bottom: 21px;
+}
+
+.form-horizontal label {
+	float: left;
+	width: 160px;
+	padding-top: 5px;
+	text-align: right;
+}
+
+.form-horizontal .controls {
+	margin-left: 180px;
+}
+
 .navbar .avatar{
 	height: 20px;
 	width: auto;
@@ -122,3 +148,63 @@ span.activityIcon.floors{
 	left:0;
 	right:0;
 }
+
+td.forum-stats{
+	font-weight: bold;
+	color: #a5a5a5;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.vote-button, .flag-button{
+	display:inline-block;
+	text-decoration: none;
+}
+
+.vote-button:hover, .flag-button:hover{
+	text-decoration: none;
+}
+
+.vote-up, .vote-down{
+	color:#666;
+}
+
+.flag-button.flag-enabled{
+	color:#666;
+}
+
+.flag-button.flag-disabled{
+	color:red;
+}
+
+.vote-up.vote-disabled, .vote-down.vote-disabled{
+	color:#ccc;
+}
+
+.hidden {
+	position: absolute !important;
+	clip: rect(1px,1px,1px,1px);
+}
+
+.thread-control{
+	padding-bottom: 10px;
+}
+
+.forum-header{
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 15px;
+}
+
+.forum-post-container{
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+.forum-post-header{
+	background: #e6e6e6;
+	padding: 6px;
+	margin-bottom: 10px;
+}
+

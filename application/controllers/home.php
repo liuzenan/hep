@@ -24,6 +24,7 @@ class Home extends CI_Controller{
 				$this->session->set_userdata('username', $row->username);
 				$gender =$row->gender;
 				$avatar = $row->profile_pic;
+				$isTutor = $row->staff;
 				$isleader = $row->leader;
 				$isadmin = $row->admin;
 				$isphantom = $row->phantom;
@@ -32,6 +33,7 @@ class Home extends CI_Controller{
 
 				$data['avatar'] = $avatar;
 				$this->session->set_userdata('avatar', $avatar);
+				$this->session->set_userdata('isTutor', $isTutor);
 				$this->session->set_userdata('isphantom', $isphantom);
 				$this->session->set_userdata('isleader', $isleader);
 				$this->session->set_userdata('isadmin', $isadmin);
@@ -40,6 +42,8 @@ class Home extends CI_Controller{
 				$data['displayName'] = $displayName;
 				$data['isAdmin'] = $this->session->userdata('isadmin');
 				$data['isLeader'] = $this->session->userdata('isleader');
+				$this->load->model('User_model','userModel');
+		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
 
 				$dateStr = date("Y-m-d");
 				//get activities data

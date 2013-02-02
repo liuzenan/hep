@@ -2,21 +2,6 @@
 
 class User_model extends CI_Model{
 
-	// var $first_name = '';
-	// var $last_name = '';
-	// var $fitbit_id ='';
-	// var $oauth_secret ='';
-	// var $oauth_token ='';
-	// var $profile_pic ='';
-	// var $gender = '';
-	// var $house_id = 0;
-	// var $username = '';
-	// var $email = '';
-	// var $admin = 0;
-	// var $phantom = 0;
-	// var $staff = 0;
-	// var $leader = 0;
-
 	function __construct(){
 		parent::__construct();
 	}
@@ -26,14 +11,53 @@ class User_model extends CI_Model{
 		try {
 			if($user_id&&$achievement_id&&$date){
 				$sql="INSERT INTO userachievement
-						VALUES(". $user_id .", ". $achievement_id .", '". $date ."')
-						ON DUPLICATE KEY UPDATE user_id=user_id";
+				VALUES(". $user_id .", ". $achievement_id .", '". $date ."')
+				ON DUPLICATE KEY UPDATE user_id=user_id";
 				$this->db->query($sql);
 			}			
 		} catch (Exception $e) {
 			
 		}
 
+	}
+
+	function getNotifications($user_id){
+		try {
+			
+			$query = $this->db->query("SELECT * FROM notification WHERE user_id = " . $user_id);
+
+			if ($query->num_rows()>0) {
+					# code...
+				$notification = $query->result();
+				return $notification;
+			}
+
+		} catch (Exception $e) {
+			
+		}
+	}
+
+	function addNotification($user_id, $description, $url){
+		try {
+			$sql = "INSERT INTO notification(description, url, user_id)
+			VALUES (" . $this->db->escape($description) . ", " . $this->db->escape($url) . ", " . $user_id . ")";
+			$this->db->query($sql);
+			$notification_id = $this->db->insert_id();
+			return $notification_id;
+			
+		} catch (Exception $e) {
+			
+		}
+
+	}
+
+	function removeNotification($notification_id){
+		try {
+			$this->db->query("DELETE FROM notification WHERE id = " . $notification_id);
+			return true;
+		} catch (Exception $e) {
+
+		}
 	}
 
 }

@@ -27,7 +27,8 @@ class Signup extends CI_Controller{
 
 			if($username){
 				$data=array(
-					'username'=>$username
+					'username'=>$username,
+					'fb'=>1
 					);
 				$this->db->where('id',$this->session->userdata('user_id'));
 				$this->db->update('user', $data);

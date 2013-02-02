@@ -53,6 +53,8 @@ class Profile extends CI_Controller {
 			if($query->num_rows()>0){
 				$data['userevents'] = $query->result();
 			}
+			$this->load->model('User_model','userModel');
+		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('profile', $data);

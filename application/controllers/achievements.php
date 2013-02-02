@@ -24,6 +24,8 @@ class Achievements extends CI_Controller {
 			$data['isAdmin'] = $this->session->userdata('isadmin');
 			$data['isLeader'] = $this->session->userdata('isleader');
 			//echo print_r($data['badges']);
+			$this->load->model('User_model','userModel');
+		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
 			$this->load->view('templates/header', $data);
 			$this->load->view('achievements', $data);
 			$this->load->view('templates/footer');

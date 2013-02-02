@@ -3,7 +3,6 @@
 class Stats extends CI_Controller {
 
 	public function index(){
-		$this->output->cache(200);
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		}else{
@@ -12,7 +11,6 @@ class Stats extends CI_Controller {
 	}
 
 	public function statistics(){
-		$this->output->cache(200);
 			$data['active'] = 5;
 			$data['displayName'] = $this->session->userdata('name');
 			$data['avatar'] = $this->session->userdata('avatar');
@@ -20,21 +18,27 @@ class Stats extends CI_Controller {
 			$data['currentTab'] = "statistics";
 			$data['isAdmin'] = $this->session->userdata('isadmin');
 			$data['isLeader'] = $this->session->userdata('isleader');
-
+$this->load->model('User_model','userModel');
+		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
 			$this->load->view("templates/header", $data);
 			$this->load->view("stats", $data);
 			$this->load->view("templates/footer");
 	}
 
-	public function history($type='steps'){
-		$this->output->cache(200);
+	public function history($type='steps', $span="week"){
 			$data['active'] = 5;
 			$data['displayName'] = $this->session->userdata('name');
 			$data['avatar'] = $this->session->userdata('avatar');
 			$data['chartTitle'] = $type;
 			date_default_timezone_set('UTC');
 			$currentDate = date('Y-m-d');
-			$weekBegin = date('Y-m-d', strtotime($currentDate)-604800);
+
+			if ($span=="week") {
+				$weekBegin = date('Y-m-d', strtotime($currentDate)-604800);
+			} else if ($span=="month") {
+				$weekBegin = date('Y-m-d', strtotime($currentDate)-604800*4);
+			}
+			
 
 			$data['startDate'] = $weekBegin;
 			$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate);
@@ -42,7 +46,9 @@ class Stats extends CI_Controller {
 			$data['currentTab'] = "history";
 			$data['isAdmin'] = $this->session->userdata('isadmin');
 			$data['isLeader'] = $this->session->userdata('isleader');
-
+			$data['span'] = $span;
+$this->load->model('User_model','userModel');
+		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
 			$this->load->view("templates/header", $data);
 			$this->load->view("stats", $data);
 			$this->load->view("templates/footer");

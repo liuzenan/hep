@@ -4,6 +4,7 @@
 			<li class="<?php if($active==1) echo "active" ?>"><a href="<?php echo base_url() . 'challenges'?>">Challenges</a></li>
 			<li class="<?php if($active==3) echo "active" ?>"><a href="<?php echo base_url() . 'leaderboard'?>">Leaderboard</a></li>
 			<li class="<?php if($active==5) echo "active" ?>"><a href="<?php echo base_url() . 'stats'?>">Personal Stats</a></li>
+			<li class="<?php if($active==8) echo "active" ?>"><a href="<?php echo base_url() . 'forum'?>">Forums</a></li>
 			<hr>
 			<?php if($isLeader==1) {?>
 			<li class="<?php if($active==6) echo "active" ?>"><a href="<?php echo base_url() . 'manage/studentList'?>">Student List</a></li>
