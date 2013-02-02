@@ -145,48 +145,6 @@ class Subscriber extends CI_Controller {
 
 		$lifetimeActivityData = $this->activities->getLifetimeActivityData($user_id);
 
-
-			$lifetimeDistance = intval($lifetimeActivityData->total_distance);
-			$lifetimeFloors = intval($lifetimeActivityData->total_floors);
-
-
-
-
-			$sql = "SELECT id FROM achievement
-					WHERE activity='distance'
-					AND min_val<=" . $lifetimeDistance;
-
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-
-					$sql = "SELECT * FROM userachievement WHERE user_id=". $user_id ." AND achievement_id=". $row->id;
-					$query = $this->db->query($sql);
-					if($query->num_rows()==0){
-						$this->usermodel->insertAchievement($user_id, $row->id, $date);
-					}
-
-				}
-			}
-
-			$sql = "SELECT id FROM achievement
-					WHERE activity='floors'
-					AND min_val<=" . $lifetimeFloors;
-
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				foreach ($query->result() as $row) {
-					# code...
-					$sql = "SELECT * FROM userachievement WHERE user_id=". $user_id ." AND achievement_id=". $row->id;
-					$query = $this->db->query($sql);
-					if($query->num_rows()==0){
-						$this->usermodel->insertAchievement($user_id, $row->id, $date);
-					}
-				}
-			}
 	}
 
 	private function getUserKeyPair($userId){

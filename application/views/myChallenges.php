@@ -1,17 +1,14 @@
-<div class="row-fluid" id="myChallenges">
+<div class="row-fluid" id="allChallenges">
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<div class="row-fluid control-bottons">
 			<div class="pull-right">
-			<a href="<?php echo base_url() . "challenges" ?>" class="btn">All Challenges</a>
-			<a href="<?php echo base_url() . "challenges/createChallenge" ?>" class="btn btn-success">Create Challenge</a>
+				<a href="#" class="btn">All Challenges</a>
+				<a href="#" class="btn">Completed Challenges</a>
 			</div>
 		</div>
-		<div id="events">
-			<?php $this->load->view('templates/events'); ?>
-		</div>
-		<div id="workouts">
-			<?php $this->load->view('templates/workouts'); ?>
+		<div id="challenges">
+			<?php $this->load->view('templates/challenge'); ?>
 		</div>
 	</div>
 </div>

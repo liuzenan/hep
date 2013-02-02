@@ -2,16 +2,14 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<div class="row-fluid control-bottons">
-			<div class="pull-right">
-				<a href="<?php echo base_url() . "challenges/myChallenge" ?>" class="btn">My Challenges</a>
-				<a href="<?php echo base_url() . "challenges/createChallenge" ?>" class="btn btn-success">Create Challenge</a>
-			</div>
+				<ul class="nav nav-tabs">
+					<li class="<?php if($tab=="my") echo "active" ?>"><a href="<?php echo base_url() . "challenges" ?>">My Challenges</a></li>
+					<li class="<?php if($tab=="all") echo "active" ?>"><a href="<?php echo base_url() . "challenges/all" ?>">All Challenges</a></li>
+					<li class="<?php if($tab=="completed") echo "active" ?>"><a href="<?php echo base_url() . "challenges/completed" ?>">Completed Challenges</a></li>
+				</ul>
 		</div>
-		<div id="events">
-			<?php $this->load->view('templates/events'); ?>
-		</div>
-		<div id="workouts">
-			<?php $this->load->view('templates/workouts'); ?>
+		<div id="challenges">
+			<?php $this->load->view('templates/challenge'); ?>
 		</div>
 	</div>
 </div>
