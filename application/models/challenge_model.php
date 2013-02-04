@@ -5,7 +5,17 @@ class Challenge_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function joinChallenge($user_id, $challenge_id) {
+		$data = array(
+	          'user_id'=>$user_id,
+			  'challenge_id'=>$challenge_id
+	        );
+		$this->db->insert('challengeparticipant',$data);
+		 
+	}
+
 	function getCurrentChallenges($user_id){
+			
 		$sql = "SELECT *
 				FROM challenge
 				INNER JOIN challengeparticipant

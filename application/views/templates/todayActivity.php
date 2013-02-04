@@ -10,7 +10,8 @@
 					</div>
 					<div class="span10">
 						<div class="row-fluid">
-								<p><strong><?php echo $exp ?> EXP/<?php echo $nextlevelpoints ?> EXP Level <?php echo $level ?></strong> Average point: <?php echo ceil($avg_points->avg_points) ?></p>
+								<!--<p><strong><?php echo $exp ?> EXP/<?php echo $nextlevelpoints ?> EXP Level <?php echo $level ?></strong> Average point: <?php echo ceil($avg_points->avg_points) ?></p>-->
+								<!--
 								<div class="progress">
 									<?php if($bar_type==0){ ?>
 									<div class="bar bar-danger" style="margin-left:<?php echo ceil(($exp-$currentLevelPoints)/($nextlevelpoints-$currentLevelPoints)*100) ?>%;width: <?php echo 100 - ceil(($exp-$currentLevelPoints)/($nextlevelpoints-$currentLevelPoints)*100); ?>%;"></div>
@@ -29,6 +30,7 @@
 									<div class="bar bar-success" style="width: <?php echo ceil(($exp-$currentLevelPoints)/($nextlevelpoints-$currentLevelPoints)*100); ?>%;"></div>
 									<?php } ?>
 								</div>
+								-->
 						</div>		
 						<div class="row-fluid">
 							<div class="span3">

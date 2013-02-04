@@ -7,6 +7,18 @@ class User_model extends CI_Model{
 	}
 
 
+	function loadUser($user_id) {
+		$query = $this->db->get_where('user', array('id' => $user_id));
+		if($query->num_rows()>0) {
+			return $query->row();
+		} else {
+			show_error('Cannot find user', 501);
+		}
+
+	}
+
+
+
 	function insertAchievement($user_id, $achievement_id, $date){
 		try {
 			if($user_id&&$achievement_id&&$date){
