@@ -6,12 +6,16 @@ class Achievements extends CI_Controller {
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		}else{
-			$this->daily();
+			$user_id = $this->session->userdata('user_id');
+			$this->daily($user_id);
 		}
 	}
 
-	public function daily(){
-		$data['achievements'] = $this->getBadges();
+	public function daily($user_id){
+
+		$this->load->model('Badge_model', 'badgeModel');
+		$data['badges'] = $this->badgeModel->getBadges($user_id);
+		$data['achievements'] = $data['badges'];
 		$data['currentTab'] = 'daily';
 		$this->loadPage($data);
 	}

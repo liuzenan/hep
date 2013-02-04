@@ -19,7 +19,7 @@ class Subscriber extends CI_Controller {
 						$date = $data['date'];
 						$this->getActivities($user_id, $date);
 						$this->updateAchievement($user_id, $date);
-						$this->load->model('Activities_model','activities');
+						$this->load->model('Activity_model','activities');
 						$this->activities->updateExp($user_id);
 					}else{
 						
@@ -57,7 +57,7 @@ class Subscriber extends CI_Controller {
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){
 			try {
-				$this->load->model('Activities_model','activities');
+				$this->load->model('Activity_model','activities');
 				$this->activities->insert_intraday_activity($user_id, $date, $keypair);
 				$this->activities->sync_activity($date, '1d', $user_id, $keypair);
 			} catch (Exception $e) {
@@ -140,7 +140,7 @@ class Subscriber extends CI_Controller {
 	}
 
 	public function updateAchievement($user_id, $date){
-		$this->load->model('Activities_model','activities');
+		$this->load->model('Activity_model','activities');
 		$this->load->model('User_model','usermodel');
 
 		$lifetimeActivityData = $this->activities->getLifetimeActivityData($user_id);
