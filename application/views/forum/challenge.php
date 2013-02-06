@@ -20,7 +20,7 @@
 					<?php endforeach ?>
 					<div class="row-fluid">
 					<div class="span12">
-						<textarea id="messageBox<?php echo $thread_id ?>" data-thread-id="<?php echo $thread_id ?>" name="compose messageBox" row="4" class="input-block-level" placeholder="Write a new message..."></textarea>
+						<textarea id="messageBox<?php echo $thread_id ?>" data-thread-id="<?php echo $thread_id ?>" name="compose" row="4" class="input-block-level messageBox" placeholder="Write a new message..."></textarea>
 						<div class="btncontainer clearfix" data-thread-id="<?php echo $thread_id ?>">
 							<div class="postbtn pull-right">
 								<span class="muted postWordCount" id="postWordCount<?php echo $thread_id ?>">800</span>
