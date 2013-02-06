@@ -29,8 +29,6 @@ class Home extends CI_Controller{
 				$isadmin = $row->admin;
 				$isphantom = $row->phantom;
 
-
-
 				$data['avatar'] = $avatar;
 				$this->session->set_userdata('avatar', $avatar);
 				$this->session->set_userdata('isTutor', $isTutor);

@@ -1,4 +1,4 @@
-var base_url = 'http://ec2-54-251-40-149.ap-southeast-1.compute.amazonaws.com/fitbit/';
+var base_url = 'http://hep.d2.comp.nus.edu.sg/';
 jQuery(document).ready(function($) {
 
 	$(".example").popover({
