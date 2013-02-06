@@ -17,6 +17,20 @@ class User_model extends CI_Model{
 
 	}
 
+	function loadUsers($uids) {
+		$str = "";
+		foreach($uids as $uid) {
+		  $str .= $uid.", ";
+		}
+		$str = substr($str,0,-2);
+		$sql = "SELECT * FROM user WHERE id IN (" . implode(",", $uids) . ")";
+		$query = $this->db->query($sql);
+		$res = array();
+		foreach($query->result() as $user) {
+			$res[$user->id] = $user;
+		}
+		return $res;
+	}
 
 
 	function insertAchievement($user_id, $achievement_id, $date){

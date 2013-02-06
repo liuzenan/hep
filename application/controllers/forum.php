@@ -40,9 +40,12 @@ class Forum extends CI_Controller {
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		}else {
-			//$this->load->model('User_model','userModel');
+			$this->load->model('User_model','userModel');
 			$this->load->model('Forum_model','forumModel');
-			$data['threads'] = $this->forumModel->getChallengeForum();
+			$forums = $this->forumModel->getChallengeForum();
+			$data['threads'] = $forums;
+			$data['users'] = $this->userModel->loadUsers($data['threads']['uids']);
+			unset($data['threads']['uids']);
 			echo "<pre>"; print_r($data);echo "</pre><br>";
 			$this->loadView($data, "challenge");
 		}
