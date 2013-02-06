@@ -6,8 +6,10 @@ jQuery(document).ready(function($) {
 		trigger: 'hover'
 	});
 	//post message
-	$("#postMessage").click(function(event){
-		var msg = $("#messageBox").val();
+	$(".postMessage").click(function(event){
+		var currentBtn = $(this);
+		var threadId = currentBtn.data("threadId");
+		var msg = $("#messageBox"+threadId).val();
 		console.log(msg);
 		if(msg.length<=800&&msg.length>0){
 			$.ajax({
@@ -15,14 +17,14 @@ jQuery(document).ready(function($) {
 				url:base_url+'forum/postMessage',
 				dataType:'json',
 				data:{
-					thread_id: $("#postMessage").data("threadId"),
+					thread_id: threadId,
 					comment: msg
 				}
 			}).done(function(msg){
 				if(msg.success==true){
 					window.location.reload();
 				}else{
-					$("#alertContainer").html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong>Your message is not posted.</div>');
+					$("#alertContainer"+currentBtn).html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong>Your message is not posted.</div>');
 				}
 			});
 		}
@@ -67,9 +69,10 @@ jQuery(document).ready(function($) {
 	});
 
 	//check word limit
-	$("#messageBox").keyup(function(event){
+	$(".messageBox").keyup(function(event){
 		var msgbox = event.target;
-		limitText(msgbox, $("#postWordCount"), 800);
+		var threadId = $(this).data("threadId");
+		limitText(msgbox, $(".btncontainer[data-thread-id="+ threadId +"] .postWordCount"), 800);
 	});
 
 	//joinevents

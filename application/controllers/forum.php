@@ -36,6 +36,18 @@ class Forum extends CI_Controller {
 		}		
 	}
 
+	public function challenge() {
+		if(!$this->session->userdata('user_id')){
+			redirect(base_url() . "login");
+		}else {
+			//$this->load->model('User_model','userModel');
+			$this->load->model('Forum_model','forumModel');
+			$data['threads'] = $this->forumModel->getChallengeForum();
+			echo "<pre>"; print_r($data);echo "</pre><br>";
+			$this->loadView($data, "challenge");
+		}
+	}
+
 	public function thread($topic_id){
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");

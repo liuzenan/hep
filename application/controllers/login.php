@@ -87,7 +87,7 @@ class Login extends CI_Controller{
 
 	private function getActivites(){
 		$user_id = $this->session->userdata('user_id');
-		$this->load->model('Activities_model','activities');
+		$this->load->model('Activity_model','activities');
 		$this->activities->sync_activity('today', '2012-12-01', $user_id);
 	}
 

@@ -1,19 +1,20 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Activities_model extends CI_Model{
+class Activity_model extends CI_Model{
 
 	function __construct(){
 		parent::__construct();
 	}
 
 
-	function getDailyActivityData($user_id, $date){
-		$sql = "SELECT * FROM activity
-				WHERE user_id=". $user_id ." AND date='". $date ."'";
-
-		$query = $this->db->query($sql);
-		if($query->num_rows()>0){
-			return $query->row();
+	function getActivityToday($user_id){
+		$today = date("Y-m-d");
+		//get activities data
+		$activityQuery = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$today));
+		if($activityQuery->num_rows()>0){
+		  	return $activityRow = $activityQuery->row();
+		}else {
+			return FALSE;
 		}
 	}
 

@@ -57,7 +57,7 @@ $this->load->model('User_model','userModel');
 	private function getActivity($type, $startDate, $endDate){
 
 		try {
-			$this->load->model('Activities_model','activities');
+			$this->load->model('Activity_model','activities');
 			$data = $this->activities->get_activity($startDate, $endDate);
 		} catch (Exception $e) {
 		}
@@ -109,11 +109,11 @@ $this->load->model('User_model','userModel');
 		if($this->session->userdata('oauth_token')&&$this->session->userdata('oauth_secret')){
 			$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
 			$xml = $this->fitbitphp->getActivityStats();
-			//echo print_r($xml);
 			$best = $xml->best->tracker;
 			$lifetime = $xml->lifetime->tracker;
-
+		
 			$stats =array();
+			if(!empty($best)) {
 			$stats['best'] = array(
 				'calories' => array(
 						'date'=>(string) $best->caloriesOut->date,
@@ -132,13 +132,18 @@ $this->load->model('User_model','userModel');
 						'value'=>(string) $best->steps->value . " steps"
 					)
 				);
+			}else {
+				$stats['best'] = array();
+			}
 
+			if(!empty($lifetime)) {
 			$stats['lifetime'] = array(
 				'calories' => (string) $lifetime->caloriesOut . " Calories",
 				'distance' => (string) $lifetime->distance . " km",
 				//'floors' => (string) $lifetime->floors . " levels",
 				'steps' => (string) $lifetime->steps . " steps"
 				);
+			}
 			return $stats;
 		}else{
 			echo "oauth error";
