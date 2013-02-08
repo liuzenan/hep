@@ -18,6 +18,29 @@ class Activity_model extends CI_Model{
 		}
 	}
 
+	
+	function getAverageActivityToday(){
+		$today = date("Y-m-d");
+		//get activities data
+		$sql = "SELECT avg(a.steps) AS avg_steps, avg(a.floors) AS avg_floors, avg(a.distance) AS avg_distance
+				FROM activity AS a
+				WHERE a.date='".$today."' AND (a.steps>0 OR a.floors>0 OR a.distance>0)";
+		$query = $this->db->query($sql);
+		return $query->row();
+	}
+
+	function getAverageSleepToday(){
+		$today = date("Y-m-d", time() - 60 * 60 * 24);
+		//get activities data
+		$sql = "SELECT avg(total_time) AS avg_time
+				FROM sleep
+				WHERE date='".$today."' AND total_time>0";
+				echo $sql;
+		$query = $this->db->query($sql);
+		return $query->row();
+	}
+	
+
 	function getExp($user_id){
 		
 		$sql = "SELECT sum(activity.steps) AS total_steps, sum(activity.floors) AS total_floors, sum(activity.active_score) AS total_score

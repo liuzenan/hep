@@ -2,7 +2,10 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<div class="row-fluid myactivity">
-				Hello World
+				<?php $this->load->view('templates/todayActivity'); ?>
+				<?php $this->load->view('templates/achievementList') ?>
+				<?php $this->load->view('templates/challengeList') ?>
+
 		</div>
 	</div>
 </div>

@@ -11,15 +11,15 @@ class Forum_model extends CI_Model{
 
 		$sql = "SELECT f.title AS title,f.id AS thread_id, f.creator_id AS creator_id, 
 				t.comment AS comment, t.time_created AS comment_time, 
-				t.user_id AS commenter_id, t.id AS comment_id
+				t.user_id AS commenter_id, t.id AS comment_id, t.vote AS votes
 					FROM forumthread AS f
 					LEFT JOIN threadpost AS t
 					ON t.thread_id = f.id
 					WHERE f.topic_id = 3";
 		$query = $this->db->query($sql);
+		$uids = array();
 		if ($query->num_rows()>0) {
 			$res = array();
-			//print_r($query->result());
 			foreach($query->result() as $row) {
 				if(empty($res[$row->thread_id])) {
 					$thread = array();
@@ -30,6 +30,7 @@ class Forum_model extends CI_Model{
 						$thread["comments"] = array();
 					}
 					$res[$row->thread_id] = $thread;
+
 				}
 				if(!empty($row->commenter_id)) {
 					$thread = $res[$row->thread_id];
@@ -38,11 +39,13 @@ class Forum_model extends CI_Model{
 					$comment["comment"] = $row->comment;
 					$comment["comment_time"] = $row->comment_time;
 					$comment["comment_id"] = $row->comment_id;
+					$comment["votes"] = $row->votes;
 					$thread["comments"][$row->comment_id] = $comment;
 					$res[$row->thread_id]["comments"] = $thread["comments"];
-					//print_r($comment);
+					$uids[] = $row->commenter_id;
 				}
 			}
+			$res['uids'] = $uids;
 			return $res;
 		} else {
 			return FALSE;
