@@ -67,10 +67,9 @@ class Subscriber extends CI_Controller {
 
 	}
 
-	private function getSleep($user_id, $date){
+	public function getSleep($user_id, $date){
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){
-			try {
 				$basedate = $date;
 				$period = '1d';
 				$this->fitbitphp->setOAuthDetails($keypair['token'],$keypair['secret']);
@@ -128,9 +127,8 @@ class Subscriber extends CI_Controller {
 							ON DUPLICATE KEY UPDATE total_time=" . $value['timeInBed'] . ", time_asleep= " . $value['minutesAsleep'] . ", start_time= '" . $value['startTime'] . "', awaken_count= " . $value['awakeningsCount'] . ", min_awake= " . $value['minutesAwake'] .", min_to_asleep= " . $value['minutesToFallAsleep'] . ", min_after_wakeup= " . $value['minutesAfterWakeup'] . ", efficiency= " . $value['efficiency'];
 					$this->db->query($sql);	
 				}
-			} catch (Exception $e) {
-				
-			}
+
+				var_dump($sleepData);
 		}
 
 	}
