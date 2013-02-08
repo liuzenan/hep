@@ -18,7 +18,7 @@
 				<tr>
 					<td><?php echo $n ?></td>
 					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->total_points ?></td>
+					<td><?php echo $row->score ?></td>
 				</tr>
 				<?php 
 				}

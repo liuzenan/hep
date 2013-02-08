@@ -1,14 +1,14 @@
 <div class="row-fluid">
 	<div class="span12 well">
-		<p><strong>Total Level</strong></p>
+		<p><strong>Overall Ranking</strong></p>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Rank</th>
+					<th></th>
 					<th>Name</th>
 					<th>House</th>
-					<th>Points</th>
-					<th>Level</th>
+					<th>Score</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -20,12 +20,10 @@
 				?>
 				<tr>
 					<td><?php echo $n ?></td>
+					<td> <img src="<?php echo $row->avatar ?>" width="25px" height="25px"/></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
 					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->total_points ?></td>
-					<td><?php 
-				$this->load->helper('level');
-				echo getLevel(intval($row->total_points)); ?></td>
+					<td><?php echo $row->score ?></td>
 				</tr>
 				<?php 
 				}
@@ -36,29 +34,30 @@
 </div>
 <div class="row-fluid">
 	<div class="span12 well">
-		<p><strong>Steps</strong></p>
+		<p><strong>Female Ranking</strong></p>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Rank</th>
+					<th></th>
 					<th>Name</th>
 					<th>House</th>
-					<th>Total Steps</th>
+					<th>Score</th>
 				</tr>
 			</thead>
 			<tbody>
-
+				
 				<?php 
 					$n=0;
-					foreach($topSteps as $row){
+					foreach($female as $row){ 
 						$n++;
-
-				 ?>
+				?>
 				<tr>
 					<td><?php echo $n ?></td>
+					<td> <img src="<?php echo $row->avatar ?>" width="25px" height="25px"/></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
 					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->total_steps ?></td>
+					<td><?php echo $row->score ?></td>
 				</tr>
 				<?php 
 				}
@@ -69,58 +68,30 @@
 </div>
 <div class="row-fluid">
 	<div class="span12 well">
-		<p><strong>Floors</strong></p>
+		<p><strong>Male Ranking</strong></p>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Rank</th>
+					<th></th>
 					<th>Name</th>
 					<th>House</th>
-					<th>Total Floors</th>
+					<th>Score</th>
 				</tr>
 			</thead>
 			<tbody>
+				
 				<?php 
 					$n=0;
-					foreach($topFloors as $row){
+					foreach($male as $row){ 
 						$n++;
-				 ?>
+				?>
 				<tr>
 					<td><?php echo $n ?></td>
+					<td> <img src="<?php echo $row->avatar ?>" width="25px" height="25px"/></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
 					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->total_floors ?></td>
-				</tr>
-				<?php 
-				}
-				 ?>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Sleep</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th>Name</th>
-					<th>House</th>
-					<th>Avg. Sleep Efficiency</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php 
-					$n=0;
-					foreach($topSleep as $row){
-						$n++;
-				 ?>
-				<tr>
-					<td><?php echo $n ?></td>
-					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->avg_sleep ?>&#37;</td>
+					<td><?php echo $row->score ?></td>
 				</tr>
 				<?php 
 				}

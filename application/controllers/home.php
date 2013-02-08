@@ -90,6 +90,11 @@ class Home extends CI_Controller{
 	private function loadActivityData($user_id, &$data) {
 		$this->load->model('Activity_model', 'activityModel');
 		$activityRow = $this->activityModel->getActivityToday($user_id);
+		$average = $this->activityModel->getAverageActivityToday();
+		$average->sleep = $this->activityModel->getAverageSleepToday()->avg_time;
+		print_r($average);
+		$data['avg'] = $average;
+
 		if($activityRow != FALSE){
 			$data['activescore'] = $activityRow->active_score;
 			$data['calories'] = $activityRow->activity_calories;

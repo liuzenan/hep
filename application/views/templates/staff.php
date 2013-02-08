@@ -7,7 +7,6 @@
 					<th>Rank</th>
 					<th>Name</th>
 					<th>Points</th>
-					<th>Level</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -19,10 +18,7 @@
 				<tr>
 					<td><?php echo $n ?></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->total_points ?></td>
-					<td><?php 
-				$this->load->helper('level');
-				echo getLevel(intval($row->total_points)); ?></td>
+					<td><?php echo $row->score ?></td>		
 				</tr>
 				<?php 
 				}
@@ -52,7 +48,7 @@
 				<tr>
 					<td><?php echo $n ?></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->total_steps ?></td>
+					<td><?php echo $row->score ?></td>
 				</tr>
 				<?php 
 				}
@@ -81,7 +77,7 @@
 				<tr>
 					<td><?php echo $n ?></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->total_floors ?></td>
+					<td><?php echo $row->score ?></td>
 				</tr>
 				<?php 
 				}
@@ -110,7 +106,7 @@
 				<tr>
 					<td><?php echo $n ?></td>
 					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->avg_sleep ?>&#37;</td>
+					<td><?php echo $row->score ?>&#37;</td>
 				</tr>
 				<?php 
 				}

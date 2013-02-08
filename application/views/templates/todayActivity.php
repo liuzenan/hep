@@ -1,5 +1,5 @@
 		<div class="row-fluid">
-			<div class="span12 well today-activity">
+			<div class="today-activity">
 				<p><strong>Today's Activity</strong></p>
 				<div class="row-fluid">
 					<div class="span2">
@@ -57,6 +57,29 @@
 							<div class="span3">
 								<span class="activityIcon calories"></span>
 								<p class="smalltext"><small>Burned <?php echo $calories ?> calories</small></p>
+								<div class="progress progress-warning">
+									<div class="bar" style="width: <?php echo ceil($calories/2000*100); ?>%"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<div class="span3">
+						
+								<div class="progress progress-danger">
+									<div class="bar" style="width: <?php echo ceil($avg->avg_steps/40000*100); ?>%"></div>
+								</div>
+							</div>
+							<div class="span3">
+								<div class="progress progress-info">
+									<div class="bar" style="width: <?php echo ceil($avg->avg_distance/5*100); ?>%"></div>
+								</div>								
+							</div>
+							<div class="span3">
+								<div class="progress progress-success">
+									<div class="bar" style="width: <?php echo ceil($avg->avg_floors/20*100); ?>%"></div>
+								</div>								
+							</div>
+							<div class="span3">
 								<div class="progress progress-warning">
 									<div class="bar" style="width: <?php echo ceil($calories/2000*100); ?>%"></div>
 								</div>
