@@ -4,7 +4,7 @@
 			<li class="<?php if($active=='leaderboard') echo "active" ?>"><a href="<?php echo base_url() . 'leaderboard'?>">Leaderboard</a></li>
 			<li class="<?php if($active=='stats') echo "active" ?>"><a href="<?php echo base_url() . 'stats'?>">Personal Stats</a></li>
 			<li class="<?php if($active=='challenge_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/challenge'?>">Challenge Forum</a></li>
-			<li class="<?php if($active=='general_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/thread/1'?>">General Forum</a></li>
+			<li class="<?php if($active=='general_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/general'?>">General Forum</a></li>
 			<hr>
 			<?php if($isLeader==1) {?>
 			<li class="<?php if($active=='studentList') echo "active" ?>"><a href="<?php echo base_url() . 'manage/studentList'?>">Student List</a></li>
