@@ -174,7 +174,7 @@ class Subscriber extends CI_Controller {
 				$signature = $headers['X-Fitbit-Signature'];
 				//$expected = hash_hmac('sha1', $_FILES['updates']['tmp_name'], '45e414dd49784ec3872a8ebbb74dcbb9&');
 				if(!$signature){
-					$sql = "INSERT INTO Updates(`update`)
+					$sql = "INSERT INTO updates(`update`)
 					VALUES ('no signature, IP: ". $this->input->ip_address() ."')";
 					$this->db->query($sql);	
 				}else{
