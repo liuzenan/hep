@@ -6,6 +6,7 @@ class Leaderboard extends CI_Controller {
 	const all = 'all';
 	const tutor = 'tutor';
 
+	private $uid;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){

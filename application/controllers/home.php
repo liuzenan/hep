@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Home extends CI_Controller{
-
+	private $uid;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -98,7 +98,7 @@ class Home extends CI_Controller{
 	private function loadChallenges($user_id, &$data){
 		$this->load->model('Challenge_model', 'challengeModel');
 
-		$data['challenges'] = $this->challengeModel->getCurrentChallenges($user_id);
+		$data['challenges'] = $this->challengeModel->getIndividualCurrentChallenges($user_id);
 		
 	}
 
