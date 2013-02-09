@@ -12,37 +12,37 @@ class Login extends CI_Controller{
 	}
 
 	public function callBack(){
-			$this->fitbitphp->initSession(base_url() . "login/callBack");
-			$xml = $this->fitbitphp->getProfile();
-			$username =(string) $xml->user->displayName;
-			$fitbit_id =(string) $xml->user->encodedId;
-			$oauth_token = $this->fitbitphp->getOAuthToken();
-			$oauth_secret = $this->fitbitphp->getOAuthSecret();
-			$profile_pic =(string) $xml->user->avatar;
-			$gender =(string) $xml->user->gender;
-			$query = $this->db->query("SELECT fitbit_id FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
+		$this->fitbitphp->initSession(base_url() . "login/callBack");
+		$xml = $this->fitbitphp->getProfile();
+		$username =(string) $xml->user->displayName;
+		$fitbit_id =(string) $xml->user->encodedId;
+		$oauth_token = $this->fitbitphp->getOAuthToken();
+		$oauth_secret = $this->fitbitphp->getOAuthSecret();
+		$profile_pic =(string) $xml->user->avatar;
+		$gender =(string) $xml->user->gender;
+		$query = $this->db->query("SELECT fitbit_id FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
 			//check if user is in database
-			$user_exist = true;
-			if($query->num_rows()==0){
+		$user_exist = true;
+		if($query->num_rows()==0){
 				//user not exists
-				$sql = "INSERT INTO User(fitbit_id, oauth_token, oauth_secret, profile_pic, gender, username)
-						VALUES (" . $this->db->escape($fitbit_id) . ", " . $this->db->escape($oauth_token) . ", " . $this->db->escape($oauth_secret) . ", " . $this->db->escape($profile_pic) . ", " . $this->db->escape($gender) . ", " . $this->db->escape($username) . ")";
+			$sql = "INSERT INTO User(fitbit_id, oauth_token, oauth_secret, profile_pic, gender, username)
+			VALUES (" . $this->db->escape($fitbit_id) . ", " . $this->db->escape($oauth_token) . ", " . $this->db->escape($oauth_secret) . ", " . $this->db->escape($profile_pic) . ", " . $this->db->escape($gender) . ", " . $this->db->escape($username) . ")";
 
-				$this->db->query($sql);
-				$user_exist = false;
-			}
+			$this->db->query($sql);
+			$user_exist = false;
+		}
 			//set session data
-			$query = $this->db->query("SELECT id, email FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
-			if($query->num_rows()>0){
-				$row = $query->row();
-				$userdata = array(
-								'user_id' => $row->id,
-								'fibit_id' => $fitbit_id,
-								'oauth_secret' => $oauth_secret,
-								'oauth_token' => $oauth_token,
-								'username' => $username,
-								'avatar' => $profile_pic
-							);		
+		$query = $this->db->query("SELECT id, email FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
+		if($query->num_rows()>0){
+			$row = $query->row();
+			$userdata = array(
+				'user_id' => $row->id,
+				'fibit_id' => $fitbit_id,
+				'oauth_secret' => $oauth_secret,
+				'oauth_token' => $oauth_token,
+				'username' => $username,
+				'avatar' => $profile_pic
+				);		
 			$this->session->set_userdata($userdata);
 
 			if($user_exist){
@@ -50,7 +50,7 @@ class Login extends CI_Controller{
 				$authData=array(
 					'oauth_token'=>$oauth_token,
 					'oauth_secret'=>$oauth_secret
-				);
+					);
 
 				$this->db->where('id',$this->session->userdata('user_id'));
 				$this->db->update('user', $authData);
@@ -156,7 +156,7 @@ class Login extends CI_Controller{
 			//insert into database
 			foreach($sleepData as $key=>$value){
 				$sql = "INSERT INTO Sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
-						VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
+				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
 				$this->db->query($sql);	
 			}
 		}else{
@@ -172,12 +172,12 @@ class Login extends CI_Controller{
 			//subscribe to himself
 			$user_id = $this->session->userdata('user_id');
 			$sql = "INSERT INTO Subscription(user_id, subscriber_id)
-					VALUES (" . $user_id . ", " . $user_id .")";
+			VALUES (" . $user_id . ", " . $user_id .")";
 			$this->db->query($sql);
 
 			//subscribe to system notifications
 			$sql = "INSERT INTO Subscription(user_id, subscriber_id)
-					VALUES (" . $user_id . ", 0)";
+			VALUES (" . $user_id . ", 0)";
 			$this->db->query($sql);
 		}else{
 			echo 'something was wrong';
@@ -196,7 +196,7 @@ class Login extends CI_Controller{
 						"date" =>(string) $row->date,
 						"steps" => $row->steps,
 						"calories" => $row->calories
-					);
+						);
 					array_push($stepsData, $currentData);
 				}
 			}
@@ -205,7 +205,7 @@ class Login extends CI_Controller{
 				if($value['steps']>=0){
 					$timeStr = $value['date'] . ' 23:59:59';
 					$sql = "INSERT INTO Post(user_id, type, time, description)
-							VALUES (" . $user_id . ", 0, '". $timeStr . "', 'took " . $value['steps'] . " steps and he burned " . $value['calories'] . " calories.')";
+					VALUES (" . $user_id . ", 0, '". $timeStr . "', 'took " . $value['steps'] . " steps and he burned " . $value['calories'] . " calories.')";
 					$this->db->query($sql);
 				}else{
 					echo "something was wrong";

@@ -12,32 +12,29 @@ class Home extends CI_Controller{
 	public function index(){
 		$data['active'] = 0;
 
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			$user_id = $this->session->userdata('user_id');
-			$this->loadUserData($user_id, $data);
-			$this->loadActivityData($user_id, $data);
-			$this->loadPosts($user_id, $data);
-			$this->loadChallenges($user_id, $data);
-			$this->loadBadges($user_id, $data);	
-			$data['avg_points'] = $this->getAverage();
+		$user_id = $this->session->userdata('user_id');
+		$this->loadUserData($user_id, $data);
+		$this->loadActivityData($user_id, $data);
+		$this->loadPosts($user_id, $data);
+		$this->loadChallenges($user_id, $data);
+		$this->loadBadges($user_id, $data);	
+		$data['avg_points'] = $this->getAverage();
 
-			$this->load->view('templates/header', $data);
-			$this->load->view('home', $data);
-			$this->load->view('templates/footer');
-		}
+		$this->load->view('templates/header', $data);
+		$this->load->view('home', $data);
+		$this->load->view('templates/footer');
+		
 	}
 
 	private function loadPosts($user_id, &$data) {
 		$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
-								FROM Subscription
-								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
-								INNER JOIN User ON User.id = Post.user_id
-								WHERE Subscription.user_id = '" . $user_id . "'
-								AND Post.time <= NOW()
-								ORDER BY Post.time DESC
-								LIMIT 0, 5";
+		FROM Subscription
+		INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
+		INNER JOIN User ON User.id = Post.user_id
+		WHERE Subscription.user_id = '" . $user_id . "'
+		AND Post.time <= NOW()
+		ORDER BY Post.time DESC
+		LIMIT 0, 5";
 
 		$postsQuery = $this->db->query($postsSql);
 		$posts = array();
@@ -50,7 +47,7 @@ class Home extends CI_Controller{
 					'time' => $row->time,
 					'description' => $row->description,
 					'type' =>$row->type
-				);
+					);
 
 				array_push($posts, $currentPost);
 			}
@@ -132,8 +129,8 @@ class Home extends CI_Controller{
 
 	private function getAverage(){
 		$sql = "SELECT avg(points) AS avg_points
-				FROM user
-				WHERE phantom=0";
+		FROM user
+		WHERE phantom=0";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -143,57 +140,54 @@ class Home extends CI_Controller{
 	}
 
 	public function postMessage(){
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			$msg = $this->input->post('message');
-			if($msg){
-				$sql = "INSERT INTO Post(user_id, type, description)
-						VALUES (" . $this->session->userdata('user_id') . ", 1, " . $this->db->escape($msg) . ")";
-				$this->db->query($sql);
+		
+		$msg = $this->input->post('message');
+		if($msg){
+			$sql = "INSERT INTO Post(user_id, type, description)
+			VALUES (" . $this->session->userdata('user_id') . ", 1, " . $this->db->escape($msg) . ")";
+			$this->db->query($sql);
 
-				$last_id = $this->db->insert_id();
+			$last_id = $this->db->insert_id();
 
-				$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
-								FROM Subscription
-								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
-								INNER JOIN User ON User.id = Post.user_id
-								WHERE Post.id = '" . $last_id  . "'";
+			$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
+			FROM Subscription
+			INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
+			INNER JOIN User ON User.id = Post.user_id
+			WHERE Post.id = '" . $last_id  . "'";
 
-				$postsQuery = $this->db->query($postsSql);
-				if($postsQuery->num_rows()>0){
-					$row = $postsQuery->row(); 
-					$time = $row->time;
-					date_default_timezone_set('UTC'); 
-					$timestamp = strtotime((string) $time); 
-					$posts = array(
-							'user_id' => $row->post_user_id,
-							'username' => $row->first_name . ' ' . $row->last_name,
-							'profile_pic' => $row->profile_pic,
-							'time' => $timestamp,
-							'description' => $row->description,
-							'type' =>$row->type
+			$postsQuery = $this->db->query($postsSql);
+			if($postsQuery->num_rows()>0){
+				$row = $postsQuery->row(); 
+				$time = $row->time;
+				date_default_timezone_set('UTC'); 
+				$timestamp = strtotime((string) $time); 
+				$posts = array(
+					'user_id' => $row->post_user_id,
+					'username' => $row->first_name . ' ' . $row->last_name,
+					'profile_pic' => $row->profile_pic,
+					'time' => $timestamp,
+					'description' => $row->description,
+					'type' =>$row->type
 					);
-					$data = array(
-						'success'=>true,
-						'posts'=>$posts
+				$data = array(
+					'success'=>true,
+					'posts'=>$posts
 
 					);
-					echo json_encode($data);
-
-				}else{
-					$data = array(
-						'success'=>false
-					);
-					echo json_encode($data);
-				}
+				echo json_encode($data);
 
 			}else{
-					$data = array(
-						'success'=>false
+				$data = array(
+					'success'=>false
 					);
-					echo json_encode($data);
+				echo json_encode($data);
 			}
+
+		}else{
+			$data = array(
+				'success'=>false
+				);
+			echo json_encode($data);
 		}
 	}
 }

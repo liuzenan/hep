@@ -2,11 +2,11 @@
 
 class Leaderboard extends CI_Controller {
 	const female = 'FEMALE';
- 	const male = 'MALE';
- 	const all = 'all';
- 	const tutor = 'tutor';
+	const male = 'MALE';
+	const all = 'all';
+	const tutor = 'tutor';
 
- 	public function __construct() {
+	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
@@ -15,85 +15,60 @@ class Leaderboard extends CI_Controller {
 
 
 	public function index(){
-		if($this->session->userdata('user_id')){
-			$this->overall();
-		}else{
-			redirect(base_url().'login');
-		}
+		$this->overall();
+		
 	}
 
 	public function overall(){
-		if($this->session->userdata('user_id')){
-			$data['currentTab'] = "overall";
-			$data['leader'] = $this->getOverallTop(Leaderboard::all);
-			$data['female'] = $this->getOverallTop(Leaderboard::female);
-			$data['male'] = $this->getOverallTop(Leaderboard::male);
-			$this->loadPage($data);
-		}else{
-			redirect(base_url().'login');
-		}
+		$data['currentTab'] = "overall";
+		$data['leader'] = $this->getOverallTop(Leaderboard::all);
+		$data['female'] = $this->getOverallTop(Leaderboard::female);
+		$data['male'] = $this->getOverallTop(Leaderboard::male);
+		$this->loadPage($data);
 	}
 
 	public function steps(){
-		if($this->session->userdata('user_id')){
-			$data['currentTab'] = "steps";
-			$data['leader'] = $this->getStepsTop(Leaderboard::all);
-			$data['female'] = $this->getStepsTop(Leaderboard::female);
-			$data['male'] = $this->getStepsTop(Leaderboard::male);
-			$this->loadPage($data);
-		}else{
-			redirect(base_url().'login');
-		}
+		$data['currentTab'] = "steps";
+		$data['leader'] = $this->getStepsTop(Leaderboard::all);
+		$data['female'] = $this->getStepsTop(Leaderboard::female);
+		$data['male'] = $this->getStepsTop(Leaderboard::male);
+		$this->loadPage($data);
+		
 	}
 
 	public function floors(){
-		if($this->session->userdata('user_id')){
-			$data['currentTab'] = "floors";
-			$data['leader'] = $this->getFloorsTop(Leaderboard::all);
-			$data['female'] = $this->getFloorsTop(Leaderboard::female);
-			$data['male'] = $this->getFloorsTop(Leaderboard::male);
+		$data['currentTab'] = "floors";
+		$data['leader'] = $this->getFloorsTop(Leaderboard::all);
+		$data['female'] = $this->getFloorsTop(Leaderboard::female);
+		$data['male'] = $this->getFloorsTop(Leaderboard::male);
+
+		$this->loadPage($data);
 		
-			$this->loadPage($data);
-		}else{
-			redirect(base_url().'login');
-		}
 	}
 
 	public function sleep(){
-		if($this->session->userdata('user_id')){
-			$data['currentTab'] = "student";
-			$data['leader'] = $this->getSleepTop(Leaderboard::all);
-			$data['female'] = $this->getSleepTop(Leaderboard::female);
-			$data['male'] = $this->getSleepTop(Leaderboard::male);
-
-			$this->loadPage($data);
-		}else{
-			redirect(base_url().'login');
-		}
+		$data['currentTab'] = "student";
+		$data['leader'] = $this->getSleepTop(Leaderboard::all);
+		$data['female'] = $this->getSleepTop(Leaderboard::female);
+		$data['male'] = $this->getSleepTop(Leaderboard::male);
 	}
 
 	public function house(){
-		if($this->session->userdata('user_id')){
-			$data['currentTab'] = "house";
-			$data['leader'] = $this->getTopHouse();
-			$this->loadPage($data);
-		}else{
-			redirect(base_url().'login');
-		}
+		$data['currentTab'] = "house";
+		$data['leader'] = $this->getTopHouse();
+		$this->loadPage($data);
+		
 
 	}
 
 	public function staff(){
-		if($this->session->userdata('user_id')){
-			$data['currentTab'] = "staff";
-			$data['leader'] = $this->getTopTutors();
-			$data['topSteps'] = $this->getTopTutorSteps();
-			$data['topFloors'] = $this->getTopTutorFloors();
-			$data['topSleep'] = $this->getTopTutorSleep();
-			$this->loadPage($data);
-		}else{
-			redirect(base_url().'login');
-		}
+		$data['currentTab'] = "staff";
+		$data['leader'] = $this->getTopTutors();
+		$data['topSteps'] = $this->getTopTutorSteps();
+		$data['topFloors'] = $this->getTopTutorFloors();
+		$data['topSleep'] = $this->getTopTutorSleep();
+		$this->loadPage($data);
+		
 
 	}
 
@@ -112,10 +87,10 @@ class Leaderboard extends CI_Controller {
 
 	private function getOverallTop($type){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, house.name AS house, user.points AS score
-				FROM user
-				INNER JOIN house
-				ON user.house_id = house.id
-				WHERE user.phantom=0 AND user.staff=0";
+		FROM user
+		INNER JOIN house
+		ON user.house_id = house.id
+		WHERE user.phantom=0 AND user.staff=0";
 		if ($type == Leaderboard::female) {
 			$sql .= " AND user.gender='".Leaderboard::female."'";
 		} elseif ($type == Leaderboard::male) {
@@ -134,12 +109,12 @@ class Leaderboard extends CI_Controller {
 
 	private function getStepsTop($type){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, house.name AS house, sum(activity.steps) AS score
-				FROM user
-				INNER JOIN activity
-				ON user.id=activity.user_id
-				INNER JOIN house
-				ON user.house_id = house.id
-				WHERE user.phantom=0 AND user.staff=0";
+		FROM user
+		INNER JOIN activity
+		ON user.id=activity.user_id
+		INNER JOIN house
+		ON user.house_id = house.id
+		WHERE user.phantom=0 AND user.staff=0";
 		if ($type == Leaderboard::female) {
 			$sql .= " AND user.gender='".Leaderboard::female."'";
 		} elseif ($type == Leaderboard::male) {
@@ -156,12 +131,12 @@ class Leaderboard extends CI_Controller {
 
 	private function getFloorsTop($type){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, house.name AS house, sum(activity.floors) AS score
-				FROM user
-				INNER JOIN activity
-				ON user.id=activity.user_id
-				INNER JOIN house
-				ON user.house_id = house.id
-				WHERE user.phantom=0 AND user.staff=0";
+		FROM user
+		INNER JOIN activity
+		ON user.id=activity.user_id
+		INNER JOIN house
+		ON user.house_id = house.id
+		WHERE user.phantom=0 AND user.staff=0";
 		if ($type == Leaderboard::female) {
 			$sql .= " AND user.gender='".Leaderboard::female."'";
 		} elseif ($type == Leaderboard::male) {
@@ -178,12 +153,12 @@ class Leaderboard extends CI_Controller {
 
 	private function getSleepTop($type){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, house.name AS house, AVG(sleep.efficiency) AS score
-				FROM user
-				INNER JOIN sleep
-				ON user.id=sleep.user_id
-				INNER JOIN house
-				ON user.house_id = house.id
-				WHERE user.phantom=0 AND user.staff=0 AND sleep.efficiency>0";
+		FROM user
+		INNER JOIN sleep
+		ON user.id=sleep.user_id
+		INNER JOIN house
+		ON user.house_id = house.id
+		WHERE user.phantom=0 AND user.staff=0 AND sleep.efficiency>0";
 		if ($type == Leaderboard::female) {
 			$sql .= " AND user.gender='".Leaderboard::female."'";
 		} elseif ($type == Leaderboard::male) {
@@ -200,10 +175,10 @@ class Leaderboard extends CI_Controller {
 
 	private function getTopTutors(){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, user.points AS score
-				FROM user
-				WHERE user.phantom=0 AND user.staff=1
-				ORDER BY score DESC
-				LIMIT 0, 10";
+		FROM user
+		WHERE user.phantom=0 AND user.staff=1
+		ORDER BY score DESC
+		LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -216,13 +191,13 @@ class Leaderboard extends CI_Controller {
 
 	private function getTopTutorSteps(){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, sum(activity.steps) AS score
-				FROM user
-				INNER JOIN activity
-				ON user.id=activity.user_id
-				WHERE user.phantom=0 AND user.staff=1
-				GROUP BY user.id
-				ORDER BY score DESC
-				LIMIT 0, 10";
+		FROM user
+		INNER JOIN activity
+		ON user.id=activity.user_id
+		WHERE user.phantom=0 AND user.staff=1
+		GROUP BY user.id
+		ORDER BY score DESC
+		LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -231,13 +206,13 @@ class Leaderboard extends CI_Controller {
 	}
 	private function getTopTutorFloors(){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, sum(activity.floors) AS score
-				FROM user
-				INNER JOIN activity
-				ON user.id=activity.user_id
-				WHERE user.phantom=0 AND user.staff=1
-				GROUP BY user.id
-				ORDER BY score DESC
-				LIMIT 0, 10";
+		FROM user
+		INNER JOIN activity
+		ON user.id=activity.user_id
+		WHERE user.phantom=0 AND user.staff=1
+		GROUP BY user.id
+		ORDER BY score DESC
+		LIMIT 0, 10";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -250,13 +225,13 @@ class Leaderboard extends CI_Controller {
 
 	private function getTopTutorSleep(){
 		$sql = "SELECT user.first_name AS firstname, user.last_name AS lastname, user.profile_pic AS avatar, AVG(sleep.efficiency) AS score
-				FROM user
-				INNER JOIN sleep
-				ON user.id=sleep.user_id
-				WHERE user.phantom=0 AND user.staff=1 AND sleep.efficiency>0
-				GROUP BY user.id
-				ORDER BY score DESC
-				LIMIT 0, 10";	
+		FROM user
+		INNER JOIN sleep
+		ON user.id=sleep.user_id
+		WHERE user.phantom=0 AND user.staff=1 AND sleep.efficiency>0
+		GROUP BY user.id
+		ORDER BY score DESC
+		LIMIT 0, 10";	
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -267,12 +242,12 @@ class Leaderboard extends CI_Controller {
 
 	private function getTopHouse(){
 		$sql = "SELECT house.name AS house, sum(user.points) AS score
-				FROM user
-				INNER JOIN house
-				ON user.house_id = house.id
-				WHERE user.phantom=0 AND user.staff=0
-				GROUP BY house.id
-				ORDER BY score DESC";
+		FROM user
+		INNER JOIN house
+		ON user.house_id = house.id
+		WHERE user.phantom=0 AND user.staff=0
+		GROUP BY house.id
+		ORDER BY score DESC";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){

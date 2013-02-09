@@ -18,23 +18,19 @@ class Challenges extends CI_Controller {
 	}		
 
 	public function all(){
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			$data["challenges"] = $this->getAllChallenges();
-			$data["tab"] = "all";
-			$this->loadPage($data);
-		}		
+		
+		$data["challenges"] = $this->getAllChallenges();
+		$data["tab"] = "all";
+		$this->loadPage($data);
+		
 	}
 
 	public function completed(){
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			$data["challenges"] = $this->getCompletedChallenges();
-			$data["tab"] = "completed";
-			$this->loadPage($data);
-		}			
+		
+		$data["challenges"] = $this->getCompletedChallenges();
+		$data["tab"] = "completed";
+		$this->loadPage($data);
+		
 	}
 
 
@@ -56,11 +52,11 @@ class Challenges extends CI_Controller {
 	}
 
 	public function joinChallenge(){
-			$title = $this->db->escape($this->input->post("title"));
-			$message = $this->db->escape($this->input->post("message"));
-			$anonymous = $this->input->post("anonymous");
-			$subscribe = $this->input->post("subscribe");
-			$topic_id = $this->input->post("topic_id");
+		$title = $this->db->escape($this->input->post("title"));
+		$message = $this->db->escape($this->input->post("message"));
+		$anonymous = $this->input->post("anonymous");
+		$subscribe = $this->input->post("subscribe");
+		$topic_id = $this->input->post("topic_id");
 	}
 
 	public function quitChallenge(){
@@ -69,16 +65,16 @@ class Challenges extends CI_Controller {
 
 
 	private function loadPage($data, $type="challenges"){
-			$data['active'] = 1;
-			$data['displayName'] = $this->session->userdata('name');
-			$data['avatar'] = $this->session->userdata('avatar');
-			$data['isAdmin'] = $this->session->userdata('isadmin');
-			$data['isLeader'] = $this->session->userdata('isleader');
-			$this->load->model('User_model','userModel');
-			$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
-			$this->load->view('templates/header', $data);
-			$this->load->view('challenges', $data);
-			$this->load->view('templates/footer');
+		$data['active'] = 1;
+		$data['displayName'] = $this->session->userdata('name');
+		$data['avatar'] = $this->session->userdata('avatar');
+		$data['isAdmin'] = $this->session->userdata('isadmin');
+		$data['isLeader'] = $this->session->userdata('isleader');
+		$this->load->model('User_model','userModel');
+		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
+		$this->load->view('templates/header', $data);
+		$this->load->view('challenges', $data);
+		$this->load->view('templates/footer');
 	}
 
 }

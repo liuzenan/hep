@@ -2,33 +2,35 @@
 
 class Manage extends CI_Controller {
 
-	public function index(){
+	public function __construct() {
+		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
-		}else{
-			if($this->session->userdata('isadmin')){
-				$data['students'] = $this->getAllUsers();
-				$this->loadPage($data, "admin");
-			} else {
-				redirect(base_url() . "home");
-			}
-
 		}
+	}
+	
+	public function index(){
+		if($this->session->userdata('isadmin')){
+			$data['students'] = $this->getAllUsers();
+			$this->loadPage($data, "admin");
+		} else {
+			redirect(base_url() . "home");
+		}
+
+		
 	}
 
 	public function studentList(){
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			if($this->session->userdata('isadmin')||$this->session->userdata('isleader')){
+		
+		if($this->session->userdata('isadmin')||$this->session->userdata('isleader')){
 
-				$data['students'] = $this->getlist();
-				$data['currentHouse'] = $this->getHouse();
-				$this->loadPage($data);
-			}else{
-				redirect(base_url() . "home");
-			}			
-		}
+			$data['students'] = $this->getlist();
+			$data['currentHouse'] = $this->getHouse();
+			$this->loadPage($data);
+		}else{
+			redirect(base_url() . "home");
+		}			
+		
 	}
 
 	private function loadPage($data, $page="studentLeader"){
