@@ -6,6 +6,8 @@ class Signup extends CI_Controller{
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
+		} else {
+			$this->uid = $this->session->userdata('user_id');
 		}
 	}
 
@@ -14,6 +16,8 @@ class Signup extends CI_Controller{
 		$this->load->helper('form');
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
+		} else {
+			$this->uid = $this->session->userdata('user_id');
 		}else{
 			$this->load->view('signup');
 		}

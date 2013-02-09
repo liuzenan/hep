@@ -6,6 +6,8 @@ class Manage extends CI_Controller {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
+		} else {
+			$this->uid = $this->session->userdata('user_id');
 		}
 	}
 	
@@ -40,7 +42,7 @@ class Manage extends CI_Controller {
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
 		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
+		$data['notifications'] = $this->userModel->getNotifications($this->uid);
 		$this->load->view('templates/header', $data);
 		$this->load->view($page, $data);
 		$this->load->view('templates/footer');
@@ -56,7 +58,7 @@ class Manage extends CI_Controller {
 
 
 	private function getlist(){
-		$user_id = $this->session->userdata("user_id");
+		$user_id = $this->uid;
 		$query = $this->db->query("SELECT house_id FROM user WHERE id = " . $user_id);
 		if($query->num_rows()>0){
 			$house_id=$query->row()->house_id;
@@ -69,7 +71,7 @@ class Manage extends CI_Controller {
 	}
 
 	private function getHouse(){
-		$user_id = $this->session->userdata("user_id");
+		$user_id = $this->uid;
 		$sql = "SELECT house.name AS house_name
 		FROM house
 		INNER JOIN user

@@ -9,6 +9,8 @@ class Notification extends CI_Controller {
 	public function redirect($notification_id){
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
+		} else {
+			$this->uid = $this->session->userdata('user_id');
 		}else{
 		$query = $this->db->query("SELECT * FROM notification WHERE id = " . $this->db->escape($notification_id));
 			if ($query->num_rows()>0) {
