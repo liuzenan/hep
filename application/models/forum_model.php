@@ -128,8 +128,8 @@ class Forum_model extends CI_Model{
 			$subscriptions = $query->result();
 			foreach ($subscriptions as $value) {
 				if ($value->user_id != $user_id) {
-					$this->load->model('User_model','userModel');
-					$notification_id = $this->userModel->addNotification($value->user_id, $description, $url);
+					
+					$notification_id = $this->User_model->addNotification($value->user_id, $description, $url);
 				}
 
 			}

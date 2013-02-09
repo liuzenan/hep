@@ -138,7 +138,7 @@ class Subscriber extends CI_Controller {
 
 	public function updateAchievement($user_id, $date){
 		$this->load->model('Activity_model','activities');
-		$this->load->model('User_model','usermodel');
+		
 
 		$lifetimeActivityData = $this->activities->getLifetimeActivityData($user_id);
 

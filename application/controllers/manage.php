@@ -41,8 +41,8 @@ class Manage extends CI_Controller {
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->uid);
+		
+		$data['notifications'] = $this->User_model->getNotifications($this->uid);
 		$this->load->view('templates/header', $data);
 		$this->load->view($page, $data);
 		$this->load->view('templates/footer');

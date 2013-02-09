@@ -6,18 +6,36 @@ class Badge_model extends CI_Model{
 	}
 
 	function getBadges($user_id) {
-		$sql = "SELECT 	name, description, badge_pic
-				FROM badge
-				INNER JOIN userbadge
-				ON badge.id = userbadge.badge_id
-				WHERE userbadge.user_id = " . $user_id;
+		$sql = "SELECT b.*, ub.*
+		FROM badge AS b
+		INNER JOIN userbadge AS ub
+		ON b.id = ub.badge_id
+		WHERE ub.user_id = ?" ;
 
 
-		$query = $this->db->query($sql);
-		if($query->num_rows()>0){
-			return $query->result();
-		}
+		$query = $this->db->query($sql, array($user_id));
+		return $query->result();
 	}
 
-	
+	function addBadge($user_id, $badge_id) {
+		$data = array(
+			'user_id'=>$user_id,
+			'badge_id'=>$badge_id
+			);
+		$query = $this->db->insert('userbadge', $data);
+		return $this->db->insert_id();
+	}
+
+	function getHouseBadges($house_id) {
+		$sql="SELECT b.*,
+		ub.*
+		FROM   badge AS b,
+		userbadge AS ub,
+		user AS u
+		WHERE  b.id = ub.badge_id
+		AND u.id = ub.user_id
+		AND u.house_id = ?";
+		$query = $this->db->query($sql, array($house_id));
+		return $query->result();
+	}
 }

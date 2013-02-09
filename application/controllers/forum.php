@@ -122,8 +122,8 @@ class Forum extends CI_Controller {
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
 		$data['isTutor'] = $this->session->userdata('isTutor');
-		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
+		
+		$data['notifications'] = $this->User_model->getNotifications($this->session->userdata("user_id"));
 
 		$this->load->view('templates/header', $data);
 		if ($type == "forum") {
