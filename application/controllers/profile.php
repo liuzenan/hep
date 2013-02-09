@@ -18,7 +18,7 @@ class Profile extends CI_Controller {
 	public function viewprofile($user_id){
 		
 		
-		$data['active'] =0;
+		$data['active'] ='profile';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

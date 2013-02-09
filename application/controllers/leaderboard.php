@@ -52,7 +52,7 @@ class Leaderboard extends CI_Controller {
 	}
 
 	private function loadPage($data){
-		$data['active'] = 3;
+		$data['active'] = 'leaderboard';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

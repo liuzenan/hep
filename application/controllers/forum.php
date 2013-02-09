@@ -50,6 +50,8 @@ class Forum extends CI_Controller {
 		$data['threads'] = $forums;
 		$data['users'] = $this->userModel->loadUsers($data['threads']['uids']);
 		unset($data['threads']['uids']);
+		$data['active'] = 'challenge_forum';
+
 			//echo "<pre>"; print_r($data);echo "</pre><br>";
 		$this->loadView($data, "challenge", 9);
 	}
@@ -81,6 +83,8 @@ class Forum extends CI_Controller {
 		} 
 			//var_dump($data['first_row']);
 		if($topic_id == 1) {
+			$data['active'] = 'general_forum';
+
 			$this->loadView($data, "thread", 10);
 
 		} else {
@@ -311,7 +315,6 @@ class Forum extends CI_Controller {
 
 
 	private function loadView($data, $type="forum", $menu_idx = 8){
-		$data['active'] = $menu_idx;
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

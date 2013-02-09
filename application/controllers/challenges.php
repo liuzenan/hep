@@ -51,7 +51,7 @@ class Challenges extends CI_Controller {
 
 
 	private function loadPage($data, $type="challenges"){
-		$data['active'] = 1;
+		$data['active'] = 'challenges';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

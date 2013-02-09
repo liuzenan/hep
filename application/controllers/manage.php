@@ -36,7 +36,7 @@ class Manage extends CI_Controller {
 	}
 
 	private function loadPage($data, $page="studentLeader"){
-		$data['active'] = 6;
+		$data['active'] = 'manage';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

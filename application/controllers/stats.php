@@ -17,7 +17,7 @@ class Stats extends CI_Controller {
 	}
 
 	public function statistics(){
-		$data['active'] = 5;
+		$data['active'] = 'stats';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['stats'] = $this->getStats();
@@ -32,7 +32,7 @@ class Stats extends CI_Controller {
 	}
 
 	public function history($type='steps', $span="week"){
-		$data['active'] = 5;
+		$data['active'] = 'stats';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['chartTitle'] = $type;

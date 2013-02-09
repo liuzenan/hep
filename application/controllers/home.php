@@ -12,7 +12,7 @@ class Home extends CI_Controller{
 	}
 	
 	public function index(){
-		$data['active'] = 0;
+		$data['active'] = 'home';
 
 		$user_id = $this->session->userdata('user_id');
 		$this->loadUserData($user_id, $data);
