@@ -23,33 +23,7 @@ class Home extends CI_Controller{
 	}
 
 	private function loadPosts($user_id, &$data) {
-		$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
-								FROM Subscription
-								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
-								INNER JOIN User ON User.id = Post.user_id
-								WHERE Subscription.user_id = '" . $user_id . "'
-								AND Post.time <= NOW()
-								ORDER BY Post.time DESC
-								LIMIT 0, 5";
 
-		$postsQuery = $this->db->query($postsSql);
-		$posts = array();
-		if($postsQuery->num_rows()>0){
-			foreach($postsQuery->result() as $row){
-				$currentPost = array(
-					'user_id' => $row->post_user_id,
-					'username' => $row->first_name . ' ' . $row->last_name,
-					'profile_pic' => $row->profile_pic,
-					'time' => $row->time,
-					'description' => $row->description,
-					'type' =>$row->type
-				);
-
-				array_push($posts, $currentPost);
-			}
-		}
-
-		$data['posts'] = $posts;
 	}
 
 	private function loadUserData($user_id, &$data) {
@@ -147,11 +121,11 @@ class Home extends CI_Controller{
 
 				$last_id = $this->db->insert_id();
 
-				$postsSql= "SELECT User.id AS post_user_id, User.first_name AS first_name, User.last_name AS last_name, User.profile_pic AS profile_pic, Post.time AS time, Post.description AS description, Post.type AS type
-								FROM Subscription
-								INNER JOIN Post ON Post.user_id = Subscription.subscriber_id
-								INNER JOIN User ON User.id = Post.user_id
-								WHERE Post.id = '" . $last_id  . "'";
+				$postsSql= "SELECT user.id AS post_user_id, user.first_name AS first_name, user.last_name AS last_name, user.profile_pic AS profile_pic, post.time AS time, post.description AS description, post.type AS type
+								FROM subscription
+								INNER JOIN Post ON post.user_id = subscription.subscriber_id
+								INNER JOIN user ON user.id = post.user_id
+								WHERE post.id = '" . $last_id  . "'";
 
 				$postsQuery = $this->db->query($postsSql);
 				if($postsQuery->num_rows()>0){

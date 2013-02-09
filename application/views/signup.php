@@ -3,8 +3,8 @@
   <head>
     <title>Fitbit App</title>
     <!-- Bootstrap -->
-    <link href="/fitbit/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-     <link rel="stylesheet" href="/fitbit/assets/css/style.css">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+     <link rel="stylesheet" href="/assets/css/style.css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
   </head>
   <body>
@@ -40,7 +40,7 @@
 			</div>
 		</div>
   	</div>
-    <script src="/fitbit/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
     <script>
     	jQuery(document).ready(function($) {
 

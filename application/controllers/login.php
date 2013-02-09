@@ -20,19 +20,19 @@ class Login extends CI_Controller{
 			$oauth_secret = $this->fitbitphp->getOAuthSecret();
 			$profile_pic =(string) $xml->user->avatar;
 			$gender =(string) $xml->user->gender;
-			$query = $this->db->query("SELECT fitbit_id FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
+			$query = $this->db->query("SELECT fitbit_id FROM user WHERE fitbit_id = '" . $fitbit_id . "'");
 			//check if user is in database
 			$user_exist = true;
 			if($query->num_rows()==0){
 				//user not exists
-				$sql = "INSERT INTO User(fitbit_id, oauth_token, oauth_secret, profile_pic, gender, username)
+				$sql = "INSERT INTO user(fitbit_id, oauth_token, oauth_secret, profile_pic, gender, username)
 						VALUES (" . $this->db->escape($fitbit_id) . ", " . $this->db->escape($oauth_token) . ", " . $this->db->escape($oauth_secret) . ", " . $this->db->escape($profile_pic) . ", " . $this->db->escape($gender) . ", " . $this->db->escape($username) . ")";
 
 				$this->db->query($sql);
 				$user_exist = false;
 			}
 			//set session data
-			$query = $this->db->query("SELECT id, email FROM User WHERE fitbit_id = '" . $fitbit_id . "'");
+			$query = $this->db->query("SELECT id, email FROM user WHERE fitbit_id = '" . $fitbit_id . "'");
 			if($query->num_rows()>0){
 				$row = $query->row();
 				$userdata = array(
@@ -188,7 +188,7 @@ class Login extends CI_Controller{
 		if($this->session->userdata('user_id')){
 
 			$user_id = $this->session->userdata('user_id');
-			$query = $this->db->query("SELECT * FROM Activity WHERE user_id='". $user_id ."'");
+			$query = $this->db->query("SELECT * FROM activity WHERE user_id='". $user_id ."'");
 			$stepsData= array();
 			if($query->num_rows()>0){
 				foreach($query->result() as $row){

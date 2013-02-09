@@ -67,7 +67,7 @@ class Subscriber extends CI_Controller {
 
 	}
 
-	public function getSleep($user_id, $date){
+	private function getSleep($user_id, $date){
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){
 				$basedate = $date;
@@ -122,7 +122,7 @@ class Subscriber extends CI_Controller {
 				}
 
 				foreach($sleepData as $key=>$value){
-					$sql = "INSERT INTO Sleep(user_id, `date`, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
+					$sql = "INSERT INTO sleep(user_id, `date`, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
 							VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'].")
 							ON DUPLICATE KEY UPDATE total_time=" . $value['timeInBed'] . ", time_asleep= " . $value['minutesAsleep'] . ", start_time= '" . $value['startTime'] . "', awaken_count= " . $value['awakeningsCount'] . ", min_awake= " . $value['minutesAwake'] .", min_to_asleep= " . $value['minutesToFallAsleep'] . ", min_after_wakeup= " . $value['minutesAfterWakeup'] . ", efficiency= " . $value['efficiency'];
 					$this->db->query($sql);	
@@ -148,7 +148,7 @@ class Subscriber extends CI_Controller {
 	private function getUserKeyPair($userId){
 		if($userId){
 			try {
-				$sql = "SELECT oauth_token, oauth_secret FROM User
+				$sql = "SELECT oauth_token, oauth_secret FROM user
 						WHERE id=". $userId;
 				$query = $this->db->query($sql);
 
@@ -189,7 +189,7 @@ class Subscriber extends CI_Controller {
 							$data['date'] = (string) $updatedResource->date;
 							$data['collectionType'] = (string) $updatedResource->collectionType;
 							array_push($notifications, $data);
-							$sql = "INSERT INTO Updates(`update`,user_id,type)
+							$sql = "INSERT INTO updates(`update`,user_id,type)
 									VALUES ('User data synced, IP: ". $this->input->ip_address() ."', ". $data['user_id'] .", '". $data['collectionType'] ."')";
 							$this->db->query($sql);
 						}

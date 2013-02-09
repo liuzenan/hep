@@ -3,7 +3,7 @@
   <head>
     <title>Fitbit App</title>
     <!-- Bootstrap -->
-    <link href="/fitbit/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body>
 <!-- Modal -->
@@ -16,7 +16,7 @@
       </div>
     </div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="/fitbit/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
     <script>
         jQuery(document).ready(function($) {
           $("#myModal").modal({
