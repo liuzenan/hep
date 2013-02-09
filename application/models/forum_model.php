@@ -8,7 +8,7 @@ class Forum_model extends CI_Model{
 	const misc = 0;
 	const table_thread = 'forumthread';
 	const table_post = 'threadpost';
-	const table_subscribe = 'postsubscription'
+	const table_subscribe = 'postsubscription';
 
 	function __construct(){
 		parent::__construct();
