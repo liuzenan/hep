@@ -7,22 +7,22 @@ class Challenge_model extends CI_Model{
 
 	function joinChallenge($user_id, $challenge_id) {
 		$data = array(
-	          'user_id'=>$user_id,
-			  'challenge_id'=>$challenge_id
-	        );
+			'user_id'=>$user_id,
+			'challenge_id'=>$challenge_id
+			);
 		$this->db->insert('challengeparticipant',$data);
-		 
+		
 	}
 
 	function getCurrentChallenges($user_id){
-			
+		
 		$sql = "SELECT *
-				FROM challenge
-				INNER JOIN challengeparticipant
-				ON challenge.id=challengeparticipant.challenge_id
-				AND challengeparticipant.user_id=". $user_id ."
-				WHERE challengeparticipant.completed = 0
-				GROUP BY challengeparticipant.challenge_id";
+		FROM challenge
+		INNER JOIN challengeparticipant
+		ON challenge.id=challengeparticipant.challenge_id
+		AND challengeparticipant.user_id=". $user_id ."
+		WHERE challengeparticipant.completed = 0
+		GROUP BY challengeparticipant.challenge_id";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
@@ -34,12 +34,12 @@ class Challenge_model extends CI_Model{
 
 	function getAllChallenges($user_id){
 		$sql = "SELECT challenge.id as challenge_id, count(challengeparticipant.challenge_id) as num_times
-				FROM challenge
-				INNER JOIN challengeparticipant
-				ON challenge.id=challengeparticipant.challenge_id
-				AND challengeparticipant.user_id=". $user_id ."
-				WHERE challengeparticipant.completed = 0
-				GROUP BY challengeparticipant.challenge_id";
+		FROM challenge
+		INNER JOIN challengeparticipant
+		ON challenge.id=challengeparticipant.challenge_id
+		AND challengeparticipant.user_id=". $user_id ."
+		WHERE challengeparticipant.completed = 0
+		GROUP BY challengeparticipant.challenge_id";
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
 			$myChallenge = $query->result();

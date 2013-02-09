@@ -109,8 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array();
-
+$autoload['model'] = array('Challenge_model', 'Activity_model','Badge_model','Event_model','Forum_model','User_model');
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */

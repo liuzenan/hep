@@ -2,24 +2,30 @@
 
 class Home extends CI_Controller{
 
+	public function __construct() {
+		parent::__construct();
+		if(!$this->session->userdata('user_id')){
+			redirect(base_url() . "login");
+		} else {
+			$this->uid = $this->session->userdata('user_id');
+		}
+	}
+	
 	public function index(){
 		$data['active'] = 0;
 
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			$user_id = $this->session->userdata('user_id');
-			$this->loadUserData($user_id, $data);
-			$this->loadActivityData($user_id, $data);
-			$this->loadPosts($user_id, $data);
-			$this->loadChallenges($user_id, $data);
-			$this->loadBadges($user_id, $data);	
-			$data['avg_points'] = $this->getAverage();
+		$user_id = $this->session->userdata('user_id');
+		$this->loadUserData($user_id, $data);
+		$this->loadActivityData($user_id, $data);
+		//$this->loadPosts($user_id, $data);
+		$this->loadChallenges($user_id, $data);
+		$this->loadBadges($user_id, $data);	
+		$data['avg_points'] = $this->getAverage();
 
-			$this->load->view('templates/header', $data);
-			$this->load->view('home', $data);
-			$this->load->view('templates/footer');
-		}
+		$this->load->view('templates/header', $data);
+		$this->load->view('home', $data);
+		$this->load->view('templates/footer');
+		
 	}
 
 	private function loadPosts($user_id, &$data) {
@@ -66,7 +72,6 @@ class Home extends CI_Controller{
 		$activityRow = $this->activityModel->getActivityToday($user_id);
 		$average = $this->activityModel->getAverageActivityToday();
 		$average->sleep = $this->activityModel->getAverageSleepToday()->avg_time;
-		print_r($average);
 		$data['avg'] = $average;
 
 		if($activityRow != FALSE){
@@ -99,68 +104,13 @@ class Home extends CI_Controller{
 
 	private function getAverage(){
 		$sql = "SELECT avg(points) AS avg_points
-				FROM user
-				WHERE phantom=0";
+		FROM user
+		WHERE phantom=0";
 
 		$query = $this->db->query($sql);
 		if($query->num_rows()>0){
 			return $query->row();
 		}
 		
-	}
-
-	public function postMessage(){
-		if(!$this->session->userdata('user_id')){
-			redirect(base_url() . "login");
-		}else{
-			$msg = $this->input->post('message');
-			if($msg){
-				$sql = "INSERT INTO Post(user_id, type, description)
-						VALUES (" . $this->session->userdata('user_id') . ", 1, " . $this->db->escape($msg) . ")";
-				$this->db->query($sql);
-
-				$last_id = $this->db->insert_id();
-
-				$postsSql= "SELECT user.id AS post_user_id, user.first_name AS first_name, user.last_name AS last_name, user.profile_pic AS profile_pic, post.time AS time, post.description AS description, post.type AS type
-								FROM subscription
-								INNER JOIN Post ON post.user_id = subscription.subscriber_id
-								INNER JOIN user ON user.id = post.user_id
-								WHERE post.id = '" . $last_id  . "'";
-
-				$postsQuery = $this->db->query($postsSql);
-				if($postsQuery->num_rows()>0){
-					$row = $postsQuery->row(); 
-					$time = $row->time;
-					date_default_timezone_set('UTC'); 
-					$timestamp = strtotime((string) $time); 
-					$posts = array(
-							'user_id' => $row->post_user_id,
-							'username' => $row->first_name . ' ' . $row->last_name,
-							'profile_pic' => $row->profile_pic,
-							'time' => $timestamp,
-							'description' => $row->description,
-							'type' =>$row->type
-					);
-					$data = array(
-						'success'=>true,
-						'posts'=>$posts
-
-					);
-					echo json_encode($data);
-
-				}else{
-					$data = array(
-						'success'=>false
-					);
-					echo json_encode($data);
-				}
-
-			}else{
-					$data = array(
-						'success'=>false
-					);
-					echo json_encode($data);
-			}
-		}
 	}
 }

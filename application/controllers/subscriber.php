@@ -70,65 +70,64 @@ class Subscriber extends CI_Controller {
 	private function getSleep($user_id, $date){
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){
-				$basedate = $date;
-				$period = '1d';
-				$this->fitbitphp->setOAuthDetails($keypair['token'],$keypair['secret']);
+			$basedate = $date;
+			$period = '1d';
+			$this->fitbitphp->setOAuthDetails($keypair['token'],$keypair['secret']);
 
-				$startTime = $this->fitbitphp->getTimeSeries('startTime', $basedate, $period);
-				$timeInBed = $this->fitbitphp->getTimeSeries('timeInBed', $basedate, $period);
-				$minutesAsleep = $this->fitbitphp->getTimeSeries('minutesAsleep', $basedate, $period);
-				$minutesAwake = $this->fitbitphp->getTimeSeries('minutesAwake', $basedate, $period);
-				$awakeningsCount = $this->fitbitphp->getTimeSeries('awakeningsCount', $basedate, $period);
-				$minutesToFallAsleep = $this->fitbitphp->getTimeSeries('minutesToFallAsleep', $basedate, $period);
-				$minutesAfterWakeup = $this->fitbitphp->getTimeSeries('minutesAfterWakeup', $basedate, $period);
-				$efficiency = $this->fitbitphp->getTimeSeries('efficiency', $basedate, $period);
+			$startTime = $this->fitbitphp->getTimeSeries('startTime', $basedate, $period);
+			$timeInBed = $this->fitbitphp->getTimeSeries('timeInBed', $basedate, $period);
+			$minutesAsleep = $this->fitbitphp->getTimeSeries('minutesAsleep', $basedate, $period);
+			$minutesAwake = $this->fitbitphp->getTimeSeries('minutesAwake', $basedate, $period);
+			$awakeningsCount = $this->fitbitphp->getTimeSeries('awakeningsCount', $basedate, $period);
+			$minutesToFallAsleep = $this->fitbitphp->getTimeSeries('minutesToFallAsleep', $basedate, $period);
+			$minutesAfterWakeup = $this->fitbitphp->getTimeSeries('minutesAfterWakeup', $basedate, $period);
+			$efficiency = $this->fitbitphp->getTimeSeries('efficiency', $basedate, $period);
 
-				$sleepData = array();
-				foreach($startTime as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['startTime'] = $value->value;				
-				}
+			$sleepData = array();
+			foreach($startTime as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['startTime'] = $value->value;				
+			}
 
-				foreach($minutesAwake as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['minutesAwake'] = $value->value;				
-				}
-				foreach($timeInBed as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['timeInBed'] = $value->value;				
-				}
-				foreach($minutesAsleep as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['minutesAsleep'] = $value->value;				
-				}
+			foreach($minutesAwake as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['minutesAwake'] = $value->value;				
+			}
+			foreach($timeInBed as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['timeInBed'] = $value->value;				
+			}
+			foreach($minutesAsleep as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['minutesAsleep'] = $value->value;				
+			}
 
-				foreach($awakeningsCount as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['awakeningsCount'] = $value->value;				
-				}
-				foreach($minutesToFallAsleep as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['minutesToFallAsleep'] = $value->value;				
-				}
+			foreach($awakeningsCount as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['awakeningsCount'] = $value->value;				
+			}
+			foreach($minutesToFallAsleep as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['minutesToFallAsleep'] = $value->value;				
+			}
 
-				foreach($minutesAfterWakeup as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['minutesAfterWakeup'] = $value->value;				
-				}
+			foreach($minutesAfterWakeup as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['minutesAfterWakeup'] = $value->value;				
+			}
 
-				foreach($efficiency as $value){
-					$currentDate = $value->dateTime;
-					$sleepData[$currentDate]['efficiency'] = $value->value;				
-				}
+			foreach($efficiency as $value){
+				$currentDate = $value->dateTime;
+				$sleepData[$currentDate]['efficiency'] = $value->value;				
+			}
+			foreach($sleepData as $key=>$value){
+				$sql = "INSERT INTO Sleep(user_id, `date`, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
+				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'].")
+				ON DUPLICATE KEY UPDATE total_time=" . $value['timeInBed'] . ", time_asleep= " . $value['minutesAsleep'] . ", start_time= '" . $value['startTime'] . "', awaken_count= " . $value['awakeningsCount'] . ", min_awake= " . $value['minutesAwake'] .", min_to_asleep= " . $value['minutesToFallAsleep'] . ", min_after_wakeup= " . $value['minutesAfterWakeup'] . ", efficiency= " . $value['efficiency'];
+				$this->db->query($sql);	
+			}
 
-				foreach($sleepData as $key=>$value){
-					$sql = "INSERT INTO sleep(user_id, `date`, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
-							VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'].")
-							ON DUPLICATE KEY UPDATE total_time=" . $value['timeInBed'] . ", time_asleep= " . $value['minutesAsleep'] . ", start_time= '" . $value['startTime'] . "', awaken_count= " . $value['awakeningsCount'] . ", min_awake= " . $value['minutesAwake'] .", min_to_asleep= " . $value['minutesToFallAsleep'] . ", min_after_wakeup= " . $value['minutesAfterWakeup'] . ", efficiency= " . $value['efficiency'];
-					$this->db->query($sql);	
-				}
-
-				var_dump($sleepData);
+			var_dump($sleepData);
 		}
 
 	}
@@ -174,11 +173,11 @@ class Subscriber extends CI_Controller {
 				$headers = apache_request_headers();
 				$signature = $headers['X-Fitbit-Signature'];
 				//$expected = hash_hmac('sha1', $_FILES['updates']['tmp_name'], '45e414dd49784ec3872a8ebbb74dcbb9&');
-			if(!$signature){
-				$sql = "INSERT INTO Updates(`update`)
+				if(!$signature){
+					$sql = "INSERT INTO Updates(`update`)
 					VALUES ('no signature, IP: ". $this->input->ip_address() ."')";
-				$this->db->query($sql);	
-			}else{
+					$this->db->query($sql);	
+				}else{
 					$notifications=array();
 					foreach ($xml as $updatedResource){
 						if($updatedResource->subscriptionId){
@@ -194,17 +193,17 @@ class Subscriber extends CI_Controller {
 							$this->db->query($sql);
 						}
 					}
+				}
+			}else{
+				$sql = "INSERT INTO Updates(`update`)
+				VALUES ('empty contents, IP: ". $this->input->ip_address() ."')";
+				$this->db->query($sql);	
 			}
-		}else{
-			$sql = "INSERT INTO Updates(`update`)
-					VALUES ('empty contents, IP: ". $this->input->ip_address() ."')";
-			$this->db->query($sql);	
-		}
 
 
 		} catch (Exception $e) {
 			$sql = "INSERT INTO Updates(`update`)
-					VALUES ('Error, IP: ". $this->input->ip_address() ."')";
+			VALUES ('Error, IP: ". $this->input->ip_address() ."')";
 			$this->db->query($sql);
 		}
 		header('HTTP/1.0 204 No Content');
