@@ -2,14 +2,19 @@
 
 class Challenges extends CI_Controller {
 
-	public function index(){
+	public function __construct() {
+		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
-		}else{
-			$data["challenges"] = $this->getMyChallenges();
-			$data["tab"] = "my";
-			$this->loadPage($data);
 		}
+	}
+
+	public function index(){
+		
+		$data["challenges"] = $this->getMyChallenges();
+		$data["tab"] = "my";
+		$this->loadPage($data);
+		
 	}		
 
 	public function all(){
@@ -34,8 +39,7 @@ class Challenges extends CI_Controller {
 
 
 	private function getMyChallenges(){
-		$this->load->model('Challenge_model','challengeModel');
-		$challenges = $this->challengeModel->getCurrentChallenges($this->session->userdata("user_id"));
+		$challenges = $this->Challenge_model->getCurrentChallenges($this->session->userdata("user_id"));
 		return $challenges;
 	}
 
@@ -52,7 +56,11 @@ class Challenges extends CI_Controller {
 	}
 
 	public function joinChallenge(){
-
+			$title = $this->db->escape($this->input->post("title"));
+			$message = $this->db->escape($this->input->post("message"));
+			$anonymous = $this->input->post("anonymous");
+			$subscribe = $this->input->post("subscribe");
+			$topic_id = $this->input->post("topic_id");
 	}
 
 	public function quitChallenge(){

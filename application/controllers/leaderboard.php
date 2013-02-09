@@ -6,6 +6,14 @@ class Leaderboard extends CI_Controller {
  	const all = 'all';
  	const tutor = 'tutor';
 
+ 	public function __construct() {
+		parent::__construct();
+		if(!$this->session->userdata('user_id')){
+			redirect(base_url() . "login");
+		}
+	}
+
+
 	public function index(){
 		if($this->session->userdata('user_id')){
 			$this->overall();
