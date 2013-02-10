@@ -209,31 +209,51 @@ class Activity_model extends CI_Model{
 				$intradayElevation = $elevation->{'activities-elevation-intraday'};
 
 				$intradayActivityData = array();
-
+				$minute = 0;
 				foreach($intradayCalories->dataset->intradayData as $value){
-					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['calories'] = $value->value;
-					$intradayActivityData[$currentTime]['level'] = $value->level;
+					if($minute%10 == 0) {
+						$currentTime = (string) $value->time;
+						$intradayActivityData[$currentTime]['calories'] = $value->value;
+						$intradayActivityData[$currentTime]['level'] = $value->level;
+					}else {
+						$intradayActivityData[$currentTime]['calories'] += $value->value;
+						$intradayActivityData[$currentTime]['level'] += $value->level;
+					}
 
 				}
-
+				$minute = 0;
 				foreach($intradaySteps->dataset->intradayData as $value){
-					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['steps'] = $value->value;
+					if($minute%10 == 0) {
+						$currentTime = (string) $value->time;
+						$intradayActivityData[$currentTime]['steps'] = $value->value;
+					}else {
+						intradayActivityData[$currentTime]['steps'] += $value->value; 
+					}   
 				}
 				foreach($intradayFloors->dataset->intradayData as $value){
-					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['floors'] = $value->value;
+					if($minute%10 == 0) {
+						$currentTime = (string) $value->time;
+						$intradayActivityData[$currentTime]['floors'] = $value->value;
+					}else {
+						$intradayActivityData[$currentTime]['floors'] += $value->value;
+
+					}
 				}
 				foreach($intradayElevation->dataset->intradayData as $value){
-					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['elevation'] = $value->value;
+					if($minute%10 == 0) {
+						$currentTime = (string) $value->time;
+						$intradayActivityData[$currentTime]['elevation'] = $value->value;
+
+					} else {
+						$intradayActivityData[$currentTime]['elevation'] += $value->value;
+					}
 				}
 
 				foreach ($intradayActivityData as $key => $value) {
 					# code...
 					$sql = "INSERT INTO intradayactivity(user_id, activity_time, steps, calories, calories_level, floors, elevation)
-					VALUES (". $user_id .", '". $date . " " . $key ."', ". $value['steps'] .", ". $value['calories'] .", ". $value['level'] .", " . $value['floors'] . ", " . $value['elevation'] .")
+					VALUES (". $user_id .", '". $date . " " . $key ."', ". $value['steps'] .", ".
+						$value['calories'] .", ". $value['level'] .", " . $value['floors'] . ", " . $value['elevation'] .")
 					ON DUPLICATE KEY UPDATE user_id=user_id";
 
 					$this->db->query($sql);					
