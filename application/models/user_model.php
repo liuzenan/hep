@@ -20,7 +20,7 @@ class User_model extends CI_Model{
 	function loadUsers($uids) {
 		$str = "";
 		foreach($uids as $uid) {
-		  $str .= $uid.", ";
+			$str .= $uid.", ";
 		}
 		$str = substr($str,0,-2);
 		$sql = "SELECT * FROM user WHERE id IN (" . implode(",", $uids) . ")";
@@ -61,6 +61,18 @@ class User_model extends CI_Model{
 		} catch (Exception $e) {
 			
 		}
+	}
+
+	public function unsubBadgeNotification($user_id) {
+		$data = array('badge_email_unsub', 1);
+		$this->db->where('id',$user_id);
+		$this->db->upate('user', $data);
+	}	
+
+	public function unsubDailyNotification($user_id) {
+		$data = array('daily_email_unsub', 1);
+		$this->db->where('id',$user_id);
+		$this->db->upate('user', $data);
 	}
 
 	function addNotification($user_id, $description, $url){
