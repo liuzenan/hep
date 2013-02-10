@@ -32,6 +32,11 @@ class User_model extends CI_Model{
 		return $res;
 	}
 
+	function loadGroupMemberAvatar($house_id) {
+		$query = $this->db->get_where('user', array('house_id' => $house_id, 'phantom'=>0, 'staff'=>0));
+		return $query->result();
+
+	}
 	function loadDailyReportUsers() {
 		$sql = "SELECT id
 		FROM   user

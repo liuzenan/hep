@@ -25,7 +25,6 @@ class Manage extends CI_Controller {
 	public function studentList(){
 		
 		if($this->session->userdata('isadmin')||$this->session->userdata('isleader')){
-
 			$data['students'] = $this->getlist();
 			$data['currentHouse'] = $this->getHouse();
 			$this->loadPage($data);

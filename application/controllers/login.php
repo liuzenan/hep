@@ -156,7 +156,7 @@ class Login extends CI_Controller{
 
 			//insert into database
 			foreach($sleepData as $key=>$value){
-				$sql = "INSERT INTO Sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
+				$sql = "INSERT INTO sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
 				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
 				$this->db->query($sql);	
 			}
