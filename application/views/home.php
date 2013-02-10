@@ -5,7 +5,6 @@
 				<?php $this->load->view('templates/todayActivity'); ?>
 				<?php $this->load->view('templates/achievementList') ?>
 				<?php $this->load->view('templates/challengeList') ?>
-
 		</div>
 	</div>
 </div>

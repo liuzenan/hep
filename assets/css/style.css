@@ -2,6 +2,49 @@ p{
 	margin: 0 0 1em;
 }
 
+.image-fix
+{
+	display: block;
+}
+
+.user-icons .user-icon
+{
+	padding: 10px;
+}
+
+.activity-chart{
+	height: 120px;
+	border-bottom: 1px solid #ccc;
+}
+
+.activity-chart>.span3{
+	height: 100%;
+	position: relative;
+}
+
+.activity-icons .span3{
+	position: relative;
+}
+
+.activity-icons .activityIcon
+{
+	position: absolute;
+	left: 30px;
+}
+
+.activity-icons h4
+{
+	position: absolute;
+	left: 60px;
+	top: 4px;
+	margin:0;
+}
+
+.activity-chart .row-fluid{
+	position: absolute;
+	bottom: 0;
+}
+
 #user-notification{
 	display: block;
 	position: absolute;
@@ -81,8 +124,7 @@ span.activityIcon.floors{
 }
 
 .badgelist{
-	border-radius: 0 !important;
-	margin-bottom: 1px;
+	
 }
 
 .newsfeed{

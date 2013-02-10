@@ -1,18 +1,27 @@
 <div class="row-fluid">
-	<div class="span12 challengelist well">
+	<div class="span12">
 		<p><strong>My Challenges</strong></p>
-		<?php if($challenges) {?>
+		<?php if(!empty($me_challenges)) {?>
 			<ul class="media-list">
-			<?php foreach($challenges as $challenge){ ?>
-			<li class="media">
-				<a href="<?php echo base_url() . 'challenges/viewevent/' .$challenge->id ?>" class="pull-left"><img class="media-object" width="64" src="<?php echo $challenge->badge_pic ?>"></a> 
-			<!--	<a href="<?php echo base_url() . 'challenges/viewevent/' .$challenge->id ?>" class="btn pull-right">View</a> -->
+			<?php foreach($me_challenges as $challenge){ ?>
+			<li class="challengeItem media">
+				<div class="pull-left"><img class="media-object" src="<?php echo $challenge->badge_pic;?>"></div>
+				<div class="challengeControls pull-right">
+					<h4 class="muted"><?php echo $challenge->points ?> points</h4>
+					<div class="view-btn"><a href="#" class="btn btn-primary">View Challenge</a></div>
+					<a href="#"><small>Quit challenge</small></a>
+					<span>&nbsp; | &nbsp;</span>
+					<a href="#"><small>View discussion</small></a>
+				</div>
 				<div class="media-body">
-					<p class="media-heading"><?php echo $challenge->title ?></p>
-					<p><small><strong>Start Time: </strong><?php echo $challenge->join_time ?></small><small><strong>Finish Time: </strong><?php echo $challenge->complete_time ?></small></p>
+					<h4 class="media-heading"><?php echo $challenge->title ?></h4>
+					<p><?php echo $challenge->description ?></p>
+					<small class="muted">You are participating in the challenge</small>
+					<div class="progress">
+						<div class="bar" style="width:80%"></div>
+					</div>
 				</div>
 			</li>
-			
 			<?php } ?>
 			</ul>
 		<?php } else {?>

@@ -20,7 +20,7 @@
           <ul class="nav pull-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-bell icon-large"></i>
+                <i class="icon-bell icon-large" style="line-height: 20px;"></i>
                 <?php if (!empty($notifications)): ?>
                   <span id="user-notification" class="badge badge-info"><?php echo count($notifications) ?></span>
                 <?php endif ?>
