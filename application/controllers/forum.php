@@ -36,6 +36,18 @@ class Forum extends CI_Controller {
 		echo "<pre>"; print_r($data);echo "</pre><br>";
 		$this->loadView($data, "challenge");
 	}
+
+	public function tutor() {
+		$forums = $this->Forum_model->getTutorForum();
+		$data['threads'] = $forums;
+		$data['users'] = 
+		count($data['threads']['uids'])>0
+		? $this->User_model->loadUsers($data['threads']['uids'])
+		: array();		unset($data['threads']['uids']);
+		$data['active'] = 'tutor_forum';
+		echo "<pre>"; print_r($data);echo "</pre><br>";
+		$this->loadView($data, "challenge");
+	}
 	
 
 	public function createThread(){
@@ -70,7 +82,7 @@ class Forum extends CI_Controller {
 		}else{
 			$user_id = $this->session->userdata('user_id');
 			$thread_id = $this->input->post("thread_id");
-			$message = $this->db->escape($this->input->post("comment"));
+			$message = $this->input->post("comment");
 
 			if ($message!=null && $message!='') {
 				# code...
@@ -88,14 +100,14 @@ class Forum extends CI_Controller {
 
 					if (isset($user) && isset($thread)) {
 					# code...
-						$username = $user ->first_name . " " . $user ->last_name;
+						$username = $user->first_name . " " . $user->last_name;
 						$title = $thread->message;
 						$description = $username . " post a new message at the thread: " . $title;
 						$url = base_url() . "forum/thread/" . $thread_id;
 
 						$subscribers = $this->Forum_model->loadThreadSubscribers($thread_id);
 
-						if (count(subscribers)>0) {
+						if (count($subscribers)>0) {
 						# code...
 							foreach ($subscribers as $value) {
 								if ($value->user_id != $user_id) {	
@@ -112,6 +124,8 @@ class Forum extends CI_Controller {
 					);
 			}
 		}
+		var_dump($message);
+		var_dump($msg);
 		echo json_encode($msg);
 	}
 
