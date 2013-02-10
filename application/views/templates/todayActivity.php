@@ -1,14 +1,8 @@
 		<div class="row-fluid">
 			<div class="today-activity">
-				<p><strong>Today's Activity</strong></p>
+				<p class="section-title">Today's Activity</p>
 				<div class="row-fluid">
-					<div class="span2">
-						<div class="row-fluid">
-							<img src="<?php echo $avatar ?>" alt="">
-						</div>				
-						<p><strong><?php echo $displayName ?></strong></p>
-					</div>
-					<div class="span10">	
+					<div class="span12">	
 						<div class="row-fluid activity-icons">
 							<div class="span3"><span class="activityIcon steps"></span><h4>Steps</h4></div>
 							<div class="span3"><span class="activityIcon floors"></span><h4>Floors</h4></div>
@@ -66,6 +60,17 @@
 									<div class="span5"><i class="icon-group icon-large"></i></div>	
 								</div>
 							</div>
+						</div>
+						<div class="row-fluid">
+							<table class="table">
+								<thead><tr></tr></thead>
+								<tbody>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tbody>
+							</table>
 						</div>
 					</div>				
 				</div>

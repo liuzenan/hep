@@ -1,6 +1,6 @@
 <div class="row-fluid">
 	<div class="span12 badgelist">
-		<p><strong>My Badges</strong></p>
+		<p class="section-title">My Badges</p>
 		<?php if(!empty($me_badges)) {?>
 			<?php foreach($me_badges as $badge){ ?>
 			<a href="#" data-toggle="tooltip" title="<?php echo $badge->description ?>"><img src="<?php echo $badge->badge_pic ?>" alt=""></a>

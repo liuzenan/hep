@@ -1,10 +1,10 @@
 <div class="row-fluid">
 	<div class="span12">
-		<p><strong>My Challenges</strong></p>
+		<p class="section-title">Current Challenges</p>
 		<?php if(!empty($me_challenges)) {?>
 			<ul class="media-list">
 			<?php foreach($me_challenges as $challenge){ ?>
-			<li class="challengeItem media">
+			<li class="challengeItem media well">
 				<div class="pull-left"><img class="media-object" src="<?php echo $challenge->badge_pic;?>"></div>
 				<div class="challengeControls pull-right">
 					<h4 class="muted"><?php echo $challenge->points ?> points</h4>
