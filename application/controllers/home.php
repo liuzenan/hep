@@ -51,12 +51,12 @@ class Home extends CI_Controller{
 	public function data() {
 		echo "<pre>"; print_r($this->loadData());echo "</pre><br>";
 	}
-	
+
 	private function cauculateDelta($today, $yesterday) {
 		if($yesterday == 0) {
 			return $today == 0 ? 0 : 1;
 		} else {
-			return ($today-$yesterday)/$yesterday;
+			return float($today-$yesterday)/float($yesterday);
 		}
 	}
 	private function loadUserData($user_id, &$data) {

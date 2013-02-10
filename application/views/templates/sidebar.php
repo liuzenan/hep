@@ -11,7 +11,8 @@
 			<li class="<?php if($active=='studentList') echo "active" ?>"><a href="<?php echo base_url() . 'manage/studentList'?>">Student List</a></li>
 			<?php } ?>
 			<?php if($isAdmin==1) {?>
-			<li class="<?php if($active=='manage') echo "active" ?>"><a href="<?php echo base_url() . 'manage'?>">Manage users</a></li>
+			<li class="<?php if($active=='tutor_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/tutor'?>">Tutor Forum</a></li>
+			<li class="<?php if($active=='manage') echo "active" ?>"><a href="<?php echo base_url() . 'manage'?>">Manage Users</a></li>
 			<?php } ?>
 		</ul>
 	</div>
