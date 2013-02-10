@@ -23,7 +23,7 @@ class Forum_model extends CI_Model{
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id > 0
 		AND t.tutor_only = 0
-		AND t.archived = 0 ORDER BY p.comment_time DESC";
+		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
 		$uids = array();
 		if ($query->num_rows()>0) {
@@ -66,7 +66,7 @@ class Forum_model extends CI_Model{
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id = 0
 		AND t.tutor_only = 0
-		AND t.archived = 0 ORDER BY p.comment_time DESC";
+		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
 		$uids = array();
 		if ($query->num_rows()>0) {
@@ -108,7 +108,7 @@ class Forum_model extends CI_Model{
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id = 0
 		AND t.tutor_only = 1
-		AND t.archived = 0 ORDER BY p.comment_time DESC";
+		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
 		$uids = array();
 		if ($query->num_rows()>0) {

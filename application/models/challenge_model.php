@@ -13,6 +13,23 @@ class Challenge_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function loadUserChallenge($user_id, $start_time, $end_time) {
+		$sql = "SELECT * 
+		FROM challenge 
+		INNER JOIN challengeparticipant 
+		ON challenge.id=challengeparticipant.challenge_id 
+		AND challengeparticipant.user_id = ?
+		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >= ?";
+		$query = $this->db->query($sql, array($user_id, $start_time, $end_time));
+		return $query->result();
+	}
+
+	function loadChallenge($challenge_id) {
+		$query = $this->db->get_where(Challenge_model::table_challenge, array('id' => $challenge_id));
+		if($query->num_rows()>0) {
+			return $query->row();
+		}
+	}
 	function joinChallenge($user_id, $challenge_id, $start_time, $end_time) {
 		$data = array(
 			'user_id'=>$user_id,
@@ -21,6 +38,7 @@ class Challenge_model extends CI_Model{
 			'end_time'=>$end_time
 			);
 		$this->db->insert(Challenge_model::table_challenge_participant,$data);
+		return $this->db->insert_id();
 		
 	}
 
@@ -96,6 +114,36 @@ class Challenge_model extends CI_Model{
 
 		$query = $this->db->query($sql, array($user_id));
 		return $query->result();		
+	}
+
+	function getIndividualChallengeCount($user_id) {
+		$sql = "SELECT Count(cp.id) AS count
+		FROM   challengeparticipant AS cp
+		WHERE  cp.user_id = ?
+		AND cp.complete_time > cp.start_time";
+		return $this->db->query($sql,array($user_id))->row()->count;
+	}
+
+	function getAverageChallengeCount() {
+		$sql1 = "SELECT count(id) AS count
+		FROM   user
+		WHERE  admin = 0
+		AND phantom = 0
+		AND staff = 0";
+		$count = $this->db->query($sql1)->row()->count;
+
+		$sql2 = "SELECT Count(cp.id) AS total
+		FROM   challengeparticipant AS cp
+		LEFT JOIN (SELECT id
+			FROM   user
+			WHERE  admin = 0
+			AND phantom = 0
+			AND staff = 0) AS temp
+		ON cp.user_id = temp.id
+		WHERE  cp.complete_time > cp.start_time";
+		$total = $this->db->query($sql2)->row()->total;
+
+		return $total/$count;		
 	}
 
 	function getAllChallenges() {
@@ -211,5 +259,5 @@ class Challenge_model extends CI_Model{
 		}
 		return $res;
 	}
-	
+
 }

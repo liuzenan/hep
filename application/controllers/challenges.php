@@ -21,12 +21,40 @@ class Challenges extends CI_Controller {
 
 	public function all(){
 		$data["tab"] = "all";
-		$challenges = $this->Challenge_model->getAllChallenges();
-		$data["challenges"] = $challenges;
+		
+		$data["challenges"] = $this->loadAvailableChallanges();
+
 		$this->loadPage($data);
 		
 	}
 
+	public function data() {
+		echo "<pre>"; print_r($this->loadAvailableChallanges());echo "</pre><br>";
+
+
+	}
+
+	public function loadAvailableChallanges() {
+		$challenges = $this->Challenge_model->getAllChallenges();
+		
+		/*
+		$current = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$res = array();
+
+		$temp = array();
+		foreach($current as $m) {
+			$temp[$m->category]
+		}
+
+		$res['current'] = $current;
+
+		foreach($challenges as $c) {
+			$res[$c->id] = $c;
+		}*/
+
+		return $challenges;
+
+	}
 	public function completed(){
 		$data["tab"] = "completed";
 		$data["challenges"] = $this->Challenge_model->getIndividualCompletedChallenges($this->uid);
@@ -34,14 +62,96 @@ class Challenges extends CI_Controller {
 		
 	}
 
+	private function validateChallengeAvilability($challenge_id, $uid, $start_time, $end_time) {
+		$current = $this->Challenge_model->loadUserChallenge($uid, $start_time, $end_time);
+		$new = $this->Challenge_model->loadChallenge($challenge_id);
+		echo "<pre>"; print_r($current);echo "</pre><br>";
+		if(empty($current)) {
+			return "";
+		} else {
+			$count = 0;
+			// check fix category
+			foreach($current as $now) {
+				
+				if($now->category>0 && ($now->category==$new->category)) {
+					$msg = "You can join only one challenge in <b><i>%s</i></b> category per day. Please drop <b><i>%s</i></b> to join this one.";
+					$category = "";
+					switch($now->category) {
+						case 1:
+						$category = "Steps";
+						break;
+						case 2:
+						$category = "Floors";
+						break;
+						case 3: 
+						$category = "Sleeping";
+						break;
+					}
+					return sprintf($msg, $category, $now->title);
+				}
 
-	public function joinChallenge(){
+				if($now->category == 0) {
+					$count++;
+					if($count == 3) {
+						return "You can join maximum three <b><i>time based</i></b> challenges per day. Please drop existing challenges to join this one";
+					}
+				}
+			}
+			return "";
+		}
+
+	}
+
+	public function joinChallengeTomorrow() {
+		$challenge_id = 1;//$this->input->post("challenge_id");
+		$uid = 50;//$this->input->post("uid");
+		$start_time = date("Y-m-d",time()+ 60 * 60 * 24). " 00:00:00";		
+		$end_time = date("Y-m-d", time() + 60 * 60 * 24). " 23:59:59";
+
+		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $start_time, $end_time);
+
+		if((bool) $invalid) {
+			$msg = array(
+				"success" => false,
+				"message" => $invalid
+				);
+			echo json_encode($msg);
+		} else {
+			
+			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $start_time, $end_time);
+			$msg = array(
+				"success" => true,
+				"message" => "You have joined the challenge successfully."
+				);
+			echo json_encode($msg);
+		}
+	}
+
+	public function joinChallengeNow(){
 		//TODO subscribe
-		
-		$challenge_id = $this->input->post("challenge_id");
-		$start_time = $this->input->post("start_time");
-		$end_time = $this->input->post("end_time");
-		return $this->Challenge_model->joinChallenge($uid, $challenge_id, $start_time, $end_time);
+		$challenge_id = 1;//$this->input->post("challenge_id");
+		$uid = 50;// $this->input->post("uid");
+		$start_time = date("Y-m-d G:i:s",time());		
+		$end_time = date("Y-m-d"). " 23:59:59";
+
+		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $start_time, $end_time);
+
+		if((bool) $invalid) {
+			$msg = array(
+				"success" => false,
+				"message" => $invalid
+				);
+			echo json_encode($msg);
+		} else {
+			
+			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $start_time, $end_time);
+			$msg = array(
+				"success" => true,
+				"message" => "You have joined the challenge successfully."
+				);
+			echo json_encode($msg);
+		}
+		//return 
 	}
 
 	public function quitChallenge(){

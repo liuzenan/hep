@@ -36,15 +36,19 @@ class Home extends CI_Controller{
 		$data['delta_steps'] = $this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps);
 		$data['delta_floors'] = $this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors);
 		$data['delta_calories'] = $this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories);
-		$data['delta_sleep'] = $this->cauculateDelta($data['me_sleep']->total_time, $data['me_sleep_yesterday']->total_time);
+		$data['delta_distance'] = $this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance);
 
 
 		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
 		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
+		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($this->uid);
 
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
+		$data['avg_completed'] = $this->Challenge_model->getAverageChallengeCount();
 		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+
+
 		return $data;
 	}
 
@@ -56,7 +60,7 @@ class Home extends CI_Controller{
 		if($yesterday == 0) {
 			return $today == 0 ? 0 : 1;
 		} else {
-			return float($today-$yesterday)/float($yesterday);
+			return ($today-$yesterday)/($yesterday);
 		}
 	}
 	private function loadUserData($user_id, &$data) {
