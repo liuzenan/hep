@@ -2,7 +2,7 @@
 
 class Challenges extends CI_Controller {
 
-    private $user_id = true;
+	private $uid;
 	
 	public function __construct() {
 		parent::__construct();
@@ -14,68 +14,49 @@ class Challenges extends CI_Controller {
 	}
 
 	public function index(){
-		
-		$data["challenges"] = $this->getMyChallenges();
+		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
 		$data["tab"] = "my";
-		$this->loadPage($data);
-		
+		$this->loadPage($data);	
 	}		
 
 	public function all(){
-		
-		$data["challenges"] = $this->getAllChallenges();
 		$data["tab"] = "all";
+		$challenges = $this->Challenge_model->getAllChallenges();
+		$data["challenges"] = $challenges;
 		$this->loadPage($data);
 		
 	}
 
 	public function completed(){
-		
-		$data["challenges"] = $this->getCompletedChallenges();
 		$data["tab"] = "completed";
+		$data["challenges"] = $this->Challenge_model->getIndividualCompletedChallenges($this->uid);
 		$this->loadPage($data);
 		
 	}
 
 
-	private function getMyChallenges(){
-		$challenges = $this->Challenge_model->getCurrentChallenges($this->uid);
-		return $challenges;
-	}
-
-	private function getCompletedChallenges(){
-		
-
-	}
-
-	private function getAllChallenges(){
-		$this->load->model('Challenge_model','challengeModel');
-		$challenges = $this->challengeModel->getAllChallenges($this->uid);
-
-		return $challenges;
-	}
-
 	public function joinChallenge(){
-		$title = $this->db->escape($this->input->post("title"));
-		$message = $this->db->escape($this->input->post("message"));
-		$anonymous = $this->input->post("anonymous");
-		$subscribe = $this->input->post("subscribe");
-		$topic_id = $this->input->post("topic_id");
+		//TODO subscribe
+		
+		$challenge_id = $this->input->post("challenge_id");
+		$start_time = $this->input->post("start_time");
+		$end_time = $this->input->post("end_time");
+		return $this->Challenge_model->joinChallenge($uid, $challenge_id, $start_time, $end_time);
 	}
 
 	public function quitChallenge(){
-
+		//TODO unsubscribe
+		return $this->Challenge_model->quitChallenge($this->input->post("id"));
 	}
 
 
 	private function loadPage($data, $type="challenges"){
-		$data['active'] = 1;
+		$data['active'] = 'challenges';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->uid);
+		$data['notifications'] = $this->User_model->getNotifications($this->uid);
 		$this->load->view('templates/header', $data);
 		$this->load->view('challenges', $data);
 		$this->load->view('templates/footer');

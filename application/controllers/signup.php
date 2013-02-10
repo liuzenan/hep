@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Signup extends CI_Controller{
-	
+	private $uid;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -18,7 +18,6 @@ class Signup extends CI_Controller{
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
-		}else{
 			$this->load->view('signup');
 		}
 

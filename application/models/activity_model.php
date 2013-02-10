@@ -9,25 +9,38 @@ class Activity_model extends CI_Model{
 
 	function getActivityToday($user_id){
 		$today = date("Y-m-d");
-		//get activities data
-		$activityQuery = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$today));
-		if($activityQuery->num_rows()>0){
-		  	return $activityRow = $activityQuery->row();
-		}else {
-			return FALSE;
-		}
+		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$today));
+	  	return $query->row();
 	}
 
-	
+	function getActivityYesterday($user_id) {
+		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
+		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$yesterday));
+	  	return $query->row();
+	}
+
 	function getAverageActivityToday(){
 		$today = date("Y-m-d");
 		//get activities data
 		$sql = "SELECT avg(a.steps) AS avg_steps, avg(a.floors) AS avg_floors, avg(a.distance) AS avg_distance
 				FROM activity AS a
-				WHERE a.date='".$today."' AND (a.steps>0 OR a.floors>0 OR a.distance>0)";
-		$query = $this->db->query($sql);
+				WHERE a.date=? AND (a.steps>0 OR a.floors>0 OR a.distance>0)";
+		$query = $this->db->query($sql, array($today));
 		return $query->row();
 	}
+
+	function getSleepToday($user_id){
+		$today = date("Y-m-d");
+		$query = $this->db->get_where('sleep', array('user_id'=>$user_id, 'date'=>$today));
+	  	return $query->row();
+	}
+
+	function getSleepYesterday($user_id) {
+		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
+		$query = $this->db->get_where('sleep', array('user_id'=>$user_id, 'date'=>$yesterday));
+	  	return $query->row();
+	}
+
 
 	function getAverageSleepToday(){
 		$today = date("Y-m-d", time() - 60 * 60 * 24);
@@ -41,70 +54,8 @@ class Activity_model extends CI_Model{
 	}
 	
 
-	function getExp($user_id){
-		
-		$sql = "SELECT sum(activity.steps) AS total_steps, sum(activity.floors) AS total_floors, sum(activity.active_score) AS total_score
-				FROM activity
-				WHERE activity.user_id = " . $user_id . "
-				GROUP BY activity.user_id";
 
-		$query1 = $this->db->query($sql);
-
-		$sql = "SELECT sum(efficiency) AS total_eff
-				FROM sleep
-				WHERE sleep.user_id = " . $user_id . "
-				GROUP BY sleep.user_id";
-		$query2 = $this->db->query($sql);
-
-		if($query2->num_rows()>0&&$query1->num_rows()>0){
-			$result = $query1->row();
-			$steps = $result->total_steps;
-			$floors = $result->total_floors;
-			$score = $result->total_score;
-
-			$result2 = $query2->row();
-			$eff = $result2->total_eff;
-			$this->load->helper('level');
-			$expPoint = getExpPoints(intval($steps), intval($floors), intval($score), intval($eff));
-			return $expPoint;
-		}
-		
-	}
-
-	function updateExp($user_id){
-		$sql = "SELECT sum(activity.steps) AS total_steps, sum(activity.floors) AS total_floors, sum(activity.active_score) AS total_score
-				FROM activity
-				WHERE activity.user_id = " . $user_id . "
-				GROUP BY activity.user_id";
-
-		$query1 = $this->db->query($sql);
-
-		$sql = "SELECT sum(efficiency) AS total_eff
-				FROM sleep
-				WHERE sleep.user_id = " . $user_id . "
-				GROUP BY sleep.user_id";
-		$query2 = $this->db->query($sql);
-
-		if($query2->num_rows()>0&&$query1->num_rows()>0){
-			$result = $query1->row();
-			$steps = $result->total_steps;
-			$floors = $result->total_floors;
-			$score = $result->total_score;
-
-			$result2 = $query2->row();
-			$eff = $result2->total_eff;
-			$this->load->helper('level');
-			$expPoint = getExpPoints(intval($steps), intval($floors), intval($score), intval($eff));
-			
-
-			$sql="UPDATE user
-					SET points = " . $expPoint . "
-					WHERE id = " . $user_id;
-
-			$this->db->query($sql);
-			return $expPoint;
-		}
-	}
+	//-------------------------
 
 	function getDailySleepData($user_id, $date){
 		$sql = "SELECT * FROM sleep

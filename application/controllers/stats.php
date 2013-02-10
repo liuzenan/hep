@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Stats extends CI_Controller {
+	private $uid;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -16,22 +17,22 @@ class Stats extends CI_Controller {
 	}
 
 	public function statistics(){
-		$data['active'] = 5;
+		$data['active'] = 'stats';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['stats'] = $this->getStats();
 		$data['currentTab'] = "statistics";
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->uid);
+		
+		$data['notifications'] = $this->User_model->getNotifications($this->uid);
 		$this->load->view("templates/header", $data);
 		$this->load->view("stats", $data);
 		$this->load->view("templates/footer");
 	}
 
 	public function history($type='steps', $span="week"){
-		$data['active'] = 5;
+		$data['active'] = 'stats';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['chartTitle'] = $type;
@@ -52,8 +53,8 @@ class Stats extends CI_Controller {
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
 		$data['span'] = $span;
-		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->uid);
+		
+		$data['notifications'] = $this->User_model->getNotifications($this->uid);
 		$this->load->view("templates/header", $data);
 		$this->load->view("stats", $data);
 		$this->load->view("templates/footer");

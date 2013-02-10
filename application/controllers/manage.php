@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Manage extends CI_Controller {
-
+	private $uid;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -36,13 +36,13 @@ class Manage extends CI_Controller {
 	}
 
 	private function loadPage($data, $page="studentLeader"){
-		$data['active'] = 6;
+		$data['active'] = 'manage';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-		$this->load->model('User_model','userModel');
-		$data['notifications'] = $this->userModel->getNotifications($this->uid);
+		
+		$data['notifications'] = $this->User_model->getNotifications($this->uid);
 		$this->load->view('templates/header', $data);
 		$this->load->view($page, $data);
 		$this->load->view('templates/footer');

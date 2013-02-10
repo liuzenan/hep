@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Home extends CI_Controller{
-
+	private $uid;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -12,15 +12,20 @@ class Home extends CI_Controller{
 	}
 	
 	public function index(){
-		$data['active'] = 0;
+		$data['active'] = 'home';
 
-		$user_id = $this->session->userdata('user_id');
-		$this->loadUserData($user_id, $data);
-		$this->loadActivityData($user_id, $data);
-		//$this->loadPosts($user_id, $data);
-		$this->loadChallenges($user_id, $data);
-		$this->loadBadges($user_id, $data);	
-		$data['avg_points'] = $this->getAverage();
+		$this->loadUserData($this->uid, $data);
+		$this->loadActivityData($this->uid, $data);
+
+		$data['me_today'] = $this->Activity_model->getActivityToday($this->uid);
+		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($this->uid);
+		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
+		$data['me_sleep'] = $this->Activity_model->getSleepToday($this->uid);
+		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($this->uid);
+
+		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
+		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('home', $data);
@@ -28,13 +33,8 @@ class Home extends CI_Controller{
 		
 	}
 
-	private function loadPosts($user_id, &$data) {
-
-	}
-
 	private function loadUserData($user_id, &$data) {
-		$this->load->model('User_model','userModel');
-		$user = $this->userModel->loadUser($user_id);
+		$user = $this->User_model->loadUser($user_id);
 		
 		if($this->session->userdata('name')){
 			$displayName = $this->session->userdata('name');
@@ -64,14 +64,13 @@ class Home extends CI_Controller{
 		$data['displayName'] = $displayName;
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-		$data['notifications'] = $this->userModel->getNotifications($this->session->userdata("user_id"));
+		$data['notifications'] = $this->User_model->getNotifications($this->session->userdata("user_id"));
 	}
 
 	private function loadActivityData($user_id, &$data) {
-		$this->load->model('Activity_model', 'activityModel');
-		$activityRow = $this->activityModel->getActivityToday($user_id);
-		$average = $this->activityModel->getAverageActivityToday();
-		$average->sleep = $this->activityModel->getAverageSleepToday()->avg_time;
+		$activityRow = $this->Activity_model->getActivityToday($user_id);
+		$average = $this->Activity_model->getAverageActivityToday();
+		$average->sleep = $this->Activity_model->getAverageSleepToday()->avg_time;
 		$data['avg'] = $average;
 
 		if($activityRow != FALSE){
@@ -87,30 +86,5 @@ class Home extends CI_Controller{
 			$data['floors'] = 0;
 			$data['steps'] = 0;
 		}
-	}
-
-	private function loadBadges($user_id, &$data){
-		$this->load->model('Badge_model', 'badgeModel');
-		$data['badges'] = $this->badgeModel->getBadges($user_id);
-
-	}
-
-	private function loadChallenges($user_id, &$data){
-		$this->load->model('Challenge_model', 'challengeModel');
-
-		$data['challenges'] = $this->challengeModel->getCurrentChallenges($user_id);
-		
-	}
-
-	private function getAverage(){
-		$sql = "SELECT avg(points) AS avg_points
-		FROM user
-		WHERE phantom=0";
-
-		$query = $this->db->query($sql);
-		if($query->num_rows()>0){
-			return $query->row();
-		}
-		
 	}
 }
