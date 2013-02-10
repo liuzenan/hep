@@ -15,8 +15,28 @@ class House extends CI_Controller {
 
 	public function index(){
 		$user = $this->User_model->loadUser($this->uid);
-		$data['house_stats'] = $this->Challenge_model->getMyHouseStats($user->house_id);
-		$data['house_current'] = $this->Challenge_model->getHouseCurrentChallenges($user->house_id);
+
+		$badges = $this->Badge_model->getHouseBadges($user->house_id);
+		$completed = $this->Challenge_model->getMyHouseStats($user->house_id);
+		$current = $this->Challenge_model->getHouseCurrentChallenges($user->house_id);
+		/*
+		echo "<pre>"; print_r($badges);echo "</pre><br>";
+		echo "<pre>"; print_r($completed);echo "</pre><br>";
+		echo "<pre>"; print_r($current);echo "</pre><br>";
+		*/
+		$data = array();
+
+		foreach($badges as $uid => $b) {
+			$data[$uid]['badge'] = $b;
+		}
+
+		foreach($completed as $uid => $c) {
+			$data[$uid]['completed'] = $c;
+		}
+
+		foreach($current as $uid => $u) {
+			$data[$uid]['current'] = $u;
+		}
 		echo "<pre>"; print_r($data);echo "</pre><br>";
 
 		$this->loadPage($data);

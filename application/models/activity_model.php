@@ -10,13 +10,47 @@ class Activity_model extends CI_Model{
 	function getActivityToday($user_id){
 		$today = date("Y-m-d");
 		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$today));
-		return $query->row();
+		$vars = $query->row();
+		if(empty($vars)) {
+			$vars = new StdClass();
+			$vars->user_id = $user_id;
+			$vars->date =date("Y-m-d");
+			$vars->steps = 0;
+			$vars->floors= 0;
+			$vars->calories = 0;
+			$vars->active_score = 0;
+			$vars->distance = 0;
+			$vars->elevation = 0;
+			$vars->min_sedentary = 0;
+			$vars->min_lightlyactive = 0;
+			$vars->min_lightlyactive = 0;
+			$vars->min_veryactive = 0;
+			$vars->activity_calories = 0;
+		}
+		return $vars;
 	}
 
 	function getActivityYesterday($user_id) {
 		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
 		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$yesterday));
-		return $query->row();
+		$vars = $query->row();
+		if(empty($vars)) {
+			$vars = new StdClass();
+			$vars->user_id = $user_id;
+			$vars->date =date("Y-m-d", time() - 60 * 60 * 24);
+			$vars->steps = 0;
+			$vars->floors= 0;
+			$vars->calories = 0;
+			$vars->active_score = 0;
+			$vars->distance = 0;
+			$vars->elevation = 0;
+			$vars->min_sedentary = 0;
+			$vars->min_lightlyactive = 0;
+			$vars->min_lightlyactive = 0;
+			$vars->min_veryactive = 0;
+			$vars->activity_calories = 0;
+		}	
+		return $vars;
 	}
 
 	function getMaxActivityToday() {
@@ -27,9 +61,9 @@ class Activity_model extends CI_Model{
 		WHERE a.date=?";
 		$query = $this->db->query($sql, array($today));
 		return $query->row();
-		
+
 	}
-	
+
 
 	function getAverageActivityToday(){
 		$today = date("Y-m-d");
@@ -44,13 +78,41 @@ class Activity_model extends CI_Model{
 	function getSleepToday($user_id){
 		$today = date("Y-m-d");
 		$query = $this->db->get_where('sleep', array('user_id'=>$user_id, 'date'=>$today));
-		return $query->row();
+		$vars = $query->row();
+		if(empty($vars)) {
+			$vars = new StdClass();
+			$vars->user_id = $user_id;
+			$vars->date =date("Y-m-d");
+			$vars->total_time= 0;
+			$vars->time_asleep = 0;
+			$vars->start_time = "00:00:00";
+			$vars->awaken_count = 0;
+			$vars->min_awake = 0;
+			$vars->min_to_asleep = 0;
+			$vars->min_after_wakeup = 0;
+			$vars->efficiency = 0;
+		}
+		return $vars;
 	}
 
 	function getSleepYesterday($user_id) {
 		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
 		$query = $this->db->get_where('sleep', array('user_id'=>$user_id, 'date'=>$yesterday));
-		return $query->row();
+		$vars = $query->row();
+		if(empty($vars)) {
+			$vars = new StdClass();
+			$vars->user_id = $user_id;
+			$vars->date =$yesterday;
+			$vars->total_time= 0;
+			$vars->time_asleep = 0;
+			$vars->start_time = "00:00:00";
+			$vars->awaken_count = 0;
+			$vars->min_awake = 0;
+			$vars->min_to_asleep = 0;
+			$vars->min_after_wakeup = 0;
+			$vars->efficiency = 0;
+		}
+		return $vars;
 	}
 
 
@@ -60,7 +122,6 @@ class Activity_model extends CI_Model{
 		$sql = "SELECT avg(total_time) AS avg_time
 		FROM sleep
 		WHERE date='".$today."' AND total_time>0";
-		echo $sql;
 		$query = $this->db->query($sql);
 		return $query->row();
 	}
@@ -93,7 +154,7 @@ class Activity_model extends CI_Model{
 	}
 
 	function getLifetimeSleepData($user_id){
-		
+
 
 	}
 
@@ -128,7 +189,7 @@ class Activity_model extends CI_Model{
 				}
 			}
 		} catch (Exception $e) {
-			
+
 		}
 	}
 
@@ -153,7 +214,7 @@ class Activity_model extends CI_Model{
 					$currentTime = (string) $value->time;
 					$intradayActivityData[$currentTime]['calories'] = $value->value;
 					$intradayActivityData[$currentTime]['level'] = $value->level;
-					
+
 				}
 
 				foreach($intradaySteps->dataset->intradayData as $value){
@@ -181,7 +242,7 @@ class Activity_model extends CI_Model{
 
 			}	
 		} catch (Exception $e) {
-			
+
 		}
 
 
@@ -279,9 +340,9 @@ class Activity_model extends CI_Model{
 			}
 
 		} catch (Exception $e) {
-			
+
 		}
 
 	}
-	
+
 }
