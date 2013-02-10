@@ -1,102 +1,54 @@
 <div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Overall Ranking</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th></th>
-					<th>Name</th>
-					<th>House</th>
-					<th>Score</th>
-				</tr>
-			</thead>
-			<tbody>
-				
-				<?php 
-					$n=0;
-					foreach($leader as $row){ 
-						$n++;
-				?>
-				<tr>
-					<td><?php echo $n ?></td>
-					<td> <img src="<?php echo $row->avatar ?>" width="25px" height="25px"/></td>
-					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->score ?></td>
-				</tr>
-				<?php 
-				}
-				 ?>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Female Ranking</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th></th>
-					<th>Name</th>
-					<th>House</th>
-					<th>Score</th>
-				</tr>
-			</thead>
-			<tbody>
-				
-				<?php 
-					$n=0;
-					foreach($female as $row){ 
-						$n++;
-				?>
-				<tr>
-					<td><?php echo $n ?></td>
-					<td> <img src="<?php echo $row->avatar ?>" width="25px" height="25px"/></td>
-					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->score ?></td>
-				</tr>
-				<?php 
-				}
-				 ?>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12 well">
-		<p><strong>Male Ranking</strong></p>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Rank</th>
-					<th></th>
-					<th>Name</th>
-					<th>House</th>
-					<th>Score</th>
-				</tr>
-			</thead>
-			<tbody>
-				
-				<?php 
-					$n=0;
-					foreach($male as $row){ 
-						$n++;
-				?>
-				<tr>
-					<td><?php echo $n ?></td>
-					<td> <img src="<?php echo $row->avatar ?>" width="25px" height="25px"/></td>
-					<td><?php echo $row->firstname . ' ' . $row->lastname ?></td>
-					<td><?php echo $row->house ?></td>
-					<td><?php echo $row->score ?></td>
-				</tr>
-				<?php 
-				}
-				 ?>
-			</tbody>
-		</table>
+	<div class="span12">
+		<div class="row-fluid">
+			<div class="span4">
+				<p class="section-title">Overall</p>
+				<?php $n=0; ?>
+				<?php foreach ($leader as $row): ?>
+				<?php $n++ ?>
+					<div class="leaderboard-person clearfix">
+						<div class="leaderboard-rank"><span class="badge badge-success"><?php echo $n ?></span></div>
+						<div class="leaderboard-profile-pic"><img src="<?php echo $row->avatar ?>" width="75" height="75"/></div>
+						<div class="leaderboard-content">
+							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
+							<p>House <?php echo $row->house ?></p>
+							<small><?php echo $row->score ?> Challenges</small>
+						</div>
+					</div>
+				<?php endforeach ?>
+			</div>
+			<div class="span4">
+				<p class="section-title">Female</p>
+				<?php $n=0; ?>
+				<?php foreach ($female as $row): ?>
+				<?php $n++ ?>
+					<div class="leaderboard-person clearfix">
+						<div class="leaderboard-rank"><span class="badge badge-success"><?php echo $n ?></span></div>
+						<div class="leaderboard-profile-pic"><img src="<?php echo $row->avatar ?>" width="75" height="75"/></div>
+						<div class="leaderboard-content">
+							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
+							<p>House <?php echo $row->house ?></p>
+							<small><?php echo $row->score ?> Challenges</small>
+						</div>
+					</div>
+				<?php endforeach ?>
+			</div>
+			<div class="span4">
+				<p class="section-title">Male</p>
+				<?php $n=0; ?>
+				<?php foreach ($male as $row): ?>
+				<?php $n++ ?>
+					<div class="leaderboard-person clearfix">
+						<div class="leaderboard-rank"><span class="badge badge-success"><?php echo $n ?></span></div>
+						<div class="leaderboard-profile-pic"><img src="<?php echo $row->avatar ?>" width="75" height="75"/></div>
+						<div class="leaderboard-content">
+							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
+							<p>House <?php echo $row->house ?></p>
+							<small><?php echo $row->score ?> Challenges</small>
+						</div>
+					</div>
+				<?php endforeach ?>
+			</div>
+		</div>
 	</div>
 </div>

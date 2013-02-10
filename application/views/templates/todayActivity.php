@@ -64,10 +64,10 @@
 						<div class="row-fluid">
 							<table class="table activity-stats">
 								<tbody>
-									<td class="activity-stats"><strong><span><?php echo $me_today->steps ?></span><br>Steps&nbsp;</strong><i class="icon-arrow-up"></i></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->floors ?></span><br>Floors&nbsp;</strong><i class="icon-arrow-up"></i></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->distance ?></span><br>Distance&nbsp;</strong><i class="icon-arrow-up"></i></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br>Calories&nbsp;</strong><i class="icon-arrow-up"></i></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->steps ?></span><br>Steps&nbsp;</strong><i class="<?php if($delta_steps>0) echo "icon-arrow-up"; else if ($delta_steps<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_steps!=0) echo abs(floor($delta_steps*100)) .'%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->floors ?></span><br>Floors&nbsp;</strong><i class="<?php if($delta_floors>0) echo "icon-arrow-up"; else if ($delta_floors<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_floors!=0) echo abs(floor($delta_floors*100)) . '%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->distance ?></span><br>Distance&nbsp;</strong><i class="<?php if($delta_distance>0) echo "icon-arrow-up"; else if ($delta_distance<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_distance!=0) echo abs(floor($delta_distance*100)) . '%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br>Calories&nbsp;</strong><i class="<?php if($delta_calories>0) echo "icon-arrow-up"; else if ($delta_calories<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_calories!=0) echo abs(floor($delta_calories*100)) . '%' ?></td>
 								</tbody>
 							</table>
 						</div>

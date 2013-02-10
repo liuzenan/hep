@@ -54,7 +54,7 @@ table.activity-stats{
 	margin-top: -5px;
 }
 
-td.activity-stats{
+td.activity-stats, td.stats-label{
 	text-align: center;
 	vertical-align: center;
 	color:#666;
@@ -62,11 +62,16 @@ td.activity-stats{
 	width: 25%;
 }
 
-td.activity-stats strong{
+td.stats-count{
+	border:none;
+	color: red;
+}
+
+td.activity-stats strong, td.stats-label strong{
 	line-height: 1.5em;
 }
 
-td.activity-stats strong span{
+td.activity-stats strong span, td.stats-label strong span{
 	font-size: 2em;
 	line-height: 1em;
 }
@@ -101,6 +106,10 @@ td.activity-stats strong span{
 .post-profile>img{
 	height:50px;
 	width:50px;
+}
+
+.postWordCount{
+	display: none;
 }
 
 .newsFeed>li, .challenge>li{
@@ -339,4 +348,57 @@ td.forum-stats{
 	margin-top: 3px;
 	padding-top: 4px;
 	font-size: 0.9em;
+}
+
+.messageBox{
+	height: 20px;
+	font-size: 13px;
+	line-height: 1em;
+}
+
+.thread-content .postbtn{
+	float: left;
+	width: 8%;
+	margin-left: 2%;
+}
+
+.thread-content .messageBox{
+	float: left;
+	width: 90%;
+}
+
+.challenge-forum hr{
+	margin: 10px 0;
+}
+
+.leaderboard-person{
+	background: #F7ECC9;
+	color: #6C7A7A;
+	border-radius: 5px;
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.leaderboard-rank{
+	width: 10%;
+	position: absolute;
+	top: -5px;
+	left: -5px;
+}
+
+.leaderboard-profile-pic{
+	float: left;
+	width: 40%;
+}
+
+.leaderboard-content{
+	float: left;
+	width: 50%;
+}
+table.challenge-stats thead td{
+	text-align: center;
+	width: 25%;
+	font-family: "Grandesign Neue Serif", Serif;
+	font-size: 2em;
+
 }

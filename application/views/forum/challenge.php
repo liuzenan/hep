@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
-		<div class="row-fluid">
+		<div class="row-fluid challenge-forum">
 			<?php foreach ($threads as $thread_id => $thread): ?>
 			<div class="thread-container clearfix">
 				<div class="thread-pic pull-left">
@@ -26,17 +26,21 @@
 						    </div>
 						<?php endforeach ?>
 					<?php endif ?>	
-				
 					<div class="row-fluid">
 					<div class="span12">
-						<textarea id="messageBox<?php echo $thread_id ?>" data-thread-id="<?php echo $thread_id ?>" name="compose" row="4" class="input-block-level messageBox" placeholder="Write a new message..."></textarea>
-						<div class="btncontainer clearfix" data-thread-id="<?php echo $thread_id ?>">
-							<div class="postbtn pull-right">
+						<div class="clearfix thread-comment">
+							<div class="thread-commment-pic"><img src="<?php echo $avatar ?>" width="36" height="36"/></div>
+							<div class="thread-comment-content clearfix">
+						<textarea id="messageBox<?php echo $thread_id ?>" data-thread-id="<?php echo $thread_id ?>" name="compose" class="input-block-level messageBox" placeholder="Write a new message..."></textarea>
+						<div class="btncontainer" data-thread-id="<?php echo $thread_id ?>">
+							<div class="postbtn">
 								<span class="muted postWordCount" id="postWordCount<?php echo $thread_id ?>">800</span>
 								<button class="btn postMessage" data-thread-id="<?php echo $thread_id ?>">Post</button>
 							</div>
 						</div>
+						</div>
 						<div id="alertContainer<?php echo $thread_id ?>"></div>
+					</div>
 					</div>				
 				</div>					
 				</div>			

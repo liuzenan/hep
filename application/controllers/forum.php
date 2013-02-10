@@ -124,8 +124,6 @@ class Forum extends CI_Controller {
 					);
 			}
 		}
-		var_dump($message);
-		var_dump($msg);
 		echo json_encode($msg);
 	}
 

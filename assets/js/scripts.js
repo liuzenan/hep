@@ -10,7 +10,6 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var threadId = currentBtn.data("threadId");
 		var msg = $("#messageBox"+threadId).val();
-		console.log(msg);
 		if(msg.length<=800&&msg.length>0){
 			$.ajax({
 				type:'POST',
@@ -20,10 +19,9 @@ jQuery(document).ready(function($) {
 					thread_id: threadId,
 					comment: msg
 				}
-			}).done(function(msg){
-				console.log(msg);
-				if(msg.success){
-
+			}).done(function(message){
+				console.log(message);
+				if(message.success){
 					window.location.reload();
 				}else{
 					$("#alertContainer"+currentBtn).html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong>Your message is not posted.</div>');
@@ -55,6 +53,7 @@ jQuery(document).ready(function($) {
 		limitText(msgbox, $(".btncontainer[data-thread-id="+ threadId +"] .postWordCount"), 800);
 	});
 
+	$(".messageBox").autosize();
 	//joinevents
 	$('.joinbtn').click(function(event){
 		var eventId = $(this).data("id");
