@@ -1,5 +1,50 @@
+/* @font-face kit by Fonts2u (http://www.fonts2u.com) */ @font-face {font-family:"Grandesign Neue Serif";src:url("../font/Grandesign_Neue_Serif.eot?") format("eot"),url("../font/Grandesign_Neue_Serif.woff") format("woff"),url("../font/Grandesign_Neue_Serif.ttf") format("truetype"),url("../font/Grandesign_Neue_Serif.svg#GrandesignNeueSerif") format("svg");font-weight:normal;font-style:normal;}
 p{
 	margin: 0 0 1em;
+}
+
+.image-fix
+{
+	display: block;
+}
+
+.user-icons .user-icon
+{
+	padding: 10px;
+	color: #ccc;
+}
+
+.activity-chart{
+	height: 120px;
+	border-bottom: 1px solid #ccc;
+}
+
+.activity-chart>.span3{
+	height: 100%;
+	position: relative;
+}
+
+.activity-icons .span3{
+	position: relative;
+}
+
+.activity-icons .activityIcon
+{
+	position: absolute;
+	left: 30px;
+}
+
+.activity-icons h4
+{
+	position: absolute;
+	left: 60px;
+	top: 4px;
+	margin:0;
+}
+
+.activity-chart .row-fluid{
+	position: absolute;
+	bottom: 0;
 }
 
 #user-notification{
@@ -81,8 +126,16 @@ span.activityIcon.floors{
 }
 
 .badgelist{
-	border-radius: 0 !important;
-	margin-bottom: 1px;
+
+}
+
+.section-title{
+	font-family: "Grandesign Neue Serif", Serif;
+	font-size: 1.2em;
+	color: white;
+	background: #39A1D1;
+	padding: 10px;
+	border-radius: 5px;
 }
 
 .newsfeed{

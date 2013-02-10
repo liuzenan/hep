@@ -1,9 +1,9 @@
 <div class="row-fluid">
-	<div class="span12 badgelist well">
-		<p><strong>My Achievements</strong></p>
-		<?php if($badges) {?>
-			<?php foreach($badges as $badge){ ?>
-			<img src="<?php echo $badge->badge_pic ?>" alt="">
+	<div class="span12 badgelist">
+		<p class="section-title">My Badges</p>
+		<?php if(!empty($me_badges)) {?>
+			<?php foreach($me_badges as $badge){ ?>
+			<a href="#" data-toggle="tooltip" title="<?php echo $badge->description ?>"><img src="<?php echo $badge->badge_pic ?>" alt=""></a>
 		<?php }} else {?>
 			<p class="mute">You currently don't have any Fitbit achievements yet... :(</p>
 		<?php } ?>
