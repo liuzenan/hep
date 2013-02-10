@@ -32,15 +32,15 @@ class House extends CI_Controller {
 		$data = array();
 
 		foreach($badges as $uid => $b) {
-			$data[$uid]['badge'] = $b;
+			$data['data'][$uid]['badge'] = $b;
 		}
 
 		foreach($completed as $uid => $c) {
-			$data[$uid]['completed'] = $c;
+			$data['data'][$uid]['completed'] = $c;
 		}
 
 		foreach($current as $uid => $u) {
-			$data[$uid]['current'] = $u;
+			$data['data'][$uid]['current'] = $u;
 		}
 
 		$rank = $this->Challenge_model->getHouseRankAndPoints($user->house_id);

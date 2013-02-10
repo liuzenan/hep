@@ -233,7 +233,7 @@ class Challenge_model extends CI_Model{
 		AND u.phantom = 0
 		AND u.staff = 0
 		GROUP BY h.id
-		ORDER BY sum(c.points), sum(cp.complete_time-cp.start_time) DESC";
+		ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
