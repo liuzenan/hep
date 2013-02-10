@@ -5,6 +5,11 @@ class Badge_model extends CI_Model{
 		parent::__construct();
 	}
 
+	function getBadge($badge_id) {
+		$query = $this->db->get_where('badge', array('id' => $badge_id));
+		return $query->row();
+	}
+
 	function getBadges($user_id) {
 		$sql = "SELECT b.*, ub.*
 		FROM badge AS b

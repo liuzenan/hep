@@ -26,6 +26,8 @@ class Home extends CI_Controller{
 
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
+		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+		echo "<pre>"; print_r($data);echo "</pre><br>";
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('home', $data);

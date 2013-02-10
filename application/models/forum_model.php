@@ -22,7 +22,7 @@ class Forum_model extends CI_Model{
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id > 0
-		AND t.archived = 0";
+		AND t.archived = 0 ORDER BY p.comment_time DESC";
 		$query = $this->db->query($sql);
 		$uids = array();
 		if ($query->num_rows()>0) {
@@ -64,7 +64,7 @@ class Forum_model extends CI_Model{
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id = 0
-		AND t.archived = 0";
+		AND t.archived = 0 ORDER BY p.comment_time DESC";
 		$query = $this->db->query($sql);
 		$uids = array();
 		if ($query->num_rows()>0) {
