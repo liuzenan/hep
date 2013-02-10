@@ -62,13 +62,12 @@
 							</div>
 						</div>
 						<div class="row-fluid">
-							<table class="table">
-								<thead><tr></tr></thead>
+							<table class="table activity-stats">
 								<tbody>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->steps ?></span><br>Steps&nbsp;</strong><i class="icon-arrow-up"></i></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->floors ?></span><br>Floors&nbsp;</strong><i class="icon-arrow-up"></i></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->distance ?></span><br>Distance&nbsp;</strong><i class="icon-arrow-up"></i></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br>Calories&nbsp;</strong><i class="icon-arrow-up"></i></td>
 								</tbody>
 							</table>
 						</div>
