@@ -76,7 +76,7 @@ class Login extends CI_Controller{
 			$this->getActivites();
 			$this->getSleep();
 			$this->setFeeds();
-			$this->initPosts();
+			//$this->initPosts();
 			$this->addSubscription();	
 			$msg['success'] = true;
 		} catch (Exception $E){
