@@ -58,12 +58,16 @@ td.activity-stats, td.stats-label{
 	text-align: center;
 	vertical-align: center;
 	color:#666;
-	border: none;
+	border-top: none;
 	width: 25%;
 }
 
+td.middle-col{
+	border-right: solid 1px #E6D9B8;
+}
+
 td.stats-count{
-	border:none;
+	border-top:none;
 	color: red;
 }
 
@@ -395,10 +399,31 @@ td.forum-stats{
 	float: left;
 	width: 50%;
 }
+
+table.table.challenge-stats{
+	margin-bottom: 0;
+}
 table.challenge-stats thead td{
 	text-align: center;
 	width: 25%;
 	font-family: "Grandesign Neue Serif", Serif;
 	font-size: 2em;
+}
 
+div.challenge-stats{
+	margin: 0 2%;
+	width: 96%;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	background: #F7ECC9;
+	margin-bottom: 20px;
+}
+
+.current-challenges .section-title{
+	margin-bottom: 0;
+}
+
+.media-list.current-challenge-list{
+	width: 96%;
+	margin: 0 2%;
 }

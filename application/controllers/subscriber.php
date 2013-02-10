@@ -50,7 +50,7 @@ class Subscriber extends CI_Controller {
 		}
 	}
 
-	private function getActivities($user_id, $date){
+	public function getActivities($user_id, $date){
 
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){
