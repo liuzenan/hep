@@ -22,6 +22,7 @@ class Forum_model extends CI_Model{
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id > 0
+		AND t.tutor_only = 0
 		AND t.archived = 0 ORDER BY p.comment_time DESC";
 		$query = $this->db->query($sql);
 		$uids = array();
@@ -64,6 +65,49 @@ class Forum_model extends CI_Model{
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id = 0
+		AND t.tutor_only = 0
+		AND t.archived = 0 ORDER BY p.comment_time DESC";
+		$query = $this->db->query($sql);
+		$uids = array();
+		if ($query->num_rows()>0) {
+			$res = array();
+			foreach($query->result() as $row) {
+				if(empty($res[$row->thread_id])) {
+					$thread = array();
+					$thread["challenge_id"] = $row->challenge_id;
+					$thread["title"]= $row->message;
+					$thread["thread_id"] = $row->id;
+					if(empty($thread["comments"])) {
+						$thread["comments"] = array();
+					}
+					$res[$row->id] = $thread;
+				}
+				if(!empty($row->commenter_id) && ($row->deleted == 0)) {
+					$thread = $res[$row->id];
+					$comment = array();
+					$comment["commenter_id"] = $row->commenter_id;
+					$comment["comment"] = $row->comment;
+					$comment["comment_time"] = $row->comment_time;
+					$comment["comment_id"] = $row->cid;
+					$thread["comments"][$row->cid] = $comment;
+					$res[$row->id]["comments"] = $thread["comments"];
+					$uids[] = $row->commenter_id;
+				}
+			}
+			$res['uids'] = $uids;
+			return $res;
+		} else {
+			return FALSE;
+		}
+	}
+
+	function getTutorForum() {
+		$sql = "SELECT t.*, p.*
+		FROM   forumthread AS t
+		LEFT JOIN threadpost AS p
+		ON t.id = p.thread_id
+		WHERE  t.challenge_id = 0
+		AND t.tutor_only = 1
 		AND t.archived = 0 ORDER BY p.comment_time DESC";
 		$query = $this->db->query($sql);
 		$uids = array();
@@ -114,6 +158,17 @@ class Forum_model extends CI_Model{
 
 	}
 
+	function createTutorThread($creator_id, $message) {
+		$data = array(
+			'creator_id'=>$creator_id,
+			'message'=>$message,
+			'tutor_only'=>1
+			);
+		$this->db->insert(Forum_model::table_thread,$data);
+		return $this->db->insert_id();
+
+	}
+
 	function loadThreadSubscribers($thread_id) {
 		$query = $this->db->get_where(Forum_model::table_subscribe , array('thread_id' => $thread_id));
 		return $query->result();
@@ -139,7 +194,7 @@ class Forum_model extends CI_Model{
 	function createPost($commenter_id, $thread_id, $message) {
 		$data = array(
 			'commenter_id'=>$commenter_id,
-			'message'=>$message,
+			'comment'=>$message,
 			'thread_id'=>$thread_id
 			);
 		$this->db->insert(Forum_model::table_post,$data);

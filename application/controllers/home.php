@@ -12,6 +12,15 @@ class Home extends CI_Controller{
 	}
 	
 	public function index(){
+
+		$data = $this->loadData();
+		$this->load->view('templates/header', $data);
+		$this->load->view('home', $data);
+		$this->load->view('templates/footer');
+		
+	}
+
+	private function loadData() {
 		$data['active'] = 'home';
 
 		$this->loadUserData($this->uid, $data);
@@ -19,22 +28,37 @@ class Home extends CI_Controller{
 
 		$data['me_today'] = $this->Activity_model->getActivityToday($this->uid);
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($this->uid);
-		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
-		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
+
 		$data['me_sleep'] = $this->Activity_model->getSleepToday($this->uid);
 		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($this->uid);
+
+
+		$data['delta_steps'] = $this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps);
+		$data['delta_floors'] = $this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors);
+		$data['delta_calories'] = $this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories);
+		$data['delta_sleep'] = $this->cauculateDelta($data['me_sleep']->total_time, $data['me_sleep_yesterday']->total_time);
+
+
+		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
 
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
 		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
-		echo "<pre>"; print_r($data);echo "</pre><br>";
-
-		$this->load->view('templates/header', $data);
-		$this->load->view('home', $data);
-		$this->load->view('templates/footer');
-		
+		return $data;
 	}
 
+	public function data() {
+		echo "<pre>"; print_r($this->loadData());echo "</pre><br>";
+	}
+
+	private function cauculateDelta($today, $yesterday) {
+		if($yesterday == 0) {
+			return $today == 0 ? 0 : 1;
+		} else {
+			return float($today-$yesterday)/float($yesterday);
+		}
+	}
 	private function loadUserData($user_id, &$data) {
 		$user = $this->User_model->loadUser($user_id);
 		

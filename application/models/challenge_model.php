@@ -43,14 +43,23 @@ class Challenge_model extends CI_Model{
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
 		WHERE challengeparticipant.start_time < NOW() AND challengeparticipant.end_time > NOW() 
-		GROUP BY challengeparticipant.challenge_id";
+		";
 
 		$query = $this->db->query($sql, array($house_id));
-		return $query->result();
+		$challenges = $query->result();
+		$res = array();
+		foreach($challenges as $c) {
+			if(!isset($res[$c->user_id])) {
+				$res[$c->user_id] = array();
+			}
+			$res[$c->user_id][] = $c;
+		}
+		
+		return $res;
 	}
 
 	function getHouseCompletedChallenges($house_id) {
-		$sql = "SELECT challenge.* , count(challengeparticipant.challenge_id) as times
+		$sql = "SELECT challenge.* , count(challengeparticipant.id) as times
 		FROM challenge
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
@@ -177,23 +186,30 @@ class Challenge_model extends CI_Model{
 		return $query->result();
 	}
 
-	function getMyHouseStats($user_id) {
+	function getMyHouseStats($house_id) {
 		$sql ="SELECT
 		u.first_name  AS firstname,
 		u.last_name   AS lastname,
 		u.profile_pic AS avatar,
+		u.leader      AS is_leader,
+		u.id 		  AS user_id,
 		Count(cp.id)  AS score
 		FROM   user AS u,
 		challengeparticipant AS cp
-		WHERE  u.house_id = (SELECT house_id FROM user WHERE id = ?)
+		WHERE  u.house_id = ?
 		AND cp.user_id = u.id
 		AND cp.complete_time > '0000-00-00 00:00:00'
 		AND u.phantom = 0
 		AND u.staff = 0
 		GROUP BY u.id
 		ORDER BY count(cp.id)";
-		$query = $this->db->query($sql, array($user_id));
-		return $query->result();
+		$query = $this->db->query($sql, array($house_id));
+		$stats = $query->result();
+		$res = array();
+		foreach($stats as $s) {
+			$res[$s->user_id] = $s;
+		}
+		return $res;
 	}
 	
 }
