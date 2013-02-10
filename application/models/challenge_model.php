@@ -219,23 +219,35 @@ class Challenge_model extends CI_Model{
 		$sql="SELECT
 		u.house_id    AS house_id,
 		h.name        AS house_name,
-		Count(cp.id)  AS score,
+		sum(c.points)  AS score,
 		Count(DISTINCT u.id) as user_num,
 		GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
 		FROM   user AS u,
 		house AS h,
-		challengeparticipant AS cp
+		challengeparticipant AS cp,
+		challenge as c
 		WHERE  u.house_id = h.id
+		AND c.id = cp.challenge_id
 		AND cp.user_id = u.id
 		AND cp.complete_time > cp.start_time
 		AND u.phantom = 0
 		AND u.staff = 0
 		GROUP BY h.id
-		ORDER BY count(cp.id), sum(cp.complete_time-cp.start_time) ASC ";
+		ORDER BY sum(c.points), sum(cp.complete_time-cp.start_time) DESC";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
 
+	function getHouseRankAndPoints($house_id) {
+		$leaderboard = $this->getHouseLeaderboard();
+		$rank = 0;
+		foreach($leaderboard as $house) {
+			$rank++;
+			if($house->house_id == $house_id) {
+				return array('rank'=>$rank, 'points'=>$house->score);
+			}
+		}
+	}
 	function getMyHouseStats($house_id) {
 		$sql ="SELECT
 		u.first_name  AS firstname,

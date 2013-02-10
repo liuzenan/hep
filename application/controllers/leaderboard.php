@@ -45,13 +45,6 @@ class Leaderboard extends CI_Controller {
 		$this->loadPage($data);
 	}
 
-	public function myhouse() {
-		$data['currentTab'] = "myhouse";
-		$data['data'] = $this->Challenge_model->getMyHouseStats($this->uid);
-		var_dump($data);
-		$this->loadPage($data);
-	}
-
 	private function loadPage($data){
 		$data['active'] = 'leaderboard';
 		$data['displayName'] = $this->session->userdata('name');

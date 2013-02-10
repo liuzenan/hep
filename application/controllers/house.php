@@ -14,6 +14,11 @@ class House extends CI_Controller {
 
 
 	public function index(){
+		
+
+		$this->loadPage($this->loadData());
+	}
+	private function loadData() {
 		$user = $this->User_model->loadUser($this->uid);
 
 		$badges = $this->Badge_model->getHouseBadges($user->house_id);
@@ -37,9 +42,15 @@ class House extends CI_Controller {
 		foreach($current as $uid => $u) {
 			$data[$uid]['current'] = $u;
 		}
-		echo "<pre>"; print_r($data);echo "</pre><br>";
 
-		$this->loadPage($data);
+		$rank = $this->Challenge_model->getHouseRankAndPoints($user->house_id);
+		$data['rank'] = $rank;
+		return $data;
+
+	}
+	public function data() {
+		echo "<pre>"; print_r($this->loadData());echo "</pre><br>";
+
 	}
 
 	private function loadPage($data){
