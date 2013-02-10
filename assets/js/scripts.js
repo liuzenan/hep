@@ -21,7 +21,9 @@ jQuery(document).ready(function($) {
 					comment: msg
 				}
 			}).done(function(msg){
-				if(msg.success==true){
+				console.log(msg);
+				if(msg.success){
+
 					window.location.reload();
 				}else{
 					$("#alertContainer"+currentBtn).html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong>Your message is not posted.</div>');

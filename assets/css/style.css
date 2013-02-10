@@ -3,6 +3,9 @@ p{
 	margin: 0 0 1em;
 }
 
+body{
+	background: url(../img/brillant.png);
+}
 .image-fix
 {
 	display: block;
@@ -10,7 +13,7 @@ p{
 
 .user-icons .user-icon
 {
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 	color: #ccc;
 }
 
@@ -45,6 +48,27 @@ p{
 .activity-chart .row-fluid{
 	position: absolute;
 	bottom: 0;
+}
+
+table.activity-stats{
+	margin-top: -5px;
+}
+
+td.activity-stats{
+	text-align: center;
+	vertical-align: center;
+	color:#666;
+	border: none;
+	width: 25%;
+}
+
+td.activity-stats strong{
+	line-height: 1.5em;
+}
+
+td.activity-stats strong span{
+	font-size: 2em;
+	line-height: 1em;
 }
 
 #user-notification{
