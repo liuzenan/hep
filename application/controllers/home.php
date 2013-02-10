@@ -33,10 +33,10 @@ class Home extends CI_Controller{
 		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($this->uid);
 
 
-		$data['delta_steps'] = $this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps);
-		$data['delta_floors'] = $this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors);
-		$data['delta_calories'] = $this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories);
-		$data['delta_distance'] = $this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance);
+		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);
+		$data['delta_floors'] = number_format($this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors),2);
+		$data['delta_calories'] = number_format($this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories),2);
+		$data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance),2);
 
 
 		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
@@ -45,7 +45,7 @@ class Home extends CI_Controller{
 
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
-		$data['avg_completed'] = $this->Challenge_model->getAverageChallengeCount();
+		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
 		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
 
 

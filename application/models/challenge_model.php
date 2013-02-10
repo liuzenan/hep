@@ -163,11 +163,11 @@ class Challenge_model extends CI_Model{
 		challengeparticipant AS cp
 		WHERE  u.house_id = h.id
 		AND cp.user_id = u.id
-		AND cp.complete_time > '0000-00-00 00:00:00'
+		AND cp.complete_time > cp.start_time
 		AND u.phantom = 0
 		AND u.staff = 0
 		GROUP BY u.id
-		ORDER BY count(cp.id) DESC LIMIT 0, 10";
+		ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
@@ -184,12 +184,12 @@ class Challenge_model extends CI_Model{
 		challengeparticipant AS cp
 		WHERE  u.house_id = h.id
 		AND cp.user_id = u.id
-		AND cp.complete_time > '0000-00-00 00:00:00'
+		AND cp.complete_time > cp.start_time
 		AND u.gender = ?
 		AND u.phantom = 0
 		AND u.staff = 0
 		GROUP BY u.id
-		ORDER BY count(cp.id) DESC LIMIT 0, 10";
+		ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
 		$query = $this->db->query($sql, array($gender));
 		return $query->result();
 	}
@@ -206,11 +206,11 @@ class Challenge_model extends CI_Model{
 		challengeparticipant AS cp
 		WHERE  u.house_id = h.id
 		AND cp.user_id = u.id
-		AND cp.complete_time > '0000-00-00 00:00:00'
+		AND cp.complete_time > cp.start_time
 		AND u.phantom = 0
-		AND (u.staff = 1 OR u.leader = 1)
+		AND (u.staff = 1)
 		GROUP BY u.id
-		ORDER BY count(cp.id) DESC LIMIT 0, 10";
+		ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}
@@ -219,17 +219,19 @@ class Challenge_model extends CI_Model{
 		$sql="SELECT
 		u.house_id    AS house_id,
 		h.name        AS house_name,
-		Count(cp.id)  AS score
+		Count(cp.id)  AS score,
+		Count(DISTINCT u.id) as user_num,
+		GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
 		FROM   user AS u,
 		house AS h,
 		challengeparticipant AS cp
 		WHERE  u.house_id = h.id
 		AND cp.user_id = u.id
-		AND cp.complete_time > '0000-00-00 00:00:00'
+		AND cp.complete_time > cp.start_time
 		AND u.phantom = 0
 		AND u.staff = 0
 		GROUP BY h.id
-		ORDER BY count(cp.id) ";
+		ORDER BY count(cp.id), sum(cp.complete_time-cp.start_time) ASC ";
 		$query = $this->db->query($sql);
 		return $query->result();
 	}

@@ -36,22 +36,6 @@ class Challenges extends CI_Controller {
 
 	public function loadAvailableChallanges() {
 		$challenges = $this->Challenge_model->getAllChallenges();
-		
-		/*
-		$current = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
-		$res = array();
-
-		$temp = array();
-		foreach($current as $m) {
-			$temp[$m->category]
-		}
-
-		$res['current'] = $current;
-
-		foreach($challenges as $c) {
-			$res[$c->id] = $c;
-		}*/
-
 		return $challenges;
 
 	}
