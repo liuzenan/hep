@@ -33,7 +33,7 @@ class Leaderboard extends CI_Controller {
 	public function staff(){
 		$data['currentTab'] = "staff";
 		$data['staff'] = $this->Challenge_model->getTutorLearderboard();
-		var_dump($data);
+		//var_dump($data);
 		$this->loadPage($data);
 	}
 
@@ -41,7 +41,7 @@ class Leaderboard extends CI_Controller {
 		$data['currentTab'] = "house";
 		$data['house'] = $this->Challenge_model->getHouseLeaderboard();
 		
-		echo "<pre>"; print_r($data);echo "</pre><br>";
+	//	echo "<pre>"; print_r($data);echo "</pre><br>";
 		$this->loadPage($data);
 	}
 

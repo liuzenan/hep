@@ -18,9 +18,7 @@ class Subscriber extends CI_Controller {
 						$user_id = $data['user_id'];
 						$date = $data['date'];
 						$this->getActivities($user_id, $date);
-						$this->updateAchievement($user_id, $date);
-						$this->load->model('Activity_model','activities');
-						$this->activities->updateExp($user_id);
+						$this->Challenge_model->updateActivityProgress($user_id);
 					}else{
 						
 					}
@@ -136,13 +134,6 @@ class Subscriber extends CI_Controller {
 
 	}
 
-	public function updateAchievement($user_id, $date){
-		$this->load->model('Activity_model','activities');
-		
-
-		$lifetimeActivityData = $this->activities->getLifetimeActivityData($user_id);
-
-	}
 
 	private function getUserKeyPair($userId){
 		if($userId){

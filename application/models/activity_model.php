@@ -77,40 +77,57 @@ class Activity_model extends CI_Model{
 
 	function getSleepToday($user_id){
 		$today = date("Y-m-d");
-		$query = $this->db->get_where('sleep', array('user_id'=>$user_id, 'date'=>$today));
+		$sql = "SELECT Sum(total_time) AS total_time,
+		date
+		FROM   sleep
+		WHERE  user_id = ?
+		AND date = ?
+		GROUP  BY date";
+		$query = $this->db->query($sql, array($user_id, $today));
 		$vars = $query->row();
 		if(empty($vars)) {
 			$vars = new StdClass();
 			$vars->user_id = $user_id;
-			$vars->date =date("Y-m-d");
+			$vars->date =$today;
 			$vars->total_time= 0;
-			$vars->time_asleep = 0;
-			$vars->start_time = "00:00:00";
-			$vars->awaken_count = 0;
-			$vars->min_awake = 0;
-			$vars->min_to_asleep = 0;
-			$vars->min_after_wakeup = 0;
-			$vars->efficiency = 0;
 		}
 		return $vars;
 	}
 
+	function getSleepStartTime($user_id, $start) {
+		$offset = strtotime("23:59:59") - strtotime($start);
+		$sql = "SELECT * FROM sleep WHERE total_time>? AND start_time<? AND user_id=?";
+		return $this->db->query($sql, array($offset, $start_time, $user_id))->row();
+	}
+	function getActivityStats($user_id, $start, $end) {
+		$sql = "SELECT Sum(steps)     AS steps,
+		Sum(calories)  AS calories,
+		Sum(floors)    AS floors,
+		Sum(elevation) AS elevation
+		FROM   intradayactivity
+		WHERE  user_id = ?
+		AND activity_time>= ?
+		AND activity_time<= ?";
+		$query = $this->db->query($sql, array($user_id, $start, $end));
+		return $query->row();
+	}
+
+
 	function getSleepYesterday($user_id) {
 		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-		$query = $this->db->get_where('sleep', array('user_id'=>$user_id, 'date'=>$yesterday));
+		$sql = "SELECT Sum(total_time) AS total_time,
+		date
+		FROM   sleep
+		WHERE  user_id = ?
+		AND date = ?
+		GROUP  BY date";
+		$query = $this->db->query($sql, array($user_id, $yesterday));
 		$vars = $query->row();
 		if(empty($vars)) {
 			$vars = new StdClass();
 			$vars->user_id = $user_id;
 			$vars->date =$yesterday;
 			$vars->total_time= 0;
-			$vars->time_asleep = 0;
-			$vars->start_time = "00:00:00";
-			$vars->awaken_count = 0;
-			$vars->min_awake = 0;
-			$vars->min_to_asleep = 0;
-			$vars->min_after_wakeup = 0;
-			$vars->efficiency = 0;
 		}
 		return $vars;
 	}
@@ -227,7 +244,7 @@ class Activity_model extends CI_Model{
 						$currentTime = (string) $value->time;
 						$intradayActivityData[$currentTime]['steps'] = $value->value;
 					}else {
-						intradayActivityData[$currentTime]['steps'] += $value->value; 
+						$intradayActivityData[$currentTime]['steps'] += $value->value; 
 					}   
 				}
 				foreach($intradayFloors->dataset->intradayData as $value){
@@ -253,8 +270,7 @@ class Activity_model extends CI_Model{
 					# code...
 					$sql = "INSERT INTO intradayactivity(user_id, activity_time, steps, calories, calories_level, floors, elevation)
 					VALUES (". $user_id .", '". $date . " " . $key ."', ". $value['steps'] .", ".
-						$value['calories'] .", ". $value['level'] .", " . $value['floors'] . ", " . $value['elevation'] .")
-					ON DUPLICATE KEY UPDATE user_id=user_id";
+						$value['calories'] .", ". $value['level'] .", " . $value['floors'] . ", " . $value['elevation'] .") ON DUPLICATE KEY UPDATE user_id=user_id";
 
 					$this->db->query($sql);					
 				}
