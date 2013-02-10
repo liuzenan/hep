@@ -312,3 +312,31 @@ td.forum-stats{
 	height: 120px;
 }
 
+.thread-container .thread-pic, .thread-container .thread-content{
+	float: left;
+}
+
+.thread-container .thread-pic{
+	width: 10%;
+}
+
+.thread-container .thread-content{
+	width: 90%;
+}
+
+.thread-content .thread-comment .thread-commment-pic{
+	width: 6%;
+	float: left;
+}
+
+.thread-content .thread-comment .thread-comment-content{
+	width: 94%;
+	float: left;
+}
+
+.thread-content .thread-comment{
+	border-top: 1px solid #ddd;
+	margin-top: 3px;
+	padding-top: 4px;
+	font-size: 0.9em;
+}
