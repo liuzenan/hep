@@ -38,6 +38,7 @@ class Forum_model extends CI_Model{
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
 					$thread["subscribe"] = 1;
+					$thread["tutor_only"] = 0;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -96,7 +97,7 @@ class Forum_model extends CI_Model{
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
 					$thread["subscribe"] = in_array($row->thread_id, $subs);
-
+					$thread["tutor_only"] = 0;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -142,6 +143,7 @@ class Forum_model extends CI_Model{
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
+
 					$res[$row->id] = $thread;
 				}
 				if(!empty($row->commenter_id) && ($row->deleted == 0)) {
@@ -162,6 +164,7 @@ class Forum_model extends CI_Model{
 			return FALSE;
 		}
 	}
+
 
 	function loadThread($thread_id) {
 		$query = $this->db->get_where(Forum_model::table_thread, array('id' => $thread_id));
@@ -199,6 +202,13 @@ class Forum_model extends CI_Model{
 			'thread_id'=>$thread_id,
 			'user_id'=>$user_id);
 		$this->db->insert("postsubscription", $data);
+	}
+
+	function unsubscribe($user_id, $thread_id) {
+		$data = array(
+			'thread_id'=>$thread_id,
+			'user_id'=>$user_id);
+		$this->db->delete("postsubscription", $data);
 	}
 
 	function createThreadNotification($thread_id) {

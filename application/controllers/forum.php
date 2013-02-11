@@ -83,6 +83,8 @@ class Forum extends CI_Controller {
 			$user_id = $this->session->userdata('user_id');
 			$thread_id = $this->input->post("thread_id");
 			$message = $this->input->post("comment");
+			$challenge_id = $this->input->post("challenge_id");
+			$tutor_only = $this->input->post("tutor_only");
 
 			if ($message!=null && $message!='') {
 				# code...
@@ -103,7 +105,15 @@ class Forum extends CI_Controller {
 						$username = $user->first_name . " " . $user->last_name;
 						$title = $thread->message;
 						$description = $username . " post a new message at the thread: " . $title;
-						$url = base_url() . "forum/thread/" . $thread_id;
+
+						if($tutor_only>0) {
+							$url = base_url() . "forum/tutor";
+
+						}else if($challenge_id>0) {
+							$url = base_url() . "forum/challenge";
+						}else {
+							$url = base_url() . "forum/general";
+						}
 
 						$subscribers = $this->Forum_model->loadThreadSubscribers($thread_id);
 

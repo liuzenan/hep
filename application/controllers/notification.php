@@ -11,8 +11,7 @@ class Notification extends CI_Controller {
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
-		}else{
-		$query = $this->db->query("SELECT * FROM notification WHERE id = " . $this->db->escape($notification_id));
+			$query = $this->db->query("SELECT * FROM notification WHERE id = " . $this->db->escape($notification_id));
 			if ($query->num_rows()>0) {
 				$notification = $query->row();
 				
