@@ -33,7 +33,7 @@ class Forum extends CI_Controller {
 		? $this->User_model->loadUsers($data['threads']['uids'])
 		: array();		unset($data['threads']['uids']);
 		$data['active'] = 'general_forum';
-		echo "<pre>"; print_r($data);echo "</pre><br>";
+		//echo "<pre>"; print_r($data);echo "</pre><br>";
 		$this->loadView($data, "general");
 	}
 

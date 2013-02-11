@@ -56,6 +56,7 @@ class Forum_model extends CI_Model{
 					$uids[] = $row->commenter_id;
 				}
 			}
+			$res = array_reverse($res, true);
 			$res['uids'] = $uids;
 			return $res;
 		} else {
@@ -115,6 +116,7 @@ class Forum_model extends CI_Model{
 					$uids[] = $row->commenter_id;
 				}
 			}
+			$res = array_reverse($res, true);
 			$res['uids'] = $uids;
 			return $res;
 		} else {
@@ -158,6 +160,8 @@ class Forum_model extends CI_Model{
 					$uids[] = $row->commenter_id;
 				}
 			}
+			$res = array_reverse($res, true);
+
 			$res['uids'] = $uids;
 			return $res;
 		} else {
@@ -247,8 +251,7 @@ class Forum_model extends CI_Model{
 
 		$user = $this->User_model->loadUser($user_id);
 		$thread = $this->loadThread($thread_id);
-		var_dump($user);
-		var_dump($thread);
+		
 		if (isset($user) && isset($thread)) {
 					# code...
 			$username = $user->first_name . " " . $user->last_name;
@@ -265,9 +268,7 @@ class Forum_model extends CI_Model{
 			}
 
 			$subscribers = $this->loadThreadSubscribers($thread_id);
-			print_r($subscribers);
 			if (count($subscribers)>0) {
-						# code...
 				foreach ($subscribers as $value) {
 					if ($value->user_id != $user_id) {	
 						$notification_id = $this->User_model->addNotification($value->user_id, $description, $url);
