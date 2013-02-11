@@ -13,7 +13,7 @@
       // init the FB JS SDK
       FB.init({
         appId      : '502310249809910', // App ID from the App Dashboard
-        channelUrl : '//54.251.40.149/fitbit/channel.php', // Channel File for x-domain communication
+        channelUrl : '//hep.d2.comp.nus.edu.sg/fitbit/channel.php', // Channel File for x-domain communication
         status     : true, // check the login status upon init?
         cookie     : true, // set sessions cookies to allow your server to access the session?
         xfbml      : true  // parse XFBML tags on this page?

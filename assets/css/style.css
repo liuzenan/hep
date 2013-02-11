@@ -6,6 +6,15 @@ p{
 body{
 	background: url(../img/brillant.png);
 }
+
+.emailinput{
+	display: none;
+}
+
+.emailinput.show{
+	display: block;
+}
+
 .image-fix
 {
 	display: block;

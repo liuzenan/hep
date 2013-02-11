@@ -215,8 +215,57 @@ class Login extends CI_Controller{
 		}
 	}
 
-	private function facebookLogin(){
+	public function facebookLogin(){
 		$facebookUsername = $this->input->post('username');
+		$query = $this->db->query("SELECT * FROM user WHERE username = '" . $facebookUsername . "'");
+		if ($query->num_rows()>0) {
+			$row = $query->row();
+			if (empty($row->email)) {
+				$msg['success'] = false;
+				$msg['error'] = 'noemail';
+			} else {
+				$userdata = array(
+					'user_id' => $row->id,
+					'fibit_id' => $row->fitbit_id,
+					'oauth_secret' => $row->oauth_secret,
+					'oauth_token' => $row->oauth_token,
+					'username' => $row->username,
+					'avatar' => $row->profile_pic
+					);		
+				$this->session->set_userdata($userdata);
+				$msg['success'] = true;				
+			}
+		} else {
+			$msg['success'] = false;
+			$msg['error'] = 'nouser';
+		}
+
+		echo json_encode($msg);
+	}
+
+	public function linkWithFacebook(){
+		$email = $this->input->post("email");
+		$username = $this->input->post("username");
+		$query = $this->db->query("SELECT * FROM user WHERE email = " . $this->db->escape($email));
+		if ($query->num_rows()>0) {
+			$row = $query->row();
+			$sql = "UPDATE user SET username = " . $this->db->escape($username) . "WHERE id = " . $row->id;
+			$this->db->query($sql);
+				$userdata = array(
+					'user_id' => $row->id,
+					'fibit_id' => $row->fitbit_id,
+					'oauth_secret' => $row->oauth_secret,
+					'oauth_token' => $row->oauth_token,
+					'username' => $this->db->escape($username),
+					'avatar' => $row->profile_pic
+					);		
+				$this->session->set_userdata($userdata);			
+			$msg["success"] = true;
+		} else {
+			$msg["success"] = false;
+		}
+
+		echo json_encode($msg);
 	}
 
 	private function addSubscription(){

@@ -9,6 +9,7 @@
   <body>
   <div id="fb-root"></div>
   <script>
+    var base_url = 'http://hep.d2.comp.nus.edu.sg/';
     window.fbAsyncInit = function() {
       // init the FB JS SDK
       FB.init({
@@ -23,7 +24,31 @@
     FB.getLoginStatus(function(response) {
       if (response.status === 'connected') {
         // connected
+            FB.api('/me',function(response){
 
+                  $.ajax({
+                    type:"POST",
+                    url:base_url + "login/facebookLogin",
+                    dataType:'json',
+                    data:{
+                      username:response.username
+                    }
+                  }).done(function(data){
+                    if (data.success) {
+                        window.location.href = base_url + "home";
+                    } else {
+                      if (data.error=="noemail") {
+                        alert("you need to sign up for your detailed information first");
+                        window.locaion.href = base_url + "login";
+                      } else if(data.error=="nouser") {
+                        alert("You need to register with fitbit account first for facebook login");
+                        $(".emailinput").addClass("show");
+                        $("#facebooklogin").attr("disabled", "disabled");
+                        link();
+                      }
+                    }
+                  });
+            });
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
@@ -47,8 +72,35 @@
        ref.parentNode.insertBefore(js, ref);
      }(document, /*debug*/ false));
 
+  function link() {
+    $("#linkWithFacebook").click(function(event){
+      event.preventDefault();
+      FB.login(function(response) {
+            if (response.authResponse) {
+               FB.api('/me',function(response){
+                $.ajax({
+                    type:"POST",
+                    url:base_url + "login/linkWithFacebook",
+                    dataType:'json',
+                    data:{
+                      username:response.username,
+                      email:$("#email").val()
+                    }
+                }).done(function(data){
+                  if (data.success) {
+                    window.location.href = base_url + "home";
+                  } else {
+                    window.location.href = base_url + "login";
+                  }
+                });
+               });
+            }
+
+          });
+    });
+  };
   function login() {
-    $("#fblogin").click(function(event){
+    $("#facebooklogin").click(function(event){
       event.preventDefault();
         FB.login(function(response) {
             if (response.authResponse) {
@@ -56,40 +108,34 @@
 
             FB.api('/me',function(response){
 
-              $.ajax({
-                url:"<?php echo base_url() . 'signup/fbLogin' ?>",
-                type:"POST",
-                data:{
-                  username: response.username,
-                  email: response.email,
-                  firstname: response.first_name,
-                  lastname: response.last_name
-                }
-              }).done(function(msg){
-
-                FB.api('/me?fields=picture.width(100).height(100)', function(response){
-
                   $.ajax({
-                    url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
                     type:"POST",
+                    url:base_url + "login/facebookLogin",
+                    dataType:'json',
                     data:{
-                      profile_pic: response.picture.data.url
+                      username:response.username
                     }
-
-                  }).done(function(msg){
-                    console.log('data saved: ' + msg);
-
-                    window.location.replace("<?php echo base_url() . 'home' ?>");
+                  }).done(function(data){
+                    if (data.success) {
+                        window.location.href = base_url + "home";
+                    } else {
+                      if (data.error=="noemail") {
+                        alert("you need to sign up for your detailed information first");
+                        window.location.href = base_url + "login";
+                      } else if(data.error=="nouser") {
+                        alert("You need to register with fitbit account first for facebook login");
+                        $(".emailinput").addClass("show");
+                        $("#facebooklogin").attr("disabled", "disabled");
+                        link();
+                      }
+                    }
                   });
-                });
-
-              });
             });
 
             } else {
                 // cancelled
             }
-        }, {scope: 'email'});
+        });
     });
   }
   </script>
@@ -97,6 +143,12 @@
     <div class="container">
       <h1 class="maintitle">HEP Platform</h1>
       <p class="loginbtn"><a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-large btn-primary">Login with Fitbit</a></p>
+      <p class="loginbtn"><a href="javascript:void(0);" id="facebooklogin" class="btn btn-large btn-primary">Login with Facebook</a></p>
+      <div class="emailinput">
+        <label for="email"></label>
+        <input type="text" id="email" name="email">
+        <button id="linkWithFacebook" class="button">Link to Account</button>
+      </div>
     </div>  
 </div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
