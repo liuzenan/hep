@@ -3,14 +3,8 @@
 		<p class="section-title">Current Challenges</p>
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
-				<thead class="stats-head">
-					<td>Me</td>
-					<td class="middle-col"></td>
-					<td>Average</td>
-					<td></td>
-				</thead>
 				<tbody>
-					<td class="stats-label"><strong><span><?php echo $me_completed ?></span><br>Completed</strong></td>
+					<td class="stats-label"><strong><span><?php echo $me_completed ?></span><br>Completed by me</strong></td>
 					<td class="stats-count middle-col">
 				<?php for ($i=0; $i < floor($me_completed); $i++) { ?>
 					<i class="icon-star"></i>
@@ -20,7 +14,7 @@
 				<?php endif ?>										
 					</td>
 					<td class="stats-label">
-						<strong><span><?php echo $avg_completed ?></span><br>Completed</strong>
+						<strong><span><?php echo $avg_completed ?></span><br>Completed by average</strong>
 					</td>
 									<td class="stats-count">
 				<?php for ($i=0; $i < floor($avg_completed); $i++) { ?>

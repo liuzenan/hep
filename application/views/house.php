@@ -44,14 +44,18 @@
 								<small class="muted">completed <?php echo $value['completed']->score ?> challenges</small>
 							</div>
 							<div class="span5 house-pepople-badges">
-								<?php foreach ($value['badge'] as $badge): ?>
-									<img src="<?php echo $badge->badge_pic ?>" alt="">
-								<?php endforeach ?>
+								<?php if (!empty($value['badge'])): ?>
+									<?php foreach ($value['badge'] as $badge): ?>
+										<img src="<?php echo $badge->badge_pic ?>" alt="">
+									<?php endforeach ?>
+								<?php endif ?>
 							</div>
 							<div class="span5 house-people-current">
-								<?php foreach ($value['current'] as $current): ?>
+								<?php if (!empty($value['current'])): ?>
+									<?php foreach ($value['current'] as $current): ?>
 									<img src="<?php echo $current->badge_pic ?>" alt="">
-								<?php endforeach ?>
+									<?php endforeach ?>
+								<?php endif ?>
 							</div>
 						</div>
 					</div>

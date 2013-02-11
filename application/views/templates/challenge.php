@@ -1,6 +1,6 @@
 <div class="row-fluid">
 	<div class="span12">
-		<ul class="media-list challenge">
+		<ul class="media-list challenge clearfix">
 			<?php 
 				if(!empty($challenges)) {
 					if ($tab=="my") {
