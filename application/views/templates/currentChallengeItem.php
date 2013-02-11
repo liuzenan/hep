@@ -12,7 +12,7 @@
 		<p><?php echo $description ?></p>
 		<small class="muted">You are participating in the challenge</small>
 		<div class="progress">
-			<div class="bar" style="width:80%"></div>
+			<div class="bar" style="width:<?php echo floor($progress*100) ?>%"></div>
 		</div>
 	</div>
 </li>

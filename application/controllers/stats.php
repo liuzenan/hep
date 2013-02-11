@@ -36,7 +36,6 @@ class Stats extends CI_Controller {
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['chartTitle'] = $type;
-		date_default_timezone_set('UTC');
 		$currentDate = date('Y-m-d');
 
 		if ($span=="week") {

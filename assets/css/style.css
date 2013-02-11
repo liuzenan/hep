@@ -427,3 +427,80 @@ div.challenge-stats{
 	width: 96%;
 	margin: 0 2%;
 }
+
+.house-people{
+	background: #fcfcfc;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-top: none;
+}
+
+.myhouse .house-people:first-child{
+ border-top: 1px solid #ddd;
+}
+
+.house-people-pic, .house-people-content{
+	float:left;
+}
+
+.house-people-pic{
+	width: 10%;
+}
+
+.house-people-content{
+	width: 90%;
+}
+
+.house-people-name .span2, .house-people-stats .span2{
+	padding-left: 1em;
+}
+
+.house-pepople-badges>img{
+	width: 20%;
+	height: auto;
+}
+
+.house-people-current>img{
+	width: 20%;
+	height: auto;
+}
+
+.house-stats td{
+	width: 25%;
+	border: none;
+	text-align: center;
+	vertical-align: middle;
+	font-weight: 700;
+}
+
+.house-stats img{
+	width: 100px;
+	height: 100px;
+}
+
+.house-stats td span{
+	font-size: 5em;
+}
+
+.leaderboard-house{
+background: #fcfcfc;
+border-radius: 5px;
+overflow: hidden;
+box-shadow: 0 0 3px #ccc;
+}
+
+.leaderboard-house-rank{
+	padding: 1em 0;
+	text-align: center;
+}
+.leaderboard-house-content{
+	padding: 1em 0;
+}
+.leaderboard-house-content .strong{
+	font-size: 20px;
+}
+
+.leaderboard-profile-pic img{
+	display: block;
+	float: left;
+}
