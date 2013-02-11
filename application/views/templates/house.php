@@ -1,26 +1,22 @@
 <div class="row-fluid">
 	<div class="span12">
-		<div class="row-fluid">
-			<div class="span4">
 				<?php $n=0; ?>
 				<?php foreach ($house as $row): ?>
 				<?php $n++ ?>
-				<div class="leaderboard-person clearfix">
-					<div class="leaderboard-rank"><span class="badge badge-success"><?php echo $n ?></span></div>
-					<div class="leaderboard-content">
-						<a href="#"><strong><?php echo $row->house_name ?></strong></a>
-						<p>Total Challenges Completed: <?php echo $row->score ?></p>
-						<p>Total Member: <?php echo $row->user_num ?></p>
-						<small>Average<?php echo $row->score/$row->user_num ?> Challenges</small>
+				<div class="row-fluid leaderboard-house">
+					<div class="span1 leaderboard-house-rank"><?php echo $n ?></div>
+					<div class="span3 leaderboard-house-content">
+						<strong>House <?php echo $row->house_name ?></strong><br>
+						<small><?php echo $row->score ?> points</small><br>
+						<small>Total Member: <?php echo $row->user_num ?></small><br>
+						<small>Average: <?php echo $row->score/$row->user_num ?> points</small>
 					</div>
-					<div class="leaderboard-profile-pic">
-						<?php $avatars = explode(",", $row->avatars); foreach ($avatars as $avatar): ?>
-						<img src="<?php echo $avatar ?>" width="75" height="75"/>
+					<div class="span8 leaderboard-profile-pic">
+					<?php $avatars = explode(",", $row->avatars); foreach ($avatars as $avatar): ?>
+						<img src="<?php echo $avatar ?>" width="10%"/>
 					<?php endforeach ?>
+					</div>
 				</div>
-			</div>
 		<?php endforeach ?>
 	</div>
-</div>
-</div>
 </div>
