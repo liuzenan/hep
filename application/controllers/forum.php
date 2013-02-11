@@ -34,7 +34,7 @@ class Forum extends CI_Controller {
 		: array();		unset($data['threads']['uids']);
 		$data['active'] = 'general_forum';
 		echo "<pre>"; print_r($data);echo "</pre><br>";
-		$this->loadView($data, "challenge");
+		$this->loadView($data, "general");
 	}
 
 	public function tutor() {
@@ -50,23 +50,23 @@ class Forum extends CI_Controller {
 	}
 	
 
-	public function createThread(){
+	public function createThread($message){
 		if(!$this->session->userdata('user_id')){
 			$msg = array(
 				"success" => true,
 				"login" => false
 				);
 		}else{
-			$message = $this->db->escape($this->input->post("message"));
+			//$message = $this->input->post("message");
 			//check empty message in js
-			$threadpost_id = $this->Forum_model->createThread($uid, $message);
-			if (isset($threadpost_id)) {
+			$threadpost_id = $this->Forum_model->createThread($this->uid, $message);
+			if (!empty($threadpost_id)) {
 					# code...
 				$msg = array(
 					"success" => true,
 					"thread_id" => $threadpost_id
 					);
-				$this->Forum_model->subscribe($uid, $threadpost_id);
+				$this->Forum_model->subscribe($this->uid, $threadpost_id);
 			}
 		}
 		echo json_encode($msg);

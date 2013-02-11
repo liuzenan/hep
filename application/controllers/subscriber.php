@@ -33,7 +33,7 @@ class Subscriber extends CI_Controller {
 
 	private function upateProgress($user_id, $date) {
 		$start_time = $date. " 00:00:00";		
-		$end_time = $date. " 23:59:59";
+		$end_time = $date. " 00:00:00";
 
 		$this->Challenge_model->updateActivityProgress($user_id, $start_time, $end_time);
 	}
@@ -184,8 +184,10 @@ class Subscriber extends CI_Controller {
 							$data['collectionType'] = (string) $updatedResource->collectionType;
 							array_push($notifications, $data);
 							$sql = "INSERT INTO updates(`update`,user_id,type)
-							VALUES ('User data synced, IP: ". $this->input->ip_address() ."', ". $data['user_id'] .", '". $data['collectionType'] ."')";
+							VALUES ('User data synced, IP: ". $this->input->ip_address() ."', ". $data['user_id'] .", '". $data['collectionType'] .", '". $data['date']."')";
 							$this->db->query($sql);
+
+							
 						}
 					}
 				}

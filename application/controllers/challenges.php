@@ -53,7 +53,7 @@ class Challenges extends CI_Controller {
 		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->now, $this->now);
 		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->tomorrow_start, $this->tomorrow_end);
 		$today = array(0=>0,1=>0,2=>0,3=>0);
-				$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
+		$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
 
 		foreach($joinedToday as $a) {
 			$today[$a->category]++;
@@ -187,9 +187,9 @@ class Challenges extends CI_Controller {
 		//TODO unsubscribe
 		$this->Challenge_model->quitChallenge($this->input->post("id"));
 		$msg = array(
-					"success" => false,
-					"message" => "You have quitted the challenge"
-					);
+			"success" => false,
+			"message" => "You have quitted the challenge"
+			);
 		echo json_encode($msg);
 	}
 

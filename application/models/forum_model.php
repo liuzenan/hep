@@ -64,7 +64,7 @@ class Forum_model extends CI_Model{
 		FROM   forumthread AS t
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
-		WHERE  t.challenge_id = 0
+		WHERE  t.challenge_id = -1
 		AND t.tutor_only = 0
 		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
@@ -172,6 +172,13 @@ class Forum_model extends CI_Model{
 	function loadThreadSubscribers($thread_id) {
 		$query = $this->db->get_where(Forum_model::table_subscribe , array('thread_id' => $thread_id));
 		return $query->result();
+	}
+
+	function subscribe($user_id, $thread_id) {
+		$data = array(
+			'thread_id'=>$thread_id,
+			'user_id'=>$user_id);
+		$this->db->insert("postsubscription", $data);
 	}
 
 	function createThreadNotification($thread_id) {

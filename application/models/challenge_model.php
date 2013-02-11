@@ -64,6 +64,8 @@ class Challenge_model extends CI_Model{
 			$data);
 	}
 
+	
+
 	function getHouseCurrentChallenges($house_id) {
 		$sql = "SELECT * 
 		FROM challenge 
@@ -110,28 +112,40 @@ class Challenge_model extends CI_Model{
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
 		AND challengeparticipant.user_id= ?
-		WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time >? 
+		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >=? 
 		GROUP BY challengeparticipant.challenge_id";
 
 		$query = $this->db->query($sql, array($user_id, $start, $end));
 		return $query->result();
 	}
 
+	function logMessage($message) {
+		$data = array(
+			'message' => $message 
+			);
+
+		$this->db->insert('log', $data); 
+
+	}
+
 	function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) {
+
+		$log = "updateActivityProgress-".$user_id."-".$start_time."-".$end_time;
+		$this->logMessage($log);
 		$ci =& get_instance();
 		$ci->load->model('Activity_model');
+		
 		if(is_null($start_time)) {
 			$data = $this->getIndividualCurrentChallenges($user_id);
 		} else {
-			$data = $this->getIndividualCurrentChallenges($user_id, $start_time, $end_time);
+			$data = $this->getIndividualChallenges($user_id, $start_time, $end_time);
 		}
 		foreach($data as $c) {
 			$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
-		print_r($status);
 
 			if($c->steps_value != 0 && $c->floor_value !=0) {
 				$progress = 0.5 * ($status->steps/$c->steps_value) +
-							0.5 * ($status->floors/$c->floor_value);
+				0.5 * ($status->floors/$c->floor_value);
 
 				$progress = number_format($progress,2);
 				$this->updateProgress($c->id, $progress);
@@ -206,9 +220,7 @@ class Challenge_model extends CI_Model{
 			FROM   user
 			WHERE  admin = 0
 			AND phantom = 0
-			AND staff = 0) AS temp
-ON cp.user_id = temp.id
-WHERE  cp.complete_time > cp.start_time";
+			AND staff = 0) AS temp ON cp.user_id = temp.id WHERE  cp.complete_time > cp.start_time";
 $total = $this->db->query($sql2)->row()->total;
 
 return $total/$count;		

@@ -31,12 +31,15 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#newThread").click(function(e){
+		console.log("newThread");
 		e.preventDefault();
 		var data = $("#newThreadForm").serializeArray();
-		data.push({name: 'topic_id', value: $("#newThreadForm").data("topicId")});
+					console.log(data);
+
 		$.post(base_url+'forum/createThread', data, function(msg){
+			console.log(msg);
 			if (msg.success == true) {
-				window.location.href = base_url+'forum/discussion/' + msg.thread_id;
+				window.location.reload();
 			} else {
 				if (msg.login == true) {
 				}else {
@@ -44,6 +47,7 @@ jQuery(document).ready(function($) {
 				};
 			}
 		}, 'json');
+		
 	});
 
 	//check word limit

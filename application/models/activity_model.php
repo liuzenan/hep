@@ -249,7 +249,7 @@ class Activity_model extends CI_Model{
 					}  
 					$minute++; 
 				}
-								$minute = 0;
+				$minute = 0;
 
 				foreach($intradayFloors->dataset->intradayData as $value){
 					if($minute%10 == 0) {
@@ -260,7 +260,7 @@ class Activity_model extends CI_Model{
 					}
 					$minute++;
 				}
-								$minute = 0;
+				$minute = 0;
 
 				foreach($intradayElevation->dataset->intradayData as $value){
 					if($minute%10 == 0) {
@@ -376,16 +376,29 @@ class Activity_model extends CI_Model{
 
 				//insert into database
 			foreach($activitiesData as $key=>$value){
-				$sql = "INSERT INTO activity(user_id, date, steps, floors, calories, active_score, distance, elevation, min_sedentary, min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
-				VALUES (" . $user_id . ", '" . $key . "', " . $value['tracker_steps'] . ", " . $value['tracker_floors'] . ", " . $value['tracker_caloriesOut'] . ", " . $value['tracker_activeScore'] . ", " . $value['tracker_distance'] . ", " . $value['tracker_elevation'] . ", " . $value['tracker_minutesSedentary'] . ", " . $value['tracker_minutesLightlyActive'] . ", " . $value['tracker_minutesFairlyActive'] . ", " . $value['tracker_minutesVeryActive'] . ", " . $value['tracker_activityCalories'] . ")
-				ON DUPLICATE KEY UPDATE steps= ". $value['tracker_steps'] .", floors= ". $value['tracker_floors'] .", calories= ". $value['tracker_caloriesOut'] .", active_score= ". $value['tracker_activeScore'] .", distance= " . $value['tracker_distance'] . ", elevation= ". $value['tracker_elevation'] . ", min_sedentary= " . $value['tracker_minutesSedentary'] . ", min_lightlyactive= " . $value['tracker_minutesLightlyActive'] . ", min_fairlyactive= " . $value['tracker_minutesFairlyActive'] .", min_veryactive= ". $value['tracker_minutesVeryActive'] . ", activity_calories= " . $value['tracker_activityCalories'];
-				$this->db->query($sql);	
-			}
+				$sql = "INSERT INTO activity(user_id, date, steps, floors, calories, active_score, distance, elevation, min_sedentary,
+					min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
+VALUES (" . $user_id . ", '" . $key . "', " . $value['tracker_steps'] . ", " 
+	. $value['tracker_floors'] . ", " . $value['tracker_caloriesOut'] . ", " 
+	. $value['tracker_activeScore'] . ", " . $value['tracker_distance'] . ", " 
+	. $value['tracker_elevation'] . ", " . $value['tracker_minutesSedentary'] . ", " 
+	. $value['tracker_minutesLightlyActive'] . ", " . $value['tracker_minutesFairlyActive'] . ", "
+	. $value['tracker_minutesVeryActive'] . ", " . $value['tracker_activityCalories'] . ")
+ON DUPLICATE KEY UPDATE last_update=NOW(), steps= ". $value['tracker_steps'] .", floors= ". $value['tracker_floors']
+.", calories= ". $value['tracker_caloriesOut'] .", active_score= ". $value['tracker_activeScore']
+.", distance= " . $value['tracker_distance'] . ", elevation= ". $value['tracker_elevation']
+. ", min_sedentary= " . $value['tracker_minutesSedentary'] . ", min_lightlyactive= "
+. $value['tracker_minutesLightlyActive'] . ", min_fairlyactive= "
+. $value['tracker_minutesFairlyActive'] .", min_veryactive= "
+. $value['tracker_minutesVeryActive'] . ", activity_calories= "
+. $value['tracker_activityCalories'];
+$this->db->query($sql);	
+}
 
-		} catch (Exception $e) {
+} catch (Exception $e) {
 
-		}
+}
 
-	}
+}
 
 }
