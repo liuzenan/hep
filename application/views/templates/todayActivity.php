@@ -6,26 +6,26 @@
 						<div class="row-fluid activity-chart">
 							<div class="span3">
 								<div class="row-fluid">
-									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $me_today->steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo 100 - $me_today->steps/$max_today->max_steps*100 ?>px"></div>
-									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $avg->avg_steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo 100 - $avg->avg_steps/$max_today->max_steps*100 ?>px"></div>
+									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_steps==0?0:$me_today->steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo ($max_today->max_steps==0?0:100 - $me_today->steps/$max_today->max_steps*100) ?>px"></div>
+									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_steps==0?0:$avg->avg_steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo $max_today->max_steps==0?0:100 - $avg->avg_steps/$max_today->max_steps*100 ?>px"></div>
 								</div>
 							</div>
 							<div class="span3">
 								<div class="row-fluid">
-									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $me_today->floors/$max_today->max_floors*100 ?>px !important; margin-top:<?php echo 100 - $me_today->floors/$max_today->max_floors*100 ?>px"></div>
-									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $avg->avg_floors/$max_today->max_floors*100 ?>px !important; margin-top:<?php echo 100 - $avg->avg_floors/$max_today->max_floors*100 ?>px"></div>
+									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_floors==0?0:$me_today->floors/$max_today->max_floors*100 ?>px !important; margin-top:<?php echo $max_today->max_floors==0?0:100 - $me_today->floors/$max_today->max_floors*100 ?>px"></div>
+									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_floors==0?0:$avg->avg_floors/$max_today->max_floors*100 ?>px !important; margin-top:<?php echo $max_today->max_floors==0?0:100 - $avg->avg_floors/$max_today->max_floors*100 ?>px"></div>
 								</div>
 							</div>
 							<div class="span3">
 								<div class="row-fluid">
-									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $me_today->distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo 100 - $me_today->distance/$max_today->max_distance*100 ?>px"></div>
-									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $avg->avg_distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo 100 - $avg->avg_distance/$max_today->max_distance*100 ?>px"></div>
+									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_distance==0?0:$me_today->distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo $max_today->max_distance==0?0:100 - $me_today->distance/$max_today->max_distance*100 ?>px"></div>
+									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_distance==0?0:$avg->avg_distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo ($max_today->max_distance==0 ? 1 : 100 - $avg->avg_distance/$max_today->max_distance*100) ?>px"></div>
 								</div>
 							</div>
 							<div class="span3">
 								<div class="row-fluid">
-									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $me_today->calories/$max_today->max_calories*100 ?>px !important; margin-top:<?php echo 100 - $me_today->calories/$max_today->max_calories*100 ?>px"></div>
-									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $avg->avg_calories/$max_today->max_calories*100 ?>px !important; margin-top:<?php echo 100 - $avg->avg_calories/$max_today->max_calories*100 ?>px"></div>
+									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_calories==0?0:$me_today->calories/$max_today->max_calories*100 ?>px !important; margin-top:<?php echo $max_today->max_calories==0?0:100 - $me_today->calories/$max_today->max_calories*100 ?>px"></div>
+									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix" alt="" style="width:40px; height:<?php echo $max_today->max_calories==0?0:$avg->avg_calories/$max_today->max_calories*100 ?>px !important; margin-top:<?php echo $max_today->max_calories==0?0:100 - $avg->avg_calories/$max_today->max_calories*100 ?>px"></div>
 								</div>
 							</div>
 						</div>
