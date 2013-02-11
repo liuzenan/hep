@@ -235,7 +235,47 @@ class Forum_model extends CI_Model{
 			'thread_id'=>$thread_id
 			);
 		$this->db->insert(Forum_model::table_post,$data);
+		$this->addNotification($thread_id, $commenter_id);
 		return $this->db->insert_id();
+	}
+
+	function addNotification($thread_id, $user_id) {
+		
+					# code...
+		$ci =& get_instance();
+		$ci->load->model('User_model');
+
+		$user = $this->User_model->loadUser($user_id);
+		$thread = $this->loadThread($thread_id);
+		var_dump($user);
+		var_dump($thread);
+		if (isset($user) && isset($thread)) {
+					# code...
+			$username = $user->first_name . " " . $user->last_name;
+			$title = $thread->message;
+			$description = $username . " post a new message at the thread: " . $title;
+
+			if($thread->tutor_only>0) {
+				$url = base_url() . "forum/tutor";
+
+			}else if($thread->challenge_id>0) {
+				$url = base_url() . "forum/challenge";
+			}else {
+				$url = base_url() . "forum/general";
+			}
+
+			$subscribers = $this->loadThreadSubscribers($thread_id);
+			print_r($subscribers);
+			if (count($subscribers)>0) {
+						# code...
+				foreach ($subscribers as $value) {
+					if ($value->user_id != $user_id) {	
+						$notification_id = $this->User_model->addNotification($value->user_id, $description, $url);
+					}
+				}
+			}
+		}
+		
 	}
 
 	function addSubscriptoin($thread_id, $user_id) {

@@ -83,50 +83,15 @@ class Forum extends CI_Controller {
 			$user_id = $this->session->userdata('user_id');
 			$thread_id = $this->input->post("thread_id");
 			$message = $this->input->post("comment");
-			$challenge_id = $this->input->post("challenge_id");
-			$tutor_only = $this->input->post("tutor_only");
-
+			
 			if ($message!=null && $message!='') {
 				# code...
-				
 				$threadpost_id = $this->Forum_model->createPost($user_id, $thread_id, $message);
-				if (isset($threadpost_id)) {
-					# code...
-					$msg = array(
+				$msg = array(
 						"success" => true,
 						"thread_id" => $threadpost_id
 						);
-
-					$user = $this->User_model->loadUser($user_id);
-					$thread = $this->Forum_model->loadThread($thread_id);
-
-					if (isset($user) && isset($thread)) {
-					# code...
-						$username = $user->first_name . " " . $user->last_name;
-						$title = $thread->message;
-						$description = $username . " post a new message at the thread: " . $title;
-
-						if($tutor_only>0) {
-							$url = base_url() . "forum/tutor";
-
-						}else if($challenge_id>0) {
-							$url = base_url() . "forum/challenge";
-						}else {
-							$url = base_url() . "forum/general";
-						}
-
-						$subscribers = $this->Forum_model->loadThreadSubscribers($thread_id);
-
-						if (count($subscribers)>0) {
-						# code...
-							foreach ($subscribers as $value) {
-								if ($value->user_id != $user_id) {	
-									$notification_id = $this->User_model->addNotification($value->user_id, $description, $url);
-								}
-							}
-						}
-					}
-				}
+				
 			} else {
 				$msg = array(
 					"success" => false,
