@@ -59,7 +59,7 @@ class Forum_model extends CI_Model{
 
 	}
 
-	function getGeneralForum() {
+	function getGeneralForum($user_id) {
 		$sql = "SELECT t.*, p.*
 		FROM   forumthread AS t
 		LEFT JOIN threadpost AS p
@@ -68,6 +68,15 @@ class Forum_model extends CI_Model{
 		AND t.tutor_only = 0
 		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
+
+
+		$sql2 = "SELECT DISTINCT thread_id FROM postsubscription WHERE user_id = ?";
+		$subscriptions = $this->db->query($sql2, array($user_id))->result();
+		$subs = array();
+		foreach($subscriptions as $s) {
+			$subs[] = $s->thread_id;
+		}
+
 		$uids = array();
 		if ($query->num_rows()>0) {
 			$res = array();
@@ -77,6 +86,8 @@ class Forum_model extends CI_Model{
 					$thread["challenge_id"] = $row->challenge_id;
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
+					$thread["subscribe"] = in_array($row->thread_id, $subs);
+
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}

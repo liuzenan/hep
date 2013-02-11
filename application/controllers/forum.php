@@ -26,7 +26,7 @@ class Forum extends CI_Controller {
 	}
 
 	public function general() {
-		$forums = $this->Forum_model->getGeneralForum();
+		$forums = $this->Forum_model->getGeneralForum($this->uid);
 		$data['threads'] = $forums;
 		$data['users'] = 
 		count($data['threads']['uids'])>0
@@ -50,14 +50,14 @@ class Forum extends CI_Controller {
 	}
 	
 
-	public function createThread($message){
+	public function createThread(){
 		if(!$this->session->userdata('user_id')){
 			$msg = array(
 				"success" => true,
 				"login" => false
 				);
 		}else{
-			//$message = $this->input->post("message");
+			$message = $this->input->post("message");
 			//check empty message in js
 			$threadpost_id = $this->Forum_model->createThread($this->uid, $message);
 			if (!empty($threadpost_id)) {

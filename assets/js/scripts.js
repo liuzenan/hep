@@ -33,10 +33,11 @@ jQuery(document).ready(function($) {
 	$("#newThread").click(function(e){
 		console.log("newThread");
 		e.preventDefault();
-		var data = $("#newThreadForm").serializeArray();
-					console.log(data);
+		var data = $("#description").val();
+		console.log(data);
 
-		$.post(base_url+'forum/createThread', data, function(msg){
+
+		$.post(base_url+'forum/createThread', {message:data}, function(msg){
 			console.log(msg);
 			if (msg.success == true) {
 				window.location.reload();
