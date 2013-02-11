@@ -95,15 +95,19 @@ class Challenge_model extends CI_Model{
 	
 
 	function getHouseCurrentChallenges($house_id) {
+		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()), date("Y-m-d G:i:s",time()));
+	}
+
+	function getHouseChallenges($house_id, $start_time, $end_time) {
 		$sql = "SELECT * 
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
-		WHERE challengeparticipant.start_time < NOW() AND challengeparticipant.end_time > NOW() 
+		WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time > ? 
 		";
 
-		$query = $this->db->query($sql, array($house_id));
+		$query = $this->db->query($sql, array($house_id, $start_time, $end_time));
 		$challenges = $query->result();
 		$res = array();
 		foreach($challenges as $c) {
@@ -114,6 +118,9 @@ class Challenge_model extends CI_Model{
 		}
 		
 		return $res;
+	}
+	function getHouseTomorrowChallenges($house_id) {
+		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
 	}
 
 	function getHouseCompletedChallenges($house_id) {

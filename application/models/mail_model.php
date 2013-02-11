@@ -7,9 +7,20 @@ class Mail_model extends CI_Model{
 	const TitleBadgeEarned = 'Congrats for earning %s badge!';
 	const TitleDailyReport = 'HEP Daily Report';
 
+	const Header = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+	<html>
+	<head>
+	<title>HEP Email</title>
+	</head>
+	<body>';
+	const Footer = '</body>
+	</html>';
 	function __construct(){
 		parent::__construct();
 		$this->load->library('email');
+		$config['mailtype'] = 'html';
+		$this->email->initialize($config);	
 	}
 
 	function sendBadgeEarnedMessage($user_id, $badge_id) {
@@ -29,7 +40,7 @@ class Mail_model extends CI_Model{
 				$message .= 'If you don\'t want to receive this message any more, <a href="%s">you can unsubscribe</a>.';
 
 				$link = sprintf(base_url(). "mail/unsubBadgeNotification/%d", $user_id);
-				$this->email->message(sprintf($message, $badge->name, $badge->description, $link));	
+				$this->email->message($this->getFullHTML(sprintf($message, $badge->name, $badge->description, $link)));	
 
 				$this->email->send();
 
@@ -38,6 +49,10 @@ class Mail_model extends CI_Model{
 			}
 		}
 
+	}
+
+	private function getFullHTML($message) {
+		return Mail_model::Header . $message . Mail_model::Footer;
 	}
 
 
@@ -54,13 +69,15 @@ class Mail_model extends CI_Model{
 
 			$sleepAvg 	 = $a->getAverageSleepToday();
 			$activityAvg = $a->getAverageActivityToday();
+			echo "<pre>" . print_r($u) . "</pre><br>";
+			echo "<pre>" . print_r($today) . "</pre><br>";
+			echo "<pre>" . print_r($yesterday) . "</pre><br>";
+			echo "<pre>" . print_r($todaySleep) . "</pre><br>";
+			echo "<pre>" . print_r($yesterdaySleep) . "</pre><br>";
+			echo "<pre>" . print_r($sleepAvg) . "</pre><br>";
+			$msg .= "<pre>" . print_r($activityAvg) ."</pre><br>";
 
-			$msg = "<pre>"; print_r($today); "</pre><br>";
-			$msg .= "<pre>"; print_r($yesterday); "</pre><br>";
-			$msg .= "<pre>"; print_r($todaySleep); "</pre><br>";
-			$msg .= "<pre>"; print_r($yesterdaySleep); "</pre><br>";
-			$msg .= "<pre>"; print_r($sleepAvg); "</pre><br>";
-			$msg .= "<pre>"; print_r($activityAvg); "</pre><br>";
+			//$content = 
 			$link = sprintf(base_url(). "mail/unsubDailyNotification/%d", $user_id);
 			$msg .= sprintf('If you don\'t want to receive this message any more, you can <a href="%s">unsubscribe</a>.', $link);
 
@@ -68,7 +85,7 @@ class Mail_model extends CI_Model{
 			$this->email->from(Mail_model::HepAccount, Mail_model::HepName);
 			$this->email->to($u->email);
 			$this->email->subject(Mail_model::TitleDailyReport);
-			$this->email->message($msg);
+			$this->email->message($this->getFullHTML($msg));
 			$this->email->send();
 			
 			echo $this->email->print_debugger();
