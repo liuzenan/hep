@@ -28,10 +28,12 @@ class Mail extends CI_Controller {
 
 	public function unsubBadgeNotification($user_id) {
 		$this->User_model->unsubBadgeNotification($user_id);
+		echo "You have been sucessfully unsubscribed from badge notification";
 	}	
 
 	public function unsubDailyNotification($user_id) {
 		$this->User_model->unsubDailyNotification($user_id);
+		echo "You have been sucessfully unsubscribed from daily notification";
 	}
 	public function carryOverChallenges() {
 		$this->Challenge_model->carryOverChallenges();
