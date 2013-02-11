@@ -42,168 +42,160 @@ class Challenges extends CI_Controller {
 		
 	}
 
+
 	public function data() {
 		echo "<pre>"; print_r($this->loadAvailableChallanges());echo "</pre><br>";
-
-
 	}
 
-	public function loadAvailableChallanges() {
-		$challenges = $this->Challenge_model->getAllChallenges();
-		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->now, $this->now);
-		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->tomorrow_start, $this->tomorrow_end);
-		$today = array(0=>0,1=>0,2=>0,3=>0);
-		$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
+	
 
-		foreach($joinedToday as $a) {
-			$today[$a->category]++;
-		}
-		foreach($joinedTomorrow as $b) {
-			$tomorrow[$b->category]++;
-		}
+public function loadAvailableChallanges() {
+	$challenges = $this->Challenge_model->getAllChallenges();
+	$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->now, $this->now);
+	$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->tomorrow_start, $this->tomorrow_end);
+	$today = array(0=>0,1=>0,2=>0,3=>0);
+	$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
 
-		foreach($challenges as $c) {
-			if($c->category>0) {
-				$c->disabled_today = ($today[$c->category]>0);
-				$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
-			} else {
-				$c->disabled_today = ($today[0]>=3);
-				$c->disabled_tomorrow = ($tomorrow[0]>=3);
-				
-			}
-		}
-		return $challenges;
-
+	foreach($joinedToday as $a) {
+		$today[$a->category]++;
 	}
-	public function completed(){
-		$data["tab"] = "completed";
-		$data["challenges"] = $this->Challenge_model->getIndividualCompletedChallenges($this->uid);
-		$this->loadPage($data);
-		
+	foreach($joinedTomorrow as $b) {
+		$tomorrow[$b->category]++;
 	}
 
-	private function validateChallengeAvilability($challenge_id, $uid, $start_time, $end_time) {
-		$current = $this->Challenge_model->loadUserChallenge($uid, $start_time, $end_time);
-		$new = $this->Challenge_model->loadChallenge($challenge_id);
-		if(empty($current) && $challenge_id>0 && $uid>0) {
-			return "";
-		} else {
-			$count = 0;
+	foreach($challenges as $c) {
+		if($c->category>0) {
+			$c->disabled_today = ($today[$c->category]>0);
+			$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
+		} 
+	}
+	return $challenges;
+
+}
+public function completed(){
+	$data["tab"] = "completed";
+	$data["challenges"] = $this->Challenge_model->getIndividualCompletedChallenges($this->uid);
+	$this->loadPage($data);
+
+}
+
+private function validateChallengeAvilability($challenge_id, $uid, $start_time, $end_time) {
+	$current = $this->Challenge_model->loadUserChallenge($uid, $start_time, $end_time);
+	$new = $this->Challenge_model->loadChallenge($challenge_id);
+	if(empty($current) && $challenge_id>0 && $uid>0) {
+		return "";
+	} else {
+		$count = 0;
 			// check fix category
-			foreach($current as $now) {
-				
-				if($now->category>0 && ($now->category==$new->category)) {
-					$msg = "You can join only one challenge in %s category per day. Please drop %s to join this one.";
-					$category = "";
-					switch($now->category) {
-						case 1:
-						$category = "Steps";
-						break;
-						case 2:
-						$category = "Floors";
-						break;
-						case 3: 
-						$category = "Sleeping";
-						break;
-					}
-					return sprintf($msg, $category, $now->title);
+		foreach($current as $now) {
+
+			if($now->category>0 && ($now->category==$new->category)) {
+				$msg = "You can join only one challenge in %s category per day. Please drop %s to join this one.";
+				$category = "";
+				switch($now->category) {
+					case 1:
+					$category = "Steps";
+					break;
+					case 2:
+					$category = "Floors";
+					break;
+					case 3: 
+					$category = "Sleeping";
+					break;
+					case 0:
+					$category = "Time Based";
 				}
-
-				if($now->category == 0) {
-					$count++;
-					if($count == 3) {
-						return "You can join maximum three time based challenges per day. Please drop existing challenges to join this one";
-					}
-				}
-			}
-			return "";
-		}
-
-	}
-
-	public function joinChallengeTomorrow() {
-		if(!$this->session->userdata('user_id')){
-			$msg = array(
-				"success" => false,
-				"login" => false
-				);
-		}else{
-			
-			$challenge_id = $this->input->post("challenge_id");
-			$uid = $this->input->post("user_id");
-			
-			$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $this->tomorrow_start, $this->tomorrow_end);
-
-			if((bool) $invalid) {
-				$msg = array(
-					"success" => false,
-					"message" => $invalid
-					);
-			} else {
-
-				$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->tomorrow_start, $this->tomorrow_end);
-				$msg = array(
-					"success" => true,
-					"message" => "You have joined the challenge successfully."
-					);
+				return sprintf($msg, $category, $now->title);
 			}
 		}
-		echo json_encode($msg);
-
+		return "";
 	}
 
-	public function joinChallengeNow(){
-		if(!$this->session->userdata('user_id')){
-			$msg = array(
-				"success" => false,
-				"login" => false
-				);
-		}else{
-		//TODO subscribe
-			
-			$challenge_id = $this->input->post("challenge_id");
-			$uid = $this->input->post("user_id");
-			$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $this->now, $this->today_end);
+}
 
-			if((bool) $invalid) {
-				$msg = array(
-					"success" => false,
-					"message" => $invalid
-					);
-			} else {
-
-				$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->now, $this->today_end);
-				$msg = array(
-					"success" => true,
-					"message" => "You have joined the challenge successfully."
-					);
-			}
-		}
-		echo json_encode($msg);
-
-	}
-
-	public function quitChallenge(){
-		//TODO unsubscribe
-		$this->Challenge_model->quitChallenge($this->input->post("id"));
+public function joinChallengeTomorrow() {
+	if(!$this->session->userdata('user_id')){
 		$msg = array(
 			"success" => false,
-			"message" => "You have quitted the challenge"
+			"login" => false
 			);
-		echo json_encode($msg);
+	}else{
+
+		$challenge_id = $this->input->post("challenge_id");
+		$uid = $this->input->post("user_id");
+
+		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $this->tomorrow_start, $this->tomorrow_end);
+
+		if((bool) $invalid) {
+			$msg = array(
+				"success" => false,
+				"message" => $invalid
+				);
+		} else {
+
+			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->tomorrow_start, $this->tomorrow_end);
+			$msg = array(
+				"success" => true,
+				"message" => "You have joined the challenge successfully."
+				);
+		}
 	}
+	echo json_encode($msg);
+
+}
+
+public function joinChallengeNow(){
+	if(!$this->session->userdata('user_id')){
+		$msg = array(
+			"success" => false,
+			"login" => false
+			);
+	}else{
+		//TODO subscribe
+
+		$challenge_id = $this->input->post("challenge_id");
+		$uid = $this->input->post("user_id");
+		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $this->now, $this->today_end);
+
+		if((bool) $invalid) {
+			$msg = array(
+				"success" => false,
+				"message" => $invalid
+				);
+		} else {
+
+			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->now, $this->today_end);
+			$msg = array(
+				"success" => true,
+				"message" => "You have joined the challenge successfully."
+				);
+		}
+	}
+	echo json_encode($msg);
+
+}
+
+public function quitChallenge(){
+		//TODO unsubscribe
+	$this->Challenge_model->quitChallenge($this->input->post("id"));
+	$msg = array(
+		"success" => false,
+		"message" => "You have quitted the challenge"
+		);
+	echo json_encode($msg);
+}
 
 
-	private function loadPage($data, $type="challenges"){
-		$data['active'] = 'challenges';
-		$data['displayName'] = $this->session->userdata('name');
-		$data['avatar'] = $this->session->userdata('avatar');
-		$data['isAdmin'] = $this->session->userdata('isadmin');
-		$data['isLeader'] = $this->session->userdata('isleader');
-		$data['notifications'] = $this->User_model->getNotifications($this->uid);
-		$this->load->view('templates/header', $data);
-		$this->load->view('challenges', $data);
-		$this->load->view('templates/footer');
-	}
+private function loadPage($data, $type="challenges"){
+	$data['active'] = 'challenges';
+	$data['displayName'] = $this->session->userdata('name');
+	$data['avatar'] = $this->session->userdata('avatar');
+	$data['isAdmin'] = $this->session->userdata('isadmin');
+	$data['isLeader'] = $this->session->userdata('isleader');
+	$data['notifications'] = $this->User_model->getNotifications($this->uid);
+	$this->load->view('templates/header', $data);
+	$this->load->view('challenges', $data);
+	$this->load->view('templates/footer');
+}
 
 }

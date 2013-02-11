@@ -31,10 +31,9 @@ class Subscriber extends CI_Controller {
 		
 	}
 
-	private function upateProgress($user_id, $date) {
+	private function updateProgress($user_id, $date) {
 		$start_time = $date. " 00:00:00";		
 		$end_time = $date. " 00:00:00";
-
 		$this->Challenge_model->updateActivityProgress($user_id, $start_time, $end_time);
 	}
 
@@ -64,9 +63,11 @@ class Subscriber extends CI_Controller {
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){
 			try {
+				
 				$this->load->model('Activity_model','activities');
 				$this->activities->insert_intraday_activity($user_id, $date, $keypair);
 				$this->activities->sync_activity($date, '1d', $user_id, $keypair);
+
 			} catch (Exception $e) {
 				
 			}
@@ -184,7 +185,7 @@ class Subscriber extends CI_Controller {
 							$data['collectionType'] = (string) $updatedResource->collectionType;
 							array_push($notifications, $data);
 							$sql = "INSERT INTO updates(`update`,user_id,type)
-							VALUES ('User data synced, IP: ". $this->input->ip_address() ."', ". $data['user_id'] .", '". $data['collectionType'] .", '". $data['date']."')";
+							VALUES ('User data synced, IP: ". $this->input->ip_address(). "-". $data['date']."', ". $data['user_id'] .", '". $data['collectionType'] ."')";
 							$this->db->query($sql);
 
 							
