@@ -101,6 +101,74 @@ class Challenge_model extends CI_Model{
 
 		$query = $this->db->query($sql, array($user_id));
 		return $query->result();
+		/*
+		//$this->load->model('Activity_model');
+		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->start_time, $c->end_time);
+		foreach($data as $c) {
+			if($c->steps_value != 0) {
+				$c->steps_progress = num_format($status->steps/$c->steps_value,2);
+			}
+			if($c->floor_value != 0) {
+				$c->steps_progress = num_format($status->floors/$c->floor_value,2);
+			}
+			if($c->sleep_value != 0) {
+				$value = $this->Activity_model->getSleepToday($user_id);
+				$c->sleep_value_progress = num_format($value->total_time/$c->sleep_value, 2);
+			}
+
+			if($c->sleep_time != 0) {
+				$value = $this->Activity_model->getSleepStartTime($user_id);
+				if(empty($value)) {
+					$c->sleep_time_progress = 0;
+				} else {
+					$c->sleep_time_progress = 1;
+				}
+			}
+		}*/
+	}
+	function updateActivityProgress() {
+		$ci =& get_instance();
+		$ci->load->model('Mymodel');
+		$ci->load->model('Activity_model');
+		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->start_time, $c->end_time);
+		foreach($data as $c) {
+			if($c->steps_value != 0) {
+				$progress = num_format($status->steps/$c->steps_value,2);
+				$this->updateProgress($c->id, $progress);
+			}
+			if($c->floor_value != 0) {
+				$progress = num_format($status->floors/$c->floor_value,2);
+				$this->updateProgress($c->id, $progress);
+
+			}
+			if($c->sleep_value != 0) {
+				$value = $this->Activity_model->getSleepToday($user_id);
+				$progress = num_format($value->total_time/$c->sleep_value, 2);
+				$this->updateProgress($c->id, $progress);
+			}
+
+			if($c->sleep_time != 0) {
+				$value = $this->Activity_model->getSleepStartTime($user_id);
+				if(empty($value)) {
+					$progress = 0;
+				} else {
+					$progress = 1;
+				}
+				$this->updateProgress($c->id, $progress);
+			}
+		}
+	}
+
+	function updateProgress($cp_id, $progress) {
+		if($progress >= 1.0) {
+			$data = array('progress'=>1, 'complete_time'=>date("Y-m-d H:i:s"));
+
+		} else {
+			$data = array('progress'=>$progress);
+
+		}
+		$this->db->where('id',$cp_id);
+		$this->db->update(Challenge_model::table_challenge_participant, $data);
 	}
 
 	function getIndividualCompletedChallenges($user_id){
@@ -139,127 +207,144 @@ class Challenge_model extends CI_Model{
 			WHERE  admin = 0
 			AND phantom = 0
 			AND staff = 0) AS temp
-		ON cp.user_id = temp.id
-		WHERE  cp.complete_time > cp.start_time";
-		$total = $this->db->query($sql2)->row()->total;
+ON cp.user_id = temp.id
+WHERE  cp.complete_time > cp.start_time";
+$total = $this->db->query($sql2)->row()->total;
 
-		return $total/$count;		
-	}
+return $total/$count;		
+}
 
-	function getAllChallenges() {
-		$query = $this->db->get(Challenge_model::table_challenge);
-		return $query->result();
-	}
+function getAllChallenges() {
+	$query = $this->db->get(Challenge_model::table_challenge);
+	return $query->result();
+}
 
-	function getLearderboard() {
-		$sql = "SELECT u.first_name  AS firstname,
-		u.last_name   AS lastname,
-		u.profile_pic AS avatar,
-		u.house_id    AS house_id,
-		h.name        AS house,
-		Count(cp.id)  AS score
-		FROM   user AS u,
-		house AS h,
-		challengeparticipant AS cp
-		WHERE  u.house_id = h.id
-		AND cp.user_id = u.id
-		AND cp.complete_time > cp.start_time
-		AND u.phantom = 0
-		AND u.staff = 0
-		GROUP BY u.id
-		ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
-		$query = $this->db->query($sql);
-		return $query->result();
-	}
+function getLearderboard() {
+	$sql = "SELECT u.first_name  AS firstname,
+	u.last_name   AS lastname,
+	u.profile_pic AS avatar,
+	u.house_id    AS house_id,
+	h.name        AS house,
+	Count(cp.id)  AS score
+	FROM   user AS u,
+	house AS h,
+	challengeparticipant AS cp
+	WHERE  u.house_id = h.id
+	AND cp.user_id = u.id
+	AND cp.complete_time > cp.start_time
+	AND u.phantom = 0
+	AND u.staff = 0
+	GROUP BY u.id
+	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
+	$query = $this->db->query($sql);
+	return $query->result();
+}
 
-	function getLearderboardByGender($gender) {
-		$sql = "SELECT u.first_name  AS firstname,
-		u.last_name   AS lastname,
-		u.profile_pic AS avatar,
-		u.house_id    AS house_id,
-		h.name        AS house,
-		Count(cp.id)  AS score
-		FROM   user AS u,
-		house AS h,
-		challengeparticipant AS cp
-		WHERE  u.house_id = h.id
-		AND cp.user_id = u.id
-		AND cp.complete_time > cp.start_time
-		AND u.gender = ?
-		AND u.phantom = 0
-		AND u.staff = 0
-		GROUP BY u.id
-		ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
-		$query = $this->db->query($sql, array($gender));
-		return $query->result();
-	}
+function getLearderboardByGender($gender) {
+	$sql = "SELECT u.first_name  AS firstname,
+	u.last_name   AS lastname,
+	u.profile_pic AS avatar,
+	u.house_id    AS house_id,
+	h.name        AS house,
+	Count(cp.id)  AS score
+	FROM   user AS u,
+	house AS h,
+	challengeparticipant AS cp
+	WHERE  u.house_id = h.id
+	AND cp.user_id = u.id
+	AND cp.complete_time > cp.start_time
+	AND u.gender = ?
+	AND u.phantom = 0
+	AND u.staff = 0
+	GROUP BY u.id
+	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
+	$query = $this->db->query($sql, array($gender));
+	return $query->result();
+}
 
-	function getTutorLearderboard() {
-		$sql = "SELECT u.first_name  AS firstname,
-		u.last_name   AS lastname,
-		u.profile_pic AS avatar,
-		u.house_id    AS house_id,
-		h.name        AS house,
-		Count(cp.id)  AS score
-		FROM   user AS u,
-		house AS h,
-		challengeparticipant AS cp
-		WHERE  u.house_id = h.id
-		AND cp.user_id = u.id
-		AND cp.complete_time > cp.start_time
-		AND u.phantom = 0
-		AND (u.staff = 1)
-		GROUP BY u.id
-		ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
-		$query = $this->db->query($sql);
-		return $query->result();
-	}
+function getTutorLearderboard() {
+	$sql = "SELECT u.first_name  AS firstname,
+	u.last_name   AS lastname,
+	u.profile_pic AS avatar,
+	u.house_id    AS house_id,
+	h.name        AS house,
+	Count(cp.id)  AS score
+	FROM   user AS u,
+	house AS h,
+	challengeparticipant AS cp
+	WHERE  u.house_id = h.id
+	AND cp.user_id = u.id
+	AND cp.complete_time > cp.start_time
+	AND u.phantom = 0
+	AND (u.staff = 1)
+	GROUP BY u.id
+	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
+	$query = $this->db->query($sql);
+	return $query->result();
+}
 
-	function getHouseLeaderboard() {
-		$sql="SELECT
-		u.house_id    AS house_id,
-		h.name        AS house_name,
-		Count(cp.id)  AS score,
-		Count(DISTINCT u.id) as user_num,
-		GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
-		FROM   user AS u,
-		house AS h,
-		challengeparticipant AS cp
-		WHERE  u.house_id = h.id
-		AND cp.user_id = u.id
-		AND cp.complete_time > cp.start_time
-		AND u.phantom = 0
-		AND u.staff = 0
-		GROUP BY h.id
-		ORDER BY count(cp.id), sum(cp.complete_time-cp.start_time) ASC ";
-		$query = $this->db->query($sql);
-		return $query->result();
-	}
+function getHouseLeaderboard() {
+	$sql="SELECT
+	u.house_id    AS house_id,
+	h.name        AS house_name,
+	h.picture     AS picture,
+	sum(c.points)  AS score,
+	Count(DISTINCT u.id) as user_num,
+	GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
+	FROM   user AS u,
+	house AS h,
+	challengeparticipant AS cp,
+	challenge as c
+	WHERE  u.house_id = h.id
+	AND c.id = cp.challenge_id
+	AND cp.user_id = u.id
+	AND cp.complete_time > cp.start_time
+	AND u.phantom = 0
+	AND u.staff = 0
+	GROUP BY h.id
+	ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
+	$query = $this->db->query($sql);
+	return $query->result();
+}
 
-	function getMyHouseStats($house_id) {
-		$sql ="SELECT
-		u.first_name  AS firstname,
-		u.last_name   AS lastname,
-		u.profile_pic AS avatar,
-		u.leader      AS is_leader,
-		u.id 		  AS user_id,
-		Count(cp.id)  AS score
-		FROM   user AS u,
-		challengeparticipant AS cp
-		WHERE  u.house_id = ?
-		AND cp.user_id = u.id
-		AND cp.complete_time > '0000-00-00 00:00:00'
-		AND u.phantom = 0
-		AND u.staff = 0
-		GROUP BY u.id
-		ORDER BY count(cp.id)";
-		$query = $this->db->query($sql, array($house_id));
-		$stats = $query->result();
-		$res = array();
-		foreach($stats as $s) {
-			$res[$s->user_id] = $s;
+function getHouseRankAndPoints($house_id) {
+	$leaderboard = $this->getHouseLeaderboard();
+	$rank = 0;
+	foreach($leaderboard as $house) {
+		$rank++;
+		if($house->house_id == $house_id) {
+			return array('rank'=>$rank, 
+				'points'=>$house->score, 
+				'house_id'=>$house->house_id, 
+				'house_name'=>$house->house_name,
+				'picture'=>$house->picture  );
 		}
-		return $res;
 	}
+}
+function getMyHouseStats($house_id) {
+	$sql ="SELECT
+	u.first_name  AS firstname,
+	u.last_name   AS lastname,
+	u.profile_pic AS avatar,
+	u.leader      AS is_leader,
+	u.id 		  AS user_id,
+	Count(cp.id)  AS score
+	FROM   user AS u,
+	challengeparticipant AS cp
+	WHERE  u.house_id = ?
+	AND cp.user_id = u.id
+	AND cp.complete_time > '0000-00-00 00:00:00'
+	AND u.phantom = 0
+	AND u.staff = 0
+	GROUP BY u.id
+	ORDER BY count(cp.id)";
+	$query = $this->db->query($sql, array($house_id));
+	$stats = $query->result();
+	$res = array();
+	foreach($stats as $s) {
+		$res[$s->user_id] = $s;
+	}
+	return $res;
+}
 
 }
