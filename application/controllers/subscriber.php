@@ -6,6 +6,7 @@ class Subscriber extends CI_Controller {
 	public function index(){
 		$this->activities();
 		$this->sleep();
+		
 	}
 
 	public function activities(){
@@ -18,7 +19,7 @@ class Subscriber extends CI_Controller {
 						$user_id = $data['user_id'];
 						$date = $data['date'];
 						$this->getActivities($user_id, $date);
-						$this->Challenge_model->updateActivityProgress($user_id);
+						$this->updateProgress($user_id, $date);
 					}else{
 						
 					}
@@ -28,6 +29,13 @@ class Subscriber extends CI_Controller {
 			
 		}
 		
+	}
+
+	private function upateProgress($user_id, $date) {
+		$start_time = $date. " 00:00:00";		
+		$end_time = $date. " 23:59:59";
+
+		$this->Challenge_model->updateActivityProgress($user_id, $start_time, $end_time);
 	}
 
 	public function sleep(){
@@ -40,6 +48,7 @@ class Subscriber extends CI_Controller {
 						$user_id = $data['user_id'];
 						$date = $data['date'];
 						$this->getSleep($user_id, $date);
+						$this->updateProgress($user_id, $date);
 					}else{
 						
 					}
@@ -130,16 +139,11 @@ class Subscriber extends CI_Controller {
 
 	}
 
-	private function updatePost(){
-
-	}
-
-
 	private function getUserKeyPair($userId){
 		if($userId){
 			try {
 				$sql = "SELECT oauth_token, oauth_secret FROM user
-						WHERE id=". $userId;
+				WHERE id=". $userId;
 				$query = $this->db->query($sql);
 
 				if($query->num_rows()>0){
@@ -180,7 +184,7 @@ class Subscriber extends CI_Controller {
 							$data['collectionType'] = (string) $updatedResource->collectionType;
 							array_push($notifications, $data);
 							$sql = "INSERT INTO updates(`update`,user_id,type)
-									VALUES ('User data synced, IP: ". $this->input->ip_address() ."', ". $data['user_id'] .", '". $data['collectionType'] ."')";
+							VALUES ('User data synced, IP: ". $this->input->ip_address() ."', ". $data['user_id'] .", '". $data['collectionType'] ."')";
 							$this->db->query($sql);
 						}
 					}

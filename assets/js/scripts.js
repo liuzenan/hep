@@ -55,22 +55,61 @@ jQuery(document).ready(function($) {
 
 	$(".messageBox").autosize();
 	//joinevents
-	$('.joinbtn').click(function(event){
-		var eventId = $(this).data("id");
-		if(eventId){
+	$(".joinChallengeNow").click(function(event){
+		var currentBtn = $(this);
+		var challengeId = currentBtn.data("challengeId");
+		var userId = currentBtn.data("userId");
+		if(challengeId){
 			$.ajax({
 				type:'POST',
-				url:base_url+'challenges/joinEvent',
+				url:base_url+'challenges/joinChallengeNow',
 				dataType:'json',
 				data:{
-					event_id:eventId
+					challenge_id:challengeId,
+					user_id:userId
 				}
 			}).done(function(msg){
-				if(msg.success){
-					window.location.reload();
-				}else{
-					alert("There's an error, we are working to fix it. Sorry!");
+				alert(msg.message);
+				window.location.reload();
+			});
+		}
+	});
+	$(".joinChallengeTomorrow").click(function(event){
+		var currentBtn = $(this);
+		var challengeId = currentBtn.data("challengeId");
+		var userId = currentBtn.data("userId");
+		if(challengeId){
+			$.ajax({
+				type:'POST',
+				url:base_url+'challenges/joinChallengeTomorrow',
+				dataType:'json',
+				data:{
+					challenge_id:challengeId,
+					user_id:userId
 				}
+			}).done(function(msg){
+				console.log(msg);
+				alert(msg.message);
+				window.location.reload();
+			});
+		}
+	});
+
+	$(".quitChallenge").click(function(event){
+		var currentBtn = $(this);
+		var cpId = currentBtn.data("cpId");
+		if(cpId){
+			$.ajax({
+				type:'POST',
+				url:base_url+'challenges/quitChallenge',
+				dataType:'json',
+				data:{
+					id:cpId,
+				}
+			}).done(function(msg){
+				console.log(msg);
+				alert(msg.message);
+				window.location.reload();
 			});
 		}
 	});

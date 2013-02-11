@@ -1,9 +1,8 @@
 <li class="challengeItem media well">
 	<div class="pull-left"><img class="media-object" src="<?php echo $badge_pic;?>"></div>
 	<div class="challengeControls pull-right">
-		<h4 class="muted"><?php echo $points ?> points</h4>
-		<div class="view-btn"><a href="#" class="btn btn-primary">View Challenge</a></div>
-		<a href="#"><small>Quit challenge</small></a>
+	<!--	<h4 class="muted"><?php echo $points ?> points</h4>  -->
+		<button class="btn quitChallenge" data-cp-id="<?php echo $id ?>"><small>Quit challenge</small></button>  
 		<span>&nbsp; | &nbsp;</span>
 		<a href="#"><small>View discussion</small></a>
 	</div>

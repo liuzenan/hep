@@ -22,6 +22,8 @@ class Home extends CI_Controller{
 
 	private function loadData() {
 		$data['active'] = 'home';
+		//update progress
+		$this->Challenge_model->updateActivityProgress($this->uid);
 
 		$this->loadUserData($this->uid, $data);
 		$this->loadActivityData($this->uid, $data);

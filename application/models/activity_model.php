@@ -228,6 +228,7 @@ class Activity_model extends CI_Model{
 				$intradayActivityData = array();
 				$minute = 0;
 				foreach($intradayCalories->dataset->intradayData as $value){
+
 					if($minute%10 == 0) {
 						$currentTime = (string) $value->time;
 						$intradayActivityData[$currentTime]['calories'] = $value->value;
@@ -236,7 +237,7 @@ class Activity_model extends CI_Model{
 						$intradayActivityData[$currentTime]['calories'] += $value->value;
 						$intradayActivityData[$currentTime]['level'] += $value->level;
 					}
-
+					$minute++;
 				}
 				$minute = 0;
 				foreach($intradaySteps->dataset->intradayData as $value){
@@ -245,17 +246,22 @@ class Activity_model extends CI_Model{
 						$intradayActivityData[$currentTime]['steps'] = $value->value;
 					}else {
 						$intradayActivityData[$currentTime]['steps'] += $value->value; 
-					}   
+					}  
+					$minute++; 
 				}
+								$minute = 0;
+
 				foreach($intradayFloors->dataset->intradayData as $value){
 					if($minute%10 == 0) {
 						$currentTime = (string) $value->time;
 						$intradayActivityData[$currentTime]['floors'] = $value->value;
 					}else {
 						$intradayActivityData[$currentTime]['floors'] += $value->value;
-
 					}
+					$minute++;
 				}
+								$minute = 0;
+
 				foreach($intradayElevation->dataset->intradayData as $value){
 					if($minute%10 == 0) {
 						$currentTime = (string) $value->time;
@@ -264,6 +270,7 @@ class Activity_model extends CI_Model{
 					} else {
 						$intradayActivityData[$currentTime]['elevation'] += $value->value;
 					}
+					$minute++;
 				}
 
 				foreach ($intradayActivityData as $key => $value) {

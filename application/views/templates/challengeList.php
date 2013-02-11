@@ -41,7 +41,7 @@
 				<div class="challengeControls pull-right">
 					<h4 class="muted"><?php echo $challenge->points ?> points</h4>
 					<div class="view-btn"><a href="#" class="btn btn-primary">View Challenge</a></div>
-					<a href="#"><small>Quit challenge</small></a>
+					<button class="btn quitChallenge" data-cp-id="<?php echo $challenge->id ?>">Quit challenge</button>  
 					<span>&nbsp; | &nbsp;</span>
 					<a href="#"><small>View discussion</small></a>
 				</div>

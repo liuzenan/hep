@@ -24,6 +24,16 @@ class Challenge_model extends CI_Model{
 		return $query->result();
 	}
 
+	function loadJoinedCategory($user_id, $start_time, $end_time) {
+		$sql = "SELECT challenge.category 
+		FROM challenge 
+		INNER JOIN challengeparticipant 
+		ON challenge.id=challengeparticipant.challenge_id 
+		AND challengeparticipant.user_id = ?
+		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >= ?";
+		$query = $this->db->query($sql, array($user_id, $start_time, $end_time));
+		return $query->result();
+	}
 	function loadChallenge($challenge_id) {
 		$query = $this->db->get_where(Challenge_model::table_challenge, array('id' => $challenge_id));
 		if($query->num_rows()>0) {
@@ -89,65 +99,55 @@ class Challenge_model extends CI_Model{
 		return $query->result();
 	}
 
-	function getIndividualCurrentChallenges($user_id){
+	function getIndividualCurrentChallenges($user_id) {
+		return $this->getIndividualChallenges($user_id,date("Y-m-d G:i:s",time()),date("Y-m-d G:i:s",time()));
+	}
 
+	function getIndividualChallenges($user_id, $start, $end) {
+		
 		$sql = "SELECT *
 		FROM challenge
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
 		AND challengeparticipant.user_id= ?
-		WHERE challengeparticipant.start_time < NOW() AND challengeparticipant.end_time > NOW() 
+		WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time >? 
 		GROUP BY challengeparticipant.challenge_id";
 
-		$query = $this->db->query($sql, array($user_id));
+		$query = $this->db->query($sql, array($user_id, $start, $end));
 		return $query->result();
-		/*
-		//$this->load->model('Activity_model');
-		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->start_time, $c->end_time);
-		foreach($data as $c) {
-			if($c->steps_value != 0) {
-				$c->steps_progress = num_format($status->steps/$c->steps_value,2);
-			}
-			if($c->floor_value != 0) {
-				$c->steps_progress = num_format($status->floors/$c->floor_value,2);
-			}
-			if($c->sleep_value != 0) {
-				$value = $this->Activity_model->getSleepToday($user_id);
-				$c->sleep_value_progress = num_format($value->total_time/$c->sleep_value, 2);
-			}
-
-			if($c->sleep_time != 0) {
-				$value = $this->Activity_model->getSleepStartTime($user_id);
-				if(empty($value)) {
-					$c->sleep_time_progress = 0;
-				} else {
-					$c->sleep_time_progress = 1;
-				}
-			}
-		}*/
 	}
-	function updateActivityProgress() {
+
+	function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) {
 		$ci =& get_instance();
-		$ci->load->model('Mymodel');
 		$ci->load->model('Activity_model');
-		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->start_time, $c->end_time);
+		if(is_null($start_time)) {
+			$data = $this->getIndividualCurrentChallenges($user_id);
+		} else {
+			$data = $this->getIndividualCurrentChallenges($user_id, $start_time, $end_time);
+		}
 		foreach($data as $c) {
-			if($c->steps_value != 0) {
-				$progress = num_format($status->steps/$c->steps_value,2);
-				$this->updateProgress($c->id, $progress);
-			}
-			if($c->floor_value != 0) {
-				$progress = num_format($status->floors/$c->floor_value,2);
+			$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
+		print_r($status);
+
+			if($c->steps_value != 0 && $c->floor_value !=0) {
+				$progress = 0.5 * ($status->steps/$c->steps_value) +
+							0.5 * ($status->floors/$c->floor_value);
+
+				$progress = number_format($progress,2);
 				$this->updateProgress($c->id, $progress);
 
-			}
-			if($c->sleep_value != 0) {
+			} else if($c->steps_value != 0) {
+				$progress = number_format($status->steps/$c->steps_value,2);
+				$this->updateProgress($c->id, $progress);
+			} else if($c->floor_value != 0) {
+				$progress = number_format($status->floors/$c->floor_value,2);
+				$this->updateProgress($c->id, $progress);
+
+			} else if ($c->sleep_value != 0) {
 				$value = $this->Activity_model->getSleepToday($user_id);
-				$progress = num_format($value->total_time/$c->sleep_value, 2);
+				$progress = number_format($value->total_time/$c->sleep_value, 2);
 				$this->updateProgress($c->id, $progress);
-			}
-
-			if($c->sleep_time != 0) {
+			} else if ($c->sleep_time != 0) {
 				$value = $this->Activity_model->getSleepStartTime($user_id);
 				if(empty($value)) {
 					$progress = 0;
