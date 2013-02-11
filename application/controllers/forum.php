@@ -88,9 +88,9 @@ class Forum extends CI_Controller {
 				# code...
 				$threadpost_id = $this->Forum_model->createPost($user_id, $thread_id, $message);
 				$msg = array(
-						"success" => true,
-						"thread_id" => $threadpost_id
-						);
+					"success" => true,
+					"thread_id" => $threadpost_id
+					);
 				
 			} else {
 				$msg = array(
@@ -102,7 +102,38 @@ class Forum extends CI_Controller {
 		echo json_encode($msg);
 	}
 
+	public function subscribe() {
+		if(!$this->session->userdata('user_id')){
+			$msg = array(
+				"success" => false,
+				"login" => false
+				);
+		}else{
+			$user_id = $this->session->userdata('user_id');
+			$thread_id = $this->input->post("thread_id");
+			$this->Forum_model->subscribe($user_id, $thread_id);
+			$msg = array("success" => true);
+		}
+		echo json_encode($msg);
 
+
+	}
+
+	public function unsubscribe() {
+		if(!$this->session->userdata('user_id')){
+			$msg = array(
+				"success" => false,
+				"login" => false
+				);
+		}else{
+			$user_id = $this->session->userdata('user_id');
+			$thread_id = $this->input->post("thread_id");
+			$this->Forum_model->unsubscribe($user_id, $thread_id);
+			$msg = array("success" => true);
+		}
+		echo json_encode($msg);
+
+	}
 	private function loadView($data, $type="forum"){
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
