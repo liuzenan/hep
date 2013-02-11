@@ -25,7 +25,9 @@ class Challenges extends CI_Controller {
 
 	public function index(){
 		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
-		echo "<pre>"; print_r($data);echo "</pre><br>";
+		$data["tomorrow"] = $this->Challenge_model->loadUserChallenge($this->uid, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
+		
+		//echo "<pre>"; print_r($data);echo "</pre><br>";
 
 		$data["tab"] = "my";
 		$this->loadPage($data);	
