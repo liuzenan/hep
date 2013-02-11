@@ -32,5 +32,8 @@ class Mail extends CI_Controller {
 	public function unsubDailyNotification($user_id) {
 		$this->User_model->unsubDailyNotification($user_id);
 	}
+	public function carryOverChallenges() {
+		$this->Challenge_model->carryOverChallenges();
 
+	}
 }
