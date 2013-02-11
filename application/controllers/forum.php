@@ -13,7 +13,7 @@ class Forum extends CI_Controller {
 
 	public function challenge() {
 		
-		$forums = $this->Forum_model->getChallengeForum();
+		$forums = $this->Forum_model->getChallengeForum($this->uid);
 		$data['threads'] = $forums;
 		$data['users'] = 
 		count($data['threads']['uids'])>0
