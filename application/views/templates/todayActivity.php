@@ -2,13 +2,7 @@
 			<div class="today-activity">
 				<p class="section-title">Today's Activity</p>
 				<div class="row-fluid">
-					<div class="span12">	
-						<div class="row-fluid activity-icons">
-							<div class="span3"><span class="activityIcon steps"></span><h4>Steps</h4></div>
-							<div class="span3"><span class="activityIcon floors"></span><h4>Floors</h4></div>
-							<div class="span3"><span class="activityIcon distance"></span><h4>Distance</h4></div>
-							<div class="span3"><span class="activityIcon"></span><h4>Calories</h4></div>
-						</div>
+					<div class="span12">
 						<div class="row-fluid activity-chart">
 							<div class="span3">
 								<div class="row-fluid">
@@ -64,10 +58,10 @@
 						<div class="row-fluid">
 							<table class="table activity-stats">
 								<tbody>
-									<td class="activity-stats"><strong><span><?php echo $me_today->steps ?></span><br>Steps&nbsp;</strong><i class="<?php if($delta_steps>0) echo "icon-arrow-up"; else if ($delta_steps<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_steps!=0) echo abs(floor($delta_steps*100)) .'%' ?></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->floors ?></span><br>Floors&nbsp;</strong><i class="<?php if($delta_floors>0) echo "icon-arrow-up"; else if ($delta_floors<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_floors!=0) echo abs(floor($delta_floors*100)) . '%' ?></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->distance ?></span><br>Distance&nbsp;</strong><i class="<?php if($delta_distance>0) echo "icon-arrow-up"; else if ($delta_distance<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_distance!=0) echo abs(floor($delta_distance*100)) . '%' ?></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br>Calories&nbsp;</strong><i class="<?php if($delta_calories>0) echo "icon-arrow-up"; else if ($delta_calories<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_calories!=0) echo abs(floor($delta_calories*100)) . '%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->steps ?></span><br><span class="activityIcon steps"></span>Steps&nbsp;</strong><i class="<?php if($delta_steps>0) echo "icon-arrow-up"; else if ($delta_steps<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_steps!=0) echo abs(floor($delta_steps*100)) .'%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->floors ?></span><br><span class="activityIcon floors"></span>Floors&nbsp;</strong><i class="<?php if($delta_floors>0) echo "icon-arrow-up"; else if ($delta_floors<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_floors!=0) echo abs(floor($delta_floors*100)) . '%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->distance ?></span><br><span class="activityIcon distance"></span>Distance&nbsp;</strong><i class="<?php if($delta_distance>0) echo "icon-arrow-up"; else if ($delta_distance<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_distance!=0) echo abs(floor($delta_distance*100)) . '%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br><span class="activityIcon"></span>Calories&nbsp;</strong><i class="<?php if($delta_calories>0) echo "icon-arrow-up"; else if ($delta_calories<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_calories!=0) echo abs(floor($delta_calories*100)) . '%' ?></td>
 								</tbody>
 							</table>
 						</div>

@@ -63,9 +63,9 @@ table.activity-stats{
 	margin-top: -5px;
 }
 
-td.activity-stats, td.stats-label{
+td.activity-stats, td.stats-label, td.stats-count{
 	text-align: center;
-	vertical-align: center;
+	vertical-align: middle;
 	color:#666;
 	border-top: none;
 	width: 25%;
@@ -125,11 +125,11 @@ td.activity-stats strong span, td.stats-label strong span{
 	display: none;
 }
 
-.newsFeed>li, .challenge>li{
+.newsFeed>li{
 	border-bottom: 1px solid #ccc;
 }
 
-.newsFeed>li:last-child, .challenge>li:last-child{
+.newsFeed>li:last-child{
 	border-bottom: 0;
 }
 
@@ -208,6 +208,43 @@ span.activityIcon.floors{
 
 .challenge>.media:last-child{
 	padding-bottom: 0;
+}
+
+.challenge .challengeItem.box{
+	width: 250px;
+	height: 250px;
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.challengeItem.box .challengeContainer{
+	width: 100%;
+	height: 100%;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+.challengeItem.box .challengeContainer{
+	text-align: center;
+	position: relative;
+	background-color: rgb(51,153,204);
+}
+
+.challengeItem.box .challengeTitle{
+	padding-top: 15px;
+	font-family: "Grandesign Neue Serif", serif;
+	font-size: 1.5em;
+}
+
+.challengeItem.box .challengeContainer p{
+	font-size: 11px;
+}
+
+.challengeItem.box .challengeControlBtns{
+	position: absolute;
+	bottom: 15px;
+	left: 15px;
 }
 
 .signup{
@@ -390,6 +427,9 @@ td.forum-stats{
 	border-radius: 5px;
 	position: relative;
 	margin-bottom: 20px;
+	float: left;
+	width: 40%;
+	margin: 0 5%;
 }
 
 .leaderboard-rank{
@@ -470,7 +510,7 @@ div.challenge-stats{
 }
 
 .house-people-current>img{
-	width: 20%;
+	width: 10%;
 	height: auto;
 }
 
@@ -496,6 +536,7 @@ background: #fcfcfc;
 border-radius: 5px;
 overflow: hidden;
 box-shadow: 0 0 3px #ccc;
+margin-bottom: 10px;
 }
 
 .leaderboard-house-rank{

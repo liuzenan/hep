@@ -8,7 +8,10 @@
 					<img src="http://placehold.it/64x64" alt="">
 				</div>
 				<div class="thread-content">
-				<div><a href="#"><strong><?php echo $thread["title"]; ?></strong></a></div>
+				<div>
+					<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>
+					<a href="#"><small></small></a>
+				</div>
 				
 					<?php if (!empty($thread["comments"])): ?>
 						<?php foreach ($thread["comments"] as $comment_id => $comment): ?>
