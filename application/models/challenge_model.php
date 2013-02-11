@@ -184,6 +184,9 @@ function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) 
 		$data = $this->getIndividualChallenges($user_id, $start_time, $end_time);
 	}
 	foreach($data as $c) {
+		if($c->progress >=1 ) {
+			continue;
+		}
 		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
 		if($c->steps_value != 0 && $c->floor_value !=0) {
 			$progress = 0.5 * ($status->steps/$c->steps_value) +
