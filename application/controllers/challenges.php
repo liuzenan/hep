@@ -39,6 +39,7 @@ class Challenges extends CI_Controller {
 		$data["challenges"] = $this->loadAvailableChallanges();
 
 		$data["user_id"] = $this->uid;
+		//echo "<pre>"; print_r($data);echo "</pre><br>";
 
 		$this->loadPage($data);
 		
@@ -66,10 +67,9 @@ class Challenges extends CI_Controller {
 		}
 
 		foreach($challenges as $c) {
-			if($c->category>0) {
 				$c->disabled_today = ($today[$c->category]>0);
 				$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
-			} 
+			
 		}
 		return $challenges;
 

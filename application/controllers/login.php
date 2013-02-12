@@ -157,7 +157,9 @@ class Login extends CI_Controller{
 			//insert into database
 			foreach($sleepData as $key=>$value){
 				$sql = "INSERT INTO sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
-				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', " . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] . ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
+				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', "
+				 . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] .
+				  ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
 				$this->db->query($sql);	
 			}
 		}else{
@@ -166,25 +168,7 @@ class Login extends CI_Controller{
 
 
 	}
-
-	private function setFeeds(){
-		if($this->session->userdata('user_id')){
-
-			//subscribe to himself
-			$user_id = $this->session->userdata('user_id');
-			$sql = "INSERT INTO Subscription(user_id, subscriber_id)
-			VALUES (" . $user_id . ", " . $user_id .")";
-			$this->db->query($sql);
-
-			//subscribe to system notifications
-			$sql = "INSERT INTO Subscription(user_id, subscriber_id)
-			VALUES (" . $user_id . ", 0)";
-			$this->db->query($sql);
-		}else{
-			echo 'something was wrong';
-		}
-	}
-
+	
 	private function initPosts(){
 		if($this->session->userdata('user_id')){
 
@@ -202,16 +186,7 @@ class Login extends CI_Controller{
 				}
 			}
 
-			foreach($stepsData as $value){
-				if($value['steps']>=0){
-					$timeStr = $value['date'] . ' 23:59:59';
-					$sql = "INSERT INTO Post(user_id, type, time, description)
-					VALUES (" . $user_id . ", 0, '". $timeStr . "', 'took " . $value['steps'] . " steps and he burned " . $value['calories'] . " calories.')";
-					$this->db->query($sql);
-				}else{
-					echo "something was wrong";
-				}
-			}
+			
 		}
 	}
 
