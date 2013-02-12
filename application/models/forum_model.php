@@ -85,6 +85,10 @@ class Forum_model extends CI_Model{
 		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
 
+		return $this->assembleForumResult($query, $user_id);
+	}
+
+	function assembleForumResult($query, $user_id) {
 
 		$subs = $this->getSubscribedThread($user_id);
 
@@ -101,6 +105,7 @@ class Forum_model extends CI_Model{
 					$thread["creator_id"] = $row->creator_id;
 					$thread["create_time"] = $row->create_time;
 					$thread["tutor_only"] = 0;
+					$uids[] = $row->creator_id;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -125,52 +130,16 @@ class Forum_model extends CI_Model{
 			return FALSE;
 		}
 	}
-
-	function getTutorForum() {
+	function getTutorForum($user_id) {
 		$sql = "SELECT t.*, p.*
 		FROM   forumthread AS t
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
-		WHERE  t.challenge_id = 0
+		WHERE  t.challenge_id = -1
 		AND t.tutor_only = 1
 		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
-		$uids = array();
-		if ($query->num_rows()>0) {
-			$res = array();
-			foreach($query->result() as $row) {
-				if(empty($res[$row->thread_id])) {
-					$thread = array();
-					$thread["challenge_id"] = $row->challenge_id;
-					$thread["title"]= $row->message;
-					$thread["thread_id"] = $row->id;
-					$thread["creator_id"] = $row->creator_id;
-					$thread["create_time"] = $row->create_time;
-					if(empty($thread["comments"])) {
-						$thread["comments"] = array();
-					}
-
-					$res[$row->id] = $thread;
-				}
-				if(!empty($row->commenter_id) && ($row->deleted == 0)) {
-					$thread = $res[$row->id];
-					$comment = array();
-					$comment["commenter_id"] = $row->commenter_id;
-					$comment["comment"] = $row->comment;
-					$comment["comment_time"] = $row->comment_time;
-					$comment["comment_id"] = $row->cid;
-					$thread["comments"][$row->cid] = $comment;
-					$res[$row->id]["comments"] = $thread["comments"];
-					$uids[] = $row->commenter_id;
-				}
-			}
-			$res = array_reverse($res, true);
-
-			$res['uids'] = $uids;
-			return $res;
-		} else {
-			return FALSE;
-		}
+		return $this->assembleForumResult($query, $user_id);
 	}
 
 
