@@ -13,7 +13,7 @@ class Forum extends CI_Controller {
 
 	public function challenge() {
 		
-		$forums = $this->Forum_model->getChallengeForum();
+		$forums = $this->Forum_model->getChallengeForum($this->uid);
 		$data['threads'] = $forums;
 		$data['users'] = 
 		count($data['threads']['uids'])>0
@@ -26,14 +26,14 @@ class Forum extends CI_Controller {
 	}
 
 	public function general() {
-		$forums = $this->Forum_model->getGeneralForum();
+		$forums = $this->Forum_model->getGeneralForum($this->uid);
 		$data['threads'] = $forums;
 		$data['users'] = 
 		count($data['threads']['uids'])>0
 		? $this->User_model->loadUsers($data['threads']['uids'])
 		: array();		unset($data['threads']['uids']);
 		$data['active'] = 'general_forum';
-		echo "<pre>"; print_r($data);echo "</pre><br>";
+		//echo "<pre>"; print_r($data);echo "</pre><br>";
 		$this->loadView($data, "general");
 	}
 
@@ -50,14 +50,14 @@ class Forum extends CI_Controller {
 	}
 	
 
-	public function createThread($message){
+	public function createThread(){
 		if(!$this->session->userdata('user_id')){
 			$msg = array(
 				"success" => true,
 				"login" => false
 				);
 		}else{
-			//$message = $this->input->post("message");
+			$message = $this->input->post("message");
 			//check empty message in js
 			$threadpost_id = $this->Forum_model->createThread($this->uid, $message);
 			if (!empty($threadpost_id)) {
@@ -83,40 +83,15 @@ class Forum extends CI_Controller {
 			$user_id = $this->session->userdata('user_id');
 			$thread_id = $this->input->post("thread_id");
 			$message = $this->input->post("comment");
-
+			
 			if ($message!=null && $message!='') {
 				# code...
-				
 				$threadpost_id = $this->Forum_model->createPost($user_id, $thread_id, $message);
-				if (isset($threadpost_id)) {
-					# code...
-					$msg = array(
-						"success" => true,
-						"thread_id" => $threadpost_id
-						);
-
-					$user = $this->User_model->loadUser($user_id);
-					$thread = $this->Forum_model->loadThread($thread_id);
-
-					if (isset($user) && isset($thread)) {
-					# code...
-						$username = $user->first_name . " " . $user->last_name;
-						$title = $thread->message;
-						$description = $username . " post a new message at the thread: " . $title;
-						$url = base_url() . "forum/thread/" . $thread_id;
-
-						$subscribers = $this->Forum_model->loadThreadSubscribers($thread_id);
-
-						if (count($subscribers)>0) {
-						# code...
-							foreach ($subscribers as $value) {
-								if ($value->user_id != $user_id) {	
-									$notification_id = $this->User_model->addNotification($value->user_id, $description, $url);
-								}
-							}
-						}
-					}
-				}
+				$msg = array(
+					"success" => true,
+					"thread_id" => $threadpost_id
+					);
+				
 			} else {
 				$msg = array(
 					"success" => false,
@@ -127,7 +102,38 @@ class Forum extends CI_Controller {
 		echo json_encode($msg);
 	}
 
+	public function subscribe() {
+		if(!$this->session->userdata('user_id')){
+			$msg = array(
+				"success" => false,
+				"login" => false
+				);
+		}else{
+			$user_id = $this->session->userdata('user_id');
+			$thread_id = $this->input->post("thread_id");
+			$this->Forum_model->subscribe($user_id, $thread_id);
+			$msg = array("success" => true);
+		}
+		echo json_encode($msg);
 
+
+	}
+
+	public function unsubscribe() {
+		if(!$this->session->userdata('user_id')){
+			$msg = array(
+				"success" => false,
+				"login" => false
+				);
+		}else{
+			$user_id = $this->session->userdata('user_id');
+			$thread_id = $this->input->post("thread_id");
+			$this->Forum_model->unsubscribe($user_id, $thread_id);
+			$msg = array("success" => true);
+		}
+		echo json_encode($msg);
+
+	}
 	private function loadView($data, $type="forum"){
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');

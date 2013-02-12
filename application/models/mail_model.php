@@ -56,30 +56,92 @@ class Mail_model extends CI_Model{
 	}
 
 
+	private function loadData($user_id, $user) {
+		$daily = "Good Morning %s, <br><br>
+		Yesterday you walked %d steps, climbed %d floors, slept %d hours and burnt %d calories. You had %d challenges yesterday and you completed %d of them.<br>
+		
+		<br><u>Yesterday's Completed Challenges</u>: <br>
+		%s
+		<br><br>
+		<u>Yesterday's Incomplete Challenges</u>: <br>
+		%s
+		<br><br>
+		<u>Today you have %d challenge to work on</u>:
+		<br>%s<br><br>
+
+		Happy exercise!<br>
+		HEP Team<br>--<br>
+		";
+		$ci =& get_instance();
+		$ci->load->model('Activity_model');
+		$data;
+		
+
+		$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
+		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
+
+		$data['me_sleep'] = $this->Activity_model->getSleepToday($user_id);
+		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($user_id);
+
+
+		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);
+		$data['delta_floors'] = number_format($this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors),2);
+		$data['delta_calories'] = number_format($this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories),2);
+		$data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance),2);
+
+
+		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($user_id);
+		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($user_id);
+		$time = date("Y-m-d G:i:s",time() - 2*60 * 60 * 24);	
+		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($user_id, $time, $time);
+		$tomorrow = date("Y-m-d G:i:s",time() - 60 * 60 * 24);	
+		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($user_id, $tomorrow, $tomorrow);
+		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
+		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
+		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
+		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+
+		$count = 0;
+		$titlesY="";
+		$titlesF="";
+		foreach($data['me_challenges_yesterday'] as $c) {
+			if($c->progress >= 1) {
+				$count++;
+				$titlesY .= '<b>'.$c->title.'</b><br>';
+				$titlesY .= '<i>'.$c->description.'</i><br><br>';
+			} else {
+				$titlesF .= '<b>'.$c->title.'</b><br>';
+				$titlesF .= '<i>'.$c->description.'</i><br><br>';
+			}
+		}
+		$titlesX="";
+		foreach($data['me_challenges_yesterday'] as $c) {
+			$titlesX .= '<b>'.$c->title.'</b><br>';
+			$titlesX .= '<i>'.$c->description.'</i><br><br>';
+			
+		}
+		$data['msg'] = sprintf($daily, $user->first_name." ".$user->last_name, $data['me_yesterday']->steps, $data['me_yesterday']->floors, number_format($data['me_sleep_yesterday']->total_time,2),
+		$data['me_yesterday']->calories, count($data['me_challenges_yesterday']), $count, $titlesY, $titlesF, count($data['me_challenges']), $titlesX);
+		return $data;
+	}
+
+	private function cauculateDelta($today, $yesterday) {
+		if($yesterday == 0) {
+			return $today == 0 ? 0 : 1;
+		} else {
+			return ($today-$yesterday)/($yesterday);
+		}
+	}
 	public function sendDailyReport($user_id) {
 
 		$u = $this->User_model->loadUser($user_id);
 		if($u->badge_email_unsub == 0) {
-			$a = $this->Activity_model;
-			print_r($u);
-			$today 		= $a->getActivityToday($user_id);
-			$yesterday  = $a->getActivityYesterday($user_id);
-			$todaySleep = $a->getSleepToday($user_id);
-			$yesterdaySleep = $a->getSleepYesterday($user_id);
-
-			$sleepAvg 	 = $a->getAverageSleepToday();
-			$activityAvg = $a->getAverageActivityToday();
-			echo "<pre>" . print_r($u) . "</pre><br>";
-			echo "<pre>" . print_r($today) . "</pre><br>";
-			echo "<pre>" . print_r($yesterday) . "</pre><br>";
-			echo "<pre>" . print_r($todaySleep) . "</pre><br>";
-			echo "<pre>" . print_r($yesterdaySleep) . "</pre><br>";
-			echo "<pre>" . print_r($sleepAvg) . "</pre><br>";
-			$msg .= "<pre>" . print_r($activityAvg) ."</pre><br>";
+			$data = $this->loadData($user_id, $u);
+			echo "<pre>"; print_r($data);echo "</pre><br>";
 
 			//$content = 
 			$link = sprintf(base_url(). "mail/unsubDailyNotification/%d", $user_id);
-			$msg .= sprintf('If you don\'t want to receive this message any more, you can <a href="%s">unsubscribe</a>.', $link);
+			$msg = $data['msg'] . sprintf('If you don\'t want to receive this message any more, you can <a href="%s">unsubscribe here</a>.', $link);
 
 
 			$this->email->from(Mail_model::HepAccount, Mail_model::HepName);

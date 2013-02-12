@@ -61,109 +61,116 @@ class Challenge_model extends CI_Model{
 			FROM   challengeparticipant
 			WHERE  start_time <= ?
 			AND end_time >= ? )
-			AND c1.user_id NOT 
-			IN (SELECT DISTINCT user_id
-			FROM   challengeparticipant
-			WHERE  start_time <= ?
-			AND end_time >= ?)";
-		$uids = $this->db->query($sql, array($ystd, $ystd, $now, $now))->result();
-		foreach($uids as $uid) {
-			$sql2="SELECT distinct challenge_id
-			FROM   challengeparticipant
-			WHERE  start_time <= ?
-			AND end_time >= ?
-			AND user_id=?";
-			$cids = $this->db->query($sql2, array($ystd, $ystd, $uid->user_id))->result();
-			foreach($cids as $cid) {
-				$this->joinChallenge($uid->user_id, $cid->challenge_id, date("Y-m-d",time())." 00:00:00", date("Y-m-d",time())." 23:59:59");
-			}
+AND c1.user_id NOT 
+IN (SELECT DISTINCT user_id
+	FROM   challengeparticipant
+	WHERE  start_time <= ?
+	AND end_time >= ?)";
+$uids = $this->db->query($sql, array($ystd, $ystd, $now, $now))->result();
+foreach($uids as $uid) {
+	$sql2="SELECT distinct challenge_id
+	FROM   challengeparticipant
+	WHERE  start_time <= ?
+	AND end_time >= ?
+	AND user_id=?";
+	$cids = $this->db->query($sql2, array($ystd, $ystd, $uid->user_id))->result();
+	foreach($cids as $cid) {
+		$this->joinChallenge($uid->user_id, $cid->challenge_id, date("Y-m-d",time())." 00:00:00", date("Y-m-d",time())." 23:59:59");
+	}
+}
+
+}
+
+
+function loadChallengeParticipation($id) {
+	$data = array('id'=>$id);
+	return $this->db->get_where(Challenge_model::table_challenge_participant, $data)->row();
+}
+
+function quitChallenge($id) {
+	return $this->db->delete(Challenge_model::table_challenge_participant,
+		array(Challenge_model::col_cp_id=>$id));
+}
+
+function completeChallenge($id, $complete_time) {
+	$data = array('complete_time', $complete_time);
+	$this->db->where('id',$id);
+	$this->db->upate(Challenge_model::table_challenge_participant,
+		$data);
+}
+
+
+
+function getHouseCurrentChallenges($house_id) {
+	return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()), date("Y-m-d G:i:s",time()));
+}
+
+function getHouseChallenges($house_id, $start_time, $end_time) {
+	$sql = "SELECT * 
+	FROM challenge 
+	INNER JOIN challengeparticipant 
+	ON challenge.id=challengeparticipant.challenge_id 
+	AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
+	WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time > ? 
+	";
+
+	$query = $this->db->query($sql, array($house_id, $start_time, $end_time));
+	$challenges = $query->result();
+	$res = array();
+	foreach($challenges as $c) {
+		if(!isset($res[$c->user_id])) {
+			$res[$c->user_id] = array();
 		}
-
-	}
-	function quitChallenge($id) {
-		return $this->db->delete(Challenge_model::table_challenge_participant,
-			array(Challenge_model::col_cp_id=>$id));
+		$res[$c->user_id][] = $c;
 	}
 
-	function completeChallenge($id, $complete_time) {
-		$data = array('complete_time', $complete_time);
-		$this->db->where('id',$id);
-		$this->db->upate(Challenge_model::table_challenge_participant,
-			$data);
-	}
+	return $res;
+}
+function getHouseTomorrowChallenges($house_id) {
+	return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
+}
 
-	
+function getHouseCompletedChallenges($house_id) {
+	$sql = "SELECT challenge.* , count(challengeparticipant.id) as times
+	FROM challenge
+	INNER JOIN challengeparticipant
+	ON challenge.id=challengeparticipant.challenge_id
+	AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
+	WHERE challengeparticipant.complete_time > challengeparticipant.start_time
+	GROUP BY challengeparticipant.challenge_id";
 
-	function getHouseCurrentChallenges($house_id) {
-		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()), date("Y-m-d G:i:s",time()));
-	}
+	$query = $this->db->query($sql, array($house_id));
+	return $query->result();
+}
 
-	function getHouseChallenges($house_id, $start_time, $end_time) {
-		$sql = "SELECT * 
-		FROM challenge 
-		INNER JOIN challengeparticipant 
-		ON challenge.id=challengeparticipant.challenge_id 
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
-		WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time > ? 
-		";
+function getIndividualCurrentChallenges($user_id) {
+	return $this->getIndividualChallenges($user_id,date("Y-m-d G:i:s",time()),date("Y-m-d G:i:s",time()));
+}
 
-		$query = $this->db->query($sql, array($house_id, $start_time, $end_time));
-		$challenges = $query->result();
-		$res = array();
-		foreach($challenges as $c) {
-			if(!isset($res[$c->user_id])) {
-				$res[$c->user_id] = array();
-			}
-			$res[$c->user_id][] = $c;
-		}
-		
-		return $res;
-	}
-	function getHouseTomorrowChallenges($house_id) {
-		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
-	}
+function getIndividualChallenges($user_id, $start, $end) {
 
-	function getHouseCompletedChallenges($house_id) {
-		$sql = "SELECT challenge.* , count(challengeparticipant.id) as times
-		FROM challenge
-		INNER JOIN challengeparticipant
-		ON challenge.id=challengeparticipant.challenge_id
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
-		WHERE challengeparticipant.complete_time > challengeparticipant.start_time
-		GROUP BY challengeparticipant.challenge_id";
-		
-		$query = $this->db->query($sql, array($house_id));
-		return $query->result();
-	}
+	$sql = "SELECT *
+	FROM challenge
+	INNER JOIN challengeparticipant
+	ON challenge.id=challengeparticipant.challenge_id
+	AND challengeparticipant.user_id= ?
+	WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >=? 
+	GROUP BY challengeparticipant.challenge_id";
 
-	function getIndividualCurrentChallenges($user_id) {
-		return $this->getIndividualChallenges($user_id,date("Y-m-d G:i:s",time()),date("Y-m-d G:i:s",time()));
-	}
+	$query = $this->db->query($sql, array($user_id, $start, $end));
+	return $query->result();
+}
 
-	function getIndividualChallenges($user_id, $start, $end) {
-		
-		$sql = "SELECT *
-		FROM challenge
-		INNER JOIN challengeparticipant
-		ON challenge.id=challengeparticipant.challenge_id
-		AND challengeparticipant.user_id= ?
-		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >=? 
-		GROUP BY challengeparticipant.challenge_id";
+function logMessage($message) {
+	$data = array(
+		'message' => $message 
+		);
 
-		$query = $this->db->query($sql, array($user_id, $start, $end));
-		return $query->result();
-	}
+	$this->db->insert('log', $data); 
 
-	function logMessage($message) {
-		$data = array(
-			'message' => $message 
-			);
+}
 
-		$this->db->insert('log', $data); 
 
-	}
-
-	
 function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) {
 
 	$log = "updateActivityProgress-".$user_id."-".$start_time."-".$end_time;
@@ -177,26 +184,29 @@ function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) 
 		$data = $this->getIndividualChallenges($user_id, $start_time, $end_time);
 	}
 	foreach($data as $c) {
+		if($c->progress >=1 ) {
+			continue;
+		}
 		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
-
 		if($c->steps_value != 0 && $c->floor_value !=0) {
 			$progress = 0.5 * ($status->steps/$c->steps_value) +
 			0.5 * ($status->floors/$c->floor_value);
 
 			$progress = number_format($progress,2);
-			$this->updateProgress($c->id, $progress);
+			$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->steps_value, "steps", $c->thread_id);
 
 		} else if($c->steps_value != 0) {
 			$progress = number_format($status->steps/$c->steps_value,2);
-			$this->updateProgress($c->id, $progress);
+			$this->updateProgress($c->id, $progress, $c->start_time, $c->end_time, $c->steps_value, "steps", $c->thread_id);
 		} else if($c->floor_value != 0) {
 			$progress = number_format($status->floors/$c->floor_value,2);
-			$this->updateProgress($c->id, $progress);
+			$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
 
 		} else if ($c->sleep_value != 0) {
 			$value = $this->Activity_model->getSleepToday($user_id);
+
 			$progress = number_format($value->total_time/$c->sleep_value, 2);
-			$this->updateProgress($c->id, $progress);
+			$this->updateProgress($c->id, $progress, date("Y-m-d 07:00:00"),date("Y-m-d 07:00:00"), 0, "sleep", $c->thread_id);
 		} else if ($c->sleep_time != 0) {
 			$value = $this->Activity_model->getSleepStartTime($user_id);
 			if(empty($value)) {
@@ -204,14 +214,32 @@ function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) 
 			} else {
 				$progress = 1;
 			}
-			$this->updateProgress($c->id, $progress);
+			$this->updateProgress($c->id, $progress, date("Y-m-d 07:00:00"),date("Y-m-d 07:00:00"), 0, "sleep", $c->thread_id);
 		}
 	}
 }
 
-function updateProgress($cp_id, $progress) {
+function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold, $type, $thread_id) {
 	if($progress >= 1.0) {
-		$data = array('progress'=>1, 'complete_time'=>date("Y-m-d H:i:s"));
+		$cp = $this->loadChallengeParticipation($cp_id);
+		$ci =& get_instance();
+		$ci->load->model('User_model');
+		$ci->load->model('Forum_model');
+		$ci->load->model('Activity_model');
+		if($type == "sleep") {
+			$data = array('progress'=>1, 'complete_time'=>date("Y-m-d 07:00:00"));
+		}else {
+			$time = $this->Activity_model->getChallengeCompletionTime($cp->user_id, $start_time, $end_time, $thresh_hold, $type);
+			$data = array('progress'=>1, 'complete_time'=>$time);
+		}
+		if(empty($data)) {
+			$data = array('progress'=>1, 'complete_time'=>date("Y-m-d H:i:s"));
+		}
+		//post to forum
+		
+		$user = $this->User_model->loadUser($cp->user_id);
+		$message = $user->first_name." ".$user->last_name. " has completed this challenge.";// at ". $data['complete_time'].".";
+		$this->Forum_model->createPost($cp->user_id, $thread_id, $message);
 
 	} else {
 		$data = array('progress'=>$progress);
@@ -283,7 +311,7 @@ function getLearderboard() {
 	AND u.phantom = 0
 	AND u.staff = 0
 	GROUP BY u.id
-	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
+	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 50";
 	$query = $this->db->query($sql);
 	return $query->result();
 }

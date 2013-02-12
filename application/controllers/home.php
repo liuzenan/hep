@@ -44,9 +44,10 @@ class Home extends CI_Controller{
 		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
 		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($this->uid);
-		$time = date("Y-m-d G:i:s",time() - 60 * 60 * 24);	
-		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($this->uid, $time, $time);
-
+		$yesterday = date("Y-m-d G:i:s",time() - 60 * 60 * 24);	
+		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday, $yesterday);
+		$tomorrow = date("Y-m-d G:i:s",time() + 60 * 60 * 24);	
+		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow, $tomorrow);
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);

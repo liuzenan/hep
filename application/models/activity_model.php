@@ -287,8 +287,36 @@ class Activity_model extends CI_Model{
 		} catch (Exception $e) {
 
 		}
+	}
 
-
+	function getChallengeCompletionTime( $user_id, $start, $end, $threshold,$type) {
+		$sql = "SELECT y.activity_time,
+				       y.%s,
+				       y.user_id
+				FROM   (SELECT t.activity_time,
+				               t.%s,
+				               t.user_id,
+				               (SELECT Sum(x.%s)
+				                FROM   intradayactivity AS x
+				                WHERE  x.user_id = 48
+				                   AND x.activity_time <= ?
+				                   AND x.activity_time >= ?
+				                   AND x.activity_time <= t.activity_time
+				                   AND x.user_id = t.user_id) AS running_total
+				        FROM   intradayactivity AS t
+				         WHERE  t.activity_time <= ?
+           					AND t.activity_time >= ?
+				        ORDER  BY t.activity_time) AS y
+				WHERE  y.running_total > ?
+				ORDER  BY y.activity_time
+				LIMIT  1";
+		$sql = sprintf($sql, $type, $type, $type);
+		$result = $this->db->query($sql, array($user_id, $end, $start, $end, $start, $threshold));
+		if($result->num_rows()>0) {
+			return $result->row()->activity_time;
+		} else {
+			return $end;
+		}
 	}
 
 	function sync_activity($basedate, $period, $user_id=NULL, $keypair=NULL) {

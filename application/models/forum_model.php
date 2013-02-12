@@ -15,13 +15,16 @@ class Forum_model extends CI_Model{
 	}
 
 
-	function getChallengeForum() {
+	function getChallengeForum($user_id) {
+		$subs = $this->getSubscribedThread($user_id);
+
 
 		$sql = "SELECT t.*, p.*
 		FROM   forumthread AS t
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id > 0
+		AND t.id IN (".implode(",", $subs).")
 		AND t.tutor_only = 0
 		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
@@ -34,6 +37,8 @@ class Forum_model extends CI_Model{
 					$thread["challenge_id"] = $row->challenge_id;
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
+					$thread["subscribe"] = 1;
+					$thread["tutor_only"] = 0;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -51,6 +56,7 @@ class Forum_model extends CI_Model{
 					$uids[] = $row->commenter_id;
 				}
 			}
+			$res = array_reverse($res, true);
 			$res['uids'] = $uids;
 			return $res;
 		} else {
@@ -59,7 +65,17 @@ class Forum_model extends CI_Model{
 
 	}
 
-	function getGeneralForum() {
+	function getSubscribedThread($user_id) {
+		$sql2 = "SELECT DISTINCT thread_id FROM postsubscription WHERE user_id = ?";
+		$subscriptions = $this->db->query($sql2, array($user_id))->result();
+		$subs = array();
+		foreach($subscriptions as $s) {
+			$subs[] = $s->thread_id;
+		}
+		return $subs;
+	}
+
+	function getGeneralForum($user_id) {
 		$sql = "SELECT t.*, p.*
 		FROM   forumthread AS t
 		LEFT JOIN threadpost AS p
@@ -68,6 +84,10 @@ class Forum_model extends CI_Model{
 		AND t.tutor_only = 0
 		AND t.archived = 0 ORDER BY p.comment_time ASC";
 		$query = $this->db->query($sql);
+
+
+		$subs = $this->getSubscribedThread($user_id);
+
 		$uids = array();
 		if ($query->num_rows()>0) {
 			$res = array();
@@ -77,6 +97,8 @@ class Forum_model extends CI_Model{
 					$thread["challenge_id"] = $row->challenge_id;
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
+					$thread["subscribe"] = in_array($row->thread_id, $subs);
+					$thread["tutor_only"] = 0;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -94,6 +116,7 @@ class Forum_model extends CI_Model{
 					$uids[] = $row->commenter_id;
 				}
 			}
+			$res = array_reverse($res, true);
 			$res['uids'] = $uids;
 			return $res;
 		} else {
@@ -122,6 +145,7 @@ class Forum_model extends CI_Model{
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
+
 					$res[$row->id] = $thread;
 				}
 				if(!empty($row->commenter_id) && ($row->deleted == 0)) {
@@ -136,12 +160,15 @@ class Forum_model extends CI_Model{
 					$uids[] = $row->commenter_id;
 				}
 			}
+			$res = array_reverse($res, true);
+
 			$res['uids'] = $uids;
 			return $res;
 		} else {
 			return FALSE;
 		}
 	}
+
 
 	function loadThread($thread_id) {
 		$query = $this->db->get_where(Forum_model::table_thread, array('id' => $thread_id));
@@ -181,6 +208,13 @@ class Forum_model extends CI_Model{
 		$this->db->insert("postsubscription", $data);
 	}
 
+	function unsubscribe($user_id, $thread_id) {
+		$data = array(
+			'thread_id'=>$thread_id,
+			'user_id'=>$user_id);
+		$this->db->delete("postsubscription", $data);
+	}
+
 	function createThreadNotification($thread_id) {
 
 		$query = $this->db->query("SELECT * FROM postsubscription WHERE thread_id = " . $thread_id);
@@ -205,7 +239,44 @@ class Forum_model extends CI_Model{
 			'thread_id'=>$thread_id
 			);
 		$this->db->insert(Forum_model::table_post,$data);
+		$this->addNotification($thread_id, $commenter_id);
 		return $this->db->insert_id();
+	}
+
+	function addNotification($thread_id, $user_id) {
+		
+					# code...
+		$ci =& get_instance();
+		$ci->load->model('User_model');
+
+		$user = $this->User_model->loadUser($user_id);
+		$thread = $this->loadThread($thread_id);
+		
+		if (isset($user) && isset($thread)) {
+					# code...
+			$username = $user->first_name . " " . $user->last_name;
+			$title = $thread->message;
+			$description = $username . " post a new message at the thread: " . $title;
+
+			if($thread->tutor_only>0) {
+				$url = base_url() . "forum/tutor";
+
+			}else if($thread->challenge_id>0) {
+				$url = base_url() . "forum/challenge";
+			}else {
+				$url = base_url() . "forum/general";
+			}
+
+			$subscribers = $this->loadThreadSubscribers($thread_id);
+			if (count($subscribers)>0) {
+				foreach ($subscribers as $value) {
+					if ($value->user_id != $user_id) {	
+						$notification_id = $this->User_model->addNotification($value->user_id, $description, $url);
+					}
+				}
+			}
+		}
+		
 	}
 
 	function addSubscriptoin($thread_id, $user_id) {
