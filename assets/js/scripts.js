@@ -105,21 +105,22 @@ jQuery(document).ready(function($) {
 	$(".quitChallenge").click(function(event){
 		var currentBtn = $(this);
 		var cpId = currentBtn.data("cpId");
-		if(cpId){
-			$.ajax({
-				type:'POST',
-				url:base_url+'challenges/quitChallenge',
-				dataType:'json',
-				data:{
-					id:cpId,
-				}
-			}).done(function(msg){
-				console.log(msg);
-				alert(msg.message);
-				window.location.reload();
-			});
-		}
-	});
+		if(confirm("Are you sure to quit this challenge? All your progress so far will be dropped.")) {
+			if(cpId){
+				$.ajax({
+					type:'POST',
+					url:base_url+'challenges/quitChallenge',
+					dataType:'json',
+					data:{
+						id:cpId,
+					}
+				}).done(function(msg){
+					console.log(msg);
+					alert(msg.message);
+					window.location.reload();
+				});
+			}
+		}});
 
 	$(".subscribe-link").click(function(event){
 		var currentBtn = $(this);
