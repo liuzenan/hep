@@ -25,7 +25,7 @@ class Challenge_model extends CI_Model{
 	}
 
 	function loadJoinedCategory($user_id, $start_time, $end_time) {
-		$sql = "SELECT challenge.category 
+		$sql = "SELECT challenge.category, challenge.id as challenge_id, challengeparticipant.id as cp_id
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 

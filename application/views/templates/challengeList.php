@@ -20,7 +20,7 @@
 				</tbody>
 			</table>
 		</div>
-		<?php if(!empty($me_challenges)) {?>
+		<?php if( !empty($me_challenges) || !empty($me_challenges_yesterday) || !empty($me_challenges_tomorrow) ) {?>
 			<div class="current-challenge-list row-fluid">
 				<div class="span4 yesterday">
 					<div class="challenge-title">Yesterday</div>

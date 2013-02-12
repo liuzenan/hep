@@ -59,17 +59,31 @@ class Challenges extends CI_Controller {
 		$today = array(0=>0,1=>0,2=>0,3=>0);
 		$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
 
+		$todayJoined = array();
+		$cpIds = array();
 		foreach($joinedToday as $a) {
 			$today[$a->category]++;
+			$todayJoined[] = $a->challenge_id;
+			$cpIds[$a->challenge_id] = $a->cp_id;
 		}
+		$tomorrowJoined = array();
+		$cpIds2 = array();
+
 		foreach($joinedTomorrow as $b) {
 			$tomorrow[$b->category]++;
+			$tomorrowJoined[] = $b->challenge_id;
+			$cpIds2[$b->challenge_id] = $b->cp_id;
+
 		}
 
 		foreach($challenges as $c) {
 			$c->user_id = $this->uid;
 			$c->disabled_today = ($today[$c->category]>0);
 			$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
+			$c->joined_today = in_array($c->id, $todayJoined);
+			$c->joined_tomorrow = in_array($c->id, $tomorrowJoined);
+			$c->cp_id_today = empty($cpIds[$c->id])? -1: $cpIds[$c->id];
+			$c->cp_id_tomorrow = empty($cpIds2[$c->id])? -1:$cpIds2[$c->id];
 			
 		}
 		return $challenges;
@@ -166,7 +180,6 @@ class Challenges extends CI_Controller {
 					"message" => $invalid
 					);
 			} else {
-
 				$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->now, $this->today_end);
 				$msg = array(
 					"success" => true,

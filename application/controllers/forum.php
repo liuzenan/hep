@@ -36,9 +36,18 @@ class Forum extends CI_Controller {
 		//echo "<pre>"; print_r($data);echo "</pre><br>";
 		$this->loadView($data, "general");
 	}
-
+	public function tutor() {
+		$forums = $this->Forum_model->getTutorForum($this->uid);
+		$data['threads'] = $forums;
+		$data['users'] = 
+		count($data['threads']['uids'])>0
+		? $this->User_model->loadUsers($data['threads']['uids'])
+		: array();		unset($data['threads']['uids']);
+		$data['active'] = 'tutor_forum';
+		$this->loadView($data, "general");
+	}
 	public function data() {
-			$forums = $this->Forum_model->getGeneralForum($this->uid);
+		$forums = $this->Forum_model->getGeneralForum($this->uid);
 		$data['threads'] = $forums;
 		$data['users'] = 
 		count($data['threads']['uids'])>0
@@ -47,17 +56,7 @@ class Forum extends CI_Controller {
 		$data['active'] = 'general_forum';
 		echo "<pre>"; print_r($data);echo "</pre><br>";
 	}
-	public function tutor() {
-		$forums = $this->Forum_model->getTutorForum();
-		$data['threads'] = $forums;
-		$data['users'] = 
-		count($data['threads']['uids'])>0
-		? $this->User_model->loadUsers($data['threads']['uids'])
-		: array();		unset($data['threads']['uids']);
-		$data['active'] = 'tutor_forum';
-		echo "<pre>"; print_r($data);echo "</pre><br>";
-		$this->loadView($data, "challenge");
-	}
+	
 	
 
 	public function createThread(){
