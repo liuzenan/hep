@@ -4,17 +4,13 @@
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
-					<td class="stats-label">	
-						<strong>Total Challenges Completed:</strong>							
-					</td>
+					
 					<td class="stats-label middle-col">
-						<strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy icon-2x"></i>
+						<strong>Total Challenges Completed:  </strong><strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy icon-2x"></i>
 					</td>
+					
 					<td class="stats-label">
-						<strong>Challenges Completed on Average:</strong>
-					</td>
-					<td class="stats-label">
-						<strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group icon-2x"></i>
+						<strong>Challenges Completed on Average:  </strong><strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group icon-2x"></i>
 					</td>
 					
 				</tbody>
