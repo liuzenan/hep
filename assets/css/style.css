@@ -605,6 +605,10 @@ margin-bottom: 10px;
 	background: rgb(226,103,74);
 }
 
+.current-challenge-list a{
+	text-decoration: none !important;
+}
+
 .current-challenge-list .tomorrow .challengeItem.box{
 	background: rgb(154,203,154);
 }
@@ -618,6 +622,9 @@ margin-bottom: 10px;
 	line-height: 50px;
 }
 
+.modal table tbody{
+	font-size: 12px;
+}
 
 .challengeItem.box .quitchallengebtn{
 	margin: 10px;

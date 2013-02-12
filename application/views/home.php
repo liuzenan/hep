@@ -31,8 +31,8 @@
 		    			<td><?php echo $challenge->description ?></td>
 		    			<td><?php echo $challenge->points ?></td>
 		    			<td>			
-		    				<button class="btn joinChallengeNow" data-challenge-id="<?php echo $challenge->id ?>" data-user-id="<?php echo $challenge->user_id ?>" <?php if($challenge->disabled_today) echo "disabled" ?>>Join Today</button>
-							<button class="btn joinChallengeTomorrow" data-challenge-id="<?php echo $challenge->id ?>" data-user-id="<?php echo $challenge->user_id ?>" <?php if($challenge->disabled_tomorrow) echo "disabled" ?>>Join Tomorrow</button>
+		    				<button class="btn btn-link joinChallengeNow" data-challenge-id="<?php echo $challenge->id ?>" data-user-id="<?php echo $challenge->user_id ?>" <?php if($challenge->disabled_today) echo "disabled" ?>>Join Today</button>
+							&nbsp;|&nbsp;<button class="btn btn-link joinChallengeTomorrow" data-challenge-id="<?php echo $challenge->id ?>" data-user-id="<?php echo $challenge->user_id ?>" <?php if($challenge->disabled_tomorrow) echo "disabled" ?>>Join Tomorrow</button>
 						</td>
 		    		</tr>   				
     			<?php endforeach ?>

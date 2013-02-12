@@ -42,7 +42,7 @@
 				<div class="span4 today">
 					<div class="challenge-title">Today</div>
 			<?php foreach($me_challenges as $challenge){ ?>
-			<a href="javascript:void(0);">
+			<a href="#myModal" role="button" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $challenge->description ?>"><?php echo $challenge->title ?></div>
@@ -57,7 +57,7 @@
 				<div class="span4 tomorrow">
 					<div class="challenge-title">Tomorrow</div>
 			<?php foreach($me_challenges_tomorrow as $challenge){ ?>
-			<a href="javascript:void(0);">
+			<a href="#myModal" role="button" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $challenge->description ?>"><?php echo $challenge->title ?></div>
