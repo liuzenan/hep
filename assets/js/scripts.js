@@ -32,6 +32,8 @@ jQuery(document).ready(function($) {
 
 	$('.challengeTitleTooltip').tooltip();
 
+	$('.my-badges').tooltip();
+
 	$("#newThread").click(function(e){
 		console.log("newThread");
 		e.preventDefault();
@@ -195,6 +197,61 @@ jQuery(document).ready(function($) {
 		} else {
 			current.text("Show all " + current.data("comments") + " comments");
 		}
+	});
+
+	$(".expandbtn").click(function(event){
+		
+		var expandable = $(this).parent().parent().find(".expandable");
+		var heights, maxheight;
+		
+		if ($(this).children().hasClass("icon-chevron-down")) {
+			 heights = expandable.children().map(function(){
+							return $(this).height();
+						}).get();
+
+			maxheight = Math.max.apply(null, heights);
+			expandable.height(maxheight);
+			$(this).children().removeClass("icon-chevron-down");
+			$(this).children().addClass("icon-chevron-up");
+			
+		} else {
+			$(this).children().removeClass("icon-chevron-up");
+			$(this).children().addClass("icon-chevron-down");
+			expandable.height(220);
+		}
+
+		expandable.toggleClass("expand");
+		
+	});
+
+	$(".myactivity .current-challenges").mouseenter(function(event){
+		var button = $(this).find(".expandbtn");
+		var expandable = button.parent().parent().find(".expandable");
+		if (button.children().hasClass("icon-chevron-down")) {
+			 heights = expandable.children().map(function(){
+							return $(this).height();
+						}).get();
+
+			maxheight = Math.max.apply(null, heights);
+			expandable.height(maxheight);
+			button.children().removeClass("icon-chevron-down");
+			button.children().addClass("icon-chevron-up");
+			
+		}
+
+		expandable.addClass("expand");
+	});
+
+	$(".myactivity .current-challenges").mouseleave(function(event){
+		var button = $(this).find(".expandbtn");
+		var expandable = button.parent().parent().find(".expandable");
+		if (button.children().hasClass("icon-chevron-up")) {
+			button.children().removeClass("icon-chevron-up");
+			button.children().addClass("icon-chevron-down");
+			expandable.height(220);
+		}
+
+		expandable.removeClass("expand");
 	});
 
 });

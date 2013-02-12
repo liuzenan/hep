@@ -585,9 +585,30 @@ margin-bottom: 10px;
 	float: left;
 }
 
+.myactivity .current-challenges .current-challenge-list{
+	position: relative;
+	height: 220px;
+	overflow: hidden;
+	transition: height 0.6s;
+	-moz-transition: height 0.6s; /* Firefox 4 */
+	-webkit-transition: height 0.6s; /* Safari and Chrome */
+	-o-transition: height 0.6s; /* Opera */
+}
+
+.expandable.expand{
+	overflow: visible !important;
+}
+
+.section-title a{
+	text-decoration: none;
+	color: white;
+}
+
+
 .current-challenge-list .challenge-title{
 	text-align: center;
 	font-weight: 700;
+	margin-bottom: 20px;
 }
 
 .challengeItem.media.well .media-body p{

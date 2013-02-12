@@ -1,6 +1,6 @@
 <div class="row-fluid current-challenges">
 	<div class="span12">
-		<p class="section-title">Current Challenges</p>
+		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="expandbtn pull-right"><i class="icon-chevron-down icon-large"></i></a></p>
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
@@ -21,7 +21,7 @@
 			</table>
 		</div>
 		<?php if( !empty($me_challenges) || !empty($me_challenges_yesterday) || !empty($me_challenges_tomorrow) ) {?>
-			<div class="current-challenge-list row-fluid">
+			<div class="current-challenge-list row-fluid expandable">
 				<div class="span4 yesterday">
 					<div class="challenge-title">Yesterday</div>
 			<?php foreach($me_challenges_yesterday as $challenge){ ?>
