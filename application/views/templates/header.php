@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/datepicker.css">
     <link rel="stylesheet" href="/assets/css/timepicker.css">
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/assets/js/jquery-1.9.1.min.js"></script>
     <script src="/assets/js/highcharts.js"></script>
   </head>
   <body>

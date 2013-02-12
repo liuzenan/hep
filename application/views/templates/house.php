@@ -7,7 +7,7 @@
 					<div class="span1 leaderboard-house-rank"><?php echo $n ?></div>
 					<div class="span3 leaderboard-house-content">
 						<strong>House <?php echo $row->house_name ?></strong><br>
-						<small><?php echo $row->score ?> points</small><br>
+						<strong class="muted"><?php echo $row->score ?> points</strong><br>
 						<small>Total Member: <?php echo $row->user_num ?></small><br>
 						<small>Average: <?php echo $row->score/$row->user_num ?> points</small>
 					</div>

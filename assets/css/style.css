@@ -238,7 +238,10 @@ span.activityIcon.floors{
 }
 
 .challengeItem.box .challengeContainer p{
-	font-size: 11px;
+	font-size: 12px;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .challengeItem.box .challengeControlBtns{
@@ -472,10 +475,10 @@ div.challenge-stats{
 	margin-bottom: 0;
 }
 
-.media-list.current-challenge-list{
+/*.media-list.current-challenge-list{
 	width: 96%;
 	margin: 0 2%;
-}
+}*/
 
 .house-people{
 	background: #fcfcfc;
@@ -505,12 +508,17 @@ div.challenge-stats{
 }
 
 .house-pepople-badges>img{
-	width: 20%;
+	width: 10%;
+	height: auto;
+}
+
+.house-people-tomorrow>img{
+	width: 15%;
 	height: auto;
 }
 
 .house-people-current>img{
-	width: 10%;
+	width: 15%;
 	height: auto;
 }
 
@@ -542,6 +550,8 @@ margin-bottom: 10px;
 .leaderboard-house-rank{
 	padding: 1em 0;
 	text-align: center;
+	font-size: 2em;
+	font-weight: 700;
 }
 .leaderboard-house-content{
 	padding: 1em 0;
@@ -560,15 +570,19 @@ margin-bottom: 10px;
 	font-weight: 700;
 }
 
+.challengeItem.media.well .media-body p{
+	font-size: 11px;
+	line-height: 1em;
+}
 .current-challenge-list .challengeItem.box{
-	padding: 10px;
+/*	padding: 10px;*/
 	margin-bottom: 10px;
 	border-radius: 1em;
 	color: white;
 }
 
 .current-challenge-list .challengeItem.box .progress{
-	margin: 10px 10px 0 10px;
+	margin: 10px;
 }
 
 .current-challenge-list .challengeItem.box h4{
@@ -580,9 +594,36 @@ margin-bottom: 10px;
 }
 
 .current-challenge-list .today .challengeItem.box{
-	background: rgb(225,204,102);
+	background: rgb(226,103,74);
 }
 
 .current-challenge-list .tomorrow .challengeItem.box{
 	background: rgb(154,203,154);
+}
+
+.challengeItem.box .quitchallengebtn{
+	margin: 10px;
+}
+
+#challenges .challenge .my .challengeItem.box{
+	height: auto;
+	width: 100%;
+	margin-left: 0;
+	float: none;
+}
+
+#challenges .challenge .steps .challengeItem.box{
+	background:rgb(204,102,153);
+}
+
+#challenges .challenge .floors .challengeItem.box{
+	background:rgb(51,153,102);
+}
+
+#challenges .challenge .sleep .challengeItem.box{
+	background:rgb(51,204,204);
+}
+
+#challenges .challenge .time-based .challengeItem.box{
+	background:rgb(153,102,153);
 }

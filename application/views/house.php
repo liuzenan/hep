@@ -12,10 +12,11 @@
 							</table>
 	<p class="section-title">House Members</p>
 		<div class="row-fluid myhouse">
+			<?php if (!empty($data)): ?>
 			<?php foreach ($data as $value): ?>
 				<div class="house-people clearfix">
 					<div class="house-people-pic">
-						<img src="<?php echo $value['completed']->avatar ?>" alt="">
+						<img src="<?php if(!empty($value['completed'])) echo $value['completed']->avatar ?>" alt="">
 					</div>
 					<div class="house-people-content">
 						
@@ -24,43 +25,58 @@
 								<div class="span2">
 									<a href="#">
 								<strong>
-									<?php echo $value['completed']->firstname . ' ' . $value['completed']->lastname; ?>
+									<?php if(!empty($value['completed'])) echo $value['completed']->firstname . ' ' . $value['completed']->lastname; ?>
 								</strong>
 									</a>
 								</div>
-								<div class="span5">
-									<strong class="muted">Badges</strong>
-								</div>
-								<div class="span5">
+								<div class="span3">
 									<strong class="muted">
-									Current Challenges
+										<small>Today's Challenges</small>
 								</strong>
+								</div>
+								<div class="span3">
+									<strong class="muted">
+										<small>Tomorrow's Challenges</small>
+									
+								</strong>
+								</div>
+								<div class="span4">
+									<strong class="muted"><small>Badges</small></strong>
 								</div>
 							</div>
 							
 						</div>
 						<div class="row-fluid house-people-stats">
 							<div class="span2">
-								<small class="muted">completed <?php echo $value['completed']->score ?> challenges</small>
+								<small class="muted">completed <?php if(!empty($value['completed'])) echo $value['completed']->score ?> challenges</small>
 							</div>
-							<div class="span5 house-pepople-badges">
-								<?php if (!empty($value['badge'])): ?>
-									<?php foreach ($value['badge'] as $badge): ?>
-										<img src="<?php echo $badge->badge_pic ?>" alt="">
-									<?php endforeach ?>
-								<?php endif ?>
-							</div>
-							<div class="span5 house-people-current">
+							<div class="span3 house-people-current">
 								<?php if (!empty($value['current'])): ?>
 									<?php foreach ($value['current'] as $current): ?>
 									<img src="<?php echo $current->badge_pic ?>" alt="">
 									<?php endforeach ?>
 								<?php endif ?>
 							</div>
+							<div class="span3 house-people-tomorrow">
+								<?php if (!empty($value['tomorrow'])): ?>
+									<?php foreach ($value['tomorrow'] as $tomorrow): ?>
+									<img src="<?php echo $current->badge_pic ?>" alt="">
+									<?php endforeach ?>
+								<?php endif ?>
+							</div>
+							<div class="span4 house-pepople-badges">
+								<?php if (!empty($value['badge'])): ?>
+									<?php foreach ($value['badge'] as $badge): ?>
+										<img src="<?php echo $badge->badge_pic ?>" alt="">
+									<?php endforeach ?>
+								<?php endif ?>
+							</div>
+
 						</div>
 					</div>
 				</div>
-			<?php endforeach ?>
+			<?php endforeach ?>				
+			<?php endif ?>
 		</div>
 	</div>
 </div>

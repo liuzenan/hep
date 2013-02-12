@@ -9,7 +9,6 @@
 							<div class="thread-comment-content clearfix">
 								<textarea name="message" class="required input-block-level" rows="1" id="description"></textarea>
 								<button id="newThread" class="btn btn-primary pull-right">Start New Thread</button>
-
 							</div>
 						</div>
 					</fieldset>
@@ -25,6 +24,10 @@
 				<div class="thread-content">
 					<div>
 						<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>
+						&middot;
+						<small><span><?php echo $users[$thread["creator_id"]]->first_name . ' ' . $users[$thread["creator_id"]]->last_name; ?></span></small>
+						&middot;
+						<small><span data-livestamp="<?php echo strtotime((string) $thread["create_time"]) - 60; ?>"></span></small>
 					<?php if ($thread["subscribe"]==0): ?>
 						<a href="#" class="subscribe-link pull-right"><small>Subscribe</small></a>
 					<?php endif ?>

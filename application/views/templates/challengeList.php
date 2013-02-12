@@ -4,26 +4,16 @@
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
-					<td class="stats-label"><strong><span><?php echo $me_completed ?></span><br>Completed by me</strong></td>
-					<td class="stats-count middle-col">
-				<?php for ($i=0; $i < floor($me_completed); $i++) { ?>
-					<i class="icon-star"></i>
-				<?php } ?>
-				<?php if (floor($me_completed)!=$me_completed): ?>
-					<i class="icon-star-half"></i>
-				<?php endif ?>										
+					<td class="stats-label"><strong><span><?php echo $me_completed ?></span></strong></td>
+					<td class="stats-label middle-col">	
+					<strong>Completed by me</strong>							
 					</td>
 					<td class="stats-label">
-						<strong><span><?php echo $avg_completed ?></span><br>Completed by average</strong>
+						<strong><span><?php echo $avg_completed ?></span></strong>
 					</td>
-									<td class="stats-count">
-				<?php for ($i=0; $i < floor($avg_completed); $i++) { ?>
-					<i class="icon-star"></i>
-				<?php } ?>
-				<?php if (floor($avg_completed)!=$avg_completed): ?>
-					<i class="icon-star-half"></i>
-				<?php endif ?>											
-									</td>
+					<td class="stats-label">
+						<strong>Completed by average</strong>
+					</td>
 								</tbody>
 							</table>
 		</div>
@@ -52,7 +42,7 @@
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle"><?php echo $challenge->title ?></div>
-						<div class="progress">
+						<div class="progress progress-warning progress-striped">
 							<div class="bar" style="width:<?php echo floor($challenge->progress*100) ?>%"></div>
 						</div>						
 					</div>

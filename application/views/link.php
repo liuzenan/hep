@@ -4,7 +4,7 @@
     <title>Fitbit App</title>
     <!-- Bootstrap -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/assets/js/jquery-1.9.1.min.js"></script>
   </head>
   <body>
   	<div class="container">
