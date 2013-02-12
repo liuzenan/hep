@@ -626,6 +626,10 @@ margin-bottom: 10px;
 	font-size: 12px;
 }
 
+.modal table tbody .btn-link:disabled{
+	display: none;
+}
+
 .challengeItem.box .quitchallengebtn{
 	margin: 10px;
 }
@@ -651,4 +655,13 @@ margin-bottom: 10px;
 
 #challenges .challenge .time-based .challengeItem.box{
 	background:rgb(153,102,153);
+}
+
+.badgelist a{
+	float: left;
+}
+.badgelist a img{
+	display: block;
+	width: 100px;
+	height: auto;
 }
