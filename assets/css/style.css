@@ -64,19 +64,11 @@ table.activity-stats{
 }
 
 td.activity-stats, td.stats-label, td.stats-count{
-	text-align: center;
+	text-align: center !important;
 	vertical-align: middle;
 	color:#666;
 	border-top: none;
-	width: 25%;
-}
-
-td.stats-label:nth-child(2n+1){
-	text-align: right;
-}
-
-td.stats-label:nth-child(2n){
-	text-align: left;
+	width: 50%;
 }
 
 td.middle-col{
