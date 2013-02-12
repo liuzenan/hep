@@ -186,13 +186,15 @@ jQuery(document).ready(function($) {
 
 	$(".thread-content .showmore").click(function(event){
 		var current = $(this);
+
+		$(this).parent().parent().children(".full-content").toggleClass("hide");
+		$(this).parent().parent().children(".collapsed-content").toggleClass("hide");
+
 		if (current.text()!="Show less comments") {
 			current.text("Show less comments");
 		} else {
-			current.text("Show all" + current.data("comments") + "comments");
+			current.text("Show all " + current.data("comments") + " comments");
 		}
-		$(this).parent().children(".full-content").toggleClass("hide");
-		$(this).parent().children(".collapsed-content").toggleClass("hide");
 	});
 
 });

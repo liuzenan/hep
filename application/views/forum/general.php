@@ -36,22 +36,18 @@
 					<?php endif ?>
 					</div>
 
+				<div class="thread-comments-container">
 					<?php if (!empty($thread["comments"])): ?>
-					<?php foreach ($thread["comments"] as $comment_id => $comment): ?>
-					<div class="clearfix thread-comment">
-						<div class="thread-commment-pic">
-							<img src="<?php echo $users[$comment['commenter_id']]->profile_pic; ?>" width="36" height="36"/>
-						</div>
-						<div class="thread-comment-content">
-							<a href="#"><strong><?php echo htmlentities($users[$comment['commenter_id']]->first_name)." ".htmlentities($users[$comment['commenter_id']]->last_name); ?></strong></a>
-							<span><?php echo $comment['comment']; ?></span>		
-							<div class="muted">
-								<small><span data-livestamp="<?php echo strtotime((string) $comment['comment_time']) - 60 ?>"></span></small>
-							</div>
-						</div>
+					<small><a class="show-button showmore <?php if(count($thread["comments"])<=3) echo "hide"; ?>" data-comments="<?php echo count($thread['comments']); ?>" href="javascript:void(0);">Show all <?php echo count($thread['comments']) ?> comments</a></small>
+					<div class="collapsed-content <?php if(count($thread["comments"])<=3) echo "hide"; ?>">
+						<?php $data = array("thread"=>$thread); $this->load->view("forum/collapsedItem", $data) ?>						
 					</div>
-				<?php endforeach ?>
-			<?php endif ?>	
+					<div class="full-content <?php if(count($thread["comments"])>3) echo "hide"; ?>">
+						<?php $data = array("thread"=>$thread); $this->load->view("forum/fullItem", $data) ?>
+					</div>
+					<?php endif ?>						
+				</div>
+				
 			<div class="row-fluid">
 				<div class="span12">
 					<div class="clearfix thread-comment">

@@ -21,7 +21,7 @@
 				</div>
 				<div class="thread-comments-container">
 					<?php if (!empty($thread["comments"])): ?>
-					<a class="show-button showmore <?php if(count($thread["comments"])<=3) echo "hide"; ?>" data-comments="<?php echo count($thread['comments']) ?>" href="javascript:(void);">Show all <?php echo count($thread['comments']) ?> comments</a>
+					<small><a class="show-button showmore <?php if(count($thread["comments"])<=3) echo "hide"; ?>" data-comments="<?php echo count($thread['comments']); ?>" href="javascript:void(0);">Show all <?php echo count($thread['comments']) ?> comments</a></small>
 					<div class="collapsed-content <?php if(count($thread["comments"])<=3) echo "hide"; ?>">
 						<?php $data = array("thread"=>$thread); $this->load->view("forum/collapsedItem", $data) ?>						
 					</div>
