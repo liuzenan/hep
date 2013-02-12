@@ -10,7 +10,7 @@
 </div>
 
 <!-- Modal -->
-<div id="challengeToday" class="modal hide fade tomorrow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="challengeToday" class="modal hide fade today" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <h3 id="myModalLabel">Change/Drop Challenges</h3>
   </div>
