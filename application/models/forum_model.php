@@ -17,7 +17,9 @@ class Forum_model extends CI_Model{
 
 	function getChallengeForum($user_id) {
 		$subs = $this->getSubscribedThread($user_id);
-
+		if(count($subs)==0) {
+			return FALSE;
+		}
 
 		$sql = "SELECT t.*, p.*
 		FROM   forumthread AS t
@@ -98,6 +100,8 @@ class Forum_model extends CI_Model{
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
 					$thread["subscribe"] = in_array($row->thread_id, $subs);
+					$thread["creator_id"] = $row->creator_id;
+					$thread["create_time"] = $row->create_time;
 					$thread["tutor_only"] = 0;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
@@ -142,6 +146,8 @@ class Forum_model extends CI_Model{
 					$thread["challenge_id"] = $row->challenge_id;
 					$thread["title"]= $row->message;
 					$thread["thread_id"] = $row->id;
+					$thread["creator_id"] = $row->creator_id;
+					$thread["create_time"] = $row->create_time;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}

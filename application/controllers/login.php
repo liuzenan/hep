@@ -168,25 +168,7 @@ class Login extends CI_Controller{
 
 
 	}
-
-	private function setFeeds(){
-		if($this->session->userdata('user_id')){
-
-			//subscribe to himself
-			$user_id = $this->session->userdata('user_id');
-			$sql = "INSERT INTO Subscription(user_id, subscriber_id)
-			VALUES (" . $user_id . ", " . $user_id .")";
-			$this->db->query($sql);
-
-			//subscribe to system notifications
-			$sql = "INSERT INTO Subscription(user_id, subscriber_id)
-			VALUES (" . $user_id . ", 0)";
-			$this->db->query($sql);
-		}else{
-			echo 'something was wrong';
-		}
-	}
-
+	
 	private function initPosts(){
 		if($this->session->userdata('user_id')){
 

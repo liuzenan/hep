@@ -119,6 +119,43 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	$(".subscribe-link").click(function(event){
+		var currentBtn = $(this);
+		var threadId = currentBtn.data("threadId");
+		console.log("threadId");
+		if(threadId){
+			$.ajax({
+				type:'POST',
+				url:base_url+'forum/subscribe',
+				dataType:'json',
+				data:{
+					thread_id:threadId,
+				}
+			}).done(function(msg){
+				console.log(msg);
+				window.location.reload();
+			});
+		}
+	});
+	$(".unsubscribe-link").click(function(event){
+		var currentBtn = $(this);
+		var threadId = currentBtn.data("threadId");
+		console.log("threadId");
+		if(threadId){
+			$.ajax({
+				type:'POST',
+				url:base_url+'forum/unsubscribe',
+				dataType:'json',
+				data:{
+					thread_id:threadId,
+				}
+			}).done(function(msg){
+				console.log(msg);
+				window.location.reload();
+			});
+		}
+	});
+
 });
 
 //limit text

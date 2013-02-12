@@ -2,8 +2,9 @@
 
 class Mail_model extends CI_Model{
 
-	const HepAccount = 'hep@comp.nus.edu.sg';
-	const HepName = 'Health Extended Program';
+	//const HepAccount = 'hepnusmedical@gmail.com';
+	const HepAccount = 'hep-support@googlegroup.com';
+	const HepName = 'Health Enhancement Program';
 	const TitleBadgeEarned = 'Congrats for earning %s badge!';
 	const TitleDailyReport = 'HEP Daily Report';
 
@@ -20,6 +21,17 @@ class Mail_model extends CI_Model{
 		parent::__construct();
 		$this->load->library('email');
 		$config['mailtype'] = 'html';
+		/*
+		$config = Array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.googlemail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'hepnusmedical@gmail.com',
+			'smtp_pass' => 'hepsupport',
+			'mailtype'  => 'html', 
+			'charset'   => 'iso-8859-1'
+			);
+			*/
 		$this->email->initialize($config);	
 	}
 
@@ -58,7 +70,8 @@ class Mail_model extends CI_Model{
 
 	private function loadData($user_id, $user) {
 		$daily = "Good Morning %s, <br><br>
-		Yesterday you walked %d steps, climbed %d floors, slept %d hours and burnt %d calories. You had %d challenges yesterday and you completed %d of them.<br>
+		Yesterday you walked %d steps, climbed %d floors, slept %d hours and burnt %d calories. You had %d challenges yesterday and you completed %d of them.
+		Now you had completed %d challenges in total.<br>
 		
 		<br><u>Yesterday's Completed Challenges</u>: <br>
 		%s
@@ -92,9 +105,9 @@ class Mail_model extends CI_Model{
 
 		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($user_id);
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($user_id);
-		$time = date("Y-m-d G:i:s",time() - 2*60 * 60 * 24);	
+		$time = date("Y-m-d ",time() - 60 * 60 * 24). " 23:59:59";	
 		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($user_id, $time, $time);
-		$tomorrow = date("Y-m-d G:i:s",time() - 60 * 60 * 24);	
+		$tomorrow = date("Y-m-d G:i:s",time() + 60 * 60 * 24);	
 		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($user_id, $tomorrow, $tomorrow);
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
@@ -115,13 +128,13 @@ class Mail_model extends CI_Model{
 			}
 		}
 		$titlesX="";
-		foreach($data['me_challenges_yesterday'] as $c) {
+		foreach($data['me_challenges'] as $c) {
 			$titlesX .= '<b>'.$c->title.'</b><br>';
 			$titlesX .= '<i>'.$c->description.'</i><br><br>';
 			
 		}
 		$data['msg'] = sprintf($daily, $user->first_name." ".$user->last_name, $data['me_yesterday']->steps, $data['me_yesterday']->floors, number_format($data['me_sleep_yesterday']->total_time,2),
-		$data['me_yesterday']->calories, count($data['me_challenges_yesterday']), $count, $titlesY, $titlesF, count($data['me_challenges']), $titlesX);
+		$data['me_yesterday']->calories, count($data['me_challenges_yesterday']), $count, $data['me_completed'], $titlesY, $titlesF, count($data['me_challenges']), $titlesX);
 		return $data;
 	}
 
@@ -137,7 +150,7 @@ class Mail_model extends CI_Model{
 		$u = $this->User_model->loadUser($user_id);
 		if($u->badge_email_unsub == 0) {
 			$data = $this->loadData($user_id, $u);
-			echo "<pre>"; print_r($data);echo "</pre><br>";
+			//echo "<pre>"; print_r($data);echo "</pre><br>";
 
 			//$content = 
 			$link = sprintf(base_url(). "mail/unsubDailyNotification/%d", $user_id);

@@ -24,7 +24,6 @@ class Home extends CI_Controller{
 		$data['active'] = 'home';
 		//update progress
 		//$this->Challenge_model->updateActivityProgress($this->uid);
-
 		$this->loadUserData($this->uid, $data);
 		$this->loadActivityData($this->uid, $data);
 
@@ -44,7 +43,7 @@ class Home extends CI_Controller{
 		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
 		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($this->uid);
-		$yesterday = date("Y-m-d G:i:s",time() - 60 * 60 * 24);	
+		$yesterday = date("Y-m-d ",time() - 60 * 60 * 24)." 23:59:59";	
 		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday, $yesterday);
 		$tomorrow = date("Y-m-d G:i:s",time() + 60 * 60 * 24);	
 		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow, $tomorrow);
