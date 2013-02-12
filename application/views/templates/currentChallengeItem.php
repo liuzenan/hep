@@ -7,7 +7,7 @@
 							<div class="bar" style="width:<?php echo floor($progress*100) ?>%"></div>
 						</div>			
 						<div class="quitchallengebtn">
-							<button class="btn quitChallenge" data-cp-id="<?php echo $id ?>">Quit challenge</button>
+							<button class="btn quitChallenge" data-cp-id="<?php echo $id ?>">Quit Challenge</button>
 						</div>									
 					</div>
 				</div>
