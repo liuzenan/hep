@@ -622,6 +622,9 @@ margin-bottom: 10px;
 	line-height: 50px;
 }
 
+.modal table tbody{
+	font-size: 12px;
+}
 
 .challengeItem.box .quitchallengebtn{
 	margin: 10px;

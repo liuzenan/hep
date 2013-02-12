@@ -105,7 +105,9 @@ jQuery(document).ready(function($) {
 	$(".quitChallenge").click(function(event){
 		var currentBtn = $(this);
 		var cpId = currentBtn.data("cpId");
-		if(confirm("Are you sure to quit this challenge? All your progress so far will be dropped.")) {
+		var quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.");
+	
+		if(quit) {
 			if(cpId){
 				$.ajax({
 					type:'POST',
