@@ -210,13 +210,14 @@ span.activityIcon.floors{
 	padding-bottom: 0;
 }
 
-.challenge .challengeItem.box{
-	width: 250px;
-	height: 250px;
-	float: left;
-	margin-right: 10px;
-	margin-bottom: 10px;
+.challenge .challengeItem.box {
+    width: 240px;
+    height: 240px;
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
 }
+
 
 .challengeItem.box .challengeContainer{
 	width: 100%;
@@ -228,13 +229,12 @@ span.activityIcon.floors{
 .challengeItem.box .challengeContainer{
 	text-align: center;
 	position: relative;
-	background-color: rgb(51,153,204);
 }
 
 .challengeItem.box .challengeTitle{
 	padding-top: 15px;
 	font-family: "Grandesign Neue Serif", serif;
-	font-size: 1.5em;
+	font-size: 1.3em;
 }
 
 .challengeItem.box .challengeContainer p{
@@ -553,4 +553,36 @@ margin-bottom: 10px;
 .leaderboard-profile-pic img{
 	display: block;
 	float: left;
+}
+
+.current-challenge-list .challenge-title{
+	text-align: center;
+	font-weight: 700;
+}
+
+.current-challenge-list .challengeItem.box{
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 1em;
+	color: white;
+}
+
+.current-challenge-list .challengeItem.box .progress{
+	margin: 10px 10px 0 10px;
+}
+
+.current-challenge-list .challengeItem.box h4{
+	opacity: 0.6;
+}
+
+.current-challenge-list .yesterday .challengeItem.box{
+	background: rgb(226,103,74);
+}
+
+.current-challenge-list .today .challengeItem.box{
+	background: rgb(225,204,102);
+}
+
+.current-challenge-list .tomorrow .challengeItem.box{
+	background: rgb(154,203,154);
 }

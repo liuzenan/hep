@@ -5,8 +5,6 @@
 	<div class="quitchallengebtn">
 		<button class="btn quitChallenge" data-cp-id="<?php echo $id ?>">Quit challenge</button>
 	</div>
-	<br>
-		<a href="#"><small>View discussion</small></a>
 	</div>
 	<div class="media-body">
 		<h4 class="media-heading"><?php echo $title ?></h4>
