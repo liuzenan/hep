@@ -68,7 +68,7 @@ class Activity_model extends CI_Model{
 	function getAverageActivityToday(){
 		$today = date("Y-m-d");
 		//get activities data
-		$sql = "SELECT avg(a.steps) AS avg_steps, avg(a.floors) AS avg_floors, avg(a.distance) AS avg_distance, avg(a.calories) as avg_calories
+		$sql = "SELECT ROUND(avg(a.steps),0) AS avg_steps, ROUND(avg(a.floors),0) AS avg_floors, ROUND(avg(a.distance),0) AS avg_distance, ROUND(avg(a.calories),0) as avg_calories
 		FROM activity AS a
 		WHERE a.date=? AND (a.steps>0 OR a.floors>0 OR a.distance>0)";
 		$query = $this->db->query($sql, array($today));

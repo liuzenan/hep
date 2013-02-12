@@ -8,6 +8,7 @@ class Home extends CI_Controller{
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
+			$this->load->library('ga_api');
 		}
 	}
 	

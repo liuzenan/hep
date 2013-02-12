@@ -15,26 +15,31 @@ class Mail_model extends CI_Model{
 	<title>HEP Email</title>
 	</head>
 	<body>';
-	const Footer = '</body>
+	const Footer = '<br><br>Happy exercise!<br>
+	HEP Team<br>--<br></body>
 	</html>';
 	function __construct(){
 		parent::__construct();
 		$this->load->library('email');
 		$config['mailtype'] = 'html';
-		/*
-		$config = Array(
-			'protocol' => 'smtp',
-			'smtp_host' => 'ssl://smtp.googlemail.com',
-			'smtp_port' => 465,
-			'smtp_user' => 'hepnusmedical@gmail.com',
-			'smtp_pass' => 'hepsupport',
-			'mailtype'  => 'html', 
-			'charset'   => 'iso-8859-1'
-			);
-			*/
+
 		$this->email->initialize($config);	
 	}
 
+	function sendChallengeCompletionMessage($user, $title, $time) {
+		if($user->challenge_email_unsub == 0) {
+			$message = "Hello %s, <br><br>
+			Congradulation! You just completed the challenge %s at %s.<br><br><br>
+			";
+			$msg = sprintf($message, $user->first_name." ".$user->last_name, $title, $time);
+			$link = sprintf(base_url(). "mail/unsubChallengeNotification/%d", $user->id);
+
+			$msg .= sprintf('If you don\'t want to receive this message any more, <a href="%s">you can unsubscribe</a>.', $link);
+
+			$this->send("HEP Challenge Completed", $msg, $user->email);
+		}
+
+	}
 	function sendBadgeEarnedMessage($user_id, $badge_id) {
 		$u = $this->User_model->loadUser($user_id);
 		if($u->badge_email_unsub == 0) {
@@ -72,7 +77,7 @@ class Mail_model extends CI_Model{
 		$daily = "Good Morning %s, <br><br>
 		Yesterday you walked %d steps, climbed %d floors, slept %d hours and burnt %d calories. You had %d challenges yesterday and you completed %d of them.
 		Now you had completed %d challenges in total.<br>
-		
+
 		<br><u>Yesterday's Completed Challenges</u>: <br>
 		%s
 		<br><br>
@@ -82,13 +87,12 @@ class Mail_model extends CI_Model{
 		<u>Today you have %d challenge to work on</u>:
 		<br>%s<br><br>
 
-		Happy exercise!<br>
-		HEP Team<br>--<br>
+
 		";
 		$ci =& get_instance();
 		$ci->load->model('Activity_model');
 		$data;
-		
+
 
 		$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
@@ -131,10 +135,10 @@ class Mail_model extends CI_Model{
 		foreach($data['me_challenges'] as $c) {
 			$titlesX .= '<b>'.$c->title.'</b><br>';
 			$titlesX .= '<i>'.$c->description.'</i><br><br>';
-			
+
 		}
 		$data['msg'] = sprintf($daily, $user->first_name." ".$user->last_name, $data['me_yesterday']->steps, $data['me_yesterday']->floors, number_format($data['me_sleep_yesterday']->total_time,2),
-		$data['me_yesterday']->calories, count($data['me_challenges_yesterday']), $count, $data['me_completed'], $titlesY, $titlesF, count($data['me_challenges']), $titlesX);
+			$data['me_yesterday']->calories, count($data['me_challenges_yesterday']), $count, $data['me_completed'], $titlesY, $titlesF, count($data['me_challenges']), $titlesX);
 		return $data;
 	}
 
@@ -156,18 +160,23 @@ class Mail_model extends CI_Model{
 			$link = sprintf(base_url(). "mail/unsubDailyNotification/%d", $user_id);
 			$msg = $data['msg'] . sprintf('If you don\'t want to receive this message any more, you can <a href="%s">unsubscribe here</a>.', $link);
 
+			$this->send(Mail_model::TitleDailyReport, $msg, $u->email);
 
-			$this->email->from(Mail_model::HepAccount, Mail_model::HepName);
-			$this->email->to($u->email);
-			$this->email->subject(Mail_model::TitleDailyReport);
-			$this->email->message($this->getFullHTML($msg));
-			$this->email->send();
-			
 			echo $this->email->print_debugger();
 			return $msg;
 		}
 
 	}
 
-	
+	private function send($title, $msg, $to) {
+		$this->email->from(Mail_model::HepAccount, Mail_model::HepName);
+		$this->email->to($to);
+		$this->email->subject($title);
+		$this->email->message($this->getFullHTML($msg));
+		$this->email->send();
+
+		echo $this->email->print_debugger();
+	}
+
+
 }
