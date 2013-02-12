@@ -1,6 +1,8 @@
 <div class="row-fluid">
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
+		<?php if (count($threads)>0): ?>
+
 		<div class="row-fluid challenge-forum">
 			<?php foreach ($threads as $thread_id => $thread): ?>
 			<div class="thread-container clearfix">
@@ -56,5 +58,6 @@
 			<hr>
 			<?php endforeach ?>
 		</div>
+		<?php endif ?>
 	</div>
 </div>

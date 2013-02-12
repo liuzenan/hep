@@ -18,7 +18,7 @@ class Forum_model extends CI_Model{
 	function getChallengeForum($user_id) {
 		$subs = $this->getSubscribedThread($user_id);
 		if(count($subs)==0) {
-			return FALSE;
+			return;
 		}
 
 		$sql = "SELECT t.*, p.*
@@ -61,9 +61,7 @@ class Forum_model extends CI_Model{
 			$res = array_reverse($res, true);
 			$res['uids'] = $uids;
 			return $res;
-		} else {
-			return FALSE;
-		}
+		} 
 
 	}
 
