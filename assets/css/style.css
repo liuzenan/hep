@@ -71,6 +71,14 @@ td.activity-stats, td.stats-label, td.stats-count{
 	width: 25%;
 }
 
+td.stats-label:nth-child(2n+1){
+	text-align: right;
+}
+
+td.stats-label:nth-child(2n){
+	text-align: left;
+}
+
 td.middle-col{
 	border-right: solid 1px #E6D9B8;
 }
@@ -590,7 +598,7 @@ margin-bottom: 10px;
 }
 
 .current-challenge-list .yesterday .challengeItem.box{
-	background: rgb(226,103,74);
+	background-color: rgb(204, 102, 153);
 }
 
 .current-challenge-list .today .challengeItem.box{
@@ -600,6 +608,16 @@ margin-bottom: 10px;
 .current-challenge-list .tomorrow .challengeItem.box{
 	background: rgb(154,203,154);
 }
+
+#challenges .current-challenge-list .tomorrow .challengeItem.box .progress{
+	display: none;
+}
+
+#challenges .current-challenge-list .tomorrow .challengeItem.box h4{
+	font-size: 2em;
+	line-height: 50px;
+}
+
 
 .challengeItem.box .quitchallengebtn{
 	margin: 10px;

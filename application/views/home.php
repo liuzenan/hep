@@ -8,3 +8,39 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Change/Drop Challenges</h3>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+    	<thead>
+    		<td>Title</td>
+    		<td>Description</td>
+    		<td>Points</td>
+    		<td>Join/Drop</td>
+    	</thead>
+    	<tbody>
+    		<?php if (!empty($all_challenge)): ?>
+    			<?php foreach ($all_challenge as $challenge): ?>
+		     		<tr id="challengeId<?php echo $challenge->id; ?>">
+		    			<td><?php echo $challenge->title ?></td>
+		    			<td><?php echo $challenge->description ?></td>
+		    			<td><?php echo $challenge->points ?></td>
+		    			<td>			
+		    				<button class="btn joinChallengeNow" data-challenge-id="<?php echo $challenge->id ?>" data-user-id="<?php echo $challenge->user_id ?>" <?php if($challenge->disabled_today) echo "disabled" ?>>Join Today</button>
+							<button class="btn joinChallengeTomorrow" data-challenge-id="<?php echo $challenge->id ?>" data-user-id="<?php echo $challenge->user_id ?>" <?php if($challenge->disabled_tomorrow) echo "disabled" ?>>Join Tomorrow</button>
+						</td>
+		    		</tr>   				
+    			<?php endforeach ?>
+    		<?php endif ?>
+    	</tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Done</button>
+  </div>
+</div>
