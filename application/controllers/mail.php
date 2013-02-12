@@ -31,6 +31,11 @@ class Mail extends CI_Controller {
 		echo "You have been sucessfully unsubscribed from badge notification";
 	}	
 
+	public function unsubChallengeNotification($user_id) {
+		$this->User_model->unsubChallengeNotification($user_id);
+		echo "You have been sucessfully unsubscribed from challenge notification"; 
+	}
+
 	public function unsubDailyNotification($user_id) {
 		$this->User_model->unsubDailyNotification($user_id);
 		echo "You have been sucessfully unsubscribed from daily notification";

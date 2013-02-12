@@ -140,23 +140,7 @@ class Challenges extends CI_Controller {
 
 			$challenge_id = $this->input->post("challenge_id");
 			$uid = $this->input->post("user_id");
-
-			$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $this->tomorrow_start, $this->tomorrow_end);
-
-			if((bool) $invalid) {
-				$msg = array(
-					"success" => false,
-					"message" => $invalid
-					);
-			} else {
-
-				$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->tomorrow_start, $this->tomorrow_end);
-				$this->Forum_model->subscribe($uid, $challenge_id);
-				$msg = array(
-					"success" => true,
-					"message" => "You have joined the challenge successfully."
-					);
-			}
+			$msg = $this->joinChallenge($uid, $challenge_id, $this->tomorrow_start, $this->tomorrow_end);
 		}
 		echo json_encode($msg);
 
@@ -172,25 +156,38 @@ class Challenges extends CI_Controller {
 
 			$challenge_id = $this->input->post("challenge_id");
 			$uid = $this->input->post("user_id");
-			$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $this->now, $this->today_end);
 
-			if((bool) $invalid) {
-				$msg = array(
-					"success" => false,
-					"message" => $invalid
-					);
-			} else {
-				$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $this->now, $this->today_end);
-				$msg = array(
-					"success" => true,
-					"message" => "You have joined the challenge successfully."
-					);
-				$this->Forum_model->subscribe($uid, $challenge_id);
-
-			}
+			$msg = $this->joinChallenge($uid, $challenge_id, $this->now, $this->today_end);
 		}
 		echo json_encode($msg);
 
+	}
+
+	public function joinChallenge($uid, $challenge_id, $start, $end) {
+		//join challenge
+		//subscribe
+		//post 
+		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $start, $end);
+
+		if((bool) $invalid) {
+			$msg = array(
+				"success" => false,
+				"message" => $invalid
+				);
+		} else {
+			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $start, $end);
+			$msg = array(
+				"success" => true,
+				"message" => "You have joined the challenge successfully."
+				);
+			$this->Forum_model->subscribe($uid, $challenge_id);
+			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
+			$user = $this->User_model->loadUser($uid);
+			$message = $user->first_name." ".$user->last_name. " joined this challenge at ". $start .".";
+			$this->Forum_model->createPost($uid, $challenge->thread_id, $message);
+		}
+
+		return $msg;
 	}
 
 	public function quitChallenge(){

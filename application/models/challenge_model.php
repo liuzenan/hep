@@ -48,6 +48,7 @@ class Challenge_model extends CI_Model{
 			'end_time'=>$end_time
 			);
 		$this->db->insert(Challenge_model::table_challenge_participant,$data);
+
 		return $this->db->insert_id();
 		
 	}
@@ -226,6 +227,7 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 		$ci->load->model('User_model');
 		$ci->load->model('Forum_model');
 		$ci->load->model('Activity_model');
+		$ci->load->model('Email_model');
 		if($type == "sleep") {
 			$data = array('progress'=>1, 'complete_time'=>date("Y-m-d 07:00:00"));
 		}else {
@@ -236,10 +238,11 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 			$data = array('progress'=>1, 'complete_time'=>date("Y-m-d H:i:s"));
 		}
 		//post to forum
-		
+		$challenge = $this->loadChallenge($cp->challenge_id);
 		$user = $this->User_model->loadUser($cp->user_id);
-		$message = $user->first_name." ".$user->last_name. " has completed this challenge.";// at ". $data['complete_time'].".";
+		$message = $user->first_name." ".$user->last_name. " has completed this challenge at ". $data['complete_time'].".";
 		$this->Forum_model->createPost($cp->user_id, $thread_id, $message);
+		$this->Email_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 
 	} else {
 		$data = array('progress'=>$progress);

@@ -53,21 +53,21 @@
 							<div class="span3 house-people-current">
 								<?php if (!empty($value['current'])): ?>
 									<?php foreach ($value['current'] as $current): ?>
-									<img src="<?php echo $current->badge_pic ?>" alt="">
+									<img class="challengeTitleTooltip" data-original-title="<?php echo $current->title ?>" src="<?php echo $current->badge_pic ?>" alt="">
 									<?php endforeach ?>
 								<?php endif ?>
 							</div>
 							<div class="span3 house-people-tomorrow">
 								<?php if (!empty($value['tomorrow'])): ?>
 									<?php foreach ($value['tomorrow'] as $tomorrow): ?>
-									<img src="<?php echo $tomorrow->badge_pic ?>" alt="">
+									<img class="challengeTitleTooltip" data-original-title="<?php echo $tomorrow->title ?>" src="<?php echo $tomorrow->badge_pic ?>" alt="">
 									<?php endforeach ?>
 								<?php endif ?>
 							</div>
 							<div class="span4 house-pepople-badges">
 								<?php if (!empty($value['badge'])): ?>
 									<?php foreach ($value['badge'] as $badge): ?>
-										<img src="<?php echo $badge->badge_pic ?>" alt="">
+										<img class="challengeTitleTooltip" data-original-title="<?php echo $badge->name ?>"  src="<?php echo $badge->badge_pic ?>" alt="">
 									<?php endforeach ?>
 								<?php endif ?>
 							</div>

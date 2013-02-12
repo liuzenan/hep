@@ -86,6 +86,12 @@ class User_model extends CI_Model{
 		$this->db->update('user', $data);
 	}
 
+	public function unsubChallengeNotification($user_id) {
+		$data = array('challenge_email_unsub'=>1);
+		$this->db->where('id',$user_id);
+		$this->db->update('user', $data);
+	}
+
 	function addNotification($user_id, $description, $url){
 		try {
 			$sql = "INSERT INTO notification(description, url, user_id)
