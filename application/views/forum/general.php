@@ -8,11 +8,7 @@
 						<div class="row-fluid">
 							<div class="thread-comment-content clearfix">
 								<textarea name="message" class="required input-block-level" rows="1" id="description"></textarea>
-								<div class="btncontainer">
-									<div class="postbtn">
-										<button id="newThread" class="btn btn-primary">Start New Thread</button>
-									</div>
-								</div>
+								<button id="newThread" class="btn btn-primary pull-right">Start New Thread</button>
 
 							</div>
 						</div>
@@ -27,7 +23,15 @@
 					<img src="http://placehold.it/64x64" alt="">
 				</div>
 				<div class="thread-content">
-					<div><a href="#"><strong><?php echo $thread["title"]; ?></strong></a></div>
+					<div>
+						<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>
+					<?php if ($thread["subscribe"]==0): ?>
+						<a href="#" class="subscribe-link pull-right"><small>Subscribe</small></a>
+					<?php endif ?>
+					<?php if ($thread["subscribe"]==1): ?>
+						<a href="#" class="unsubscribe-link pull-right"><small>Unsubscribe</small></a>
+					<?php endif ?>
+					</div>
 
 					<?php if (!empty($thread["comments"])): ?>
 					<?php foreach ($thread["comments"] as $comment_id => $comment): ?>

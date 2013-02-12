@@ -10,7 +10,12 @@
 				<div class="thread-content">
 				<div>
 					<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>
-					<a href="#"><small></small></a>
+					<?php if ($thread["subscribe"]==0): ?>
+						<a href="#" class="subscribe-link pull-right"><small>Subscribe</small></a>
+					<?php endif ?>
+					<?php if ($thread["subscribe"]==1): ?>
+						<a href="#" class="unsubscribe-link pull-right"><small>Unsubscribe</small></a>
+					<?php endif ?>
 				</div>
 				
 					<?php if (!empty($thread["comments"])): ?>
