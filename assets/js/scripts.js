@@ -30,6 +30,8 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	$('.challengeTitleTooltip').tooltip();
+
 	$("#newThread").click(function(e){
 		console.log("newThread");
 		e.preventDefault();
