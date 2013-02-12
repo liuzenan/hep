@@ -5,13 +5,13 @@
 			<table class="table challenge-stats">
 				<tbody>
 					<td class="stats-label">	
-						<strong>Total Challenges Completed:</strong>							
+						<strong>Total Completed:</strong>							
 					</td>
 					<td class="stats-label middle-col">
 						<strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy icon-2x"></i>
 					</td>
 					<td class="stats-label">
-						<strong>Challenges Completed on Average:</strong>
+						<strong>Average:</strong>
 					</td>
 					<td class="stats-label">
 						<strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group icon-2x"></i>
@@ -42,7 +42,7 @@
 				<div class="span4 today">
 					<div class="challenge-title">Today</div>
 			<?php foreach($me_challenges as $challenge){ ?>
-			<a href="#myModal" role="button" data-toggle="modal">
+			<a href="#challengeToday" role="button" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $challenge->description ?>"><?php echo $challenge->title ?></div>
@@ -57,7 +57,7 @@
 				<div class="span4 tomorrow">
 					<div class="challenge-title">Tomorrow</div>
 			<?php foreach($me_challenges_tomorrow as $challenge){ ?>
-			<a href="#myModal" role="button" data-toggle="modal">
+			<a href="#challengeTmr" role="button" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $challenge->description ?>"><?php echo $challenge->title ?></div>

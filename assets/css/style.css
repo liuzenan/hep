@@ -64,11 +64,19 @@ table.activity-stats{
 }
 
 td.activity-stats, td.stats-label, td.stats-count{
-	text-align: center !important;
+	text-align: center;
 	vertical-align: middle;
 	color:#666;
 	border-top: none;
-	width: 50%;
+	width: 25%;
+}
+
+td.stats-label:nth-child(2n+1){
+	text-align: right;
+}
+
+td.stats-label:nth-child(2n){
+	text-align: left;
 }
 
 td.middle-col{
@@ -618,6 +626,10 @@ margin-bottom: 10px;
 	font-size: 12px;
 }
 
+.modal table tbody .btn-link:disabled{
+	display: none;
+}
+
 .challengeItem.box .quitchallengebtn{
 	margin: 10px;
 }
@@ -643,4 +655,13 @@ margin-bottom: 10px;
 
 #challenges .challenge .time-based .challengeItem.box{
 	background:rgb(153,102,153);
+}
+
+.badgelist a{
+	float: left;
+}
+.badgelist a img{
+	display: block;
+	width: 100px;
+	height: auto;
 }

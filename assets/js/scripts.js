@@ -161,8 +161,9 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$('#myModal').modal({
-		show:false
+	$('.modal').modal({
+		show:false,
+		backdrop:false
 	});
 
 });
