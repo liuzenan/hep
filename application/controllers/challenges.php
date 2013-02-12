@@ -72,7 +72,7 @@ class Challenges extends CI_Controller {
 		foreach($joinedTomorrow as $b) {
 			$tomorrow[$b->category]++;
 			$tomorrowJoined[] = $b->challenge_id;
-			$cpIds2[$b->challenge_id] = $a->cp_id;
+			$cpIds2[$b->challenge_id] = $b->cp_id;
 
 		}
 
