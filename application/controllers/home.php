@@ -51,6 +51,10 @@ class Home extends CI_Controller{
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
 		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+		$this->load->library('../controllers/challenges');
+
+
+		$data['all_challenge'] = $this->challenges->loadAvailableChallanges();
 
 
 		return $data;
