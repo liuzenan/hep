@@ -3,6 +3,10 @@ p{
 	margin: 0 0 1em;
 }
 
+.hide{
+	display: none;
+}
+
 body{
 	background: url(../img/brillant.png);
 }

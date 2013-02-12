@@ -184,6 +184,17 @@ jQuery(document).ready(function($) {
 		backdrop:false
 	});
 
+	$(".thread-content .showmore").click(function(event){
+		var current = $(this);
+		if (current.text()!="Show less comments") {
+			current.text("Show less comments");
+		} else {
+			current.text("Show all" + current.data("comments") + "comments");
+		}
+		$(this).parent().children(".full-content").toggleClass("hide");
+		$(this).parent().children(".collapsed-content").toggleClass("hide");
+	});
+
 });
 
 //limit text
