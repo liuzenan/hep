@@ -42,6 +42,7 @@
 				<div class="span4 today">
 					<div class="challenge-title">Today</div>
 			<?php foreach($me_challenges as $challenge){ ?>
+			<a href="javascript:void(0);">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $challenge->description ?>"><?php echo $challenge->title ?></div>
@@ -49,18 +50,21 @@
 							<div class="bar" style="width:<?php echo floor($challenge->progress*100) ?>%"></div>
 						</div>						
 					</div>
-				</div>
+				</div>				
+			</a>
 			<?php } ?>
 				</div>
 				<div class="span4 tomorrow">
 					<div class="challenge-title">Tomorrow</div>
 			<?php foreach($me_challenges_tomorrow as $challenge){ ?>
+			<a href="javascript:void(0);">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $challenge->description ?>"><?php echo $challenge->title ?></div>
 						<h4><?php echo $challenge->points ?> points</h4>						
 					</div>
-				</div>
+				</div>				
+			</a>
 			<?php } ?>
 				</div>
 			</div>
