@@ -5,13 +5,13 @@
 			<table class="table challenge-stats">
 				<tbody>
 					<td class="stats-label middle-col">	
-					<strong>Completed by me</strong>							
+					<strong>Total Challenges Completed:</strong>							
 					</td>
-										<td class="stats-label"><strong><span><?php echo $me_completed ?></span></strong></td>
+					<td class="stats-label"><strong><span><?php echo $me_completed ?></span></strong></td>
 
 					
 					<td class="stats-label">
-						<strong>Completed by average</strong>
+						<strongChallenges Completed on Average:</strong>
 					</td>
 					<td class="stats-label">
 						<strong><span><?php echo $avg_completed ?></span></strong>
