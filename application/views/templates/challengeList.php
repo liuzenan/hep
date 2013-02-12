@@ -4,18 +4,19 @@
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
-					<td class="stats-label">
-						<i class="icon-trophy icon-2x"></i>&nbsp;<strong><span><?php echo $me_completed ?></span></strong>
+					<td class="stats-label">	
+						<strong>Completed by me:</strong>							
 					</td>
-					<td class="stats-label middle-col">	
-						<strong>Completed by me</strong>							
-					</td>
-					<td class="stats-label">
-						<strong><i class="icon-group icon-2x"></i>&nbsp;<span><?php echo $avg_completed ?></span></strong>
+					<td class="stats-label middle-col">
+						<strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy icon-2x"></i>
 					</td>
 					<td class="stats-label">
-						<strong>Completed by average</strong>
+						<strong>Completed by average:</strong>
 					</td>
+					<td class="stats-label">
+						<strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group icon-2x"></i>
+					</td>
+					
 				</tbody>
 			</table>
 		</div>
