@@ -39,7 +39,7 @@
                     } else {
                       if (data.error=="noemail") {
                         alert("you need to sign up for your detailed information first");
-                        window.locaion.href = base_url + "login";
+                        window.location.href = base_url + "login";
                       } else if(data.error=="nouser") {
                         alert("You need to register with fitbit account first for facebook login");
                         $(".emailinput").addClass("show");
