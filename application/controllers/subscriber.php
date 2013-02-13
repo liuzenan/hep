@@ -32,9 +32,8 @@ class Subscriber extends CI_Controller {
 	}
 
 	private function updateProgress($user_id, $date) {
-		$start_time = $date. " 00:00:00";		
-		$end_time = $date. " 00:00:00";
-		$this->Challenge_model->updateActivityProgress($user_id, $start_time, $end_time);
+		
+		$this->Challenge_model->updateActivityProgress($user_id, $date);
 	}
 
 	public function sleep(){
@@ -135,7 +134,7 @@ class Subscriber extends CI_Controller {
 				$this->db->query($sql);	
 			}
 
-			var_dump($sleepData);
+			//var_dump($sleepData);
 		}
 
 	}

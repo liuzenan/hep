@@ -172,8 +172,9 @@ function logMessage($message) {
 }
 
 
-function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) {
-
+function updateActivityProgress($user_id, $date) {
+	$start_time = $date. " 00:00:00";		
+	$end_time = $date. " 00:00:00";
 	$log = "updateActivityProgress-".$user_id."-".$start_time."-".$end_time;
 	$this->logMessage($log);
 	$ci =& get_instance();
@@ -207,15 +208,18 @@ function updateActivityProgress($user_id, $start_time = NULL, $end_time = NULL) 
 			$value = $this->Activity_model->getSleepToday($user_id);
 
 			$progress = number_format($value->total_time/$c->sleep_value, 2);
-			$this->updateProgress($c->id, $progress, date("Y-m-d 07:00:00"),date("Y-m-d 07:00:00"), 0, "sleep", $c->thread_id);
+			$this->updateProgress($c->id, $progress, $date." 07:00:00", $date." 07:00:00", 0, "sleep", $c->thread_id);
 		} else if ($c->sleep_time != 0) {
-			$value = $this->Activity_model->getSleepStartTime($user_id);
+			$value = $this->Activity_model->getSleepStartTime($user_id, $c->sleep_time);
 			if(empty($value)) {
 				$progress = 0;
+				$this->updateProgress($c->id, $progress, $date." 00:00:00",$date." 00:00:00", 0, "sleep", $c->thread_id);
+
 			} else {
 				$progress = 1;
+				$this->updateProgress($c->id, $progress, $date." ".$value->start_time,$date." ".$value->start_time, 0, "sleep", $c->thread_id);
+
 			}
-			$this->updateProgress($c->id, $progress, date("Y-m-d 07:00:00"),date("Y-m-d 07:00:00"), 0, "sleep", $c->thread_id);
 		}
 	}
 }
@@ -229,7 +233,7 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 		$ci->load->model('Activity_model');
 		$ci->load->model('Email_model');
 		if($type == "sleep") {
-			$data = array('progress'=>1, 'complete_time'=>date("Y-m-d 07:00:00"));
+			$data = array('progress'=>1, 'complete_time'=>$start_time);
 		}else {
 			$time = $this->Activity_model->getChallengeCompletionTime($cp->user_id, $start_time, $end_time, $thresh_hold, $type);
 			$data = array('progress'=>1, 'complete_time'=>$time);
