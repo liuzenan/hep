@@ -669,7 +669,8 @@ margin-bottom: 10px;
 }
 
 .modal table tbody .btn-link:disabled{
-	display: none;
+	color: #ddd;
+	text-decoration: none;
 }
 
 .challengeItem.box .quitchallengebtn{

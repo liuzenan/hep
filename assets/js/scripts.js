@@ -10,6 +10,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var threadId = currentBtn.data("threadId");
 		var msg = $("#messageBox"+threadId).val();
+		$(this).attr("disabled", true);
 		if(msg.length<=800&&msg.length>0){
 			$.ajax({
 				type:'POST',
@@ -25,6 +26,7 @@ jQuery(document).ready(function($) {
 					window.location.reload();
 				}else{
 					$("#alertContainer"+currentBtn).html('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong>Your message is not posted.</div>');
+					$(this).attr("disabled", false);
 				}
 			});
 		}
@@ -68,6 +70,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var challengeId = currentBtn.data("challengeId");
 		var userId = currentBtn.data("userId");
+		$(".joinChallengeNow").attr("disabled", true);
 		if(challengeId){
 			$.ajax({
 				type:'POST',
@@ -87,6 +90,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var challengeId = currentBtn.data("challengeId");
 		var userId = currentBtn.data("userId");
+		$(".joinChallengeTomorrow").attr("disabled", true);
 		if(challengeId){
 			$.ajax({
 				type:'POST',
@@ -108,7 +112,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var cpId = currentBtn.data("cpId");
 		var quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.","HEP Advisor");
-
+		$(".today .quitChallenge").attr("disabled", true);
 		if(quit) {
 			if(cpId){
 				$.ajax({
@@ -128,6 +132,7 @@ jQuery(document).ready(function($) {
 	$(".tomorrow .quitChallenge").click(function(event){
 		var currentBtn = $(this);
 		var cpId = currentBtn.data("cpId");	
+		$(".tomorrow .quitChallenge").attr("disabled", true);
 		if(cpId){
 			$.ajax({
 				type:'POST',
@@ -148,6 +153,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var threadId = currentBtn.data("threadId");
 		console.log("threadId");
+		$(this).attr("disabled", true);
 		if(threadId){
 			$.ajax({
 				type:'POST',
@@ -166,6 +172,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var threadId = currentBtn.data("threadId");
 		console.log("threadId");
+		$(this).attr("disabled", true);
 		if(threadId){
 			$.ajax({
 				type:'POST',
