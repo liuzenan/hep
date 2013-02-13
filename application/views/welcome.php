@@ -139,15 +139,20 @@
     });
   }
   </script>
-<div class="wrapper">
+<div class="wrapper welcome">
     <div class="container">
-      <h1 class="maintitle">HEP Platform</h1>
-      <p class="loginbtn"><a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-large btn-primary">Login with Fitbit</a></p>
-      <p class="loginbtn"><a href="javascript:void(0);" id="facebooklogin" class="btn btn-large btn-primary">Login with Facebook</a></p>
+      <h3 class="maintitle">Health Enhancement Programme</h3>
+      <div class="logincontrol well">
+      <p class="loginbtn">
+        <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Login with Fitbit</a>
+        <span class="muted">or</span>
+        <a href="javascript:void(0);" id="facebooklogin" class="btn btn-primary">Login with Facebook</a>
+      </p>
       <div class="emailinput">
-        <label for="email"></label>
-        <input type="text" id="email" name="email">
-        <button id="linkWithFacebook" class="button">Link to Account</button>
+        <label for="email"><small class="muted">Please enter your email registered with HEP</small></label>
+        <input type="text" class="input-block-level" id="email" name="email"><br>
+        <button id="linkWithFacebook" class="btn btn-block">Link to Account</button>
+      </div>        
       </div>
     </div>  
 </div>

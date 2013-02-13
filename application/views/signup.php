@@ -15,11 +15,11 @@
 					<fieldset>
 						<legend>More Information</legend>
 						<label for="firstname">First Name</label>
-						<input type="text" name="firstname">
+						<input id="firstname" type="text" name="firstname">
 						<label for="lastname">Last Name</label>
-						<input type="text" name="lastname">
+						<input id="lastname" type="text" name="lastname">
 						<label for="email">Email</label>
-						<input type="email" name="email">
+						<input id="email" type="email" name="email">
 						<label for="">House</label>
 						<select name="house" id="house">
 							<option value="0">Select a House...</option>
@@ -43,6 +43,12 @@
     <script src="/assets/js/bootstrap.min.js"></script>
     <script>
     	jQuery(document).ready(function($) {
+    		$("#submitbtn").attr('disabled','disabled');
+    		$('input[type="text"], input[type="email"]').keyup(function() {
+		        if($("#firstname").val() != '' && $("#lastname").val() != '' && $("#email").val()!='') {
+		           $('#submitbtn').removeAttr('disabled');
+		        }
+		     });
 
     		$("#submitbtn").click(function(event){
     			event.preventDefault();

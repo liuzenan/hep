@@ -286,8 +286,16 @@ span.activityIcon.floors{
 }
 
 .maintitle{
+	font-family: "Grandesign Neue Serif", serif;
 	text-align: center;
 	margin-top: 100px;
+	font-weight: 400;
+}
+
+.logincontrol{
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .loginbtn{
@@ -295,17 +303,14 @@ span.activityIcon.floors{
 	margin-top: 40px;
 }
 
-.wrapper{
-	background: url(../img/running_background.jpg) no-repeat center center fixed;
-	background-size: cover;
-	-moz-background-size:cover;
-	-o-background-size:cover;
-	position:absolute;
-	display:block;
-	top:0;
-	bottom:0;
-	left:0;
-	right:0;
+.loginbtn span{
+	margin: 0 10px;
+	font-style: italic;
+}
+
+.emailinput{
+	width: 80%;
+	margin-left: 10%;
 }
 
 td.forum-stats{
