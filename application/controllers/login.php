@@ -75,7 +75,6 @@ class Login extends CI_Controller{
 		try{
 			$this->getActivites();
 			$this->getSleep();
-			$this->setFeeds();
 			//$this->initPosts();
 			$this->addSubscription();	
 			$msg['success'] = true;
@@ -104,7 +103,7 @@ class Login extends CI_Controller{
 		if($this->session->userdata('oauth_token')&&$this->session->userdata('oauth_secret')){
 			$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
 			$basedate = 'today';
-			$period = '2012-12-01';
+			$period = '2012-02-13';
 
 			$startTime = $this->fitbitphp->getTimeSeries('startTime', $basedate, $period);
 			$timeInBed = $this->fitbitphp->getTimeSeries('timeInBed', $basedate, $period);
