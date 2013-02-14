@@ -1,5 +1,6 @@
 var base_url = 'http://hep.d2.comp.nus.edu.sg/';
-var game_start_date = Date(2013, 02, 28);
+var game_start_date = new Date();
+game_start_date.setFullYear(2013, 1, 28, 0, 0, 0, 0);
 
 jQuery(document).ready(function($) {
 
@@ -267,20 +268,19 @@ jQuery(document).ready(function($) {
 	});
 
 	var counter = setInterval(timer, 1000);
-
+	console.log(game_start_date);
 });
 
 function timer(){
-	var current = Date();
+	var current = new Date();
 	var oneDay = 24*60*60*1000;
 	var oneHour = 60*60*1000;
 	var oneMinute = 60*1000;
 	var oneSecond = 1000;
-
-	$("#count-down-days").text(""+Math.floor((game_start_date.getTime()-current.getTime())/(oneDay)));
-	$("#count-down-hours").text(""+Math.floor(((game_start_date.getTime()-current.getTime())%(oneDay))/(oneHour)));
-	$("#count-down-minutes").text(""+Math.floor((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))/(oneMinute)));
-	$("#count-down-seconds").text(""+Math.floor(((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))%(oneMinute))/(oneSecond)));
+	$("#count-down-days").text(Math.floor((game_start_date.getTime()-current.getTime())/(oneDay))+" Days ");
+	$("#count-down-hours").text(""+Math.floor(((game_start_date.getTime()-current.getTime())%(oneDay))/(oneHour)) + " Hours ");
+	$("#count-down-minutes").text(""+Math.floor((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))/(oneMinute)) + " Minutes ");
+	$("#count-down-seconds").text(""+Math.floor(((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))%(oneMinute))/(oneSecond)) + " Seconds ");
 }
 
 //limit text
