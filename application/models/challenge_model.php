@@ -13,14 +13,14 @@ class Challenge_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function loadUserChallenge($user_id, $start_time, $end_time) {
+	function loadUserChallenge($user_id, $date) {
 		$sql = "SELECT * 
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id = ?
-		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >= ?";
-		$query = $this->db->query($sql, array($user_id, $start_time, $end_time));
+		WHERE DATE(challengeparticipant.start_time) = ?";
+		$query = $this->db->query($sql, array($user_id, $date));
 		return $query->result();
 	}
 

@@ -8,6 +8,8 @@ class Challenges extends CI_Controller {
 	private $today_end;
 	private $tomorrow_start;
 	private $tomorrow_end;
+	private $date_today;
+	private $date_tomorrow;
 	
 	public function __construct() {
 		parent::__construct();
@@ -19,13 +21,16 @@ class Challenges extends CI_Controller {
 			$this->tomorrow_end = date("Y-m-d", time() + 60 * 60 * 24). " 23:59:59";
 			$this->today_start = date("Y-m-d"). " 00:00:00";
 			$this->today_end = date("Y-m-d")." 23:59:59";
-			$this->now = date("Y-m-d G:i:s",time());	
+			$this->now = date("Y-m-d G:i:s",time());
+			$this->date_today = date("Y-m-d", time());
+			$this->date_tomorrow = date("Y-m-d", time()+ 60*60*24);
+
 		} 
 	}
 
 	public function index(){
 		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
-		$data["tomorrow"] = $this->Challenge_model->loadUserChallenge($this->uid, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
+		$data["tomorrow"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
 		
 		//echo "<pre>"; print_r($data);echo "</pre><br>";
 
@@ -96,8 +101,8 @@ class Challenges extends CI_Controller {
 
 	}
 
-	private function validateChallengeAvilability($challenge_id, $uid, $start_time, $end_time) {
-		$current = $this->Challenge_model->loadUserChallenge($uid, $start_time, $end_time);
+	private function validateChallengeAvilability($challenge_id, $uid, $date) {
+		$current = $this->Challenge_model->loadUserChallenge($uid, $date);
 		$new = $this->Challenge_model->loadChallenge($challenge_id);
 		if(empty($current) && $challenge_id>0 && $uid>0) {
 			return "";
@@ -140,7 +145,7 @@ class Challenges extends CI_Controller {
 
 			$challenge_id = $this->input->post("challenge_id");
 			$uid = $this->input->post("user_id");
-			$msg = $this->joinChallenge($uid, $challenge_id, $this->tomorrow_start, $this->tomorrow_end);
+			$msg = $this->joinChallenge($uid, $challenge_id, $this->date_tomorrow);
 		}
 		echo json_encode($msg);
 
@@ -155,19 +160,20 @@ class Challenges extends CI_Controller {
 		}else{
 
 			$challenge_id = $this->input->post("challenge_id");
+			$challenge = $this->Challenge_model()->loadChallenge($challenge_id);
 			$uid = $this->input->post("user_id");
 
-			$msg = $this->joinChallenge($uid, $challenge_id, $this->now, $this->today_end);
+			$msg = $this->joinChallenge($uid, $challenge_id, $this->date_today);
 		}
 		echo json_encode($msg);
 
 	}
 
-	public function joinChallenge($uid, $challenge_id, $start, $end) {
+	public function joinChallenge($uid, $challenge_id, $date) {
 		//join challenge
 		//subscribe
 		//post 
-		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $start, $end);
+		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $date);
 
 		if((bool) $invalid) {
 			$msg = array(
@@ -175,10 +181,25 @@ class Challenges extends CI_Controller {
 				"message" => $invalid
 				);
 		} else {
+			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
+
+			//update time for "liftstyle" challenge
+			if($challenge->start_time != "00:00:00") {
+				$start = $date." ".$challenge->start_time;
+				$end = $date." ".$challenge->end_time;
+			} else {
+				if ($date == $this->date_today) {
+					$start = $this->today_start;
+					$end = $this->today_end;
+				} else {
+					$start = $this->tomorrow_start;
+					$end = $this->tomorrow_end;
+				}
+			}
 			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $start, $end);
 
 			$this->Forum_model->subscribe($uid, $challenge_id);
-			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
+			
 			$user = $this->User_model->loadUser($uid);
 			$message = $user->first_name." ".$user->last_name. " joined this challenge at ". $start .".";
 			$this->Forum_model->createPost($uid, $challenge->thread_id, $message);

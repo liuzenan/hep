@@ -74,12 +74,12 @@ class Home extends CI_Controller{
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($this->uid);
 		$timestr .= microtime()."<br>";
 
-		$yesterday = date("Y-m-d ",microtime() - 60 * 60 * 24)." 23:59:59";	
-		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday, $yesterday);
+		$yesterday = date("Y-m-d ",time() - 60 * 60 * 24);	
+		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday);
 		$timestr .= microtime()."<br>";
 
-		$tomorrow = date("Y-m-d G:i:s",microtime() + 60 * 60 * 24);	
-		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow, $tomorrow);
+		$tomorrow = date("Y-m-d ",time() + 60 * 60 * 24);	
+		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow);
 		$timestr .= microtime()."<br>";
 
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();

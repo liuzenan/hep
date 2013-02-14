@@ -175,10 +175,8 @@ class Forum_model extends CI_Model{
 	}
 
 	function subscribe($user_id, $thread_id) {
-		$data = array(
-			'thread_id'=>$thread_id,
-			'user_id'=>$user_id);
-		$this->db->insert("postsubscription", $data);
+		$sql = "INSERT IGNORE INTO `postsubscription` (`thread_id`, `user_id`) VALUES (?, ?)";
+		$this->db->query($sql, array($user_id, $thread_id));
 	}
 
 	function unsubscribe($user_id, $thread_id) {
