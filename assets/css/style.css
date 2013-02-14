@@ -610,7 +610,15 @@ margin-bottom: 10px;
 }
 
 .myactivity .current-challenge-list .challengeItem.box{
-	height: 100px;
+	min-height: 100px;
+}
+
+.current-challenge-list .challengeItem.box.empty{
+	opacity: 0.5;
+}
+
+.current-challenge-list .challengeItem.box.empty:hover{
+	opacity: 1;
 }
 
 .current-challenge-list .challenge-title{
@@ -708,7 +716,7 @@ margin-bottom: 10px;
 }
 .badgelist a img{
 	display: block;
-	width: 100px;
+	width: pxx;
 	height: auto;
 }
 
