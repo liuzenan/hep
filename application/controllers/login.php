@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends CI_Controller{
-
+	const BASELINE = "2013-02-13";
 	public function index(){
 		if(!$this->session->userdata('user_id')){
 			$this->fitbitphp->initSession(base_url() . "login/callBack");
@@ -88,7 +88,7 @@ class Login extends CI_Controller{
 	private function getActivites(){
 		$user_id = $this->session->userdata('user_id');
 		$this->load->model('Activity_model','activities');
-		$this->activities->sync_activity('today', '2012-12-01', $user_id);
+		$this->activities->sync_activity('today', Login::BASELINE, $user_id);
 	}
 
 	private function getSleep(){
@@ -103,7 +103,7 @@ class Login extends CI_Controller{
 		if($this->session->userdata('oauth_token')&&$this->session->userdata('oauth_secret')){
 			$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
 			$basedate = 'today';
-			$period = '2012-02-13';
+			$period = Login::BASELINE;
 
 			$startTime = $this->fitbitphp->getTimeSeries('startTime', $basedate, $period);
 			$timeInBed = $this->fitbitphp->getTimeSeries('timeInBed', $basedate, $period);

@@ -75,20 +75,19 @@ class Activity_model extends CI_Model{
 		return $query->row();
 	}
 
-	function getSleepToday($user_id){
-		$today = date("Y-m-d");
+	function getSleepData($user_id, $date){
 		$sql = "SELECT Sum(time_asleep) AS total_time,
 		date
 		FROM   sleep
 		WHERE  user_id = ?
 		AND date = ?
-		GROUP  BY date";
-		$query = $this->db->query($sql, array($user_id, $today));
+		GROUP BY date";
+		$query = $this->db->query($sql, array($user_id, $date));
 		$vars = $query->row();
 		if(empty($vars)) {
 			$vars = new StdClass();
 			$vars->user_id = $user_id;
-			$vars->date =$today;
+			$vars->date =$date;
 			$vars->total_time= 0;
 		}
 		return $vars;
@@ -110,26 +109,6 @@ class Activity_model extends CI_Model{
 		AND activity_time<= ?";
 		$query = $this->db->query($sql, array($user_id, $start, $end));
 		return $query->row();
-	}
-
-
-	function getSleepYesterday($user_id) {
-		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-		$sql = "SELECT Sum(total_time) AS total_time,
-		date
-		FROM   sleep
-		WHERE  user_id = ?
-		AND date = ?
-		GROUP  BY date";
-		$query = $this->db->query($sql, array($user_id, $yesterday));
-		$vars = $query->row();
-		if(empty($vars)) {
-			$vars = new StdClass();
-			$vars->user_id = $user_id;
-			$vars->date =$yesterday;
-			$vars->total_time= 0;
-		}
-		return $vars;
 	}
 
 
@@ -289,7 +268,8 @@ class Activity_model extends CI_Model{
 		}
 	}
 
-	function getChallengeCompletionTime( $user_id, $start, $end, $threshold,$type) {
+	function getChallengeCompletionTime($user_id, $start, $end, $threshold,$type) {
+
 		$sql = "SELECT y.activity_time,
 				       y.%s,
 				       y.user_id

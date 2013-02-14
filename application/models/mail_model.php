@@ -97,8 +97,8 @@ class Mail_model extends CI_Model{
 		$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
 
-		$data['me_sleep'] = $this->Activity_model->getSleepToday($user_id);
-		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($user_id);
+		$data['me_sleep'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time()));
+		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time() - 60 * 60 * 24));
 
 
 		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);
@@ -109,10 +109,10 @@ class Mail_model extends CI_Model{
 
 		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($user_id);
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($user_id);
-		$time = date("Y-m-d ",time() - 60 * 60 * 24). " 23:59:59";	
-		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($user_id, $time, $time);
-		$tomorrow = date("Y-m-d G:i:s",time() + 60 * 60 * 24);	
-		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($user_id, $tomorrow, $tomorrow);
+		$time = date("Y-m-d",time() - 60 * 60 * 24);	
+		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($user_id, $time);
+		$tomorrow = date("Y-m-d",time() + 60 * 60 * 24);	
+		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($user_id, $tomorrow);
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);

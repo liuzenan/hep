@@ -13,25 +13,25 @@ class Challenge_model extends CI_Model{
 		parent::__construct();
 	}
 
-	function loadUserChallenge($user_id, $start_time, $end_time) {
+	function loadUserChallenge($user_id, $date) {
 		$sql = "SELECT * 
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id = ?
-		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >= ?";
-		$query = $this->db->query($sql, array($user_id, $start_time, $end_time));
+		WHERE DATE(challengeparticipant.start_time) = ?";
+		$query = $this->db->query($sql, array($user_id, $date));
 		return $query->result();
 	}
 
-	function loadJoinedCategory($user_id, $start_time, $end_time) {
+	function loadJoinedCategory($user_id, $date) {
 		$sql = "SELECT challenge.category, challenge.id as challenge_id, challengeparticipant.id as cp_id
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id = ?
-		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >= ?";
-		$query = $this->db->query($sql, array($user_id, $start_time, $end_time));
+		WHERE DATE(challengeparticipant.start_time) = ? ";
+		$query = $this->db->query($sql, array($user_id, $date));
 		return $query->result();
 	}
 	function loadChallenge($challenge_id) {
@@ -145,20 +145,20 @@ function getHouseCompletedChallenges($house_id) {
 }
 
 function getIndividualCurrentChallenges($user_id) {
-	return $this->getIndividualChallenges($user_id,date("Y-m-d G:i:s",time()),date("Y-m-d G:i:s",time()));
+	return $this->getIndividualChallenges($user_id,date("Y-m-d",time()));
 }
 
-function getIndividualChallenges($user_id, $start, $end) {
+function getIndividualChallenges($user_id, $date) {
 
 	$sql = "SELECT *
 	FROM challenge
 	INNER JOIN challengeparticipant
 	ON challenge.id=challengeparticipant.challenge_id
 	AND challengeparticipant.user_id= ?
-	WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >=? 
+	WHERE Date(challengeparticipant.start_time) = ?
 	GROUP BY challengeparticipant.challenge_id";
 
-	$query = $this->db->query($sql, array($user_id, $start, $end));
+	$query = $this->db->query($sql, array($user_id, $date));
 	return $query->result();
 }
 
@@ -172,18 +172,16 @@ function logMessage($message) {
 }
 
 
-function updateActivityProgress($user_id, $date) {
-	$start_time = $date. " 00:00:00";		
-	$end_time = $date. " 00:00:00";
-	$log = "updateActivityProgress-".$user_id."-".$start_time."-".$end_time;
+function updateActivityProgress($user_id, $date=NULL) {
+	$log = "updateActivityProgress-".$user_id."-".$date;
 	$this->logMessage($log);
 	$ci =& get_instance();
 	$ci->load->model('Activity_model');
 
-	if(is_null($start_time)) {
+	if(is_null($date)) {
 		$data = $this->getIndividualCurrentChallenges($user_id);
 	} else {
-		$data = $this->getIndividualChallenges($user_id, $start_time, $end_time);
+		$data = $this->getIndividualChallenges($user_id, $date);
 	}
 	foreach($data as $c) {
 		if($c->progress >=1 ) {
@@ -205,7 +203,7 @@ function updateActivityProgress($user_id, $date) {
 			$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
 
 		} else if ($c->sleep_value != 0) {
-			$value = $this->Activity_model->getSleepToday($user_id);
+			$value = $this->Activity_model->getSleepData($user_id, $date);
 
 			$progress = number_format($value->total_time/$c->sleep_value, 2);
 			$this->updateProgress($c->id, $progress, $date." 07:00:00", $date." 07:00:00", 0, "sleep", $c->thread_id);
@@ -225,13 +223,14 @@ function updateActivityProgress($user_id, $date) {
 }
 
 function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold, $type, $thread_id) {
+	echo "updateProgress ".$progress."-".$start_time."-".$end_time."-".$thresh_hold."-".$type."-".$thread_id;
 	if($progress >= 1.0) {
 		$cp = $this->loadChallengeParticipation($cp_id);
 		$ci =& get_instance();
 		$ci->load->model('User_model');
 		$ci->load->model('Forum_model');
 		$ci->load->model('Activity_model');
-		$ci->load->model('Email_model');
+		$ci->load->model('Mail_model');
 		if($type == "sleep") {
 			$data = array('progress'=>1, 'complete_time'=>$start_time);
 		}else {
@@ -246,7 +245,7 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 		$user = $this->User_model->loadUser($cp->user_id);
 		$message = $user->first_name." ".$user->last_name. " has completed this challenge at ". $data['complete_time'].".";
 		$this->Forum_model->createPost($cp->user_id, $thread_id, $message);
-		$this->Email_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
+		$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 
 	} else {
 		$data = array('progress'=>$progress);
@@ -323,6 +322,8 @@ function getLearderboard() {
 	return $query->result();
 }
 
+
+
 function getLearderboardByGender($gender) {
 	$sql = "SELECT u.first_name  AS firstname,
 	u.last_name   AS lastname,
@@ -367,27 +368,62 @@ function getTutorLearderboard() {
 }
 
 function getHouseLeaderboard() {
-	$sql="SELECT
+
+	
+	$house_sql="SELECT
 	u.house_id    AS house_id,
 	h.name        AS house_name,
 	h.picture     AS picture,
-	sum(c.points)  AS score,
 	Count(DISTINCT u.id) as user_num,
 	GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
 	FROM   user AS u,
 	house AS h,
-	challengeparticipant AS cp,
 	challenge as c
 	WHERE  u.house_id = h.id
-	AND c.id = cp.challenge_id
+	AND u.phantom = 0
+	AND u.staff = 0
+	GROUP BY h.id
+	";
+	$houses = $this->db->query($house_sql)->result();
+
+	$rank_sql = "SELECT
+	u.house_id    AS house_id,
+	sum(c.points)  AS score
+	FROM   user AS u,
+	challengeparticipant AS cp,
+	challenge as c
+	WHERE 
+	c.id = cp.challenge_id
 	AND cp.user_id = u.id
 	AND cp.complete_time > cp.start_time
 	AND u.phantom = 0
 	AND u.staff = 0
-	GROUP BY h.id
+	GROUP BY u.house_id
 	ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
-	$query = $this->db->query($sql);
-	return $query->result();
+
+	$ranks = $this->db->query($rank_sql)->result();
+	$res = array();
+
+	$res1 = array(); $res2 = array();
+	foreach($ranks as $r) {
+		$res1[$r->house_id] = $r->score;
+	}
+	foreach($houses as $h) {
+		$h->score = empty($res1[$h->house_id]) ? 0 : $res1[$h->house_id];
+		$h->average = number_format($h->score/$h->user_num,2);
+		$res2[$h->house_id] = $h;
+		$res1[$h->house_id] = $h;
+	}
+
+	//var_dump($res2);
+	//var_dump($res1);
+/*
+	for($i=0; $i<=10; $i++) {
+		$house_id = array_shift($res1);
+		$res[$i] = $res2[] 
+	}
+*/
+	return $res1;
 }
 
 function getHouseRankAndPoints($house_id) {

@@ -9,7 +9,7 @@
 						<strong>House <?php echo $row->house_name ?></strong><br>
 						<strong class="muted"><?php echo $row->score ?> points</strong><br>
 						<small>Total Member: <?php echo $row->user_num ?></small><br>
-						<small>Average: <?php echo $row->score/$row->user_num ?> points</small>
+						<small>Average Points: <?php echo $row->average ?> </small>
 					</div>
 					<div class="span8 leaderboard-profile-pic">
 					<?php $avatars = explode(",", $row->avatars); foreach ($avatars as $avatar): ?>
