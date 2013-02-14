@@ -172,8 +172,7 @@ function logMessage($message) {
 }
 
 
-function updateActivityProgress($user_id, $date) {
-	echo "updateProgress".$date;
+function updateActivityProgress($user_id, $date=NULL) {
 	$log = "updateActivityProgress-".$user_id."-".$date;
 	$this->logMessage($log);
 	$ci =& get_instance();
@@ -185,12 +184,10 @@ function updateActivityProgress($user_id, $date) {
 		$data = $this->getIndividualChallenges($user_id, $date);
 	}
 	foreach($data as $c) {
-		print_r($c);
 		if($c->progress >=1 ) {
 			continue;
 		}
 		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
-		print_r($status);
 		if($c->steps_value != 0 && $c->floor_value !=0) {
 			$progress = 0.5 * ($status->steps/$c->steps_value) +
 			0.5 * ($status->floors/$c->floor_value);
@@ -325,6 +322,8 @@ function getLearderboard() {
 	return $query->result();
 }
 
+
+
 function getLearderboardByGender($gender) {
 	$sql = "SELECT u.first_name  AS firstname,
 	u.last_name   AS lastname,
@@ -369,27 +368,62 @@ function getTutorLearderboard() {
 }
 
 function getHouseLeaderboard() {
-	$sql="SELECT
+
+	
+	$house_sql="SELECT
 	u.house_id    AS house_id,
 	h.name        AS house_name,
 	h.picture     AS picture,
-	sum(c.points)  AS score,
 	Count(DISTINCT u.id) as user_num,
 	GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
 	FROM   user AS u,
 	house AS h,
-	challengeparticipant AS cp,
 	challenge as c
 	WHERE  u.house_id = h.id
-	AND c.id = cp.challenge_id
+	AND u.phantom = 0
+	AND u.staff = 0
+	GROUP BY h.id
+	";
+	$houses = $this->db->query($house_sql)->result();
+
+	$rank_sql = "SELECT
+	u.house_id    AS house_id,
+	sum(c.points)  AS score
+	FROM   user AS u,
+	challengeparticipant AS cp,
+	challenge as c
+	WHERE 
+	c.id = cp.challenge_id
 	AND cp.user_id = u.id
 	AND cp.complete_time > cp.start_time
 	AND u.phantom = 0
 	AND u.staff = 0
-	GROUP BY h.id
+	GROUP BY u.house_id
 	ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
-	$query = $this->db->query($sql);
-	return $query->result();
+
+	$ranks = $this->db->query($rank_sql)->result();
+	$res = array();
+
+	$res1 = array(); $res2 = array();
+	foreach($ranks as $r) {
+		$res1[$r->house_id] = $r->score;
+	}
+	foreach($houses as $h) {
+		$h->score = empty($res1[$h->house_id]) ? 0 : $res1[$h->house_id];
+		$h->average = number_format($h->score/$h->user_num,2);
+		$res2[$h->house_id] = $h;
+		$res1[$h->house_id] = $h;
+	}
+
+	//var_dump($res2);
+	//var_dump($res1);
+/*
+	for($i=0; $i<=10; $i++) {
+		$house_id = array_shift($res1);
+		$res[$i] = $res2[] 
+	}
+*/
+	return $res1;
 }
 
 function getHouseRankAndPoints($house_id) {

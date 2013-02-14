@@ -291,7 +291,6 @@ class Activity_model extends CI_Model{
 				ORDER  BY y.activity_time
 				LIMIT  1";
 		$sql = sprintf($sql, $type, $type, $type);
-		echo $sql;
 		$result = $this->db->query($sql, array($user_id, $end, $start, $end, $start, $threshold));
 		if($result->num_rows()>0) {
 			return $result->row()->activity_time;

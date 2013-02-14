@@ -160,7 +160,7 @@ class Challenges extends CI_Controller {
 		}else{
 
 			$challenge_id = $this->input->post("challenge_id");
-			$challenge = $this->Challenge_model()->loadChallenge($challenge_id);
+			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
 			$uid = $this->input->post("user_id");
 
 			$msg = $this->joinChallenge($uid, $challenge_id, $this->date_today);
@@ -201,8 +201,8 @@ class Challenges extends CI_Controller {
 			$this->Forum_model->subscribe($uid, $challenge_id);
 			
 			$user = $this->User_model->loadUser($uid);
-			$message = $user->first_name." ".$user->last_name. " joined this challenge at ". $start .".";
-			$this->Forum_model->createPost($uid, $challenge->thread_id, $message);
+		//	$message = $user->first_name." ".$user->last_name. " joined this challenge at ". $start .".";
+		//	$this->Forum_model->createPost($uid, $challenge->thread_id, $message);
 			$msg = array(
 				"success" => true,
 				"message" => "You have joined the challenge successfully.",
