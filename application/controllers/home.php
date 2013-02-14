@@ -99,6 +99,9 @@ class Home extends CI_Controller{
 		$timestr .= microtime()."<br>";
 
 		$data['all_challenge'] = $this->challenges->loadAvailableChallanges();
+		foreach($data['all_challenge'] as $c) {
+			$data['all'][$c->category][]=$c;	
+		}
 		$timestr .= microtime()."<br>";
 
 		$data['profiling'] = $timestr;
@@ -147,6 +150,8 @@ class Home extends CI_Controller{
 		$data['displayName'] = $displayName;
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
+		$data['isTutor'] = $this->session->userdata('isTutor');
+		$data['isPhantom'] = $isphantom;
 		$data['notifications'] = $this->User_model->getNotifications($this->session->userdata("user_id"));
 	}
 
