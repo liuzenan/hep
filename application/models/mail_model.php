@@ -97,8 +97,8 @@ class Mail_model extends CI_Model{
 		$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
 
-		$data['me_sleep'] = $this->Activity_model->getSleepToday($user_id);
-		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($user_id);
+		$data['me_sleep'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time()));
+		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time() - 60 * 60 * 24));
 
 
 		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);

@@ -19,7 +19,6 @@ class Subscriber extends CI_Controller {
 						$user_id = $data['user_id'];
 						$date = $data['date'];
 						$this->getActivities($user_id, $date);
-						$this->updateProgress($user_id, $date);
 					}else{
 						
 					}
@@ -66,6 +65,7 @@ class Subscriber extends CI_Controller {
 				$this->load->model('Activity_model','activities');
 				$this->activities->insert_intraday_activity($user_id, $date, $keypair);
 				$this->activities->sync_activity($date, '1d', $user_id, $keypair);
+				$this->updateProgress($user_id, $date);
 
 			} catch (Exception $e) {
 				

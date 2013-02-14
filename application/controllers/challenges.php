@@ -59,8 +59,8 @@ class Challenges extends CI_Controller {
 
 	public function loadAvailableChallanges() {
 		$challenges = $this->Challenge_model->getAllChallenges();
-		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->now, $this->now);
-		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->tomorrow_start, $this->tomorrow_end);
+		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_today);
+		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_tomorrow);
 		$today = array(0=>0,1=>0,2=>0,3=>0);
 		$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
 

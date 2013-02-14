@@ -24,14 +24,14 @@ class Challenge_model extends CI_Model{
 		return $query->result();
 	}
 
-	function loadJoinedCategory($user_id, $start_time, $end_time) {
+	function loadJoinedCategory($user_id, $date) {
 		$sql = "SELECT challenge.category, challenge.id as challenge_id, challengeparticipant.id as cp_id
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id = ?
-		WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >= ?";
-		$query = $this->db->query($sql, array($user_id, $start_time, $end_time));
+		WHERE DATE(challengeparticipant.start_time) = ? ";
+		$query = $this->db->query($sql, array($user_id, $date));
 		return $query->result();
 	}
 	function loadChallenge($challenge_id) {
@@ -145,20 +145,20 @@ function getHouseCompletedChallenges($house_id) {
 }
 
 function getIndividualCurrentChallenges($user_id) {
-	return $this->getIndividualChallenges($user_id,date("Y-m-d G:i:s",time()),date("Y-m-d G:i:s",time()));
+	return $this->getIndividualChallenges($user_id,date("Y-m-d",time()));
 }
 
-function getIndividualChallenges($user_id, $start, $end) {
+function getIndividualChallenges($user_id, $date) {
 
 	$sql = "SELECT *
 	FROM challenge
 	INNER JOIN challengeparticipant
 	ON challenge.id=challengeparticipant.challenge_id
 	AND challengeparticipant.user_id= ?
-	WHERE challengeparticipant.start_time <= ? AND challengeparticipant.end_time >=? 
+	WHERE Date(challengeparticipant.start_time) = ?
 	GROUP BY challengeparticipant.challenge_id";
 
-	$query = $this->db->query($sql, array($user_id, $start, $end));
+	$query = $this->db->query($sql, array($user_id, $date));
 	return $query->result();
 }
 
@@ -173,23 +173,24 @@ function logMessage($message) {
 
 
 function updateActivityProgress($user_id, $date) {
-	$start_time = $date. " 00:00:00";		
-	$end_time = $date. " 00:00:00";
-	$log = "updateActivityProgress-".$user_id."-".$start_time."-".$end_time;
+	echo "updateProgress".$date;
+	$log = "updateActivityProgress-".$user_id."-".$date;
 	$this->logMessage($log);
 	$ci =& get_instance();
 	$ci->load->model('Activity_model');
 
-	if(is_null($start_time)) {
+	if(is_null($date)) {
 		$data = $this->getIndividualCurrentChallenges($user_id);
 	} else {
-		$data = $this->getIndividualChallenges($user_id, $start_time, $end_time);
+		$data = $this->getIndividualChallenges($user_id, $date);
 	}
 	foreach($data as $c) {
+		print_r($c);
 		if($c->progress >=1 ) {
 			continue;
 		}
 		$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
+		print_r($status);
 		if($c->steps_value != 0 && $c->floor_value !=0) {
 			$progress = 0.5 * ($status->steps/$c->steps_value) +
 			0.5 * ($status->floors/$c->floor_value);
@@ -205,7 +206,7 @@ function updateActivityProgress($user_id, $date) {
 			$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
 
 		} else if ($c->sleep_value != 0) {
-			$value = $this->Activity_model->getSleepToday($user_id);
+			$value = $this->Activity_model->getSleepData($user_id, $date);
 
 			$progress = number_format($value->total_time/$c->sleep_value, 2);
 			$this->updateProgress($c->id, $progress, $date." 07:00:00", $date." 07:00:00", 0, "sleep", $c->thread_id);
@@ -225,13 +226,14 @@ function updateActivityProgress($user_id, $date) {
 }
 
 function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold, $type, $thread_id) {
+	echo "updateProgress ".$progress."-".$start_time."-".$end_time."-".$thresh_hold."-".$type."-".$thread_id;
 	if($progress >= 1.0) {
 		$cp = $this->loadChallengeParticipation($cp_id);
 		$ci =& get_instance();
 		$ci->load->model('User_model');
 		$ci->load->model('Forum_model');
 		$ci->load->model('Activity_model');
-		$ci->load->model('Email_model');
+		$ci->load->model('Mail_model');
 		if($type == "sleep") {
 			$data = array('progress'=>1, 'complete_time'=>$start_time);
 		}else {
@@ -246,7 +248,7 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 		$user = $this->User_model->loadUser($cp->user_id);
 		$message = $user->first_name." ".$user->last_name. " has completed this challenge at ". $data['complete_time'].".";
 		$this->Forum_model->createPost($cp->user_id, $thread_id, $message);
-		$this->Email_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
+		$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 
 	} else {
 		$data = array('progress'=>$progress);

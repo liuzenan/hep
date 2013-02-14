@@ -51,10 +51,10 @@ class Home extends CI_Controller{
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($this->uid);
 		$timestr .= microtime()."<br>";
 
-		$data['me_sleep'] = $this->Activity_model->getSleepToday($this->uid);
+		$data['me_sleep'] = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time()));
 		$timestr .= microtime()."<br>";
 
-		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepYesterday($this->uid);
+		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time() - 60 * 60 * 24));
 
 		$timestr .= microtime()."<br>";
 
