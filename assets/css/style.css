@@ -609,6 +609,9 @@ margin-bottom: 10px;
 	color: white;
 }
 
+.myactivity .current-challenge-list .challengeItem.box{
+	height: 100px;
+}
 
 .current-challenge-list .challenge-title{
 	text-align: center;

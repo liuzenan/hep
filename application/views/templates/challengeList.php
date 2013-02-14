@@ -11,7 +11,7 @@
 						<strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy icon-2x"></i>
 					</td>
 					<td class="stats-label">
-						<strong>Average:</strong>
+						<strong>Cohort Average:</strong>
 					</td>
 					<td class="stats-label">
 						<strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group icon-2x"></i>
@@ -38,6 +38,12 @@
 					</div>
 				</div>
 			<?php } ?>
+			<?php for ($i=0; $i < (4 - count($me_challenges_yesterday)); $i++ ): ?>
+				<div class="challengeItem box">
+					<div class="challengeContainer">
+					</div>
+				</div>
+			<?php endfor ?>
 		<div class="alert">
 		  <button type="button" class="close" data-dismiss="alert">&times;</button>
 		    <small>Please report any errors here to:<br><a href="mailto:hep-support@googlegroup.com">hep-support@googlegroup.com</a></small>
