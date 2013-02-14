@@ -2,7 +2,12 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<div class="row-fluid myactivity">
-				<?php $this->load->view('templates/challengeList');?>
+      <?php if (!($isLeader || $isTutor || $isAdmin)): ?>
+        <?php $this->load->view('templates/challengeListDisabled');?>
+      <?php else: ?>
+        <?php $this->load->view('templates/challengeList');?>
+      <?php endif ?>
+				
 				<?php $this->load->view('templates/todayActivity');?>
 				<?php $this->load->view('templates/achievementList');?>
 		</div>
