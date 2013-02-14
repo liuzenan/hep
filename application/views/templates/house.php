@@ -12,9 +12,9 @@
 						<small>Average Points: <?php echo $row->average ?> </small>
 					</div>
 					<div class="span8 leaderboard-profile-pic">
-					<?php $avatars = explode(",", $row->avatars); foreach ($avatars as $avatar): ?>
-						<img src="<?php echo $avatar ?>" width="10%"/>
-					<?php endforeach ?>
+					<?php $avatars = explode(",", $row->avatars); $names=explode(",", $row->names); for($i=0; $i<count($avatars);$i++): ?>
+						<img class="challengeTitleTooltip" src="<?php echo $avatars[$i] ?>" width="10%" data-original-title="<?php echo $names[$i] ?>"/>
+					<?php endfor ?>
 					</div>
 				</div>
 		<?php endforeach ?>

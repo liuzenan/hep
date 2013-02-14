@@ -374,11 +374,11 @@ function getHouseLeaderboard() {
 	u.house_id    AS house_id,
 	h.name        AS house_name,
 	h.picture     AS picture,
-	Count(DISTINCT u.id) as user_num,
-	GROUP_CONCAT(DISTINCT u.profile_pic) as avatars
+	Count(u.id) as user_num,
+	GROUP_CONCAT(u.profile_pic) as avatars,
+	GROUP_CONCAT(u.first_name) as names
 	FROM   user AS u,
-	house AS h,
-	challenge as c
+	house AS h
 	WHERE  u.house_id = h.id
 	AND u.phantom = 0
 	AND u.staff = 0
