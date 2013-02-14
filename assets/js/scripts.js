@@ -1,4 +1,6 @@
 var base_url = 'http://hep.d2.comp.nus.edu.sg/';
+var game_start_date = Date(2013, 02, 28);
+
 jQuery(document).ready(function($) {
 
 	$(".example").popover({
@@ -264,7 +266,22 @@ jQuery(document).ready(function($) {
 		expandable.removeClass("expand");
 	});
 
+	var counter = setInterval(timer, 1000);
+
 });
+
+function timer(){
+	var current = Date();
+	var oneDay = 24*60*60*1000;
+	var oneHour = 60*60*1000;
+	var oneMinute = 60*1000;
+	var oneSecond = 1000;
+
+	$("#count-down-days").text(""+Math.floor((game_start_date.getTime()-current.getTime())/(oneDay)));
+	$("#count-down-hours").text(""+Math.floor(((game_start_date.getTime()-current.getTime())%(oneDay))/(oneHour)));
+	$("#count-down-minutes").text(""+Math.floor((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))/(oneMinute)));
+	$("#count-down-seconds").text(""+Math.floor(((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))%(oneMinute))/(oneSecond)));
+}
 
 //limit text
 function limitText(limitField, limitCount, limitNum) {
