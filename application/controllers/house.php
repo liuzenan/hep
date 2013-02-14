@@ -21,17 +21,17 @@ class House extends CI_Controller {
 	private function loadData() {
 		$user = $this->User_model->loadUser($this->uid);
 
+		$members = $this->User_model->loadGroupMemberAvatar($user->house_id);
 		$badges = $this->Badge_model->getHouseBadges($user->house_id);
 		$completed = $this->Challenge_model->getMyHouseStats($user->house_id);
 		$current = $this->Challenge_model->getHouseCurrentChallenges($user->house_id);
 		$tomorrow = $this->Challenge_model->getHouseTomorrowChallenges($user->house_id);
-		/*
-		echo "<pre>"; print_r($badges);echo "</pre><br>";
-		echo "<pre>"; print_r($completed);echo "</pre><br>";
-		echo "<pre>"; print_r($current);echo "</pre><br>";
-		*/
+				
+		
 		$data = array();
-
+		foreach($members as $m) {
+			$data['data'][$m->id]['profile'] = $m;
+		}
 		foreach($badges as $uid => $b) {
 			$data['data'][$uid]['badge'] = $b;
 		}

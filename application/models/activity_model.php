@@ -77,7 +77,7 @@ class Activity_model extends CI_Model{
 
 	function getSleepToday($user_id){
 		$today = date("Y-m-d");
-		$sql = "SELECT Sum(total_time) AS total_time,
+		$sql = "SELECT Sum(time_asleep) AS total_time,
 		date
 		FROM   sleep
 		WHERE  user_id = ?
@@ -96,8 +96,8 @@ class Activity_model extends CI_Model{
 
 	function getSleepStartTime($user_id, $start) {
 		$offset = strtotime("23:59:59") - strtotime($start);
-		$sql = "SELECT * FROM sleep WHERE total_time>? AND start_time<? AND user_id=?";
-		return $this->db->query($sql, array($offset, $start_time, $user_id))->row();
+		$sql = "SELECT start_time FROM sleep WHERE total_time>=? AND start_time<=? AND user_id=?";
+		return $this->db->query($sql, array($offset, $start, $user_id))->row();
 	}
 	function getActivityStats($user_id, $start, $end) {
 		$sql = "SELECT Sum(steps)     AS steps,
@@ -298,7 +298,7 @@ class Activity_model extends CI_Model{
 				               t.user_id,
 				               (SELECT Sum(x.%s)
 				                FROM   intradayactivity AS x
-				                WHERE  x.user_id = 48
+				                WHERE  x.user_id = ?
 				                   AND x.activity_time <= ?
 				                   AND x.activity_time >= ?
 				                   AND x.activity_time <= t.activity_time
@@ -307,7 +307,7 @@ class Activity_model extends CI_Model{
 				         WHERE  t.activity_time <= ?
            					AND t.activity_time >= ?
 				        ORDER  BY t.activity_time) AS y
-				WHERE  y.running_total > ?
+				WHERE  y.running_total >= ?
 				ORDER  BY y.activity_time
 				LIMIT  1";
 		$sql = sprintf($sql, $type, $type, $type);

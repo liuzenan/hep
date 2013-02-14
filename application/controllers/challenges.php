@@ -176,15 +176,17 @@ class Challenges extends CI_Controller {
 				);
 		} else {
 			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $start, $end);
-			$msg = array(
-				"success" => true,
-				"message" => "You have joined the challenge successfully."
-				);
+
 			$this->Forum_model->subscribe($uid, $challenge_id);
 			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
 			$user = $this->User_model->loadUser($uid);
 			$message = $user->first_name." ".$user->last_name. " joined this challenge at ". $start .".";
 			$this->Forum_model->createPost($uid, $challenge->thread_id, $message);
+			$msg = array(
+				"success" => true,
+				"message" => "You have joined the challenge successfully.",
+				"challenge" => $challenge
+				);
 		}
 
 		return $msg;
@@ -199,7 +201,8 @@ class Challenges extends CI_Controller {
 		}
 		$msg = array(
 			"success" => false,
-			"message" => "You have quitted the challenge"
+			"message" => "You have quitted the challenge",
+			"challenge_id" => $cp->challenge_id
 			);
 		echo json_encode($msg);
 	}
