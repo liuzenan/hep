@@ -202,8 +202,8 @@ jQuery(document).ready(function($) {
 		$(this).parent().parent().children(".full-content").toggleClass("hide");
 		$(this).parent().parent().children(".collapsed-content").toggleClass("hide");
 
-		if (current.text()!="Show less comments") {
-			current.text("Show less comments");
+		if (current.text()!="Show fewer comments") {
+			current.text("Show fewer comments");
 		} else {
 			current.text("Show all " + current.data("comments") + " comments");
 		}
