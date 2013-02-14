@@ -81,8 +81,9 @@ jQuery(document).ready(function($) {
 					user_id:userId
 				}
 			}).done(function(msg){
-				alert(msg.message);
-				window.location.reload();
+				//alert(msg.message);
+				//window.location.reload();
+				console.log(msg);
 			});
 		}
 	});
@@ -102,8 +103,8 @@ jQuery(document).ready(function($) {
 				}
 			}).done(function(msg){
 				console.log(msg);
-				alert(msg.message);
-				window.location.reload();
+				//alert(msg.message);
+				//window.location.reload();
 			});
 		}
 	});
