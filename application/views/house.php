@@ -16,7 +16,7 @@
 			<?php foreach ($data as $value): ?>
 				<div class="house-people clearfix">
 					<div class="house-people-pic">
-						<img src="<?php if(!empty($value['completed'])) echo $value['completed']->avatar ?>" alt="">
+						<img src="<?php if(!empty($value['profile'])) echo $value['profile']->profile_pic ?>" alt="">
 					</div>
 					<div class="house-people-content">
 						
@@ -25,7 +25,7 @@
 								<div class="span2">
 									<a href="#">
 								<strong>
-									<?php if(!empty($value['completed'])) echo $value['completed']->firstname . ' ' . $value['completed']->lastname; ?>
+									<?php if(!empty($value['profile'])) echo $value['profile']->first_name . ' ' . $value['profile']->last_name; ?>
 								</strong>
 									</a>
 								</div>
@@ -48,7 +48,7 @@
 						</div>
 						<div class="row-fluid house-people-stats">
 							<div class="span2">
-								<small class="muted">completed <?php if(!empty($value['completed'])) echo $value['completed']->score ?> challenges</small>
+								<small class="muted">completed <?php echo empty($value['completed']) ? 0 : $value['completed']->score ?> challenges</small>
 							</div>
 							<div class="span3 house-people-current">
 								<?php if (!empty($value['current'])): ?>
