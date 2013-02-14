@@ -65,7 +65,10 @@ class Home extends CI_Controller{
 		$timestr .= microtime()."<br>";
 
 
-		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$cs1 = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		foreach($cs1 as $c1) {
+		 	$data['me_challenges'][$c1->category]=$c1;
+		}
 		$timestr .= microtime()."<br>";
 
 		$data['me_badges'] = $this->Badge_model->getBadges($this->uid);
@@ -75,11 +78,17 @@ class Home extends CI_Controller{
 		$timestr .= microtime()."<br>";
 
 		$yesterday = date("Y-m-d ",time() - 60 * 60 * 24);	
-		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday);
+		$cs2 = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday);
+		foreach($cs2 as $c2) {
+		 	$data['me_challenges_yesterday'][$c2->category]=$c2;
+		}
 		$timestr .= microtime()."<br>";
 
 		$tomorrow = date("Y-m-d ",time() + 60 * 60 * 24);	
-		$data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow);
+		$cs3= $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow);
+		foreach($cs3 as $c3) {
+			$data['me_challenges_tomorrow'][$c3->category]=$c3;
+		}
 		$timestr .= microtime()."<br>";
 
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
@@ -99,6 +108,9 @@ class Home extends CI_Controller{
 		$timestr .= microtime()."<br>";
 
 		$data['all_challenge'] = $this->challenges->loadAvailableChallanges();
+		foreach($data['all_challenge'] as $c) {
+			$data['all'][$c->category][]=$c;	
+		}
 		$timestr .= microtime()."<br>";
 
 		$data['profiling'] = $timestr;
@@ -147,6 +159,8 @@ class Home extends CI_Controller{
 		$data['displayName'] = $displayName;
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
+		$data['isTutor'] = $this->session->userdata('isTutor');
+		$data['isPhantom'] = $isphantom;
 		$data['notifications'] = $this->User_model->getNotifications($this->session->userdata("user_id"));
 	}
 
