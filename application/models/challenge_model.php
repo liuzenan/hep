@@ -369,7 +369,7 @@ function getTutorLearderboard() {
 
 function getHouseLeaderboard() {
 
-	
+	$this->db->query('SET GLOBAL group_concat_max_len=15000');
 	$house_sql="SELECT
 	u.house_id    AS house_id,
 	h.name        AS house_name,
@@ -382,6 +382,7 @@ function getHouseLeaderboard() {
 	WHERE  u.house_id = h.id
 	AND u.phantom = 0
 	AND u.staff = 0
+	AND u.house_id > 0
 	GROUP BY h.id
 	";
 	$houses = $this->db->query($house_sql)->result();
@@ -398,6 +399,7 @@ function getHouseLeaderboard() {
 	AND cp.complete_time > cp.start_time
 	AND u.phantom = 0
 	AND u.staff = 0
+	AND u.house_id > 0
 	GROUP BY u.house_id
 	ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
 
