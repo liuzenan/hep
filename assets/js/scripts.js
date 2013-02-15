@@ -1,6 +1,5 @@
 var base_url = 'http://hep.d2.comp.nus.edu.sg/';
-var game_start_date = new Date();
-game_start_date.setFullYear(2013, 1, 28, 0, 0, 0, 0);
+var game_start_date = new Date(2013, 1, 28, 0);
 
 jQuery(document).ready(function($) {
 
