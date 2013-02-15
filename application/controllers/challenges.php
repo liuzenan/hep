@@ -30,8 +30,19 @@ class Challenges extends CI_Controller {
 
 	public function index(){
 		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
-		$data["tomorrow"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
-		
+		$tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
+
+		foreach($data["challenges"] as $c) {
+			$data["today"][$c->category]=$c;
+		}
+		foreach($tomorrow as $c2) {
+			$data["tomorrow"][$c2->category]=$c2;
+		}
+
+		$all = $this->loadAvailableChallanges();
+		foreach($all as $c3) {
+			$data['all'][$c3->category][] = $c3;
+		}
 		//echo "<pre>"; print_r($data);echo "</pre><br>";
 
 		$data["tab"] = "my";
@@ -52,7 +63,22 @@ class Challenges extends CI_Controller {
 
 
 	public function data() {
-		echo "<pre>"; print_r($this->loadAvailableChallanges());echo "</pre><br>";
+		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
+
+		foreach($data["challenges"] as $c) {
+			$data["today"][$c->category]=$c;
+		}
+		foreach($tomorrow as $c2) {
+			$data["tomorrow"][$c2->category]=$c2;
+		}
+
+		$all = $this->loadAvailableChallanges();
+		foreach($all as $c3) {
+			$data['all'][$c3->category][] = $c3;
+		}
+		
+		echo "<pre>"; print_r($data);echo "</pre><br>";
 	}
 
 	
@@ -91,6 +117,8 @@ class Challenges extends CI_Controller {
 			$c->cp_id_tomorrow = empty($cpIds2[$c->id])? -1:$cpIds2[$c->id];
 			
 		}
+
+
 		return $challenges;
 
 	}
@@ -145,7 +173,8 @@ class Challenges extends CI_Controller {
 
 			$challenge_id = $this->input->post("challenge_id");
 			$uid = $this->input->post("user_id");
-			$msg = $this->joinChallenge($uid, $challenge_id, $this->date_tomorrow);
+			$old_cpid = $this->input->post("old_cpid");
+			$msg = $this->joinChallenge($uid, $old_cpid, $challenge_id, $this->date_tomorrow);
 		}
 		echo json_encode($msg);
 
@@ -162,17 +191,22 @@ class Challenges extends CI_Controller {
 			$challenge_id = $this->input->post("challenge_id");
 			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
 			$uid = $this->input->post("user_id");
+			$old_cpid = $this->input->post("old_cpid");
 
-			$msg = $this->joinChallenge($uid, $challenge_id, $this->date_today);
+			$msg = $this->joinChallenge($uid, $old_cpid, $challenge_id, $this->date_today);
 		}
 		echo json_encode($msg);
 
 	}
 
-	public function joinChallenge($uid, $challenge_id, $date) {
+	public function joinChallenge($uid, $old_cpid, $challenge_id, $date) {
+		//delete old
 		//join challenge
 		//subscribe
 		//post 
+		if($old_cpid > 0) {
+			$this->Challenge_model->quitChallenge($old_cpid);
+		}
 		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $date);
 
 		if((bool) $invalid) {
