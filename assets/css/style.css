@@ -743,4 +743,15 @@ margin-bottom: 10px;
 	padding-top: 10px;
 }
 
+#challengeModal .challenge-wrapper .row-fluid{
+	padding: 10px 0;
+	border-bottom: 1px solid #ccc;
+}
 
+#challengeModal .challenge-wrapper a{
+	text-decoration: none !important;
+}
+
+#challengeModal .challenge-wrapper .row-fluid:hover{
+	background-color: #ddd;
+}

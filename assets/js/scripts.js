@@ -236,6 +236,38 @@ jQuery(document).ready(function($) {
 		
 	});
 
+	for (var i = 0; i < 4; i++) {
+		$(".today .challenge-type-"+i+" a").bind('click', {type:i}, function(event){
+			var data = event.data;
+			$("#challengeModal .challenge-wrapper").html("");
+			console.log(data.type);
+			for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
+				var currentChallenge = allChallenges[data.type][j];
+				if(currentChallenge.cp_id_tomorrow!=-1){
+					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				} else {
+					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				}
+				
+			}
+		});
+
+		$(".tomorrow .challenge-type-"+i+" a").bind('click', {type:i},function(event){
+			var data = event.data;
+			$("#challengeModal .challenge-wrapper").html("");
+			console.log(data.type);
+			for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
+				var currentChallenge = allChallenges[data.type][j];
+				if(currentChallenge.cp_id_tomorrow!=-1){
+					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				} else {
+					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				}
+				
+			}
+		});		
+	};
+
 	$(".myactivity .current-challenges").mouseenter(function(event){
 		var button = $(this).find(".expandbtn");
 		var expandable = button.parent().parent().find(".expandable");

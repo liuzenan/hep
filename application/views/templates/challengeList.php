@@ -52,7 +52,7 @@
 				<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 						<?php if (!empty($me_challenges) && !empty($me_challenges[$i])): ?>
-			<a href="#challengeToday" role="button" data-challenge-id="<?php echo $me_challenges[$i]->id ?>" data-toggle="modal">
+			<a href="#challengeModal" role="button" data-challenge-id="<?php echo $me_challenges[$i]->id ?>" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $me_challenges[$i]->description ?>"><?php echo $me_challenges[$i]->title ?></div>
@@ -64,7 +64,7 @@
 				</div>				
 			</a>					
 						<?php else: ?>
-			<a href="#challengeToday" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
+			<a href="#challengeModal" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
 				<div class="challengeItem box empty">
 					<div class="challengeContainer">
 					</div>
@@ -79,7 +79,7 @@
 				<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 						<?php if (!empty($me_challenges_tomorrow) && !empty($me_challenges_tomorrow[$i])): ?>
-			<a href="#challengeTmr" role="button" data-challenge-id="<?php echo $me_challenges_tomorrow[$i]->id ?>" data-toggle="modal">
+			<a href="#challengeModal" role="button" data-challenge-id="<?php echo $me_challenges_tomorrow[$i]->id ?>" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $me_challenges_tomorrow[$i]->description ?>"><?php echo $me_challenges_tomorrow[$i]->title ?></div>
@@ -88,7 +88,7 @@
 				</div>				
 			</a>			
 						<?php else: ?>
-			<a href="#challengeTmr" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
+			<a href="#challengeModal" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
 				<div class="challengeItem box empty">
 					<div class="challengeContainer">
 					</div>
