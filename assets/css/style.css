@@ -3,6 +3,19 @@ p{
 	margin: 0 0 1em;
 }
 
+.notstarted{
+	text-align: center;
+}
+
+.notstarted p{
+	font-family: "Grandesign Neue Serif", serif;
+	font-size: 1.2em;
+}
+
+.notstarted p{
+	font-size: 1.5em;
+}
+
 .hide{
 	display: none;
 }
@@ -716,7 +729,7 @@ margin-bottom: 10px;
 }
 .badgelist a img{
 	display: block;
-	width: pxx;
+	width: 100px;
 	height: auto;
 }
 

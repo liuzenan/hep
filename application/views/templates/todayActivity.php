@@ -1,6 +1,6 @@
 		<div class="row-fluid">
 			<div class="today-activity">
-				<p class="section-title">Today's Activity  last sync: <span data-livestamp="<?php echo strtotime((string) $me_today->last_update) - 60; ?>"></span></p>
+				<p class="section-title">Today's Activity  <span class="pull-right">last sync: <span data-livestamp="<?php if(!empty($me_today->last_update)) echo strtotime((string) $me_today->last_update) - 60; ?>"></span></span></p>
 				<div class="row-fluid">
 					<div class="span12">
 						<div class="row-fluid activity-chart">

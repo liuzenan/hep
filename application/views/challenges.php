@@ -1,6 +1,9 @@
 <div class="row-fluid" id="allChallenges">
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
+		<?php if (!($isLeader|| $isAdmin)): ?>
+		<?php $this->load->view("challengeDisabled"); ?>
+		<?php else: ?>
 		<div class="alert">
 		  <button type="button" class="close" data-dismiss="alert">&times;</button>
 		  <strong>Game Rules</strong><br>
@@ -19,5 +22,6 @@
 		<div id="challenges" class="<?php echo $tab ?>">
 			<?php $this->load->view('templates/challenge'); ?>
 		</div>
+		<?php endif ?>
 	</div>
 </div>
