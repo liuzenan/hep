@@ -12,63 +12,55 @@ class Profile extends CI_Controller {
 	}
 
 	public function index(){
-		
+		$this->user($this->session->userdata('user_id'));
 	}
 
-	public function viewprofile($user_id){
+	public function user($user_id) {
+		$this->loadUserData($user_id, $data);
+		print_r($data);
+		$data['active'] = "profile";
+		$this->load->view('templates/header', $data);
+		$this->load->view('profile', $data);
+		$this->load->view('templates/footer');
+	}
+	private function loadUserData($user_id, &$data) {
+		$user = $this->User_model->loadUser($user_id);
 		
-		
-		$data['active'] ='profile';
-		$data['displayName'] = $this->session->userdata('name');
-		$data['avatar'] = $this->session->userdata('avatar');
+		if($this->session->userdata('name')){
+			$displayName = $this->session->userdata('name');
+		}else{
+			$displayName = $user->first_name . ' ' . $user->last_name;
+		}
+
+		$this->session->set_userdata('name', $displayName);
+		$this->session->set_userdata('username', $user->username);
+		$gender =$user->gender;
+		$avatar = $user->profile_pic;
+		$isTutor = $user->staff;
+		$isleader = $user->leader;
+		$isadmin = $user->admin;
+		$isphantom = $user->phantom;
+
+		$data['badge_email_unsub'] = $user->badge_email_unsub;
+		$data['daily_email_unsub'] = $user->daily_email_unsub;
+		$data['badge_email_unsub'] = $user->badge_email_unsub;
+		$data['house_id'] = $user->house_id;
+		$data['gender'] = $user->gender;
+		$data['email'] = $user->email;
+		$data['avatar'] = $avatar;
+		$this->session->set_userdata('avatar', $avatar);
+		$this->session->set_userdata('isTutor', $isTutor);
+		$this->session->set_userdata('isphantom', $isphantom);
+		$this->session->set_userdata('isleader', $isleader);
+		$this->session->set_userdata('isadmin', $isadmin);
+		$data['first_name'] = $user->first_name;
+		$data['last_name'] = $user->last_name;
+		$data['gender'] = $gender;
+		$data['displayName'] = $displayName;
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-
-		$query = $this->db->query("SELECT * FROM user WHERE id=" . $user_id);
-
-		if($query->num_rows()>0){
-
-			$data['userdata'] = $query->row();
-			$sql = "SELECT achievement.badge_pic, achievement.name
-			FROM achievement
-			INNER JOIN userachievement
-			ON achievement.id = userachievement.achievement_id
-			WHERE userachievement.user_id = ". $user_id;
-			$query = $this->db->query($sql);
-
-			if($query->num_rows()>0){
-				$data['userachievement'] = $query->result();
-			}
-
-			$sql = "SELECT * FROM post 
-			WHERE user_id = " . $user_id . "
-			ORDER BY time DESC
-			LIMIT 0, 10";
-
-			$query = $this->db->query($sql);
-			if($query->num_rows()>0){
-				$data['userposts'] = $query->result();
-			}
-
-			$sql = "SELECT event.title, event.id, event.date, event.event_image
-			FROM event
-			INNER JOIN eventparticipant
-			ON event.id = eventparticipant.event_id
-			WHERE eventparticipant.user_id = " . $user_id;
-
-			$query = $this->db->query($sql);
-			if($query->num_rows()>0){
-				$data['userevents'] = $query->result();
-			}
-			
-			$data['notifications'] = $this->User_model->getNotifications($this->session->userdata("user_id"));
-
-			$this->load->view('templates/header', $data);
-			$this->load->view('profile', $data);
-			$this->load->view('templates/footer');
-
-		}			
-		
-
+		$data['isTutor'] = $this->session->userdata('isTutor');
+		$data['isPhantom'] = $isphantom;
+		$data['notifications'] = $this->User_model->getNotifications($this->session->userdata("user_id"));
 	}
 }
