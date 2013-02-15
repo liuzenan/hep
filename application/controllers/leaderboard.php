@@ -23,17 +23,21 @@ class Leaderboard extends CI_Controller {
 
 	public function overall(){
 
-		$this->loadPage($this->data());
+		$this->loadPage($this->loadData());
 	}
 
-	public function data() {
+	private function loadData() {
 		$data['currentTab'] = "overall";
-		//$data['leader'] = $this->Challenge_model->getLearderboard();
+		$data['leader'] = $this->Challenge_model->getLearderboard();
+		return $data;
+	}
+	public function data() {
+		
 		//$data['female'] = $this->Challenge_model->getLearderboardByGender(Leaderboard::female);
 		//$data['male'] = $this->Challenge_model->getLearderboardByGender(Leaderboard::male);
-			$data['house'] = $this->Challenge_model->getHouseLeaderboard();
-
-		echo "<pre>"; print_r($data['house']);echo "</pre><br>";
+		//$data['house'] = $this->Challenge_model->getHouseLeaderboard();
+		//$data['leader'] = $this->loadData();
+		//echo "<pre>"; print_r($data['house']);echo "</pre><br>";
 
 		return $data;
 	}
@@ -43,18 +47,18 @@ class Leaderboard extends CI_Controller {
 		FROM   activity
 		WHERE  ( steps > 0
 			OR floors > 0 )
-			AND date = ?
-			UNION
-			SELECT DISTINCT user_id
-			FROM   sleep
-			WHERE  total_time > 0
-			AND date = ?";
-		$uids=$this->db->query($sql, array(date("Y-m-d ",time()),date("Y-m-d ",time())))->result();
-		foreach($uids as $uid) {
-			$this->Challenge_model->updateActivityProgress($uid->user_id);
-		}
+AND date = ?
+UNION
+SELECT DISTINCT user_id
+FROM   sleep
+WHERE  total_time > 0
+AND date = ?";
+$uids=$this->db->query($sql, array(date("Y-m-d ",time()),date("Y-m-d ",time())))->result();
+foreach($uids as $uid) {
+	$this->Challenge_model->updateActivityProgress($uid->user_id);
+}
 
-	}
+}
 
 
 public function staff(){
@@ -78,6 +82,7 @@ private function loadPage($data){
 	$data['avatar'] = $this->session->userdata('avatar');
 	$data['isAdmin'] = $this->session->userdata('isadmin');
 	$data['isLeader'] = $this->session->userdata('isleader');
+	$data['isTutor'] = $this->session->userdata('isTutor');
 
 	$data['notifications'] = $this->User_model->getNotifications($this->uid);
 	$this->load->view('templates/header', $data);

@@ -317,7 +317,7 @@ function getLearderboard() {
 	AND u.phantom = 0
 	AND u.staff = 0
 	GROUP BY u.id
-	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 50";
+	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 20";
 	$query = $this->db->query($sql);
 	return $query->result();
 }
