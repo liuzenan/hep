@@ -44,8 +44,9 @@ class Home extends CI_Controller{
 
 		$this->loadActivityData($this->uid, $data);
 		$timestr .= microtime()."<br>";
-
 		$data['me_today'] = $this->Activity_model->getActivityToday($this->uid);
+		$data['today'] = $this->Activity_model->getLastUpdate($this->uid);
+
 		$timestr .=		 microtime()."<br>";
 
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($this->uid);
@@ -67,7 +68,7 @@ class Home extends CI_Controller{
 
 		$cs1 = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
 		foreach($cs1 as $c1) {
-		 	$data['me_challenges'][$c1->category]=$c1;
+			$data['me_challenges'][$c1->category]=$c1;
 		}
 		$timestr .= microtime()."<br>";
 
@@ -80,7 +81,7 @@ class Home extends CI_Controller{
 		$yesterday = date("Y-m-d ",time() - 60 * 60 * 24);	
 		$cs2 = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday);
 		foreach($cs2 as $c2) {
-		 	$data['me_challenges_yesterday'][$c2->category]=$c2;
+			$data['me_challenges_yesterday'][$c2->category]=$c2;
 		}
 		$timestr .= microtime()."<br>";
 

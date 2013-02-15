@@ -30,6 +30,17 @@ class Activity_model extends CI_Model{
 		return $vars;
 	}
 
+	function getLastUpdate($user_id) {
+		$sql="SELECT Max(last_update) as time
+				FROM   activity	
+				WHERE  user_id = ?";
+		$lastupdate = $this->db->query($sql, array($user_id))->row();
+		if(empty($lastupdate)) {
+			return "2013-02-14 00:00:00";
+		}else {
+			return $lastupdate->time;
+		}
+	}
 	function getActivityYesterday($user_id) {
 		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
 		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$yesterday));

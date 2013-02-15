@@ -28,10 +28,12 @@ class Leaderboard extends CI_Controller {
 
 	public function data() {
 		$data['currentTab'] = "overall";
-		$data['leader'] = $this->Challenge_model->getLearderboard();
+		//$data['leader'] = $this->Challenge_model->getLearderboard();
 		//$data['female'] = $this->Challenge_model->getLearderboardByGender(Leaderboard::female);
 		//$data['male'] = $this->Challenge_model->getLearderboardByGender(Leaderboard::male);
-		//echo "<pre>"; print_r($data);echo "</pre><br>";
+			$data['house'] = $this->Challenge_model->getHouseLeaderboard();
+
+		echo "<pre>"; print_r($data['house']);echo "</pre><br>";
 
 		return $data;
 	}
