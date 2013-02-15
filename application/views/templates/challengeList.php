@@ -76,7 +76,7 @@
 				</div>
 				<div class="span4 tomorrow">
 					<div class="challenge-title">Tomorrow</div>
-
+			<?php if (!empty($me_challenges_tomorrow)): ?>
 			<?php foreach($me_challenges_tomorrow as $challenge){ ?>
 			<a href="#challengeTmr" role="button" data-challenge-id="<?php echo $challenge->id ?>" data-toggle="modal">
 				<div class="challengeItem box">
@@ -86,7 +86,7 @@
 					</div>
 				</div>				
 			</a>
-			<?php } ?>
+			<?php } ?>	
 			<?php for ($i=0; $i < (4 - count($me_challenges_tomorrow)); $i++ ): ?>
 			<a href="#challengeTmr" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
 				<div class="challengeItem box empty">
@@ -94,7 +94,8 @@
 					</div>
 				</div>
 			</a>
-			<?php endfor ?>
+			<?php endfor ?>			
+			<?php endif ?>
 				</div>
 			</div>
 		<?php } else {?>
