@@ -42,7 +42,10 @@ class Login extends CI_Controller{
 				'oauth_secret' => $oauth_secret,
 				'oauth_token' => $oauth_token,
 				'username' => $username,
-				'avatar' => $profile_pic
+				'avatar' => $profile_pic,
+				'isadmin'=> $row->admin,
+				'isleader'=> $row->leader,
+				'isTutor' => $row->staff
 				);		
 			$this->session->set_userdata($userdata);
 
@@ -157,100 +160,106 @@ class Login extends CI_Controller{
 			foreach($sleepData as $key=>$value){
 				$sql = "INSERT INTO sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
 				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', "
-				 . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] .
-				  ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
-				$this->db->query($sql);	
+					. $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] .
+					", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] .")";
+$this->db->query($sql);	
+}
+}else{
+	echo 'something was wrong';
+}
+
+
+}
+
+private function initPosts(){
+	if($this->session->userdata('user_id')){
+
+		$user_id = $this->session->userdata('user_id');
+		$query = $this->db->query("SELECT * FROM activity WHERE user_id='". $user_id ."'");
+		$stepsData= array();
+		if($query->num_rows()>0){
+			foreach($query->result() as $row){
+				$currentData = array(
+					"date" =>(string) $row->date,
+					"steps" => $row->steps,
+					"calories" => $row->calories
+					);
+				array_push($stepsData, $currentData);
 			}
-		}else{
-			echo 'something was wrong';
 		}
 
-
+		
 	}
-	
-	private function initPosts(){
-		if($this->session->userdata('user_id')){
+}
 
-			$user_id = $this->session->userdata('user_id');
-			$query = $this->db->query("SELECT * FROM activity WHERE user_id='". $user_id ."'");
-			$stepsData= array();
-			if($query->num_rows()>0){
-				foreach($query->result() as $row){
-					$currentData = array(
-						"date" =>(string) $row->date,
-						"steps" => $row->steps,
-						"calories" => $row->calories
-						);
-					array_push($stepsData, $currentData);
-				}
-			}
-
-			
-		}
-	}
-
-	public function facebookLogin(){
-		$facebookUsername = $this->input->post('username');
-		$query = $this->db->query("SELECT * FROM user WHERE username = '" . $facebookUsername . "'");
-		if ($query->num_rows()>0) {
-			$row = $query->row();
-			if (empty($row->email)) {
-				$msg['success'] = false;
-				$msg['error'] = 'noemail';
-			} else {
-				$userdata = array(
-					'user_id' => $row->id,
-					'fibit_id' => $row->fitbit_id,
-					'oauth_secret' => $row->oauth_secret,
-					'oauth_token' => $row->oauth_token,
-					'username' => $row->username,
-					'avatar' => $row->profile_pic
-					);		
-				$this->session->set_userdata($userdata);
-				$msg['success'] = true;				
-			}
-		} else {
+public function facebookLogin(){
+	$facebookUsername = $this->input->post('username');
+	$query = $this->db->query("SELECT * FROM user WHERE username = '" . $facebookUsername . "'");
+	if ($query->num_rows()>0) {
+		$row = $query->row();
+		if (empty($row->email)) {
 			$msg['success'] = false;
-			$msg['error'] = 'nouser';
-		}
-
-		echo json_encode($msg);
-	}
-
-	public function linkWithFacebook(){
-		$email = $this->input->post("email");
-		$username = $this->input->post("username");
-		$query = $this->db->query("SELECT * FROM user WHERE email = " . $this->db->escape($email));
-		if ($query->num_rows()>0) {
-			$row = $query->row();
-			$sql = "UPDATE user SET username = " . $this->db->escape($username) . "WHERE id = " . $row->id;
-			$this->db->query($sql);
-				$userdata = array(
-					'user_id' => $row->id,
-					'fibit_id' => $row->fitbit_id,
-					'oauth_secret' => $row->oauth_secret,
-					'oauth_token' => $row->oauth_token,
-					'username' => $this->db->escape($username),
-					'avatar' => $row->profile_pic
-					);		
-				$this->session->set_userdata($userdata);			
-			$msg["success"] = true;
+			$msg['error'] = 'noemail';
 		} else {
-			$msg["success"] = false;
+			$userdata = array(
+				'user_id' => $row->id,
+				'fibit_id' => $row->fitbit_id,
+				'oauth_secret' => $row->oauth_secret,
+				'oauth_token' => $row->oauth_token,
+				'username' => $row->username,
+				'avatar' => $row->profile_pic,
+				'isadmin'=> $row->admin,
+				'isleader'=> $row->leader,
+				'isTutor' => $row->staff
+				);		
+			$this->session->set_userdata($userdata);
+			$msg['success'] = true;				
 		}
-
-		echo json_encode($msg);
+	} else {
+		$msg['success'] = false;
+		$msg['error'] = 'nouser';
 	}
 
-	private function addSubscription(){
+	echo json_encode($msg);
+}
 
-		try {
-			$user_id =(string) $this->session->userdata('user_id');
-			$activity_id = $user_id . "-activities";
-			$sleep_id = $user_id . "-sleep";
-			$this->fitbitphp->addSubscription($activity_id, "/activities", "activities");
-			$this->fitbitphp->addSubscription($sleep_id, "/sleep", "sleep");
-		} catch (Exception $e) {
-		}
+public function linkWithFacebook(){
+	$email = $this->input->post("email");
+	$username = $this->input->post("username");
+	$query = $this->db->query("SELECT * FROM user WHERE email = " . $this->db->escape($email));
+	if ($query->num_rows()>0) {
+		$row = $query->row();
+		$sql = "UPDATE user SET username = " . $this->db->escape($username) . "WHERE id = " . $row->id;
+		$this->db->query($sql);
+		$userdata = array(
+			'user_id' => $row->id,
+			'fibit_id' => $row->fitbit_id,
+			'oauth_secret' => $row->oauth_secret,
+			'oauth_token' => $row->oauth_token,
+			'username' => $this->db->escape($username),
+			'avatar' => $row->profile_pic,
+			'isadmin'=> $row->admin,
+			'isleader'=> $row->leader,
+			'isTutor' => $row->staff
+			);		
+		$this->session->set_userdata($userdata);			
+		$msg["success"] = true;
+	} else {
+		$msg["success"] = false;
 	}
+
+	echo json_encode($msg);
+}
+
+private function addSubscription(){
+
+	try {
+		$user_id =(string) $this->session->userdata('user_id');
+		$activity_id = $user_id . "-activities";
+		$sleep_id = $user_id . "-sleep";
+		$this->fitbitphp->addSubscription($activity_id, "/activities", "activities");
+		$this->fitbitphp->addSubscription($sleep_id, "/sleep", "sleep");
+	} catch (Exception $e) {
+	}
+}
 }

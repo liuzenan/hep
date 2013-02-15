@@ -6,8 +6,7 @@
 				<img src="<?php echo $avatar ?>" alt="" height="100" width="100">
 				<p><?php echo $displayName ?></p>
 			</div>
-			<div class="span8">
-				
+			<div class="span8">				
 			</div>
 		</div>
 	</div>

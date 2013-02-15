@@ -1,83 +1,65 @@
-<div class="row-fluid">
-	<?php $this->load->view('templates/sidebar'); ?>
-	<div class="span10">
 		<div class="row-fluid">
-			<div class="media well">
-				<img class="pull-left" src="<?php echo $userdata->profile_pic ?>" alt="">
-				<div class="media-body">
-					<h4 class="media-heading"><?php echo $userdata->first_name . " " . $userdata->last_name ?></h4>
-					<p><strong>Gender: </strong><?php echo $userdata->gender ?></p>
-					<?php if ($userdata->leader==1): ?>
-					<p><strong>House Leader</strong></p>
-				<?php endif ?>
-				<?php if ($userdata->staff==1): ?>
-				<p><strong>Tutor</strong></p>
-			<?php endif ?>
-			<p><strong>Exp points: </strong><?php echo $userdata->points ?></p>
+			<div class="span4 offset4 well ">
+				<form action="" id="userinfo">
+					<fieldset>
+						<legend>Profile Setting</legend>
+						<label for="firstname">First Name</label>
+						<input id="firstname" type="text" name="firstname" value="<?php echo $first_name ?>">
+						<label for="lastname">Last Name</label>
+						<input id="lastname" type="text" name="lastname" value="<?php echo $last_name ?>">
+						<label for="email">Email</label>
+						<input id="email" type="email" name="email" value="<?php echo $email ?>">
+						<label for="">House</label>
+						<select name="house" id="house" value="<?php echo $house_id ?>">
+							<option value="0">Select a House...</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="-1">Tutor</option>
+						</select>
+						<label for="">Gender</label>
+						<select name="gender" id="gender" value="<?php echo $gender ?>">
+							<option value="FEMALE">Female</option>
+							<option value="MALE">Male</option>
+						</select>
+						<label class="checkbox">
+							<input type="checkbox" id="badge_email_unsub" name="badge_email_unsub"  value="<?php echo $badge_email_unsub ?>">Badge email notification
+						</label>
+						<label class="checkbox">
+							<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub" value="<?php echo $badge_email_unsub ?>"> Daily challenge notification
+						</label>
+						<label class="checkbox">
+							<input type="checkbox" id="badge_email_unsub" name="badge_email_unsub"> Challenge completion notification
+						</label>
+						<button id="submitbtn" class="btn btn-large btn-block">Update</button>
+					</fieldset>
+				</form>
 			</div>
 		</div>
-		<div class="row-fluid">
-			<div class="span12 well">
-				<p><strong>Achievements</strong></p>
-				<?php if(isset($userachievement) && count($userachievement)>0) {?>
-				<?php foreach($userachievement as $badge){ ?>
-				<img src="<?php echo $badge->badge_pic ?>" alt="">
-				<?php }} else {?>
-				<p class="mute">You currently don't have any Fitbit achievements yet... :(</p>
-				<?php } ?>
-			</div>		
-		</div>
-		<div class="row-fluid">
-			<div class="span12 well">
-				<p><strong>Challenges</strong></p>
-				<?php if(isset($userevents) && count($userevents)>0) {?>
-				<ul class="media-list">
-					<?php foreach($userevents as $challenge){ ?>
-					<li class="media">
-						<a href="<?php echo base_url() . 'challenges/viewevent/' .$challenge->id ?>" class="pull-left"><img class="media-object" width="64" src="<?php echo $challenge->event_image ?>"></a> 
-						<a href="<?php echo base_url() . 'challenges/viewevent/' .$challenge->id ?>" class="btn pull-right">View</a>
-						<div class="media-body">
-							<p class="media-heading"><?php echo $challenge->title ?></p>
-							<p><small><strong>Date: </strong><?php echo $challenge->date ?></small></p>
-						</div>
-					</li>
 
-					<?php } ?>
-				</ul>
-				<?php } else {?>
-				<p class="mute">You currently don't have any challenges yet...</p>
-				<?php } ?>
-			</div>	
-		</div>
+		<script src="/assets/js/bootstrap.min.js"></script>
+		<script>
+		jQuery(document).ready(function($) {
+			$("#submitbtn").attr('disabled','disabled');
+			$('input[type="text"], input[type="email"]').keyup(function() {
+				if($("#firstname").val() != '' && $("#lastname").val() != '' && $("#email").val()!='' && $("#gender").val()!='') {
+					$('#submitbtn').removeAttr('disabled');
+				}
+			});
 
-		<div class="row-fluid">
-					<div class="span12">
-					<h4><strong>Latest News</strong></h4>
-						<ul class="media-list newsFeed" id="newsFeed">
-							<?php if (isset($userposts) && count($userposts)>0): ?>
-							<?php foreach($userposts as $comment){ ?>
-							<li class="media">
-								<a href="#" title="" class="pull-left post-profile">
-									<img src="<?php echo $userdata->profile_pic?>" alt="">
-								</a>
-								<div class="media-body">
-									<p class="media-heading"><strong><?php echo $userdata->first_name ?></strong></p>
-									<p><?php echo htmlentities($comment->description) ?></p>
-									<p><small><span data-livestamp="<?php 
-									if($comment->type=="0"){
-										date_default_timezone_set('Asia/Singapore');
-									}else{
-										date_default_timezone_set('UTC'); 
-									}
-									echo strtotime((string) $comment->time); 
-									?>"></span></small></p>
-								</div>
-							</li>
-							<?php } ?>								
-							<?php endif ?>
+			$("#submitbtn").click(function(event){
+				event.preventDefault();
+				$.post("<?php echo base_url() . 'signup/submit' ?>", $("#userinfo").serialize(), function(msg){
+				//window.location.replace("<?php echo base_url() . 'signup/linkFB' ?>");
+			});
+			});
+		});
 
-						</ul>
-					</div>	
-		</div>
-
-</div>
+		</script>
