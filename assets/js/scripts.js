@@ -72,6 +72,8 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var challengeId = currentBtn.data("challengeId");
 		var userId = currentBtn.data("userId");
+		var cpId = currentBtn.data("cpid");
+
 		$(".joinChallengeNow").attr("disabled", true);
 		if(challengeId){
 			$.ajax({
@@ -80,7 +82,8 @@ jQuery(document).ready(function($) {
 				dataType:'json',
 				data:{
 					challenge_id:challengeId,
-					user_id:userId
+					user_id:userId,
+					cp_id:cpId
 				}
 			}).done(function(msg){
 				//alert(msg.message);
@@ -95,6 +98,7 @@ jQuery(document).ready(function($) {
 		var currentBtn = $(this);
 		var challengeId = currentBtn.data("challengeId");
 		var userId = currentBtn.data("userId");
+		var cpId = currentBtn.data("cpid");
 		$(".joinChallengeTomorrow").attr("disabled", true);
 		if(challengeId){
 			$.ajax({
@@ -103,7 +107,8 @@ jQuery(document).ready(function($) {
 				dataType:'json',
 				data:{
 					challenge_id:challengeId,
-					user_id:userId
+					user_id:userId,
+					cp_id:cpId
 				}
 			}).done(function(msg){
 				console.log(msg);
