@@ -33,7 +33,44 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
+	$(".deletePost").click(function(e){
+		var current = $(this);
+		var postId = current.data("postId");
+		console.log("post id"+postId);
+		$.ajax({
+			type:'POST',
+			url:base_url+'forum/deletePost',
+			dataType:'json',
+			data:{
+				post_id: postId,
+			}
+		}).done(function(message){
+			console.log(message);
+			if(message.success){
+				window.location.reload();
+			}
+		});
 
+	});
+	$(".deleteThread").click(function(e){
+		var current = $(this);
+		var threadId = current.data("threadId");
+		console.log("thread id"+threadId);
+		$.ajax({
+			type:'POST',
+			url:base_url+'forum/deleteThread',
+			dataType:'json',
+			data:{
+				thread_id: threadId,
+			}
+		}).done(function(message){
+			console.log(message);
+			if(message.success){
+				window.location.reload();
+			}
+		});
+
+	});
 	$('.challengeTitleTooltip').tooltip();
 
 	$('.my-badges').tooltip();
@@ -94,55 +131,36 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
-	$(".joinChallengeTomorrow").click(function(event){
-		var currentBtn = $(this);
-		var challengeId = currentBtn.data("challengeId");
-		var userId = currentBtn.data("userId");
-		var cpId = currentBtn.data("cpid");
-		$(".joinChallengeTomorrow").attr("disabled", true);
-		if(challengeId){
-			$.ajax({
-				type:'POST',
-				url:base_url+'challenges/joinChallengeTomorrow',
-				dataType:'json',
-				data:{
-					challenge_id:challengeId,
-					user_id:userId,
-					cp_id:cpId
-				}
-			}).done(function(msg){
-				console.log(msg);
+$(".joinChallengeTomorrow").click(function(event){
+	var currentBtn = $(this);
+	var challengeId = currentBtn.data("challengeId");
+	var userId = currentBtn.data("userId");
+	var cpId = currentBtn.data("cpid");
+	$(".joinChallengeTomorrow").attr("disabled", true);
+	if(challengeId){
+		$.ajax({
+			type:'POST',
+			url:base_url+'challenges/joinChallengeTomorrow',
+			dataType:'json',
+			data:{
+				challenge_id:challengeId,
+				user_id:userId,
+				cp_id:cpId
+			}
+		}).done(function(msg){
+			console.log(msg);
 				//alert(msg.message);
 				//window.location.reload();
 			});
-		}
-	});
+	}
+});
 
-	$(".today .quitChallenge").click(function(event){
-		var currentBtn = $(this);
-		var cpId = currentBtn.data("cpId");
-		var quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.","HEP Advisor");
-		$(".today .quitChallenge").attr("disabled", true);
-		if(quit) {
-			if(cpId){
-				$.ajax({
-					type:'POST',
-					url:base_url+'challenges/quitChallenge',
-					dataType:'json',
-					data:{
-						id:cpId,
-					}
-				}).done(function(msg){
-					console.log(msg);
-					alert(msg.message);
-					window.location.reload();
-				});
-			}
-		}});
-	$(".tomorrow .quitChallenge").click(function(event){
-		var currentBtn = $(this);
-		var cpId = currentBtn.data("cpId");	
-		$(".tomorrow .quitChallenge").attr("disabled", true);
+$(".today .quitChallenge").click(function(event){
+	var currentBtn = $(this);
+	var cpId = currentBtn.data("cpId");
+	var quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.","HEP Advisor");
+	$(".today .quitChallenge").attr("disabled", true);
+	if(quit) {
 		if(cpId){
 			$.ajax({
 				type:'POST',
@@ -157,154 +175,173 @@ jQuery(document).ready(function($) {
 				window.location.reload();
 			});
 		}
-	});
-
-	$(".subscribe-link").click(function(event){
-		var currentBtn = $(this);
-		var threadId = currentBtn.data("threadId");
-		console.log("threadId");
-		$(this).attr("disabled", true);
-		if(threadId){
-			$.ajax({
-				type:'POST',
-				url:base_url+'forum/subscribe',
-				dataType:'json',
-				data:{
-					thread_id:threadId,
-				}
-			}).done(function(msg){
-				console.log(msg);
-				window.location.reload();
-			});
-		}
-	});
-	$(".unsubscribe-link").click(function(event){
-		var currentBtn = $(this);
-		var threadId = currentBtn.data("threadId");
-		console.log("threadId");
-		$(this).attr("disabled", true);
-		if(threadId){
-			$.ajax({
-				type:'POST',
-				url:base_url+'forum/unsubscribe',
-				dataType:'json',
-				data:{
-					thread_id:threadId,
-				}
-			}).done(function(msg){
-				console.log(msg);
-				window.location.reload();
-			});
-		}
-	});
-
-	$('.modal').modal({
-		show:false,
-		backdrop:false
-	});
-
-	$(".thread-content .showmore").click(function(event){
-		var current = $(this);
-
-		$(this).parent().parent().children(".full-content").toggleClass("hide");
-		$(this).parent().parent().children(".collapsed-content").toggleClass("hide");
-
-		if (current.text()!="Show fewer comments") {
-			current.text("Show fewer comments");
-		} else {
-			current.text("Show all " + current.data("comments") + " comments");
-		}
-	});
-
-	$(".expandbtn").click(function(event){
-		
-		var expandable = $(this).parent().parent().find(".expandable");
-		var heights, maxheight;
-		
-		if ($(this).children().hasClass("icon-chevron-down")) {
-			 heights = expandable.children().map(function(){
-							return $(this).height();
-						}).get();
-
-			maxheight = Math.max.apply(null, heights);
-			expandable.height(maxheight);
-			$(this).children().removeClass("icon-chevron-down");
-			$(this).children().addClass("icon-chevron-up");
-			
-		} else {
-			$(this).children().removeClass("icon-chevron-up");
-			$(this).children().addClass("icon-chevron-down");
-			expandable.height(220);
-		}
-
-		expandable.toggleClass("expand");
-		
-	});
-
-	for (var i = 0; i < 4; i++) {
-		$(".today .challenge-type-"+i+" a").bind('click', {type:i}, function(event){
-			var data = event.data;
-			$("#challengeModal .challenge-wrapper").html("");
-			console.log(data.type);
-			for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
-				var currentChallenge = allChallenges[data.type][j];
-				if(currentChallenge.cp_id_today!=-1){
-					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-				} else {
-					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-				}
-				
+	}});
+$(".tomorrow .quitChallenge").click(function(event){
+	var currentBtn = $(this);
+	var cpId = currentBtn.data("cpId");	
+	$(".tomorrow .quitChallenge").attr("disabled", true);
+	if(cpId){
+		$.ajax({
+			type:'POST',
+			url:base_url+'challenges/quitChallenge',
+			dataType:'json',
+			data:{
+				id:cpId,
 			}
+		}).done(function(msg){
+			console.log(msg);
+			alert(msg.message);
+			window.location.reload();
 		});
+	}
+});
 
-		$(".tomorrow .challenge-type-"+i+" a").bind('click', {type:i},function(event){
-			var data = event.data;
-			$("#challengeModal .challenge-wrapper").html("");
-			console.log(data.type);
-			for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
-				var currentChallenge = allChallenges[data.type][j];
-				if(currentChallenge.cp_id_tomorrow!=-1){
-					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-				} else {
-					$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-				}
-				
+$(".subscribe-link").click(function(event){
+	var currentBtn = $(this);
+	var threadId = currentBtn.data("threadId");
+	console.log("threadId");
+	$(this).attr("disabled", true);
+	if(threadId){
+		$.ajax({
+			type:'POST',
+			url:base_url+'forum/subscribe',
+			dataType:'json',
+			data:{
+				thread_id:threadId,
 			}
-		});		
-	};
+		}).done(function(msg){
+			console.log(msg);
+			window.location.reload();
+		});
+	}
+});
+$(".unsubscribe-link").click(function(event){
+	var currentBtn = $(this);
+	var threadId = currentBtn.data("threadId");
+	console.log("threadId");
+	$(this).attr("disabled", true);
+	if(threadId){
+		$.ajax({
+			type:'POST',
+			url:base_url+'forum/unsubscribe',
+			dataType:'json',
+			data:{
+				thread_id:threadId,
+			}
+		}).done(function(msg){
+			console.log(msg);
+			window.location.reload();
+		});
+	}
+});
 
-	$(".myactivity .current-challenges").mouseenter(function(event){
-		var button = $(this).find(".expandbtn");
-		var expandable = button.parent().parent().find(".expandable");
-		if (button.children().hasClass("icon-chevron-down")) {
-			 heights = expandable.children().map(function(){
-							return $(this).height();
-						}).get();
+$('.modal').modal({
+	show:false,
+	backdrop:false
+});
 
-			maxheight = Math.max.apply(null, heights);
-			expandable.height(maxheight);
-			button.children().removeClass("icon-chevron-down");
-			button.children().addClass("icon-chevron-up");
-			
+$(".thread-content .showmore").click(function(event){
+	var current = $(this);
+
+	$(this).parent().parent().children(".full-content").toggleClass("hide");
+	$(this).parent().parent().children(".collapsed-content").toggleClass("hide");
+
+	if (current.text()!="Show fewer comments") {
+		current.text("Show fewer comments");
+	} else {
+		current.text("Show all " + current.data("comments") + " comments");
+	}
+});
+
+$(".expandbtn").click(function(event){
+
+	var expandable = $(this).parent().parent().find(".expandable");
+	var heights, maxheight;
+
+	if ($(this).children().hasClass("icon-chevron-down")) {
+		heights = expandable.children().map(function(){
+			return $(this).height();
+		}).get();
+
+		maxheight = Math.max.apply(null, heights);
+		expandable.height(maxheight);
+		$(this).children().removeClass("icon-chevron-down");
+		$(this).children().addClass("icon-chevron-up");
+
+	} else {
+		$(this).children().removeClass("icon-chevron-up");
+		$(this).children().addClass("icon-chevron-down");
+		expandable.height(220);
+	}
+
+	expandable.toggleClass("expand");
+
+});
+
+for (var i = 0; i < 4; i++) {
+	$(".today .challenge-type-"+i+" a").bind('click', {type:i}, function(event){
+		var data = event.data;
+		$("#challengeModal .challenge-wrapper").html("");
+		console.log(data.type);
+		for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
+			var currentChallenge = allChallenges[data.type][j];
+			if(currentChallenge.cp_id_today!=-1){
+				$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+			} else {
+				$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+			}
+
 		}
-
-		expandable.addClass("expand");
 	});
 
-	$(".myactivity .current-challenges").mouseleave(function(event){
-		var button = $(this).find(".expandbtn");
-		var expandable = button.parent().parent().find(".expandable");
-		if (button.children().hasClass("icon-chevron-up")) {
-			button.children().removeClass("icon-chevron-up");
-			button.children().addClass("icon-chevron-down");
-			expandable.height(220);
+$(".tomorrow .challenge-type-"+i+" a").bind('click', {type:i},function(event){
+	var data = event.data;
+	$("#challengeModal .challenge-wrapper").html("");
+	console.log(data.type);
+	for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
+		var currentChallenge = allChallenges[data.type][j];
+		if(currentChallenge.cp_id_tomorrow!=-1){
+			$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+		} else {
+			$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
 		}
 
-		expandable.removeClass("expand");
-	});
+	}
+});		
+};
 
-	var counter = setInterval(timer, 1000);
-	console.log(game_start_date);
+$(".myactivity .current-challenges").mouseenter(function(event){
+	var button = $(this).find(".expandbtn");
+	var expandable = button.parent().parent().find(".expandable");
+	if (button.children().hasClass("icon-chevron-down")) {
+		heights = expandable.children().map(function(){
+			return $(this).height();
+		}).get();
+
+		maxheight = Math.max.apply(null, heights);
+		expandable.height(maxheight);
+		button.children().removeClass("icon-chevron-down");
+		button.children().addClass("icon-chevron-up");
+
+	}
+
+	expandable.addClass("expand");
+});
+
+$(".myactivity .current-challenges").mouseleave(function(event){
+	var button = $(this).find(".expandbtn");
+	var expandable = button.parent().parent().find(".expandable");
+	if (button.children().hasClass("icon-chevron-up")) {
+		button.children().removeClass("icon-chevron-up");
+		button.children().addClass("icon-chevron-down");
+		expandable.height(220);
+	}
+
+	expandable.removeClass("expand");
+});
+
+var counter = setInterval(timer, 1000);
+console.log(game_start_date);
 });
 
 function timer(){

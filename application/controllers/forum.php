@@ -8,6 +8,7 @@ class Forum extends CI_Controller {
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
+
 		}
 	}
 
@@ -125,6 +126,22 @@ class Forum extends CI_Controller {
 		}
 		echo json_encode($msg);
 
+
+	}
+
+	public function deletePost() {
+		$id = $this->input->post("post_id");
+		
+		$this->Forum_model->deletePost($id);
+		echo json_encode(array("success" => true));
+
+	}
+
+	public function deleteThread() {
+
+		$id = $this->input->post("thread_id");
+		$this->Forum_model->archiveThread($id);
+		echo json_encode(array("success" => true));
 
 	}
 

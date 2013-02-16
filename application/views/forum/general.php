@@ -28,6 +28,9 @@
 						<small><span><?php echo $users[$thread["creator_id"]]->first_name . ' ' . $users[$thread["creator_id"]]->last_name; ?></span></small>
 						&middot;
 						<small><span data-livestamp="<?php echo strtotime((string) $thread["create_time"]) - 60; ?>"></span></small>
+						<?php if ($thread['creator_id'] == $thread['user_id']): ?>
+							- <small><a class="deleteThread" data-thread-id="<?php echo $thread['thread_id'] ?>">Delete</a></small>
+						<?php endif ?>
 					<?php if ($thread["subscribe"]==0): ?>
 						<a href="#" class="subscribe-link pull-right" data-thread-id="<?php echo $thread_id ?>"><small>Subscribe</small></a>
 					<?php endif ?>

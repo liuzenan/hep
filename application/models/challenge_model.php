@@ -100,7 +100,7 @@ function quitChallenge($id) {
 function completeChallenge($id, $complete_time) {
 	$data = array('complete_time', $complete_time);
 	$this->db->where('id',$id);
-	$this->db->upate(Challenge_model::table_challenge_participant,
+	$this->db->update(Challenge_model::table_challenge_participant,
 		$data);
 }
 
@@ -247,7 +247,7 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 		//post to forum
 		$challenge = $this->loadChallenge($cp->challenge_id);
 		$user = $this->User_model->loadUser($cp->user_id);
-		$message = $user->first_name." ".$user->last_name. " has completed this challenge at ". $data['complete_time'].".";
+		$message = $user->first_name." ".$user->last_name. " has completed this challenge at ". substr($data['complete_time'],0,-3).".";
 		$this->Forum_model->createPost($cp->user_id, $thread_id, $message);
 		$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 

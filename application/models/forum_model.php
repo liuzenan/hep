@@ -104,6 +104,7 @@ class Forum_model extends CI_Model{
 					$thread["subscribe"] = in_array($row->thread_id, $subs);
 					$thread["creator_id"] = $row->creator_id;
 					$thread["create_time"] = $row->create_time;
+					$thread["user_id"] = $user_id;
 					$thread["tutor_only"] = 0;
 					$uids[] = $row->creator_id;
 					if(empty($thread["comments"])) {
@@ -118,6 +119,7 @@ class Forum_model extends CI_Model{
 					$comment["comment"] = $row->comment;
 					$comment["comment_time"] = $row->comment_time;
 					$comment["comment_id"] = $row->cid;
+					$comment["user_id"] = $user_id;
 					$thread["comments"][$row->cid] = $comment;
 					$res[$row->id]["comments"] = $thread["comments"];
 					$uids[] = $row->commenter_id;
@@ -260,16 +262,16 @@ class Forum_model extends CI_Model{
 	}
 
 	function archiveThread($thread_id) {
-		$data = array('archived', 1);
+		$data = array('archived'=>1);
 		$this->db->where('id',$thread_id);
-		$this->db->upate(Forum_model::table_thread,
+		$this->db->update(Forum_model::table_thread,
 			$data);
 	}
 
 	function deletePost($post_id) {
-		$data = array('deleted', 1);
+		$data = array('deleted'=>1);
 		$this->db->where('cid',$post_id);
-		$this->db->upate(Forum_model::table_post,
+		$this->db->update(Forum_model::table_post,
 			$data);
 	}
 	
