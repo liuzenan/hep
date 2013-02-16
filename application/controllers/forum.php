@@ -82,6 +82,11 @@ class Forum extends CI_Controller {
 		echo json_encode($msg);
 	}
 
+	public function clearNotification() {
+		$this->Forum_model->clearNotification($this->uid);
+		echo json_encode(array("success" => true));
+
+	}
 
 	public function postMessage() {
 		if(!$this->session->userdata('user_id')){

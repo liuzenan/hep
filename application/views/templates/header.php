@@ -70,6 +70,7 @@
               </a>
               <ul class="dropdown-menu">
               <?php if (!empty($notifications)): ?>
+                <li><a class="clearNotification" href="#" >Clear all notifications</a></li>
                 <?php foreach ($notifications as $key => $value): ?>
                   <li><a href="<?php echo base_url() . "notification/redirect/" . $value->id ?>"><?php echo $value->description ?></a></li>
                 <?php endforeach ?>

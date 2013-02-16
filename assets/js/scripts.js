@@ -33,6 +33,22 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
+	$(".clearNotification").click(function(e){
+		console.log("clearNotification");
+		$.ajax({
+			type:'POST',
+			url:base_url+'forum/clearNotification',
+			dataType:'json',
+			data:{
+			}
+		}).done(function(message){
+			console.log(message);
+			if(message.success){
+				window.location.reload();
+			}
+		});
+
+	});
 	$(".deletePost").click(function(e){
 		var current = $(this);
 		var postId = current.data("postId");
@@ -197,9 +213,10 @@ $(".tomorrow .quitChallenge").click(function(event){
 });
 
 $(".subscribe-link").click(function(event){
+	console.log("here");
 	var currentBtn = $(this);
 	var threadId = currentBtn.data("threadId");
-	console.log("threadId");
+	console.log("threadId"+threadId);
 	$(this).attr("disabled", true);
 	if(threadId){
 		$.ajax({

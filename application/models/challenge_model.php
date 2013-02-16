@@ -247,8 +247,8 @@ function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold,
 		//post to forum
 		$challenge = $this->loadChallenge($cp->challenge_id);
 		$user = $this->User_model->loadUser($cp->user_id);
-		$message = $user->first_name." ".$user->last_name. " has completed this challenge at ". substr($data['complete_time'],0,-3).".";
-		$this->Forum_model->createPost($cp->user_id, $thread_id, $message);
+		$message = $user->first_name." ".$user->last_name. " completed this challenge at ". substr($data['complete_time'],0,-3).".";
+		$this->Forum_model->createPost($cp->user_id, $thread_id, $message, false);
 		$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 
 	} else {

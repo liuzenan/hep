@@ -41,6 +41,7 @@ class Forum_model extends CI_Model{
 					$thread["thread_id"] = $row->id;
 					$thread["subscribe"] = 1;
 					$thread["tutor_only"] = 0;
+					$thread["user_id"] = $user_id;
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -53,6 +54,7 @@ class Forum_model extends CI_Model{
 					$comment["comment"] = $row->comment;
 					$comment["comment_time"] = $row->comment_time;
 					$comment["comment_id"] = $row->cid;
+					$comment["user_id"] = $user_id;
 					$thread["comments"][$row->cid] = $comment;
 					$res[$row->id]["comments"] = $thread["comments"];
 					$uids[] = $row->commenter_id;
@@ -144,6 +146,11 @@ class Forum_model extends CI_Model{
 		return $this->assembleForumResult($query, $user_id);
 	}
 
+	function clearNotification($user_id) {
+		$sql="DELETE FROM notification
+				WHERE  user_id = ?";
+		$this->db->query($sql, array($user_id));
+	}
 
 	function loadThread($thread_id) {
 		$query = $this->db->get_where(Forum_model::table_thread, array('id' => $thread_id));
@@ -178,7 +185,7 @@ class Forum_model extends CI_Model{
 
 	function subscribe($user_id, $thread_id) {
 		$sql = "INSERT IGNORE INTO `postsubscription` (`thread_id`, `user_id`) VALUES (?, ?)";
-		$this->db->query($sql, array($user_id, $thread_id));
+		$this->db->query($sql, array($thread_id,$user_id));
 	}
 
 	function unsubscribe($user_id, $thread_id) {
@@ -205,14 +212,16 @@ class Forum_model extends CI_Model{
 		}
 	}
 
-	function createPost($commenter_id, $thread_id, $message) {
+	function createPost($commenter_id, $thread_id, $message, $addNotification = true) {
 		$data = array(
 			'commenter_id'=>$commenter_id,
 			'comment'=>$message,
 			'thread_id'=>$thread_id
 			);
 		$this->db->insert(Forum_model::table_post,$data);
-		$this->addNotification($thread_id, $commenter_id);
+		if($addNotification) {
+			$this->addNotification($thread_id, $commenter_id);
+		}
 		return $this->db->insert_id();
 	}
 
@@ -232,12 +241,12 @@ class Forum_model extends CI_Model{
 			$description = $username . " post a new message at the thread: " . $title;
 
 			if($thread->tutor_only>0) {
-				$url = base_url() . "forum/tutor";
+				$url = base_url() . "forum/tutor/#".$thread_id;
 
 			}else if($thread->challenge_id>0) {
-				$url = base_url() . "forum/challenge";
+				$url = base_url() . "forum/challenge/#".$thread_id;
 			}else {
-				$url = base_url() . "forum/general";
+				$url = base_url() . "forum/general/#".$thread_id;
 			}
 
 			$subscribers = $this->loadThreadSubscribers($thread_id);
