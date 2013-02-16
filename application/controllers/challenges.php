@@ -35,6 +35,8 @@ class Challenges extends CI_Controller {
 		foreach($data["challenges"] as $c) {
 			$data["today"][$c->category]=$c;
 		}
+
+		$data["tomorrow"] = array();
 		foreach($tomorrow as $c2) {
 			$data["tomorrow"][$c2->category]=$c2;
 		}
@@ -84,7 +86,7 @@ class Challenges extends CI_Controller {
 	
 
 	public function loadAvailableChallanges() {
-		$challenges = $this->Challenge_model->getAllChallenges();
+		$challenges = $this->Challenge_model->getAllChallenges($this->uid);
 		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_today);
 		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_tomorrow);
 		$today = array(0=>0,1=>0,2=>0,3=>0);
@@ -129,16 +131,14 @@ class Challenges extends CI_Controller {
 
 	}
 
-	private function validateChallengeAvilability($challenge_id, $uid, $date) {
+	private function validateChallengeAvilability($new, $uid, $date) {
 		$current = $this->Challenge_model->loadUserChallenge($uid, $date);
-		$new = $this->Challenge_model->loadChallenge($challenge_id);
-		if(empty($current) && $challenge_id>0 && $uid>0) {
+		if(empty($current) && $new->challenge_id>0 && $uid>0) {
 			return "";
 		} else {
 			$count = 0;
 			// check fix category
 			foreach($current as $now) {
-
 				if($now->category>0 && ($now->category==$new->category)) {
 					$msg = "You can join only one challenge in %s category per day. Please drop %s to join this one.";
 					$category = "";
@@ -158,6 +158,11 @@ class Challenges extends CI_Controller {
 					return sprintf($msg, $category, $now->title);
 				}
 			}
+			// check max num of times joinable
+			$count = $this->Challenge_model->getParticipationCount($new->challenge_id, $uid);
+			if($count>=$new->quota) {
+				return "You have exceeded the maximum quota of this challenge. Please choose another one.";
+			}
 			return "";
 		}
 
@@ -173,7 +178,10 @@ class Challenges extends CI_Controller {
 
 			$challenge_id = $this->input->post("challenge_id");
 			$uid = $this->input->post("user_id");
-			$old_cpid = $this->input->post("old_cpid");
+			$old_cpid = $this->input->post("cp_id");
+			if(empty($old_cpid)) {
+				$old_cpid = -1;
+			}
 			$msg = $this->joinChallenge($uid, $old_cpid, $challenge_id, $this->date_tomorrow);
 		}
 		echo json_encode($msg);
@@ -191,9 +199,16 @@ class Challenges extends CI_Controller {
 			$challenge_id = $this->input->post("challenge_id");
 			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
 			$uid = $this->input->post("user_id");
-			$old_cpid = $this->input->post("old_cpid");
+			$old_cpid = $this->input->post("cp_id");
+			if(empty($old_cpid)) {
+				$old_cpid = -1;
+			}
 
 			$msg = $this->joinChallenge($uid, $old_cpid, $challenge_id, $this->date_today);
+
+			//auto join tomorrow
+			$this->joinChallenge($uid, -1, $challenge_id, $this->date_tomorrow);
+
 		}
 		echo json_encode($msg);
 
@@ -204,10 +219,12 @@ class Challenges extends CI_Controller {
 		//join challenge
 		//subscribe
 		//post 
+		$challenge = $this->Challenge_model->loadChallenge($challenge_id);
+
 		if($old_cpid > 0) {
 			$this->Challenge_model->quitChallenge($old_cpid);
 		}
-		$invalid = $this->validateChallengeAvilability($challenge_id, $uid, $date);
+		$invalid = $this->validateChallengeAvilability($challenge, $uid, $date);
 
 		if((bool) $invalid) {
 			$msg = array(
@@ -215,7 +232,6 @@ class Challenges extends CI_Controller {
 				"message" => $invalid
 				);
 		} else {
-			$challenge = $this->Challenge_model->loadChallenge($challenge_id);
 
 			//update time for "liftstyle" challenge
 			if($challenge->start_time != "00:00:00") {
@@ -230,7 +246,7 @@ class Challenges extends CI_Controller {
 					$end = $this->tomorrow_end;
 				}
 			}
-			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $start, $end);
+			$id = $this->Challenge_model->joinChallenge($uid, $challenge_id, $challenge->category, $start, $end);
 
 			$this->Forum_model->subscribe($uid, $challenge_id);
 			

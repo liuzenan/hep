@@ -101,7 +101,13 @@ class Home extends CI_Controller{
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
 		$timestr .= microtime()."<br>";
 
-		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+		//$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+		$data['max_today'] = new stdClass;
+		$data['max_today']->max_steps = max($data['avg_today']->avg_steps, $data['me_today']->steps);
+		$data['max_today']->max_floors = max($data['avg_today']->avg_floors, $data['me_today']->floors);
+		$data['max_today']->max_distance = max($data['avg_today']->avg_distance,$data['me_today']->distance);
+		$data['max_today']->max_calories = max($data['avg_today']->avg_calories,$data['me_today']->calories);
+
 		$timestr .= microtime()."<br>";
 
 		$this->load->library('../controllers/challenges');

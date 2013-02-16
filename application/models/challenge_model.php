@@ -40,17 +40,21 @@ class Challenge_model extends CI_Model{
 			return $query->row();
 		}
 	}
-	function joinChallenge($user_id, $challenge_id, $start_time, $end_time) {
+	function joinChallenge($user_id, $challenge_id, $category, $start_time, $end_time) {
 		$data = array(
 			'user_id'=>$user_id,
 			'challenge_id'=>$challenge_id,
+			'category'=>$category,
 			'start_time'=>$start_time,
 			'end_time'=>$end_time
 			);
 		$this->db->insert(Challenge_model::table_challenge_participant,$data);
 
 		return $this->db->insert_id();
-		
+	}
+
+	function checkChallengeQuota() {
+
 	}
 	
 	public function carryOverChallenges() {
@@ -296,9 +300,45 @@ $total = $this->db->query($sql2)->row()->total;
 return $total/$count;		
 }
 
-function getAllChallenges() {
+function getAllChallenges($user_id) {
 	$query = $this->db->get(Challenge_model::table_challenge);
+	$count_sql = "SELECT challenge_id,
+	Count(id) AS count
+	FROM   challengeparticipant
+	WHERE  user_id = ?
+	GROUP  BY challenge_id";
+	$counts = $this->db->query($count_sql, array($user_id))->result();
+	$participations = array();
+	foreach($counts as $c) {
+		$participations[$c->challenge_id]=$c->count;
+	}
+
+	foreach($query->result() as $m) {
+		
+		if(empty($participations[$m->id]) || $participations[$m->id]<$m->quota) {
+			$m->quota_exceeded = 0;
+		} else {
+			$m->quota_exceeded = 1;
+		}
+
+		
+	}
 	return $query->result();
+}
+
+function getParticipationCount($uid, $challenge_id) {
+	$sql = "SELECT
+	Count(id) AS count
+	FROM   challengeparticipant
+	WHERE  user_id = ?
+	AND challenge_id = ?
+	GROUP  BY challenge_id";
+	$query = $this->db->query($sql, array($uid, $challenge_id));
+	$res = $query->result();
+	return empty($res)
+	 ? 0 
+	 : $res->count;
+	
 }
 
 function getLearderboard() {
