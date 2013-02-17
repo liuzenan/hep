@@ -2,6 +2,13 @@
 
 class Home extends CI_Controller{
 	private $uid;
+	private $now;
+	private $today_start;
+	private $today_end;
+	private $tomorrow_start;
+	private $tomorrow_end;
+	private $date_today;
+	private $date_tomorrow;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -15,12 +22,35 @@ class Home extends CI_Controller{
 			} else {
 				$this->uid = $this->session->userdata('user_id');
 				$this->load->library('ga_api');
+
+				$this->tomorrow_start = date("Y-m-d",time()+ 60 * 60 * 24). " 00:00:00";		
+				$this->tomorrow_end = date("Y-m-d", time() + 60 * 60 * 24). " 23:59:59";
+				$this->today_start = date("Y-m-d"). " 00:00:00";
+				$this->today_end = date("Y-m-d")." 23:59:59";
+				$this->now = date("Y-m-d G:i:s",time());
+				$this->date_today = date("Y-m-d", time());
+				$this->date_tomorrow = date("Y-m-d", time()+ 60*60*24);
+
+				$this->disabled = !( $this->session->userdata('isadmin')
+					|| $this->session->userdata('isleader')
+					|| $this->session->userdata('isTutor'));
+
+				if($this->disabled) {
+					$this->date_today="2013-02-24";
+					$this->date_tomorrow="2013-02-25";
+					$this->tomorrow_start = "2013-02-25 00:00:00";		
+					$this->tomorrow_end = "2013-02-25 23:59:59";
+					$this->today_start = "2013-02-24 00:00:00";
+					$this->today_end = "2013-02-24 23:59:59";
+				}
 			}
 		}
 	}
+
+
 	
 	public function index(){
-
+		$this->Challenge_model->preAllocateChallenge($this->uid);
 		$data = $this->loadData();
 		$this->load->view('templates/header', $data);
 		$this->load->view('home', $data);
@@ -66,7 +96,7 @@ class Home extends CI_Controller{
 		$timestr .= microtime()."<br>";
 
 
-		$cs1 = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$cs1 = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
 		foreach($cs1 as $c1) {
 			$data['me_challenges'][$c1->category]=$c1;
 		}
@@ -78,15 +108,13 @@ class Home extends CI_Controller{
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($this->uid);
 		$timestr .= microtime()."<br>";
 
-		$yesterday = date("Y-m-d ",time() - 60 * 60 * 24);	
-		$cs2 = $this->Challenge_model->loadUserChallenge($this->uid, $yesterday);
+		$cs2 = $this->Challenge_model->loadUserChallenge($this->uid, date("Y-m-d ",time() - 60 * 60 * 24));
 		foreach($cs2 as $c2) {
 			$data['me_challenges_yesterday'][$c2->category]=$c2;
 		}
 		$timestr .= microtime()."<br>";
 
-		$tomorrow = date("Y-m-d ",time() + 60 * 60 * 24);	
-		$cs3= $this->Challenge_model->loadUserChallenge($this->uid, $tomorrow);
+		$cs3= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
 		foreach($cs3 as $c3) {
 			$data['me_challenges_tomorrow'][$c3->category]=$c3;
 		}

@@ -107,7 +107,7 @@ class Mail_model extends CI_Model{
 		$data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance),2);
 
 
-		$data['me_challenges'] = $this->Challenge_model->getIndividualCurrentChallenges($user_id);
+		$data['me_challenges'] = $this->Challenge_model->loadUserChallenge($user_id, date("Y-m-d ",time()));
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($user_id);
 		$time = date("Y-m-d",time() - 60 * 60 * 24);	
 		$data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($user_id, $time);

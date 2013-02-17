@@ -10,7 +10,9 @@ class Challenges extends CI_Controller {
 	private $tomorrow_end;
 	private $date_today;
 	private $date_tomorrow;
-	
+
+	private $disabled;
+
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -25,11 +27,24 @@ class Challenges extends CI_Controller {
 			$this->date_today = date("Y-m-d", time());
 			$this->date_tomorrow = date("Y-m-d", time()+ 60*60*24);
 
+			$this->disabled = !( $this->session->userdata('isadmin')
+				|| $this->session->userdata('isleader')
+				|| $this->session->userdata('isTutor'));
+
+			if($this->disabled) {
+				$this->date_today="2013-02-24";
+				$this->date_tomorrow="2013-02-25";
+				$this->tomorrow_start = "2013-02-25 00:00:00";		
+				$this->tomorrow_end = "2013-02-25 23:59:59";
+				$this->today_start = "2013-02-24 00:00:00";
+				$this->today_end = "2013-02-24 23:59:59";
+			}
+
 		} 
 	}
 
 	public function index(){
-		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$data["challenges"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
 		$tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
 
 		foreach($data["challenges"] as $c) {
@@ -65,7 +80,7 @@ class Challenges extends CI_Controller {
 
 
 	public function data() {
-		$data["challenges"] = $this->Challenge_model->getIndividualCurrentChallenges($this->uid);
+		$data["challenges"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
 		$tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
 
 		foreach($data["challenges"] as $c) {
@@ -86,6 +101,7 @@ class Challenges extends CI_Controller {
 	
 
 	public function loadAvailableChallanges() {
+
 		$challenges = $this->Challenge_model->getAllChallenges($this->uid);
 		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_today);
 		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_tomorrow);
@@ -97,7 +113,7 @@ class Challenges extends CI_Controller {
 		foreach($joinedToday as $a) {
 			$today[$a->category]++;
 			$todayJoined[] = $a->challenge_id;
-			$cpIds[$a->challenge_id] = $a->cp_id;
+			$cpIds[$a->category] = $a->cp_id;
 		}
 		$tomorrowJoined = array();
 		$cpIds2 = array();
@@ -105,7 +121,7 @@ class Challenges extends CI_Controller {
 		foreach($joinedTomorrow as $b) {
 			$tomorrow[$b->category]++;
 			$tomorrowJoined[] = $b->challenge_id;
-			$cpIds2[$b->challenge_id] = $b->cp_id;
+			$cpIds2[$b->category] = $b->cp_id;
 
 		}
 
@@ -115,8 +131,8 @@ class Challenges extends CI_Controller {
 			$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
 			$c->joined_today = in_array($c->id, $todayJoined);
 			$c->joined_tomorrow = in_array($c->id, $tomorrowJoined);
-			$c->cp_id_today = empty($cpIds[$c->id])? -1: $cpIds[$c->id];
-			$c->cp_id_tomorrow = empty($cpIds2[$c->id])? -1:$cpIds2[$c->id];
+			$c->cp_id_today = empty($cpIds[$c->category])? -1: $cpIds[$c->category];
+			$c->cp_id_tomorrow = empty($cpIds2[$c->category])? -1:$cpIds2[$c->category];
 			
 		}
 
@@ -139,7 +155,7 @@ class Challenges extends CI_Controller {
 			$count = 0;
 			// check fix category
 			foreach($current as $now) {
-				if($now->category>0 && ($now->category==$new->category)) {
+				if($now->category==$new->category) {
 					$msg = "You can join only one challenge in %s category per day. Please drop %s to join this one.";
 					$category = "";
 					switch($now->category) {
@@ -159,7 +175,7 @@ class Challenges extends CI_Controller {
 				}
 			}
 			// check max num of times joinable
-			$count = $this->Challenge_model->getParticipationCount($new->challenge_id, $uid);
+			$count = $this->Challenge_model->getParticipationCount($new->id, $uid);
 			if($count>=$new->quota) {
 				return "You have exceeded the maximum quota of this challenge. Please choose another one.";
 			}
@@ -182,6 +198,8 @@ class Challenges extends CI_Controller {
 			if(empty($old_cpid)) {
 				$old_cpid = -1;
 			}
+
+
 			$msg = $this->joinChallenge($uid, $old_cpid, $challenge_id, $this->date_tomorrow);
 		}
 		echo json_encode($msg);

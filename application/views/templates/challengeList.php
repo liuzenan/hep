@@ -48,7 +48,12 @@
 				<?php } ?>
 			</div>
 			<div class="span4 today">
-				<div class="challenge-title">Today</div>
+				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
+					<div class="challenge-title">24th Feb</div>
+			    <?php else: ?>
+					<div class="challenge-title">Today</div>
+      			<?php endif ?>
+
 				<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 						<?php if (!empty($me_challenges) && !empty($me_challenges[$i])): ?>
@@ -75,8 +80,12 @@
 				<?php } ?>
 			</div>
 			<div class="span4 tomorrow">
-				<div class="challenge-title">Today</div>
-				<?php for ($i=0; $i < 4; $i++) { ?>
+				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
+					<div class="challenge-title">25th Feb</div>
+			    <?php else: ?>
+					<div class="challenge-title">Today</div>
+      			<?php endif ?>				
+      			<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 						<?php if (!empty($me_challenges_tomorrow) && !empty($me_challenges_tomorrow[$i])): ?>
 			<a href="#challengeModal" role="button" data-challenge-id="<?php echo $me_challenges_tomorrow[$i]->id ?>" data-toggle="modal">

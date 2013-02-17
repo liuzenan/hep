@@ -53,8 +53,15 @@ class Challenge_model extends CI_Model{
 		return $this->db->insert_id();
 	}
 
-	function checkChallengeQuota() {
-
+	function preAllocateChallenge($user_id) {
+		$sql1 = 'select * from challengeparticipant where DATE(start_time)="2013-02-24" and user_id=?';
+		$exists = $this->db->query($sql1, array($user_id))->result();
+		if(empty($exists)) {
+			$this->joinChallenge($user_id, 1, 1, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
+			$this->joinChallenge($user_id, 7, 2, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
+			$this->joinChallenge($user_id, 13, 3, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
+			$this->joinChallenge($user_id, 22, 0, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
+		}
 	}
 	
 	public function carryOverChallenges() {
@@ -148,9 +155,7 @@ function getHouseCompletedChallenges($house_id) {
 	return $query->result();
 }
 
-function getIndividualCurrentChallenges($user_id) {
-	return $this->getIndividualChallenges($user_id,date("Y-m-d",time()));
-}
+
 
 function getIndividualChallenges($user_id, $date) {
 
@@ -183,7 +188,7 @@ function updateActivityProgress($user_id, $date=NULL) {
 	$ci->load->model('Activity_model');
 
 	if(is_null($date)) {
-		$data = $this->getIndividualCurrentChallenges($user_id);
+		$data = $this->getIndividualChallenges($user_id,date("Y-m-d ",time()));
 	} else {
 		$data = $this->getIndividualChallenges($user_id, $date);
 	}

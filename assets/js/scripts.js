@@ -120,34 +120,157 @@ jQuery(document).ready(function($) {
 	});
 
 	$(".messageBox").autosize();
-	//joinevents
-	$(".joinChallengeNow").click(function(event){
-		var currentBtn = $(this);
-		var challengeId = currentBtn.data("challengeId");
-		var userId = currentBtn.data("userId");
-		var cpId = currentBtn.data("cpid");
+	
 
-		$(".joinChallengeNow").attr("disabled", true);
-		if(challengeId){
+	$(".subscribe-link").click(function(event){
+		console.log("here");
+		var currentBtn = $(this);
+		var threadId = currentBtn.data("threadId");
+		console.log("threadId"+threadId);
+		$(this).attr("disabled", true);
+		if(threadId){
 			$.ajax({
 				type:'POST',
-				url:base_url+'challenges/joinChallengeNow',
+				url:base_url+'forum/subscribe',
 				dataType:'json',
 				data:{
-					challenge_id:challengeId,
-					user_id:userId,
-					cp_id:cpId
+					thread_id:threadId,
 				}
 			}).done(function(msg){
-				//alert(msg.message);
-				//window.location.reload();
 				console.log(msg);
-				$(".myactivity .today").append('<a href="#challengeToday" role="button" data-toggle="modal"><div class="challengeItem box"><div class="challengeContainer"><div class="challengeTitle challengeTitleTooltip" data-original-title="'+ msg.challenge.description +'">'+ msg.challenge.title +'<h4>'+ msg.challenge.points +' points · <i class="icon-time icon-large"></i>&nbsp;'+ msg.challenge.start_time.substring(0, 5) +'-'+ msg.challenge.end_time.substring(0, 5) +'</h4><div class="progress progress-warning progress-striped"><div class="bar" style="width:0%"></div></div></div></div></div></a>');
-
+				window.location.reload();
 			});
 		}
 	});
-$(".joinChallengeTomorrow").click(function(event){
+	$(".unsubscribe-link").click(function(event){
+		var currentBtn = $(this);
+		var threadId = currentBtn.data("threadId");
+		console.log("threadId");
+		$(this).attr("disabled", true);
+		if(threadId){
+			$.ajax({
+				type:'POST',
+				url:base_url+'forum/unsubscribe',
+				dataType:'json',
+				data:{
+					thread_id:threadId,
+				}
+			}).done(function(msg){
+				console.log(msg);
+				window.location.reload();
+			});
+		}
+	});
+
+	$('.modal').modal({
+		show:false,
+		backdrop:false
+	});
+
+	$(".thread-content .showmore").click(function(event){
+		var current = $(this);
+
+		$(this).parent().parent().children(".full-content").toggleClass("hide");
+		$(this).parent().parent().children(".collapsed-content").toggleClass("hide");
+
+		if (current.text()!="Show fewer comments") {
+			current.text("Show fewer comments");
+		} else {
+			current.text("Show all " + current.data("comments") + " comments");
+		}
+	});
+
+	$(".expandbtn").click(function(event){
+
+		var expandable = $(this).parent().parent().find(".expandable");
+		var heights, maxheight;
+
+		if ($(this).children().hasClass("icon-chevron-down")) {
+			heights = expandable.children().map(function(){
+				return $(this).height();
+			}).get();
+
+			maxheight = Math.max.apply(null, heights);
+			expandable.height(maxheight);
+			$(this).children().removeClass("icon-chevron-down");
+			$(this).children().addClass("icon-chevron-up");
+
+		} else {
+			$(this).children().removeClass("icon-chevron-up");
+			$(this).children().addClass("icon-chevron-down");
+			expandable.height(220);
+		}
+
+		expandable.toggleClass("expand");
+
+	});
+
+	for (var i = 0; i < 4; i++) {
+		$(".today .challenge-type-"+i+" a").bind('click', {type:i}, function(event){
+			var data = event.data;
+			$("#challengeModal .challenge-wrapper ").html("");
+		//console.log(data.type);
+		for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
+			var currentChallenge = allChallenges[data.type][j];
+			if(currentChallenge.joined_today==1){
+				$("#challengeModal .challenge-wrapper ").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+			} else {
+				$("#challengeModal .challenge-wrapper ").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+			}
+
+		}
+	});
+
+$(".tomorrow .challenge-type-"+i+" a").bind('click', {type:i},function(event){
+	var data = event.data;
+	$("#challengeModal .challenge-wrapper").html("");
+	console.log(data.type);
+	for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
+		var currentChallenge = allChallenges[data.type][j];
+		if(currentChallenge.joined_tomorrow==1){
+			$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeTomorrow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id+'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+
+		} else {
+			$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeTomorrow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id+'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+
+		}
+
+	}
+});		
+};
+
+//joinevents
+$(".today").on('click','.joinChallengeNow',function(event){
+	var currentBtn = $(this);
+	console.log("joinChallengeNow");
+	var challengeId = currentBtn.data("challengeId");
+	var userId = currentBtn.data("userId");
+	var cpId = currentBtn.data("cpid");
+	console.log(challengeId+"-"+userId+"-"+cpId);
+	$(".joinChallengeNow").attr("disabled", true);
+	if(challengeId){
+		$.ajax({
+			type:'POST',
+			url:base_url+'challenges/joinChallengeNow',
+			dataType:'json',
+			data:{
+				challenge_id:challengeId,
+				user_id:userId,
+				cp_id:cpId
+			}
+		}).done(function(msg){
+				console.log("getback");
+				console.log(msg);
+
+				$("#challengeModal").hide();
+				//alert(msg.message);
+				window.location.reload();
+				//$(".myactivity .today").append('<a href="#challengeToday" role="button" data-toggle="modal"><div class="challengeItem box"><div class="challengeContainer"><div class="challengeTitle challengeTitleTooltip" data-original-title="'+ msg.challenge.description +'">'+ msg.challenge.title +'<h4>'+ msg.challenge.points +' points · <i class="icon-time icon-large"></i>&nbsp;'+ msg.challenge.start_time.substring(0, 5) +'-'+ msg.challenge.end_time.substring(0, 5) +'</h4><div class="progress progress-warning progress-striped"><div class="bar" style="width:0%"></div></div></div></div></div></a>');
+
+			});
+	}
+});
+$("#challengeModal").on('click',".joinChallengeTomorrow", function(event){
 	var currentBtn = $(this);
 	var challengeId = currentBtn.data("challengeId");
 	var userId = currentBtn.data("userId");
@@ -166,7 +289,7 @@ $(".joinChallengeTomorrow").click(function(event){
 		}).done(function(msg){
 			console.log(msg);
 				//alert(msg.message);
-				//window.location.reload();
+			window.location.reload();
 			});
 	}
 });
@@ -211,122 +334,6 @@ $(".tomorrow .quitChallenge").click(function(event){
 		});
 	}
 });
-
-$(".subscribe-link").click(function(event){
-	console.log("here");
-	var currentBtn = $(this);
-	var threadId = currentBtn.data("threadId");
-	console.log("threadId"+threadId);
-	$(this).attr("disabled", true);
-	if(threadId){
-		$.ajax({
-			type:'POST',
-			url:base_url+'forum/subscribe',
-			dataType:'json',
-			data:{
-				thread_id:threadId,
-			}
-		}).done(function(msg){
-			console.log(msg);
-			window.location.reload();
-		});
-	}
-});
-$(".unsubscribe-link").click(function(event){
-	var currentBtn = $(this);
-	var threadId = currentBtn.data("threadId");
-	console.log("threadId");
-	$(this).attr("disabled", true);
-	if(threadId){
-		$.ajax({
-			type:'POST',
-			url:base_url+'forum/unsubscribe',
-			dataType:'json',
-			data:{
-				thread_id:threadId,
-			}
-		}).done(function(msg){
-			console.log(msg);
-			window.location.reload();
-		});
-	}
-});
-
-$('.modal').modal({
-	show:false,
-	backdrop:false
-});
-
-$(".thread-content .showmore").click(function(event){
-	var current = $(this);
-
-	$(this).parent().parent().children(".full-content").toggleClass("hide");
-	$(this).parent().parent().children(".collapsed-content").toggleClass("hide");
-
-	if (current.text()!="Show fewer comments") {
-		current.text("Show fewer comments");
-	} else {
-		current.text("Show all " + current.data("comments") + " comments");
-	}
-});
-
-$(".expandbtn").click(function(event){
-
-	var expandable = $(this).parent().parent().find(".expandable");
-	var heights, maxheight;
-
-	if ($(this).children().hasClass("icon-chevron-down")) {
-		heights = expandable.children().map(function(){
-			return $(this).height();
-		}).get();
-
-		maxheight = Math.max.apply(null, heights);
-		expandable.height(maxheight);
-		$(this).children().removeClass("icon-chevron-down");
-		$(this).children().addClass("icon-chevron-up");
-
-	} else {
-		$(this).children().removeClass("icon-chevron-up");
-		$(this).children().addClass("icon-chevron-down");
-		expandable.height(220);
-	}
-
-	expandable.toggleClass("expand");
-
-});
-
-for (var i = 0; i < 4; i++) {
-	$(".today .challenge-type-"+i+" a").bind('click', {type:i}, function(event){
-		var data = event.data;
-		$("#challengeModal .challenge-wrapper").html("");
-		console.log(data.type);
-		for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
-			var currentChallenge = allChallenges[data.type][j];
-			if(currentChallenge.cp_id_today!=-1){
-				$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-			} else {
-				$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-			}
-
-		}
-	});
-
-$(".tomorrow .challenge-type-"+i+" a").bind('click', {type:i},function(event){
-	var data = event.data;
-	$("#challengeModal .challenge-wrapper").html("");
-	console.log(data.type);
-	for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
-		var currentChallenge = allChallenges[data.type][j];
-		if(currentChallenge.cp_id_tomorrow!=-1){
-			$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-		} else {
-			$("#challengeModal .challenge-wrapper").append('<a href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-		}
-
-	}
-});		
-};
-
 $(".myactivity .current-challenges").mouseenter(function(event){
 	var button = $(this).find(".expandbtn");
 	var expandable = button.parent().parent().find(".expandable");
@@ -360,6 +367,11 @@ $(".myactivity .current-challenges").mouseleave(function(event){
 var counter = setInterval(timer, 1000);
 console.log(game_start_date);
 });
+
+
+
+
+
 
 function timer(){
 	var current = new Date();
