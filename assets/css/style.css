@@ -744,14 +744,28 @@ margin-bottom: 10px;
 }
 
 #challengeModal .challenge-wrapper .row-fluid{
-	padding: 10px 0;
-	border-bottom: 1px solid #ccc;
+padding: 10px 2%;
+border-bottom: 1px solid #ccc;
+width: 96%;
 }
 
 #challengeModal .challenge-wrapper a{
 	text-decoration: none !important;
+	color: #999;
+	cursor: default;
 }
 
-#challengeModal .challenge-wrapper .row-fluid:hover{
-	background-color: #ddd;
+#challengeModal .challenge-wrapper a.enabled{
+	cursor: pointer;
+	color: #4F8AC4;
+}
+
+#challengeModal .challenge-wrapper a.enabled .row-fluid:hover{
+	background-color: #4F8AC4;
+	color: white;
+}
+
+#challengeModal .modal-body{
+	margin: 0;
+	padding: 0;
 }

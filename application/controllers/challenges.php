@@ -44,26 +44,27 @@ class Challenges extends CI_Controller {
 	}
 
 	public function index(){
-		$data["challenges"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
-		$tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
+		// $data["challenges"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
+		// $tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
 
-		foreach($data["challenges"] as $c) {
-			$data["today"][$c->category]=$c;
-		}
+		// foreach($data["challenges"] as $c) {
+		// 	$data["today"][$c->category]=$c;
+		// }
 
-		$data["tomorrow"] = array();
-		foreach($tomorrow as $c2) {
-			$data["tomorrow"][$c2->category]=$c2;
-		}
+		// $data["tomorrow"] = array();
+		// foreach($tomorrow as $c2) {
+		// 	$data["tomorrow"][$c2->category]=$c2;
+		// }
 
-		$all = $this->loadAvailableChallanges();
-		foreach($all as $c3) {
-			$data['all'][$c3->category][] = $c3;
-		}
-		//echo "<pre>"; print_r($data);echo "</pre><br>";
+		// $all = $this->loadAvailableChallanges();
+		// foreach($all as $c3) {
+		// 	$data['all'][$c3->category][] = $c3;
+		// }
+		// //echo "<pre>"; print_r($data);echo "</pre><br>";
 
-		$data["tab"] = "my";
-		$this->loadPage($data);	
+		// $data["tab"] = "my";
+		// $this->loadPage($data);	
+		$this->all();
 	}		
 
 	public function all(){
