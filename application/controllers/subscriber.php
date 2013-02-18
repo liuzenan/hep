@@ -30,7 +30,7 @@ class Subscriber extends CI_Controller {
 		
 	}
 
-	private function updateProgress($user_id, $date) {
+	public function updateProgress($user_id, $date) {
 		
 		$this->Challenge_model->updateActivityProgress($user_id, $date);
 	}
