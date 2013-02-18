@@ -38,6 +38,7 @@ class Challenges extends CI_Controller {
 				$this->tomorrow_end = "2013-02-25 23:59:59";
 				$this->today_start = "2013-02-24 00:00:00";
 				$this->today_end = "2013-02-24 23:59:59";
+				$this->now = $this->today_start;
 			}
 
 		} 
@@ -258,7 +259,7 @@ class Challenges extends CI_Controller {
 				$end = $date." ".$challenge->end_time;
 			} else {
 				if ($date == $this->date_today) {
-					$start = $this->today_start;
+					$start = $this->now;
 					$end = $this->today_end;
 				} else {
 					$start = $this->tomorrow_start;
