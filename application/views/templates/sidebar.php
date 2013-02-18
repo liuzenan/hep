@@ -11,6 +11,8 @@
 			<?php } ?>
 			<?php if($isAdmin==1) {?>
 			<li class="<?php if($active=='manage') echo "active" ?>"><a href="<?php echo base_url() . 'manage'?>">Manage Users</a></li>
+			<li class="<?php if($active=='masquerade') echo "active" ?>"><a href="<?php echo base_url() . 'masquerade'?>">Masquerade</a></li>
+
 			<?php } ?>
 		</ul>
 	</div>

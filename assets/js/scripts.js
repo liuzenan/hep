@@ -313,6 +313,8 @@ $("#challengeModal").on('click',".joinChallengeTomorrow.enabled", function(event
 	}
 });
 
+
+
 $(".today .quitChallenge").click(function(event){
 	var currentBtn = $(this);
 	var cpId = currentBtn.data("cpId");

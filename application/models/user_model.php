@@ -12,8 +12,8 @@ class User_model extends CI_Model{
 		WHERE  ( first_name IS NULL
 			OR last_name IS NULL
 			OR email IS NULL ) 
-			AND id=?";
-		return $this->db->query($sql, array($user_id))->row();
+AND id=?";
+return $this->db->query($sql, array($user_id))->row();
 }
 
 function loadUser($user_id) {
@@ -24,6 +24,16 @@ function loadUser($user_id) {
 		show_error('Cannot find user', 501);
 	}
 
+}
+
+function searchUser($name) {
+	$sql = "SELECT Group_concat(first_name, ' ', last_name) AS name,
+	user.*
+	FROM   user
+	GROUP  BY id
+	HAVING ( Lower(name) LIKE Lower('%".$name."%') ) ";
+	$query = $this->db->query($sql);
+	return $query->result();
 }
 
 function loadUsers($uids) {
