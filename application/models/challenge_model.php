@@ -212,7 +212,7 @@ function updateActivityProgress($user_id, $date=NULL) {
 			$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
 
 		} else if ($c->sleep_value != 0) {
-			$value = $this->Activity_model->getSleepData($user_id, $date);
+			$value = $this->Activity_model->getSleepData($user_id, $date)/60;
 
 			$progress = number_format($value->total_time/$c->sleep_value, 2);
 			$this->updateProgress($c->id, $progress, $date." 07:00:00", $date." 07:00:00", 0, "sleep", $c->thread_id);

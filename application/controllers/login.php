@@ -33,7 +33,7 @@ class Login extends CI_Controller{
 			$user_exist = false;
 		}
 			//set session data
-		$query = $this->db->query("SELECT id, email FROM user WHERE fitbit_id = '" . $fitbit_id . "'");
+		$query = $this->db->query("SELECT * FROM user WHERE fitbit_id = '" . $fitbit_id . "'");
 		if($query->num_rows()>0){
 			$row = $query->row();
 			$userdata = array(
@@ -45,7 +45,7 @@ class Login extends CI_Controller{
 				'avatar' => $profile_pic,
 				'isadmin'=> $row->admin,
 				'isleader'=> $row->leader,
-				'isTutor' => $row->staff
+				'isTutor' => ($row->staff || ($row->house_id == -1))
 				);		
 			$this->session->set_userdata($userdata);
 
@@ -210,7 +210,7 @@ public function facebookLogin(){
 				'avatar' => $row->profile_pic,
 				'isadmin'=> $row->admin,
 				'isleader'=> $row->leader,
-				'isTutor' => $row->staff
+				'isTutor' => ($row->staff || $row->house_id == -1)
 				);		
 			$this->session->set_userdata($userdata);
 			$msg['success'] = true;				
@@ -240,7 +240,7 @@ public function linkWithFacebook(){
 			'avatar' => $row->profile_pic,
 			'isadmin'=> $row->admin,
 			'isleader'=> $row->leader,
-			'isTutor' => $row->staff
+			'isTutor' => ($row->staff || $row->house_id == -1)
 			);		
 		$this->session->set_userdata($userdata);			
 		$msg["success"] = true;

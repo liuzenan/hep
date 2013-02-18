@@ -2,8 +2,9 @@
 
 class Mail_model extends CI_Model{
 
-	//const HepAccount = 'hepnusmedical@gmail.com';
-	const HepAccount = 'hep-support@googlegroup.com';
+	const HepAccount = 'hepnusmedical@gmail.com';
+	//const HepAccount = 'hep-support@googlegroup.com';
+	//const HepAccount = 'hep@hep.d2.comp.nus.edu.sg';
 	const HepName = 'Health Enhancement Program';
 	const TitleBadgeEarned = 'Congrats for earning %s badge!';
 	const TitleDailyReport = 'HEP Daily Report';
