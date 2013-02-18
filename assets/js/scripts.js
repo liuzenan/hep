@@ -213,9 +213,14 @@ jQuery(document).ready(function($) {
 		for (var j = allChallenges[data.type].length - 1; j >= 0; j--) {
 			var currentChallenge = allChallenges[data.type][j];
 			if(currentChallenge.joined_today==1){
-				$("#challengeModal .challenge-wrapper ").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
 			} else {
-				$("#challengeModal .challenge-wrapper ").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				if (currentChallenge.quota_exceeded) {
+					$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeNow" disabled="disabled" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				} else {
+					$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
+				}
+				
 			}
 
 		}
