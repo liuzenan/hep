@@ -54,7 +54,7 @@ class Allhouse extends CI_Controller {
 
 	}
 	public function data() {
-		echo "<pre>"; print_r($this->loadData());echo "</pre><br>";
+		echo "<pre>"; print_r($this->loadData(-1));echo "</pre><br>";
 
 	}
 
