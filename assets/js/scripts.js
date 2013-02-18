@@ -252,8 +252,15 @@ $(".today").on('click','.joinChallengeNow',function(event){
 	var userId = currentBtn.data("userId");
 	var cpId = currentBtn.data("cpid");
 	console.log(challengeId+"-"+userId+"-"+cpId);
+	var quit;
+	if(cpId>0) {
+	  	quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.","HEP Advisor");
+	} else {
+	  	quit = 1;
+	}
+
 	$(".joinChallengeNow").attr("disabled", true);
-	if(challengeId){
+	if(challengeId && quit){
 		$.ajax({
 			type:'POST',
 			url:base_url+'challenges/joinChallengeNow',
