@@ -83,7 +83,7 @@
 				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
 					<div class="challenge-title">25th Feb</div>
 			    <?php else: ?>
-					<div class="challenge-title">Today</div>
+					<div class="challenge-title">Tomorrow</div>
       			<?php endif ?>				
       			<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
