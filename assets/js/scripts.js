@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
 	$(".postMessage").click(function(event){
 		var currentBtn = $(this);
 		var threadId = currentBtn.data("threadId");
-		var msg = $("#messageBox"+threadId).val();
+		var msg = $("#messageBox"+threadId).val().trim();
 		$(this).attr("disabled", true);
 		if(msg.length<=800&&msg.length>0){
 			$.ajax({
@@ -94,21 +94,23 @@ jQuery(document).ready(function($) {
 	$("#newThread").click(function(e){
 		console.log("newThread");
 		e.preventDefault();
-		var data = $("#description").val();
+		var data = $("#description").val().trim();
 		console.log(data);
 
+		if(data.length>0) {
 
-		$.post(base_url+'forum/createThread', {message:data}, function(msg){
-			console.log(msg);
-			if (msg.success == true) {
-				window.location.reload();
-			} else {
-				if (msg.login == true) {
-				}else {
-					window.location.href = base_url+"login"
-				};
-			}
-		}, 'json');
+			$.post(base_url+'forum/createThread', {message:data}, function(msg){
+				console.log(msg);
+				if (msg.success == true) {
+					window.location.reload();
+				} else {
+					if (msg.login == true) {
+					}else {
+						window.location.href = base_url+"login"
+					};
+				}
+			}, 'json');
+		}
 		
 	});
 
@@ -259,9 +261,9 @@ $(".today").on('click','.joinChallengeNow.enabled',function(event){
 	console.log(challengeId+"-"+userId+"-"+cpId);
 	var quit;
 	if(cpId>0) {
-	  	quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.","HEP Advisor");
+		quit = confirm("Are you sure to quit this challenge? All your progress so far will be dropped.","HEP Advisor");
 	} else {
-	  	quit = 1;
+		quit = 1;
 	}
 
 	$(".joinChallengeNow").attr("disabled", true);
@@ -276,10 +278,10 @@ $(".today").on('click','.joinChallengeNow.enabled',function(event){
 				cp_id:cpId
 			}
 		}).done(function(msg){
-				console.log("getback");
-				console.log(msg);
+			console.log("getback");
+			console.log(msg);
 
-				$("#challengeModal").hide();
+			$("#challengeModal").hide();
 				//alert(msg.message);
 				window.location.reload();
 				//$(".myactivity .today").append('<a href="#challengeToday" role="button" data-toggle="modal"><div class="challengeItem box"><div class="challengeContainer"><div class="challengeTitle challengeTitleTooltip" data-original-title="'+ msg.challenge.description +'">'+ msg.challenge.title +'<h4>'+ msg.challenge.points +' points · <i class="icon-time icon-large"></i>&nbsp;'+ msg.challenge.start_time.substring(0, 5) +'-'+ msg.challenge.end_time.substring(0, 5) +'</h4><div class="progress progress-warning progress-striped"><div class="bar" style="width:0%"></div></div></div></div></div></a>');
@@ -306,7 +308,7 @@ $("#challengeModal").on('click',".joinChallengeTomorrow.enabled", function(event
 		}).done(function(msg){
 			console.log(msg);
 				//alert(msg.message);
-			window.location.reload();
+				window.location.reload();
 			});
 	}
 });
