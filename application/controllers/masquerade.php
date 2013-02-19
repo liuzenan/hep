@@ -54,7 +54,6 @@ class Masquerade extends CI_Controller {
 			'oauth_token' => $row->oauth_token,
 			'username' => $row->username,
 			'avatar' => $row->profile_pic,
-			'isadmin'=> $row->admin,
 			'isleader'=> $row->leader,
 			'isTutor' => ($row->staff || ($row->house_id == -1)),
 			'name' => $row->first_name
