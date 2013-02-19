@@ -17,7 +17,7 @@ class Profile extends CI_Controller {
 
 	public function user($user_id) {
 		$this->loadUserData($user_id, $data);
-		var_dump($data);
+		//var_dump($data);
 		$data['active'] = "profile";
 		$this->load->view('templates/header', $data);
 		$this->load->view('profile', $data);
