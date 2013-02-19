@@ -97,7 +97,9 @@
       <div class="span4 offset4">
         <button class="btn btn-large btn-block btn-primary" id="facebookbtn">Link with Facebook</button>
       </div>
-      <div class="span4 skip"><p><a href="<?php echo base_url() . 'home' ?>">Skip</a></p></div>
+      <?php if(empty($active) || $active!="profile"): ?>
+        <div class="span4 skip"><p><a href="<?php echo base_url() . 'home' ?>">Skip</a></p></div>
+      <?php endif ?>
     </div>
   </div>
     <script src="/assets/js/jquery-1.9.1.min.js"></script>
