@@ -24,7 +24,7 @@
       if (response.status === 'connected') {
         // connected
         $("#facebookbtn").attr("disabled","disabled");
-        $("#facebookbtn").html("Connected");
+        $("#facebookbtn").html("Facebook Connected");
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
