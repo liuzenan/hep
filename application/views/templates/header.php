@@ -87,6 +87,7 @@
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
+                <li><a href="<?php echo base_url() . "profile" ?>">Setting</a></li>
                 <li><a href="<?php echo base_url() . "logout" ?>">Logout</a></li>
               </ul>
             </li>
