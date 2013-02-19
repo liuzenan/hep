@@ -14,21 +14,23 @@
 				<label for="">House</label>
 				<select name="house" id="house">
 					<option value="0">Select a House...</option>
-					<option value="1" selected="<?php if($house_id==1) echo "selected" ?>">1</option>
-					<option value="2" selected="<?php if($house_id==2) echo "selected" ?>">2</option>
-					<option value="3" selected="<?php if($house_id==3) echo "selected" ?>">3</option>
-					<option value="4" selected="<?php if($house_id==4) echo "selected" ?>">4</option>
-					<option value="5" selected="<?php if($house_id==5) echo "selected" ?>">5</option>
-					<option value="6" selected="<?php if($house_id==6) echo "selected" ?>">6</option>
-					<option value="7" selected="<?php if($house_id==7) echo "selected" ?>">7</option>
-					<option value="8" selected="<?php if($house_id==8) echo "selected" ?>">8</option>
-					<option value="9" selected="<?php if($house_id==9) echo "selected" ?>">9</option>
-					<option value="10" selected="<?php if($house_id==10) echo "selected" ?>">10</option>
+					<?php for($i=1; $i<=10; $i++): ?>
+						<?php if($house_id == $i): ?>
+							<option value="<?php echo $i ?>" selected><?php echo $i ?></option>
+						<?php else: ?>
+							<option value="<?php echo $i ?>"><?php echo $i ?></option>
+						<?php endif ?>
+					<?php endfor ?>
 				</select>
 				<label for="">Gender</label>
 				<select name="gender" id="gender" value="<?php echo $gender ?>">
-					<option value="FEMALE">Female</option>
-					<option value="MALE">Male</option>
+					<?php if($gender=="FEMALE"):?>
+						<option value="FEMALE" selected>Female</option>
+						<option value="MALE">Male</option>
+					<?php else: ?>
+						<option value="FEMALE">Female</option>
+						<option value="MALE" selected>Male</option>
+					<?php endif ?>
 				</select>
 				<label class="checkbox">
 					<?php if($badge_email_unsub==0):?>
