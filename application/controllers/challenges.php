@@ -177,7 +177,7 @@ class Challenges extends CI_Controller {
 				}
 			}
 			// check max num of times joinable
-			$count = $this->Challenge_model->getParticipationCount($new->id, $uid);
+			$count = $this->Challenge_model->getParticipationCount($uid, $new->id);
 			if($count>=$new->quota) {
 				return "You have exceeded the maximum quota of this challenge. Please choose another one.";
 			}
