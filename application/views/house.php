@@ -48,7 +48,8 @@
 						</div>
 						<div class="row-fluid house-people-stats">
 							<div class="span2">
-								<small class="muted">completed <?php echo empty($value['completed']) ? 0 : $value['completed']->score ?> challenges</small>
+								<small class="muted"><?php echo empty($value['completed']) ? 0 : $value['completed']->score ?> challenges</small><br>
+								<small class="muted"><?php echo empty($value['completed']) ? 0 : $value['completed']->total_points ?> points</small>
 							</div>
 							<div class="span3 house-people-current">
 								<?php if (!empty($value['current'])): ?>

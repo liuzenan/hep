@@ -65,29 +65,42 @@ class Challenge_model extends CI_Model{
 	}
 	
 	public function carryOverChallenges() {
-		$now = date("Y-m-d G:i:s",time());	
-		$ystd = date("Y-m-d G:i:s",time() - 24*60*60);
+		$now = date("Y-m-d",time());	
+		$ystd = date("Y-m-d",time() - 24*60*60);
 		$sql = "SELECT DISTINCT c1.user_id
 		FROM   challengeparticipant AS c1
 		WHERE  c1.user_id IN (SELECT DISTINCT user_id
 			FROM   challengeparticipant
-			WHERE  start_time <= ?
-			AND end_time >= ? )
+			WHERE  DATE(start_time) = ?)
 			AND c1.user_id NOT 
 			IN (SELECT DISTINCT user_id
 			FROM   challengeparticipant
-			WHERE  start_time <= ?
-			AND end_time >= ?)";
-		$uids = $this->db->query($sql, array($ystd, $ystd, $now, $now))->result();
-		foreach($uids as $uid) {
+			WHERE  DATE(start_time) = ?)";
+		$uids = $this->db->query($sql, array($ystd, $now))->result();
+		$nextLevel = array(1=>2, 2=>3, 7=>8, 8=>9, 13=>14, 14=>15);
+		foreach($uids as $u) {
+			$uid = $u->user_id;
 			$sql2="SELECT distinct challenge_id
 			FROM   challengeparticipant
-			WHERE  start_time <= ?
-			AND end_time >= ?
+			WHERE  DATE(start_time) = ?
 			AND user_id=?";
-			$cids = $this->db->query($sql2, array($ystd, $ystd, $uid->user_id))->result();
-			foreach($cids as $cid) {
-				$this->joinChallenge($uid->user_id, $cid->challenge_id, date("Y-m-d",time())." 00:00:00", date("Y-m-d",time())." 23:59:59");
+			$cids = $this->db->query($sql2, array($ystd, $uid))->result();
+			foreach($cids as $c) {
+				$cid = $c->challenge_id;
+				$new = $this->loadChallenge($cid);
+				$count = $this->Challenge_model->getParticipationCount($uid, $new->id);
+				if($count>= ($new->quota)) {
+					$cid = $nextLevel[$cid];
+					$new = $this->loadChallenge($cid);
+				}
+				if($new->start_time != "00:00:00") {
+					$start = $now." ".$new->start_time;
+					$end = $now." ".$new->end_time;
+				} else {
+					$start = $now." 00:00:00";
+					$end = $now." 23:59:59";
+				}
+				$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
 			}
 		}
 
@@ -232,7 +245,6 @@ class Challenge_model extends CI_Model{
 	}
 
 	function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold, $type, $thread_id) {
-		echo "updateProgress ".$progress."-".$start_time."-".$end_time."-".$thresh_hold."-".$type."-".$thread_id;
 		if($progress >= 1.0) {
 			$cp = $this->loadChallengeParticipation($cp_id);
 			$ci =& get_instance();
@@ -337,12 +349,14 @@ function getParticipationCount($uid, $challenge_id) {
 	FROM   challengeparticipant
 	WHERE  user_id = ?
 	AND challenge_id = ?
-	GROUP  BY challenge_id";
+	GROUP BY challenge_id";
 	$query = $this->db->query($sql, array($uid, $challenge_id));
-	$res = $query->result();
-	return empty($res)
-	? 0 
-	: $res->count;
+
+	if($query->num_rows()>0) {
+		return $query->row()->count;
+	} else {
+		return 0;
+	}
 	
 }
 
