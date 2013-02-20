@@ -1,8 +1,7 @@
-<li class="studentItem media well">
-	<a href="#" class="pull-left"><img class="media-object" src="<?php echo $profile_pic ?>"></a>
-	<div class="media-body">
-		<h4 class="media-heading"><?php echo $first_name . ' ' . $last_name ?></h4>
-		<p><?php echo $email ?></p>
+<tr>
+	<td><strong><?php echo $first_name . ' ' . $last_name ?></strong></td>
+	<td><?php echo $email ?></td>
+	<td>
 		<?php if ($admin==1): ?>
 			<span class="label"><?php echo "Admin" ?></span>
 		<?php endif ?>
@@ -19,5 +18,7 @@
 		<?php if ($leader==1): ?>
 			<span class="label"><?php echo "House Leader" ?></span>
 		<?php endif ?>	
-	</div>
-</li>
+	</td>
+	<td></td>
+	<td></td>
+</tr>

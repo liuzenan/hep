@@ -1,5 +1,6 @@
 	<div class="span2">
 		<ul class="nav nav-pills nav-stacked">
+			<li class="<?php if($active=='home') echo "active" ?>"><a href="<?php echo base_url() . 'home'?>">Home</a></li>
 			<li class="<?php if($active=='stats') echo "active" ?>"><a href="<?php echo base_url() . 'stats'?>">Statistics</a></li>
 			<li class="<?php if($active=='challenges') echo "active" ?>"><a href="<?php echo base_url() . 'challenges'?>">Challenges</a></li>
 			<li class="<?php if($active=='leaderboard') echo "active" ?>"><a href="<?php echo base_url() . 'leaderboard'?>">Leaderboard</a></li>

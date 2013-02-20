@@ -2,13 +2,11 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<div class="row-fluid">
-			<div class="span12">
-				<ul class="media-list achievements">
+			<table class="table">
 					<?php foreach($students as $student){
 						$this->load->view("templates/studentItem", $student);
 					} ?>
-				</ul>
-			</div>
+			</table>
 		</div>
 	</div>
 </div>

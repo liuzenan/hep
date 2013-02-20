@@ -6,7 +6,7 @@
 				<a href="<?php echo base_url() . 'stats/history' ?>">steps</a>
 			</li>
 			<li class="<?php if($activeActivity=='floors') echo 'active' ?>"><a href="<?php echo base_url() . 'stats/history/floors' ?>">floors</a></li>
-			<li class="<?php if($activeActivity=='calories') echo 'active' ?>"><a href="<?php echo base_url() . 'stats/history/calories' ?>">calories</a></li>
+			<li class="<?php if($activeActivity=='sleep') echo 'active' ?>"><a href="<?php echo base_url() . 'stats/history/sleep' ?>">sleep</a></li>
 		</ul>
 	</div>
 	<div class="span4 offset4">
@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
 		plotOptions:{
 			column:{
 				pointInterval:24 * 3600 * 1000,
-				pointStart: getTimestamp('<?php echo $startDate . " 00:00:00" ?>')
+				pointStart: getTimestamp('2013-02-13 00:00:00') + 3600*24*1000
 			}
 		},
 		series: [{
