@@ -90,7 +90,7 @@ class Masquerade extends CI_Controller {
 	}
 
 	private function loadPage($data){
-		$data['active'] = 'allhouse';
+		$data['active'] = 'masquerade';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');
