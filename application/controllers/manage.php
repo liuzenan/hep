@@ -21,7 +21,7 @@ class Manage extends CI_Controller {
 
 		
 	}
-
+/*
 	public function studentList(){
 		
 		if($this->session->userdata('isadmin')||$this->session->userdata('isleader')){
@@ -33,7 +33,7 @@ class Manage extends CI_Controller {
 		}			
 		
 	}
-
+*/
 	private function loadPage($data, $page="studentLeader"){
 		$data['active'] = 'manage';
 		$data['displayName'] = $this->session->userdata('name');
@@ -49,14 +49,44 @@ class Manage extends CI_Controller {
 	}
 
 	private function getAllUsers(){
-		$query = $this->db->query("SELECT * FROM user");
-		if ($query->num_rows()>0) {
-			# code...
-			return $query->result();
+
+		$sql = "SELECT
+
+		sum(c.points)  AS points,
+		count(cp.id) AS challenges,
+		u.*
+		FROM   user AS u,
+		challengeparticipant AS cp,
+		challenge as c
+		WHERE 
+		c.id = cp.challenge_id
+		AND cp.user_id = u.id
+		AND cp.complete_time > cp.start_time
+		AND u.phantom = 0
+		AND u.staff = 0
+		AND u.house_id > 0
+		GROUP BY u.id
+		ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
+
+		$query1 = $this->db->query($sql);
+		$progress = array();
+		foreach($query1->result() as $row) {
+			$progress[$row->id] = $row;
 		}
+
+		$query = $this->db->query("SELECT * FROM user");
+		foreach($query->result() as $row2) {
+			if(empty($progress[$row2->id])) {
+				$row2->challenges = 0;
+				$row2->points = 0;
+				$progress[$row2->id] = $row2;
+			}
+		}
+		
+		return $progress;
 	}
 
-
+/*
 	private function getlist(){
 		$user_id = $this->uid;
 		$query = $this->db->query("SELECT house_id FROM user WHERE id = " . $user_id);
@@ -84,5 +114,5 @@ class Manage extends CI_Controller {
 			return $house;
 		}
 	}
-
+   */
 }
