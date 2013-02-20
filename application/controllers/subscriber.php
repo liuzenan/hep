@@ -9,6 +9,30 @@ class Subscriber extends CI_Controller {
 		
 	}
 
+	public function update() {
+		$sql1= "SELECT DISTINCT id
+				FROM   user
+				WHERE  fitbit_id IS not NULL";
+		$query1 = $this->db->query($sql1);
+		foreach($query1->result() as $row1) {
+			$uid = $row1->id;
+
+			$sql = "SELECT DISTINCT date
+					FROM   activity
+   					WHERE date NOT IN (SELECT DISTINCT date
+                    FROM   activity
+                    WHERE  user_id =?)";
+			$query = $this->db->query($sql, array($uid));
+			foreach($query->result() as $row) {
+				$date = $row->date;
+				echo $uid.'-'.$date.'<br>';
+				$this->getActivities($uid, $date);
+				$this->getSleep($uid, $date);
+			}
+	}
+	echo "finish";
+
+	}
 	public function activities(){
 		try {
 			$notifications = $this->getNotification();
