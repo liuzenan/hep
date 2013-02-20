@@ -67,7 +67,9 @@ class Activity_model extends CI_Model{
 	function getMaxActivityToday() {
 		$today = date("Y-m-d");
 		//get activities data
-		$sql = "SELECT max(a.steps) AS max_steps, max(a.floors) AS max_floors, max(a.distance) AS max_distance, max(a.calories) as max_calories
+		$sql = "SELECT max(a.steps) AS max_steps, 
+		max(a.floors) AS max_floors, 
+		max(a.distance) AS max_distance, max(a.calories) as max_calories
 		FROM activity AS a
 		WHERE a.date=?";
 		$query = $this->db->query($sql, array($today));
@@ -79,7 +81,10 @@ class Activity_model extends CI_Model{
 	function getAverageActivityToday(){
 		$today = date("Y-m-d");
 		//get activities data
-		$sql = "SELECT CEILING(avg(a.steps)) AS avg_steps, CEILING(avg(a.floors)) AS avg_floors, CEILING(avg(a.distance)) AS avg_distance, CEILING(avg(a.calories)) as avg_calories
+		$sql = "SELECT CEILING(avg(a.steps)) AS avg_steps, 
+		CEILING(avg(a.floors)) AS avg_floors, 
+		CEILING(avg(a.distance)) AS avg_distance, 
+		CEILING(avg(a.calories)) as avg_calories
 		FROM activity AS a
 		WHERE a.date=? AND (a.steps>0 OR a.floors>0 OR a.distance>0)";
 		$query = $this->db->query($sql, array($today));
@@ -149,7 +154,10 @@ class Activity_model extends CI_Model{
 	}
 
 	function getLifetimeActivityData($user_id){
-		$sql = "SELECT sum(steps) AS total_steps, sum(floors) AS total_floors, sum(calories) AS total_calories, sum(active_score) AS total_activescore, sum(distance) AS total_distance, sum(elevation) AS total_elevation, sum(activity_calories) AS total_activitycalories
+		$sql = "SELECT sum(steps) AS total_steps, sum(floors) AS total_floors, 
+		sum(calories) AS total_calories, sum(active_score) AS total_activescore, 
+		sum(distance) AS total_distance, sum(elevation) AS total_elevation, 
+		sum(activity_calories) AS total_activitycalories
 		FROM activity
 		WHERE user_id=". $user_id ."
 		GROUP BY user_id";
@@ -166,38 +174,85 @@ class Activity_model extends CI_Model{
 	}
 
 
-	function get_activity($startDate, $endDate){
-		try {
-			if($this->session->userdata('user_id')){
-				$sql = "SELECT * FROM activity
-				WHERE user_id = ". $this->session->userdata('user_id') ."
-				AND date
-				BETWEEN '". (string) $startDate ."' AND '" . (string) $endDate ."'
-				ORDER BY date";
+	function get_activity($startDate, $endDate, $user_id){
+		$sql = "SELECT * FROM activity as a
+		WHERE a.user_id = ?
+		AND a.date
+		BETWEEN '". (string) $startDate ."' AND '" . (string) $endDate ."'
+		ORDER BY a.date";
 
-				$query = $this->db->query($sql);
-				$resultSet['steps'] = array();
-				$resultSet['floors'] = array();
-				$resultSet['distance'] = array();
-				$resultSet['calories'] = array();
-				$resultSet['activity_calories'] = array();
-				$resultSet['elevation'] = array();
-				if($query->num_rows()>0){
-					foreach($query->result() as $row){
-						array_push($resultSet['steps'], $row->steps);
-						array_push($resultSet['floors'], $row->floors);
-						array_push($resultSet['calories'], $row->calories);
-						array_push($resultSet['distance'], $row->distance);
-						array_push($resultSet['activity_calories'], $row->activity_calories);
-						array_push($resultSet['elevation'], $row->elevation);
-					}
-
-					return $resultSet;
-				}
+		$query = $this->db->query($sql, array($user_id));
+		$resultSet['steps'] = array();
+		$resultSet['floors'] = array();
+		$resultSet['distance'] = array();
+		$resultSet['calories'] = array();
+		$resultSet['activity_calories'] = array();
+		$resultSet['elevation'] = array();
+		$resultSet['sleep'] = array();
+		if($query->num_rows()>0){
+			foreach($query->result() as $row){
+				$resultSet['steps'][$row->date] = $row->steps;
+				$resultSet['floors'][$row->date] = $row->floors;
+				$resultSet['calories'][$row->date] = $row->calories;
+				$resultSet['distance'][$row->date] = $row->distance;
+				$resultSet['activity_calories'][$row->date] = $row->activity_calories;
+				$resultSet['elevation'][$row->date] = $row->elevation;
 			}
-		} catch (Exception $e) {
-
 		}
+
+
+		$sql2 = "SELECT * FROM sleep as a
+		WHERE a.user_id = ?
+		AND a.date
+		BETWEEN '". (string) $startDate ."' AND '" . (string) $endDate ."'
+		ORDER BY a.date";
+		$query2 = $this->db->query($sql2, array($user_id));
+
+		if($query2->num_rows()>0){
+			foreach($query2->result() as $row){
+				if(empty($resultSet['elevation'][$row->date])) {
+					$resultSet['steps'][$row->date] = 0;
+					$resultSet['floors'][$row->date] = 0;
+					$resultSet['calories'][$row->date] = 0;
+					$resultSet['distance'][$row->date] = 0;
+					$resultSet['activity_calories'][$row->date] = 0;
+					$resultSet['elevation'][$row->date] = 0;
+				}
+				$resultSet['sleep'][$row->date] = $row->time_asleep;
+			}
+		}
+
+
+		for($i = strtotime($startDate); $i<=strtotime($endDate); $i += 24*3600) {
+			$date = date('Y-m-d', $i);
+			if(empty($resultSet['steps'][$date])) {
+				$resultSet['steps'][$date] = 0;
+				$resultSet['floors'][$date] = 0;
+				$resultSet['distance'][$date] = 0;
+				$resultSet['calories'][$date] = 0;
+				$resultSet['activity_calories'][$date] = 0;
+				$resultSet['elevation'][$date] = 0;
+				$resultSet['sleep'][$date] = 0;
+			}
+		}
+
+		ksort($resultSet['steps']);
+		ksort($resultSet['floors']);
+
+		ksort($resultSet['distance']);
+
+		ksort($resultSet['calories']);
+
+		ksort($resultSet['activity_calories']);
+
+		ksort($resultSet['elevation']);
+
+		ksort($resultSet['sleep']);
+
+
+			return $resultSet;
+
+		
 	}
 
 
@@ -267,7 +322,8 @@ class Activity_model extends CI_Model{
 					# code...
 					$sql = "INSERT INTO intradayactivity(user_id, activity_time, steps, calories, calories_level, floors, elevation)
 					VALUES (". $user_id .", '". $date . " " . $key ."', ". $value['steps'] .", ".
-						$value['calories'] .", ". $value['level'] .", " . $value['floors'] . ", " . $value['elevation'] .") ON DUPLICATE KEY UPDATE user_id=user_id";
+						$value['calories'] .", ". $value['level'] .", " 
+						. $value['floors'] . ", " . $value['elevation'] .") ON DUPLICATE KEY UPDATE user_id=user_id";
 
 					$this->db->query($sql);					
 				}

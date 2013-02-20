@@ -60,13 +60,14 @@ class Stats extends CI_Controller {
 		$this->load->view("templates/footer");
 	}
 
+	public function data() {
+		$currentDate = date('Y-m-d');
+		var_dump($this->Activity_model->get_activity(date('Y-m-d', strtotime($currentDate)-604800), $currentDate , $this->uid));
+	}
+
 	private function getActivity($type, $startDate, $endDate){
 
-		try {
-			$this->load->model('Activity_model','activities');
-			$data = $this->activities->get_activity($startDate, $endDate);
-		} catch (Exception $e) {
-		}
+		$data = $this->Activity_model->get_activity($startDate, $endDate, $this->uid);
 		
 		if($data){
 			switch ($type) {
@@ -101,12 +102,7 @@ class Stats extends CI_Controller {
 				break;
 			}
 
-			if(count($activity)<7){
-				$num = count($activity);
-				for($num;$num<7;$num++){
-					array_push($activity, 0);
-				}
-			}
+			
 			return $activity;
 		}
 	}

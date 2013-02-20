@@ -12,7 +12,7 @@ class Subscriber extends CI_Controller {
 	public function update() {
 		$sql1= "SELECT DISTINCT id
 				FROM   user
-				WHERE  fitbit_id IS not NULL";
+				WHERE  fitbit_id IS NOT NULL AND id NOT IN ('264','59')";
 		$query1 = $this->db->query($sql1);
 		foreach($query1->result() as $row1) {
 			$uid = $row1->id;

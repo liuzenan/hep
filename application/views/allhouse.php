@@ -2,7 +2,7 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
 		<ul class="nav nav-tabs">
-			<?php for($i=1; $i<10; $i++): ?>
+			<?php for($i=1; $i<=10; $i++): ?>
 			<li class="<?php if($house_id==$i) echo "active" ?>"><a href="<?php echo base_url() . "allhouse/house/".$i; ?>"><?php echo $i ?></a></li>
 		<?php endfor ?>
 		<li class="<?php if($house_id==-1) echo "active" ?>"><a href="<?php echo base_url() . "allhouse/house/-1"; ?>">Tutor</a></li>
