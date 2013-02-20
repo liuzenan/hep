@@ -67,16 +67,16 @@ class Challenge_model extends CI_Model{
 	public function carryOverToToday() {
 		$now = date("Y-m-d",time());	
 		$ystd = date("Y-m-d",time() - 24*60*60);
-		return $this->carryOverChallenges($yesd, $now);
+		return $this->carryOverChallenges($ystd, $now);
 	}
 
 	public function carryOverToTomorrow() {
 		$now = date("Y-m-d",time() + 24*60*60);	
 		$ystd = date("Y-m-d",time());
-		return $this->carryOverChallenges($yesd, $now);
+		return $this->carryOverChallenges($ystd, $now);
 	}
 	
-	public function carryOverChallenges($yesd, $now) {
+	public function carryOverChallenges($ystd, $now) {
 		
 		$sql = "SELECT DISTINCT c1.user_id
 		FROM   challengeparticipant AS c1

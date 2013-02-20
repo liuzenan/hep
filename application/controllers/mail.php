@@ -9,7 +9,8 @@ class Mail extends CI_Controller {
 	}
 
 	public function dailyReport() {
-		$this->carryOverChallenges();
+		$this->Challenge_model->carryOverToToday();
+		$this->Challenge_model->carryOverToTomorrow();
 		$uids = $this->User_model->loadDailyReportUsers();
 		foreach($uids as $uid) {
 			$this->Mail_model->sendDailyReport($uid->id);
@@ -40,7 +41,5 @@ class Mail extends CI_Controller {
 		$this->User_model->unsubDailyNotification($user_id);
 		echo "You have been sucessfully unsubscribed from daily notification";
 	}
-	public function carryOverChallenges() {
-		$this->Challenge_model->carryOverChallenges();
-	}
+	
 }

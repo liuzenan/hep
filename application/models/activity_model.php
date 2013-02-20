@@ -218,7 +218,7 @@ class Activity_model extends CI_Model{
 					$resultSet['activity_calories'][$row->date] = 0;
 					$resultSet['elevation'][$row->date] = 0;
 				}
-				$resultSet['sleep'][$row->date] = $row->time_asleep;
+				$resultSet['sleep'][$row->date] = number_format($row->time_asleep/60, 2);
 			}
 		}
 
@@ -232,6 +232,8 @@ class Activity_model extends CI_Model{
 				$resultSet['calories'][$date] = 0;
 				$resultSet['activity_calories'][$date] = 0;
 				$resultSet['elevation'][$date] = 0;
+			}
+			if(empty($resultSet['sleep'][$date])) {
 				$resultSet['sleep'][$date] = 0;
 			}
 		}
