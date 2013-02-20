@@ -26,7 +26,7 @@ var stepsChart; // globally available
 
 function getTimestamp(str) {
   var d = str.match(/\d+/g); // extract date parts
-  return +new Date(d[0], d[1] - 1, d[2]); // build Date object
+  return +new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5]); // build Date object
 }
 
 jQuery(document).ready(function($) {
@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
 		plotOptions:{
 			column:{
 				pointInterval:24 * 3600 * 1000,
-				pointStart: getTimestamp('<?php echo $startDate ?>')
+				pointStart: getTimestamp('<?php echo $startDate . " 00:00:00" ?>')
 			}
 		},
 		series: [{
