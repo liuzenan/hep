@@ -18,9 +18,6 @@
 		<div class="row-fluid challenge-forum">
 			<?php foreach ($threads as $thread_id => $thread): ?>
 			<div class="thread-container clearfix">
-				<div class="thread-pic pull-left">
-					<img src="http://placehold.it/64x64" alt="">
-				</div>
 				<div class="thread-content">
 					<div>
 						<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>

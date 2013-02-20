@@ -27,6 +27,12 @@
 
       // Additional initialization code such as adding Event Listeners goes here
     FB.getLoginStatus(function(response) {
+      $("#logoutbtn").click(function(event){
+        event.preventDefault();
+        FB.logout(function(response){
+          window.location.replace("<?php echo base_url() . 'logout' ?>");
+        });
+      });
       if (response.status === 'connected') {
         console.log("connected");
       } else if (response.status === 'not_authorized') {
@@ -53,8 +59,49 @@
      }(document, /*debug*/ false));
 
   function login() {
-    
+    $("#facebookbtn").click(function(event){
+      event.preventDefault();
+        FB.login(function(response) {
+            if (response.authResponse) {
+                // connected
+            $("#facebookbtn").attr("disabled","disabled");
+            $("#facebookbtn").html("Redirecting...");
+            FB.api('/me',function(response){
+
+              $.ajax({
+                url:"<?php echo base_url() . 'signup/fbLogin' ?>",
+                type:"POST",
+                data:{
+                  username: response.username
+                }
+              }).done(function(msg){
+
+                FB.api('/me?fields=picture.width(100).height(100)', function(response){
+
+                  $.ajax({
+                    url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
+                    type:"POST",
+                    data:{
+                      profile_pic: response.picture.data.url
+                    }
+
+                  }).done(function(msg){
+                    console.log('data saved: ' + msg);
+
+                    window.location.replace("<?php echo base_url() . 'home' ?>");
+                  });
+                });
+
+              });
+            });
+
+            } else {
+                // cancelled
+            }
+        }, {scope: 'email'});
+    });
   }
+
   </script>
   	<div class="container">
       <div class="navbar">
@@ -88,7 +135,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a href="<?php echo base_url() . "profile" ?>">Setting</a></li>
-                <li><a href="<?php echo base_url() . "logout" ?>">Logout</a></li>
+                <li><a id="logoutbtn" href="javascript:void(0);">Logout</a></li>
               </ul>
             </li>
           </ul>
