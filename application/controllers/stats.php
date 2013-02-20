@@ -12,7 +12,7 @@ class Stats extends CI_Controller {
 	}
 	public function index(){
 		
-		$this->statistics();
+		$this->history();
 		
 	}
 

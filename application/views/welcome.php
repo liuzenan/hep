@@ -1,3 +1,9 @@
+<?php 
+  if ($this->session->userdata("user_id")) {
+    # code...
+    redirect(base_url() . "home");
+  }
+ ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
