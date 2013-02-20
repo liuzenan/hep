@@ -1,7 +1,7 @@
 <div class="row-fluid">
 	<?php $this->load->view('templates/sidebar'); ?>
-	<div class="row-fluid linkfacebook">
-	<div class="span4 offset4 well ">
+	<div class="row-fluid">
+	<div class="span4 offset2">
 		<form action="" id="userinfo">
 			<fieldset>
 				<legend>Profile Setting</legend>

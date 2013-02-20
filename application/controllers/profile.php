@@ -21,7 +21,7 @@ class Profile extends CI_Controller {
 		$data['active'] = "profile";
 		$this->load->view('templates/header', $data);
 		$this->load->view('profile', $data);
-		$this->load->view('linkFacebook');
+		//$this->load->view('linkFacebook');
 		$this->load->view('templates/footer');
 	}
 
