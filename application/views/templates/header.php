@@ -27,22 +27,31 @@
 
       // Additional initialization code such as adding Event Listeners goes here
     FB.getLoginStatus(function(response) {
+      if (response.status === 'connected') {
+        console.log("connected");
+        $("#facebookbtn").attr("disabled","disabled");
+        $("#facebookbtn").html("Facebook Connected");
       $("#logoutbtn").click(function(event){
         event.preventDefault();
         FB.logout(function(response){
           window.location.replace("<?php echo base_url() . 'logout' ?>");
         });
       });
-      if (response.status === 'connected') {
-        console.log("connected");
-        $("#facebookbtn").attr("disabled","disabled");
-        $("#facebookbtn").html("Facebook Connected");
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
+      $("#logoutbtn").click(function(event){
+        event.preventDefault();
+
+          window.location.replace("<?php echo base_url() . 'logout' ?>");
+      });
       } else {
         // not_logged_in
         login();
+      $("#logoutbtn").click(function(event){
+        event.preventDefault();
+          window.location.replace("<?php echo base_url() . 'logout' ?>");
+      });
       }
      });
 
