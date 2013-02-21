@@ -123,7 +123,7 @@ class Mail_model extends CI_Model{
 		$data['new_badge'] = $this->Badge_model->getBadgesByDate($user_id, date("Y-m-d ",time() - 60 * 60 * 24));
 		$new_badge = "";
 		if(!empty($data['new_badge'])) {
-			$new_badge .= "<u>Newly earned badges</u>: <br>"
+			$new_badge .= "<u>Newly earned badges</u>: <br>";
 			
 			foreach($data['new_badge'] as $bd) {
 				$new_badge .= '<b>'.$bd->name.'</b><br>';			
