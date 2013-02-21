@@ -35,7 +35,6 @@
 					<?php endif ?>
 				</label>
 				<?php endif ?>
-				<button id="submitbtn" class="btn btn-large btn-block">Update</button>
 			</fieldset>
 		</form>
 		<button class="btn btn-large btn-block btn-primary" id="facebookbtn">Link with Facebook</button>
@@ -46,6 +45,11 @@
 <script src="/assets/js/bootstrap.min.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	$(".checkbox input").click(function(event){
+		$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
+				console.log(msg);
+			});
+	});
 	$("#submitbtn").click(function(event){
 		event.preventDefault();
 		if($("#firstname").val() != '' 

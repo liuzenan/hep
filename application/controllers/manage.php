@@ -21,6 +21,15 @@ class Manage extends CI_Controller {
 
 		
 	}
+
+	public function user($user_id){
+		if($this->session->userdata('isadmin') && $user_id){
+			$data['user'] = $this->currentUser($user_id);
+			$this->loadPage($data, "manageuser");
+		} else {
+			redirect(base_url() . "home");
+		}		
+	}
 /*
 	public function studentList(){
 		
@@ -34,6 +43,15 @@ class Manage extends CI_Controller {
 		
 	}
 */
+
+	private function currentUser($user_id){
+		$query = $this->db->query("SELECT * FROM user WHERE id = ".$user_id);
+		if ($query->num_rows()>0) {
+			# code...
+			return $query->row();
+		}
+	}
+
 	private function loadPage($data, $page="studentLeader"){
 		$data['active'] = 'manage';
 		$data['displayName'] = $this->session->userdata('name');

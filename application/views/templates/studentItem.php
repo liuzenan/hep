@@ -19,6 +19,6 @@
 			<span class="label"><?php echo "House Leader" ?></span>
 		<?php endif ?>	
 	</td>
-	<td></td>
+	<td><a href="<?php echo base_url() . "manage/user/" . $id; ?>" class="btn">Edit</a></td>
 	<td></td>
 </tr>
