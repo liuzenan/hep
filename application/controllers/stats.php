@@ -58,17 +58,19 @@ class Stats extends CI_Controller {
 		
 
 		$data['startDate'] = $weekBegin;
-		$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate, $this->uid);
+		$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate, $uid);
 		$data['activeActivity'] = $type;
 		$data['currentTab'] = "history";
 		$data['span'] = $span;
 		$data['stats_uid'] = $uid;
+
 		
 		$this->loadPage($data);
 	}
 
 	private function loadPage($data) {
-		$data['active'] = 'stats';
+		$data['stats_user'] = $this->User_model->loadUser($data['stats_uid']);
+		$data['active'] = ($data['stats_uid'] == $this->uid) ? 'stats' : 'none';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

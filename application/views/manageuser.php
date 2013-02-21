@@ -51,7 +51,7 @@ jQuery(document).ready(function($) {
 			console.log("valid");
 			console.log($("#userinfo").serialize());
 			
-			$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
+			$.post("<?php echo base_url() . 'manage/update' ?>", $("#userinfo").serialize(), function(msg){
 				console.log(msg);
 			});
 		} else {

@@ -26,9 +26,39 @@ class Manage extends CI_Controller {
 		if($this->session->userdata('isadmin') && $user_id){
 			$data['user'] = $this->currentUser($user_id);
 			$this->loadPage($data, "manageuser");
+			$this->session->set_userdata(array("manage_user_id"=>$user_id));
 		} else {
 			redirect(base_url() . "home");
 		}		
+	}
+
+	public function update() {
+		$firstname = $this->input->post("firstname");
+		$lastname = $this->input->post("lastname");
+		$email = $this->input->post("email");
+		$house = $this->input->post("house");
+		$gender = $this->input->post("gender");
+
+		$staff = ($house == -1) ? 1 : 0;
+		$data=array();
+
+		$data['first_name'] = $firstname;
+		$data['last_name'] = $lastname;
+		$data['email'] = $email;
+		$data['house_id'] = $house;
+		$data['staff'] = $staff;
+		$data['gender'] = $gender;
+		//$data['badge_email_unsub'] = empty($badge_email)?1:0;
+		//$data['daily_email_unsub'] = empty($daily_email)?1:0;
+		//$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
+		//$data['hide_progress'] = empty($hide_progress)?1:0;
+		$uid = $this->session->userdata('manage_user_id');
+		
+		//$data['house_id'] = $house;
+		$this->db->where('id',$uid);
+		$this->db->update('user', $data);
+			
+		echo json_encode(array('success'=>true, 'uid'=>$uid));
 	}
 /*
 	public function studentList(){
