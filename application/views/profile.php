@@ -2,6 +2,9 @@
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="row-fluid">
 	<div class="span4 offset2">
+		<div id="savealertcontainer" class="row-fluid">
+
+		</div>
 		<form action="" id="userinfo">
 			<fieldset>
 				<legend>Profile Setting</legend>
@@ -46,6 +49,7 @@ jQuery(document).ready(function($) {
 	$(".checkbox input").click(function(event){
 		$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
 				console.log(msg);
+				$("#savealertcontainer").html('<div class="alert alert-success save-alert show"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success!</strong> Your settings have been saved</div>');
 			});
 	});
 	$("#submitbtn").click(function(event){
@@ -61,6 +65,7 @@ jQuery(document).ready(function($) {
 			
 			$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
 				console.log(msg);
+				$("#savealertcontainer").html('<div class="alert alert-success save-alert show"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success!</strong> Your settings have been saved</div>');
 			});
 		} else {
 			alert("Please fill all the infomation");

@@ -30,7 +30,7 @@
 							<option value="10" <?php if($user->house_id==10) echo "selected"; ?>>10</option>
 							<option value="-1" <?php if($user->house_id==-1) echo "selected"; ?>>Tutor</option>
 				</select>
-				<?php if($phantom==0):?>	
+				<?php if($user->phantom==0):?>	
 						<input type="checkbox" id="phantom" name="phantom" checked> Set as phantom
 					<?php else: ?>
 						<input type="checkbox" id="phantom" name="phantom" > Set as phantom

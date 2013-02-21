@@ -1,3 +1,6 @@
+<?php if (!empty($stats_user) && $stats_user->id != $this->session->userdata("user_id")): ?>
+	<p class="section-title">Activity history for <?php echo $stats_user->first_name . " " . $stats_user->last_name; ?></p>
+<?php endif ?>
 <div id="chartContainer" class="row-fluid" style="height: 400px"></div>
 <div class="row-fluid">
 	<div class="span4">
