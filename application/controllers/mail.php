@@ -11,11 +11,16 @@ class Mail extends CI_Controller {
 	public function dailyReport() {
 		$this->Challenge_model->carryOverToToday();
 		$this->Challenge_model->carryOverToTomorrow();
+		$this->updateBadge();
 		$uids = $this->User_model->loadDailyReportUsers();
 		foreach($uids as $uid) {
 			$this->Mail_model->sendDailyReport($uid->id);
 		}
 
+	}
+
+	public function updateBadge() {
+		$this->Badge_model->scanBadge();
 	}
 
 	public function sendNewBadgeEarnedNotification($user_id, $badge_id) {

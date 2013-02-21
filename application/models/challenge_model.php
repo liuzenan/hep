@@ -289,6 +289,8 @@ class Challenge_model extends CI_Model{
 			$this->Forum_model->createPost($cp->user_id, $thread_id, $message, false);
 			$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 
+			
+
 		} else {
 			$data = array('progress'=>$progress);
 
