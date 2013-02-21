@@ -4,6 +4,7 @@
 		<ul class="nav nav-tabs">
 			<li class="<?php if($currentTab=="overall") echo "active" ?>"><a href="<?php echo base_url() . "leaderboard/overall"; ?>">Individual</a></li>
 			<li class="<?php if($currentTab=="house") echo "active" ?>"><a href="<?php echo base_url() . "leaderboard/house"; ?>">House</a></li>
+			<li class="<?php if($currentTab=="staff") echo "active" ?>"><a href="<?php echo base_url() . "leaderboard/staff"; ?>">Tutor</a></li>
 		</ul>
 		<?php 
 			if ($currentTab == "house" || $currentTab == "staff") {

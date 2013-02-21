@@ -1,7 +1,7 @@
 <div class="row-fluid" id="allChallenges">
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
-		<?php if (!($isLeader|| $isAdmin)): ?>
+		<?php if (!($isLeader|| $isAdmin || $isTutor)): ?>
 		<?php $this->load->view("challengeDisabled"); ?>
 		<?php else: ?>
 		<div class="alert">

@@ -53,30 +53,36 @@ class Challenge_model extends CI_Model{
 		return $this->db->insert_id();
 	}
 
-	function preAllocateChallenge($user_id) {
-		$sql1 = 'select * from challengeparticipant where DATE(start_time)="2013-02-24" and user_id=?';
-		$exists = $this->db->query($sql1, array($user_id))->result();
+	function preAllocateChallenge($user_id, $day1, $day2) {
+		$sql1 = 'select * from challengeparticipant where (DATE(start_time)=? or DATE(start_time)=?) and user_id=?';
+		$exists = $this->db->query($sql1, array($day1, $day2, $user_id))->result();
 		if(empty($exists)) {
-			$this->joinChallenge($user_id, 1, 1, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-			$this->joinChallenge($user_id, 7, 2, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-			$this->joinChallenge($user_id, 13, 3, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-			$this->joinChallenge($user_id, 22, 0, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-		}
+				$this->joinChallenge($user_id, 1, 1, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 7, 2, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 13, 3, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 22, 0, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 1, 1, $day2." 00:00:00", $day2." 23:59:59");
+				$this->joinChallenge($user_id, 7, 2, $day2." 00:00:00", $day2." 23:59:59");
+				$this->joinChallenge($user_id, 13, 3, $day2." 00:00:00", $day2." 23:59:59");
+				$this->joinChallenge($user_id, 22, 0, $day2." 00:00:00", $day2." 23:59:59");
+		
+		}	
 	}
+
 
 	public function carryOverToToday() {
 		$now = date("Y-m-d",time());	
 		$ystd = date("Y-m-d",time() - 24*60*60);
-		return $this->carryOverChallenges($yesd, $now);
+		return $this->carryOverChallenges($ystd, $now);
 	}
 
 	public function carryOverToTomorrow() {
 		$now = date("Y-m-d",time() + 24*60*60);	
 		$ystd = date("Y-m-d",time());
-		return $this->carryOverChallenges($yesd, $now);
+		return $this->carryOverChallenges($ystd, $now);
 	}
 	
-	public function carryOverChallenges($yesd, $now) {
+	public function carryOverChallenges($ystd, $now) {
 		
 		$sql = "SELECT DISTINCT c1.user_id
 		FROM   challengeparticipant AS c1
@@ -138,19 +144,18 @@ class Challenge_model extends CI_Model{
 
 
 	function getHouseCurrentChallenges($house_id) {
-		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()), date("Y-m-d G:i:s",time()));
+		return $this->getHouseChallenges($house_id, date("Y-m-d",time()));
 	}
 
-	function getHouseChallenges($house_id, $start_time, $end_time) {
+	function getHouseChallenges($house_id, $date) {
 		$sql = "SELECT * 
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
-		WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time > ? 
-		";
+		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
+		WHERE DATE(challengeparticipant.start_time) = ?";
 
-		$query = $this->db->query($sql, array($house_id, $start_time, $end_time));
+		$query = $this->db->query($sql, array($house_id, $date));
 		$challenges = $query->result();
 		$res = array();
 		foreach($challenges as $c) {
@@ -163,7 +168,7 @@ class Challenge_model extends CI_Model{
 		return $res;
 	}
 	function getHouseTomorrowChallenges($house_id) {
-		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
+		return $this->getHouseChallenges($house_id, date("Y-m-d",time()+24*60*60));
 	}
 
 	function getHouseCompletedChallenges($house_id) {
@@ -171,7 +176,7 @@ class Challenge_model extends CI_Model{
 		FROM challenge
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
+		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
 		WHERE challengeparticipant.complete_time > challengeparticipant.start_time
 		GROUP BY challengeparticipant.challenge_id";
 
@@ -430,6 +435,7 @@ function getTutorLearderboard() {
 	AND cp.user_id = u.id
 	AND cp.complete_time > cp.start_time
 	AND u.phantom = 0
+	AND u.hide_progress = 0
 	AND (u.staff = 1)
 	GROUP BY u.id
 	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
@@ -486,15 +492,6 @@ function getHouseLeaderboard() {
 		$res2[$h->house_id] = $h;
 		$res1[$h->house_id] = $h;
 	}
-
-	//var_dump($res2);
-	//var_dump($res1);
-/*
-	for($i=0; $i<=10; $i++) {
-		$house_id = array_shift($res1);
-		$res[$i] = $res2[] 
-	}
-*/
 	return $res1;
 }
 
@@ -504,6 +501,7 @@ function getHouseRankAndPoints($house_id) {
 	foreach($leaderboard as $house) {
 		$rank++;
 		if($house->house_id == $house_id) {
+
 			return array('rank'=>$rank, 
 				'points'=>$house->score, 
 				'house_id'=>$house->house_id, 

@@ -55,7 +55,8 @@ class Masquerade extends CI_Controller {
 			'username' => $row->username,
 			'avatar' => $row->profile_pic,
 			'isleader'=> $row->leader,
-			'isTutor' => ($row->staff || ($row->house_id == -1)),
+			'isTutor' => $row->staff,
+			'isAdmin' => 1,
 			'name' => $row->first_name
 			);
 
@@ -80,7 +81,7 @@ class Masquerade extends CI_Controller {
 			'avatar' => $row->profile_pic,
 			'isadmin'=> $row->admin,
 			'isleader'=> $row->leader,
-			'isTutor' => ($row->staff || ($row->house_id == -1)),
+			'isTutor' => $row->staff,
 			'masquerade_id' => $this->session->userdata('user_id'),
 			'name' => $row->first_name
 			);
