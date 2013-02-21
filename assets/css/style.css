@@ -482,12 +482,11 @@ td.forum-stats{
 
 .leaderboard-profile-pic{
 	float: left;
-	width: 40%;
+	margin-right: 10px;
 }
 
 .leaderboard-content{
 	float: left;
-	width: 50%;
 }
 
 table.table.challenge-stats{
@@ -598,7 +597,7 @@ margin-bottom: 10px;
 	font-size: 20px;
 }
 
-.leaderboard-profile-pic img{
+.leaderboard-house-profile-pic img{
 	display: block;
 	float: left;
 }
@@ -768,4 +767,12 @@ width: 96%;
 #challengeModal .modal-body{
 	margin: 0;
 	padding: 0;
+}
+
+.save-alert{
+	display: none;
+}
+
+.save-alert.show{
+	display: block;
 }
