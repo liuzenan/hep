@@ -22,6 +22,16 @@ class Badge_model extends CI_Model{
 		return $query->result();
 	}
 
+	function getBadgesByDate($user_id, $date) {
+		$sql="SELECT *
+		FROM   badge b
+       	INNER JOIN userbadge ub
+               ON b.id = ub.badge_id
+		WHERE  ub.user_id = ?
+   		AND ub.date = ?"
+   		$query = $this->db->query($sql, array($user_id, $date));
+   		return $query->result();
+	}
 	function getHouseBadges($house_id) {
 		$sql = "SELECT b.*, ub.*
 		FROM badge AS b
@@ -49,6 +59,33 @@ class Badge_model extends CI_Model{
 			);
 		$query = $this->db->insert('userbadge', $data);
 		return $this->db->insert_id();
+	}
+
+	//1 beat personal best
+	//2 above personal average
+	function scanBadge() {
+		$yest = date("Y-m-d", time() - 60*60*24);
+
+		$sql = "INSERT IGNORE INTO userbadge
+            (badge_id,
+             user_id,
+             date)
+SELECT a1.category,
+       a1.user_id,
+       DATE(a1.start_time)
+FROM   challengeparticipant AS a1
+WHERE  a1.challenge_id > (SELECT Max(a2.challenge_id)
+                   FROM   challengeparticipant AS a2
+                   WHERE  a1.user_id = a2.user_id
+                   	   AND a1.category = a2.category
+                   	   AND a2.progress >= 1
+                      AND DATE(a2.start_time) < DATE(a1.start_time))
+   AND a1.progress >= 1
+   AND (a1.category = 1 OR a1.category = 2)
+   AND DATE(a1.start_time) = ?";
+   		$query = $this->db->query($sql, array($yest));
+
+
 	}
 
 }

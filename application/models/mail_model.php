@@ -85,6 +85,7 @@ class Mail_model extends CI_Model{
 		<u>Yesterday's Incomplete Challenges</u>: <br>
 		%s
 		<br><br>
+		%s
 		<u>Today you have %d challenge to work on</u>:
 		<br>%s<br><br>
 
@@ -92,6 +93,7 @@ class Mail_model extends CI_Model{
 		";
 		$ci =& get_instance();
 		$ci->load->model('Activity_model');
+		$ci->load->model('Badge_model');
 		$data;
 
 
@@ -118,6 +120,16 @@ class Mail_model extends CI_Model{
 		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
 		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
+		$data['new_badge'] = $this->Badge_model->getBadgesByDate($user_id, date("Y-m-d ",time() - 60 * 60 * 24));
+		$new_badge = "";
+		if(!empty($data['new_badge'])) {
+			$new_badge .= "<u>Newly earned badges</u>: <br>"
+			
+			foreach($data['new_badge'] as $bd) {
+				$new_badge .= '<b>'.$bd->name.'</b><br>';			
+			}
+			$new_badge .= "<br><br>";
+		}
 
 		$count = 0;
 		$titlesY="";
@@ -138,8 +150,20 @@ class Mail_model extends CI_Model{
 			$titlesX .= '<i>'.$c->description.'</i><br><br>';
 
 		}
-		$data['msg'] = sprintf($daily, $user->first_name." ".$user->last_name, $data['me_yesterday']->steps, $data['me_yesterday']->floors, number_format($data['me_sleep_yesterday']->total_time,2),
-			$data['me_yesterday']->calories, count($data['me_challenges_yesterday']), $count, $data['me_completed'], $titlesY, $titlesF, count($data['me_challenges']), $titlesX);
+		$data['msg'] = sprintf($daily, 
+			$user->first_name." ".$user->last_name, 
+			$data['me_yesterday']->steps, 
+			$data['me_yesterday']->floors, 
+			number_format($data['me_sleep_yesterday']->total_time,2),
+			$data['me_yesterday']->calories, 
+			count($data['me_challenges_yesterday']), 
+			$count, 
+			$data['me_completed'], 
+			$titlesY, 
+			$titlesF, 
+			$new_badge,
+			count($data['me_challenges']), 
+			$titlesX);
 		return $data;
 	}
 
