@@ -84,6 +84,9 @@ class Signup extends CI_Controller{
 			if($house!="0"){
 				$data['house_id'] = $house;
 			}
+			if($house == -1) {
+				$data['staff'] = 1;
+			}
 			$this->db->where('id',$this->session->userdata('user_id'));
 			$this->db->update('user', $data);
 		}else{

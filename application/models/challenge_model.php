@@ -53,16 +53,22 @@ class Challenge_model extends CI_Model{
 		return $this->db->insert_id();
 	}
 
-	function preAllocateChallenge($user_id) {
-		$sql1 = 'select * from challengeparticipant where DATE(start_time)="2013-02-24" and user_id=?';
-		$exists = $this->db->query($sql1, array($user_id))->result();
+	function preAllocateChallenge($user_id, $day1, $day2) {
+		$sql1 = 'select * from challengeparticipant where (DATE(start_time)=? or DATE(start_time)=?) and user_id=?';
+		$exists = $this->db->query($sql1, array($day1, $day2, $user_id))->result();
 		if(empty($exists)) {
-			$this->joinChallenge($user_id, 1, 1, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-			$this->joinChallenge($user_id, 7, 2, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-			$this->joinChallenge($user_id, 13, 3, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-			$this->joinChallenge($user_id, 22, 0, "2013-02-24 00:00:00", "2013-02-24 23:59:59");
-		}
+				$this->joinChallenge($user_id, 1, 1, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 7, 2, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 13, 3, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 22, 0, $day1." 00:00:00", $day1." 23:59:59");
+				$this->joinChallenge($user_id, 1, 1, $day2." 00:00:00", $day2." 23:59:59");
+				$this->joinChallenge($user_id, 7, 2, $day2." 00:00:00", $day2." 23:59:59");
+				$this->joinChallenge($user_id, 13, 3, $day2." 00:00:00", $day2." 23:59:59");
+				$this->joinChallenge($user_id, 22, 0, $day2." 00:00:00", $day2." 23:59:59");
+		
+		}	
 	}
+
 
 	public function carryOverToToday() {
 		$now = date("Y-m-d",time());	

@@ -9,6 +9,7 @@ class Home extends CI_Controller{
 	private $tomorrow_end;
 	private $date_today;
 	private $date_tomorrow;
+	private $disabled;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
@@ -50,7 +51,9 @@ class Home extends CI_Controller{
 
 	
 	public function index(){
-		$this->Challenge_model->preAllocateChallenge($this->uid);
+			
+		$this->Challenge_model->preAllocateChallenge($this->uid, $this->date_today, $this->date_tomorrow);
+		
 		$data = $this->loadData();
 		$this->load->view('templates/header', $data);
 		$this->load->view('home', $data);

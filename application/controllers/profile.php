@@ -26,23 +26,25 @@ class Profile extends CI_Controller {
 	}
 
 	public function update(){
-		$firstname = $this->input->post("firstname");
-		$lastname = $this->input->post("lastname");
-		$email = $this->input->post("email");
-		$house = $this->input->post("house");
+		//$firstname = $this->input->post("firstname");
+		//$lastname = $this->input->post("lastname");
+		//$email = $this->input->post("email");
+		//$house = $this->input->post("house");
 		
 		$badge_email = $this->input->post("badge_email_unsub");
 		$daily_email = $this->input->post("daily_email_unsub");
 		$challenge_email = $this->input->post("challenge_email_unsub"); 
+		$hide_progress = $this->input->post("hide_progress");
 		$data=array();
 
-		$data['first_name'] = $firstname;
-		$data['last_name'] = $lastname;
-		$data['email'] = $email;
+		//$data['first_name'] = $firstname;
+		//$data['last_name'] = $lastname;
+		//$data['email'] = $email;
 		$data['badge_email_unsub'] = empty($badge_email)?1:0;
 		$data['daily_email_unsub'] = empty($daily_email)?1:0;
 		$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
-		$data['house_id'] = $house;
+		$data['hide_progress'] = empty($hide_progress)?1:0;
+		//$data['house_id'] = $house;
 		$this->db->where('id',$this->session->userdata('user_id'));
 		$this->db->update('user', $data);
 			
@@ -71,6 +73,7 @@ class Profile extends CI_Controller {
 		$data['badge_email_unsub'] = $user->badge_email_unsub;
 		$data['daily_email_unsub'] = $user->daily_email_unsub;
 		$data['challenge_email_unsub'] = $user->challenge_email_unsub;
+		$data['hide_progress'] = $user->hide_progress;
 		$data['house_id'] = $user->house_id;
 		$data['gender'] = $user->gender;
 		$data['email'] = $user->email;

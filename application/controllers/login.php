@@ -45,7 +45,7 @@ class Login extends CI_Controller{
 				'avatar' => $profile_pic,
 				'isadmin'=> $row->admin,
 				'isleader'=> $row->leader,
-				'isTutor' => ($row->staff || ($row->house_id == -1))
+				'isTutor' => $row->staff
 				);		
 			$this->session->set_userdata($userdata);
 
@@ -210,7 +210,7 @@ public function facebookLogin(){
 				'avatar' => $row->profile_pic,
 				'isadmin'=> $row->admin,
 				'isleader'=> $row->leader,
-				'isTutor' => ($row->staff || $row->house_id == -1)
+				'isTutor' => $row->staff
 				);		
 			$this->session->set_userdata($userdata);
 			$msg['success'] = true;				
@@ -240,7 +240,7 @@ public function linkWithFacebook(){
 			'avatar' => $row->profile_pic,
 			'isadmin'=> $row->admin,
 			'isleader'=> $row->leader,
-			'isTutor' => ($row->staff || $row->house_id == -1)
+			'isTutor' => $row->staff 
 			);		
 		$this->session->set_userdata($userdata);			
 		$msg["success"] = true;
