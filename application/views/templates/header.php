@@ -145,7 +145,7 @@
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="<?php echo base_url() . "profile" ?>">Setting</a></li>
+                <li><a href="<?php echo base_url() . "profile" ?>">Settings</a></li>
                 <li><a id="logoutbtn" href="javascript:void(0);">Logout</a></li>
               </ul>
             </li>

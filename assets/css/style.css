@@ -776,3 +776,9 @@ width: 96%;
 .save-alert.show{
 	display: block;
 }
+
+.challengeItem.box.empty h4{
+	color:white;
+	padding-top: 40px;
+	opacity: 0.6;
+}
