@@ -144,19 +144,18 @@ class Challenge_model extends CI_Model{
 
 
 	function getHouseCurrentChallenges($house_id) {
-		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()), date("Y-m-d G:i:s",time()));
+		return $this->getHouseChallenges($house_id, date("Y-m-d",time()));
 	}
 
-	function getHouseChallenges($house_id, $start_time, $end_time) {
+	function getHouseChallenges($house_id, $date) {
 		$sql = "SELECT * 
 		FROM challenge 
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
-		WHERE challengeparticipant.start_time < ? AND challengeparticipant.end_time > ? 
-		";
+		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
+		WHERE DATE(challengeparticipant.start_time) = ?";
 
-		$query = $this->db->query($sql, array($house_id, $start_time, $end_time));
+		$query = $this->db->query($sql, array($house_id, $date));
 		$challenges = $query->result();
 		$res = array();
 		foreach($challenges as $c) {
@@ -169,7 +168,7 @@ class Challenge_model extends CI_Model{
 		return $res;
 	}
 	function getHouseTomorrowChallenges($house_id) {
-		return $this->getHouseChallenges($house_id, date("Y-m-d G:i:s",time()+24*60*60),date("Y-m-d G:i:s",time()+24*60*60));
+		return $this->getHouseChallenges($house_id, date("Y-m-d",time()+24*60*60));
 	}
 
 	function getHouseCompletedChallenges($house_id) {
@@ -177,7 +176,7 @@ class Challenge_model extends CI_Model{
 		FROM challenge
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ?) 
+		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
 		WHERE challengeparticipant.complete_time > challengeparticipant.start_time
 		GROUP BY challengeparticipant.challenge_id";
 
@@ -492,15 +491,6 @@ function getHouseLeaderboard() {
 		$res2[$h->house_id] = $h;
 		$res1[$h->house_id] = $h;
 	}
-
-	//var_dump($res2);
-	//var_dump($res1);
-/*
-	for($i=0; $i<=10; $i++) {
-		$house_id = array_shift($res1);
-		$res[$i] = $res2[] 
-	}
-*/
 	return $res1;
 }
 
@@ -510,6 +500,7 @@ function getHouseRankAndPoints($house_id) {
 	foreach($leaderboard as $house) {
 		$rank++;
 		if($house->house_id == $house_id) {
+
 			return array('rank'=>$rank, 
 				'points'=>$house->score, 
 				'house_id'=>$house->house_id, 
