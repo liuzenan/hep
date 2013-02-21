@@ -30,6 +30,11 @@
 							<option value="10" <?php if($user->house_id==10) echo "selected"; ?>>10</option>
 							<option value="-1" <?php if($user->house_id==-1) echo "selected"; ?>>Tutor</option>
 				</select>
+				<?php if($phantom==0):?>	
+						<input type="checkbox" id="phantom" name="phantom" checked> Set as phantom
+					<?php else: ?>
+						<input type="checkbox" id="phantom" name="phantom" > Set as phantom
+					<?php endif ?>
 				<button id="submitbtn" class="btn btn-large btn-block">Update</button>
 			</fieldset>
 		</form>
@@ -49,7 +54,7 @@ jQuery(document).ready(function($) {
 			console.log("valid");
 			console.log($("#userinfo").serialize());
 			
-			$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
+			$.post("<?php echo base_url() . 'manage/update' ?>", $("#userinfo").serialize(), function(msg){
 				console.log(msg);
 			});
 		} else {
