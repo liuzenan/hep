@@ -1,5 +1,5 @@
 <tr>
-	<td><strong><?php echo $first_name . ' ' . $last_name ?></strong></td>
+	<td><a href="<?php echo base_url() . "stats/history/steps/week/" . $id; ?>"></a><strong><?php echo $first_name . ' ' . $last_name ?></strong></td>
 	<td><?php echo $email ?></td>
 	<td>
 		<?php if ($admin==1): ?>

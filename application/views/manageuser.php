@@ -36,8 +36,6 @@
 	</div>
 </div>
 </div>
-
-<script src="/assets/js/bootstrap.min.js"></script>
 <script>
 jQuery(document).ready(function($) {
 	$("#submitbtn").click(function(event){
