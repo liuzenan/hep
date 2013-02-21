@@ -68,7 +68,7 @@ class Profile extends CI_Controller {
 		$avatar = $user->profile_pic;
 		$isTutor = $user->staff;
 		$isleader = $user->leader;
-		$isadmin = $user->admin;
+		//$isadmin = $user->admin;
 		$isphantom = $user->phantom;
 		$data['badge_email_unsub'] = $user->badge_email_unsub;
 		$data['daily_email_unsub'] = $user->daily_email_unsub;
@@ -82,7 +82,7 @@ class Profile extends CI_Controller {
 		$this->session->set_userdata('isTutor', $isTutor);
 		$this->session->set_userdata('isphantom', $isphantom);
 		$this->session->set_userdata('isleader', $isleader);
-		$this->session->set_userdata('isadmin', $isadmin);
+		//$this->session->set_userdata('isadmin', $isadmin);
 		$data['first_name'] = $user->first_name;
 		$data['last_name'] = $user->last_name;
 		$data['gender'] = $gender;
