@@ -65,6 +65,11 @@ class Challenge_model extends CI_Model{
 				$this->joinChallenge($user_id, 7, 2, $day2." 00:00:00", $day2." 23:59:59");
 				$this->joinChallenge($user_id, 13, 3, $day2." 00:00:00", $day2." 23:59:59");
 				$this->joinChallenge($user_id, 22, 0, $day2." 00:00:00", $day2." 23:59:59");
+				$sql = "INSERT IGNORE INTO `postsubscription` (`thread_id`, `user_id`) VALUES (?, ?)";
+				$this->db->query($sql, array(1,$user_id));
+				$this->db->query($sql, array(7,$user_id));
+				$this->db->query($sql, array(13,$user_id));
+				$this->db->query($sql, array(22,$user_id));
 		
 		}	
 	}

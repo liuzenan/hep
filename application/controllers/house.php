@@ -27,7 +27,6 @@ class House extends CI_Controller {
 		$current = $this->Challenge_model->getHouseCurrentChallenges($user->house_id);
 		$tomorrow = $this->Challenge_model->getHouseTomorrowChallenges($user->house_id);
 				
-		
 		$data = array();
 		foreach($members as $m) {
 			$data['data'][$m->id]['profile'] = $m;

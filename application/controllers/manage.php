@@ -13,13 +13,17 @@ class Manage extends CI_Controller {
 	
 	public function index(){
 		if($this->session->userdata('isadmin')){
-			$data['students'] = $this->getAllUsers();
-			$this->loadPage($data, "admin");
+			$this->house(1);
 		} else {
 			redirect(base_url() . "home");
 		}
 
 		
+	}
+
+	public function house($house_id) {
+		$data['students'] = $this->getAllUsers($house_id);
+		$this->loadPage($data, "admin");
 	}
 
 	public function user($user_id){
@@ -33,32 +37,33 @@ class Manage extends CI_Controller {
 	}
 
 	public function update() {
-		$firstname = $this->input->post("firstname");
-		$lastname = $this->input->post("lastname");
-		$email = $this->input->post("email");
-		$house = $this->input->post("house");
-		$gender = $this->input->post("gender");
+		if($this->session->userdata('isadmin')) {
+			$firstname = $this->input->post("firstname");
+			$lastname = $this->input->post("lastname");
+			$email = $this->input->post("email");
+			$house = $this->input->post("house");
+			$gender = $this->input->post("gender");
 
-		$staff = ($house == -1) ? 1 : 0;
-		$data=array();
+			$staff = ($house == -1) ? 1 : 0;
+			$data=array();
 
-		$data['first_name'] = $firstname;
-		$data['last_name'] = $lastname;
-		$data['email'] = $email;
-		$data['house_id'] = $house;
-		$data['staff'] = $staff;
-		$data['gender'] = $gender;
-		$data['phantom'] = empty($phantom)?1:0;
+			$data['first_name'] = $firstname;
+			$data['last_name'] = $lastname;
+			$data['email'] = $email;
+			$data['house_id'] = $house;
+			$data['staff'] = $staff;
+			$data['gender'] = $gender;
+			$data['phantom'] = empty($phantom)?1:0;
 		//$data['badge_email_unsub'] = empty($badge_email)?1:0;
 		//$data['daily_email_unsub'] = empty($daily_email)?1:0;
 		//$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
 		//$data['hide_progress'] = empty($hide_progress)?1:0;
-		$uid = $this->session->userdata('manage_user_id');
-		
-		//$data['house_id'] = $house;
-		$this->db->where('id',$uid);
-		$this->db->update('user', $data);
+			$uid = $this->session->userdata('manage_user_id');
 			
+		//$data['house_id'] = $house;
+			$this->db->where('id',$uid);
+			$this->db->update('user', $data);
+		}
 		echo json_encode(array('success'=>true, 'uid'=>$uid));
 	}
 /*
@@ -97,7 +102,7 @@ class Manage extends CI_Controller {
 		$this->load->view('templates/footer');
 	}
 
-	private function getAllUsers(){
+	private function getAllUsers($house_id){
 
 		$sql = "SELECT
 
@@ -113,11 +118,11 @@ class Manage extends CI_Controller {
 		AND cp.complete_time > cp.start_time
 		AND u.phantom = 0
 		AND u.staff = 0
-		AND u.house_id > 0
+		AND u.house_id = ?
 		GROUP BY u.id
 		ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
 
-		$query1 = $this->db->query($sql);
+		$query1 = $this->db->query($sql, array($house_id));
 		$progress = array();
 		foreach($query1->result() as $row) {
 			$progress[$row->id] = $row;

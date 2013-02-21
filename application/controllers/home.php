@@ -63,7 +63,7 @@ class Home extends CI_Controller{
 
 	private function loadData() {
 		$data['active'] = 'home';
-		echo xdebug_get_profiler_filename();
+		//echo xdebug_get_profiler_filename();
 
 		//xdebug_start_trace('/tmp/xdebug/trace' . rand(1,9999999));
 		//xdebug_stop_trace();
@@ -181,7 +181,7 @@ class Home extends CI_Controller{
 		$avatar = $user->profile_pic;
 		$isTutor = $user->staff;
 		$isleader = $user->leader;
-		$isadmin = $user->admin;
+		//$isadmin = $user->admin;
 		$isphantom = $user->phantom;
 
 
@@ -191,7 +191,7 @@ class Home extends CI_Controller{
 		$this->session->set_userdata('isTutor', $isTutor);
 		$this->session->set_userdata('isphantom', $isphantom);
 		$this->session->set_userdata('isleader', $isleader);
-		$this->session->set_userdata('isadmin', $isadmin);
+		//$this->session->set_userdata('isadmin', $isadmin);
 
 		$data['gender'] = $gender;
 		$data['displayName'] = $displayName;
