@@ -35,6 +35,8 @@
       });
       if (response.status === 'connected') {
         console.log("connected");
+        $("#facebookbtn").attr("disabled","disabled");
+        $("#facebookbtn").html("Facebook Connected");
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();

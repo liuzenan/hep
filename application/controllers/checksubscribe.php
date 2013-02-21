@@ -94,6 +94,32 @@ class Checksubscribe extends CI_Controller {
 		}
 	}
 
+	public function unsubscribeuser($user_id=-1){
+		if ($user_id>0) {
+			$query = $this->db->query("SELECT * FROM user WHERE id=" . $user_id);
+			if ($query->num_rows()) {
+				$result = $query->row();
+				$user_token = $result->oauth_token;
+				$user_secret = $result->oauth_secret;
+				$this->fitbitphp->setOAuthDetails($user_token, $user_secret);
+				try {
+							$xml = $this->fitbitphp->getSubscriptions();
+							foreach ($xml->apiSubscriptions->apiSubscription as $value) {
+								var_dump((string)$value->collectionType);
+								$collectionType = (string)$value->collectionType;
+								$subscriptionId = (string)$value->subscriptionId;
+								$this->fitbitphp->deleteSubscription($subscriptionId, "/" . $collectionType, $collectionType);
+								
+							}					
+				} catch (Exception $e) {
+					// $xml = $this->fitbitphp->getSubscriptions();
+					// var_dump($xml->apiSubscriptions);					
+				}
+
+			}
+		}
+	}
+
 	public function resubscribeuser($user_id=-1){
 		if ($user_id>0) {
 			# code...
@@ -101,8 +127,8 @@ class Checksubscribe extends CI_Controller {
 			if ($query->num_rows()) {
 				# code...
 				$result = $query->row();
-				$user_token = $result->oauth_token;
-				$user_secret = $result->oauth_secret;
+				$user_token = (string)$result->oauth_token;
+				$user_secret = (string)$result->oauth_secret;
 				$this->fitbitphp->setOAuthDetails($user_token, $user_secret);
 
 					try {
@@ -115,10 +141,10 @@ class Checksubscribe extends CI_Controller {
 						try {
 							$xml = $this->fitbitphp->getSubscriptions();
 							foreach ($xml->apiSubscriptions->apiSubscription as $value) {
-								$collectionType = $value->collectionType;
-								$subscriptionId = $value->subscriptionId;
+								$collectionType = (string)$value->collectionType;
+								$subscriptionId = (string)$value->subscriptionId;
 								try {
-									$this->fitbitphp->deleteSubscription($subscriptionId, "/" . $collectionType);
+									$this->fitbitphp->deleteSubscription($subscriptionId, "/" . $collectionType, $collectionType);
 								} catch (Exception $e) {
 									$xml = $this->fitbitphp->getSubscriptions();
 									var_dump($xml->apiSubscriptions);

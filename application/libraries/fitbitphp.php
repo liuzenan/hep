@@ -2201,13 +2201,17 @@ class FitBitPHP
      * @param string $path Subscription resource path (beginning with slash)
      * @return bool
      */
-    public function deleteSubscription($id, $path = null)
+    public function deleteSubscription($id, $path = null, $subscriberId = null)
     {
         $headers = $this->getHeaders();
         if (isset($path))
             $path = '/' . $path;
         else
             $path = '';
+
+        if ($subscriberId)
+            $userHeaders['X-Fitbit-Subscriber-Id'] = $subscriberId;
+        $headers = array_merge($headers, $userHeaders);
 
         try {
             $this->oauth->fetch($this->baseApiUrl . "user/-" . $path . "/apiSubscriptions/" . $id . ".xml", null, OAUTH_HTTP_METHOD_DELETE, $headers);

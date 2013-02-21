@@ -26,6 +26,15 @@
 						<input type="checkbox" id="challenge_email_unsub" name="challenge_email_unsub" > Challenge completion notification
 					<?php endif ?>
 				</label>
+				<?php if ($isTutor): ?>
+				<label class="checkbox">
+					<?php if($hide_progress==0):?>	
+						<input type="checkbox" id="hide_progress" name="hide_progress" checked> Show my challenges to public
+					<?php else: ?>
+						<input type="checkbox" id="hide_progress" name="hide_progress" > Show my challenges to public
+					<?php endif ?>
+				</label>
+				<?php endif ?>
 				<button id="submitbtn" class="btn btn-large btn-block">Update</button>
 			</fieldset>
 		</form>
