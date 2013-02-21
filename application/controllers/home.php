@@ -85,17 +85,18 @@ class Home extends CI_Controller{
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($this->uid);
 		$timestr .= microtime()."<br>";
 
-		$data['me_sleep'] = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time()));
+		$data['me_today']->sleep = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time()))->total_time;
 		$timestr .= microtime()."<br>";
 
 		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time() - 60 * 60 * 24));
-
+		$data['me_yesterday']->sleep = $data['me_sleep_yesterday']->total_time;
 		$timestr .= microtime()."<br>";
 
 		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);
 		$data['delta_floors'] = number_format($this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors),2);
 		$data['delta_calories'] = number_format($this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories),2);
 		$data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance),2);
+		$data['delta_sleep'] = number_format($this->cauculateDelta($data['me_today']->sleep, $data['me_yesterday']->sleep),2);
 		$timestr .= microtime()."<br>";
 
 
@@ -126,7 +127,7 @@ class Home extends CI_Controller{
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$timestr .= microtime()."<br>";
 
-		$data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
+		$data['avg_today']->avg_sleep = $this->Activity_model->getAverageSleepToday();
 		$timestr .= microtime()."<br>";
 
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
@@ -138,6 +139,7 @@ class Home extends CI_Controller{
 		$data['max_today']->max_floors = max($data['avg_today']->avg_floors, $data['me_today']->floors);
 		$data['max_today']->max_distance = max($data['avg_today']->avg_distance,$data['me_today']->distance);
 		$data['max_today']->max_calories = max($data['avg_today']->avg_calories,$data['me_today']->calories);
+		$data['max_today']->max_sleep = max($data['avg_today']->avg_sleep, $data['me_today']->sleep);
 
 		$timestr .= microtime()."<br>";
 
@@ -205,7 +207,7 @@ class Home extends CI_Controller{
 	private function loadActivityData($user_id, &$data) {
 		$activityRow = $this->Activity_model->getActivityToday($user_id);
 		$average = $this->Activity_model->getAverageActivityToday();
-		$average->sleep = $this->Activity_model->getAverageSleepToday()->avg_time;
+		$average->avg_sleep = $this->Activity_model->getAverageSleepToday();
 		$data['avg'] = $average;
 
 		if($activityRow != FALSE){

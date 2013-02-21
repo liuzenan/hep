@@ -131,11 +131,15 @@ class Activity_model extends CI_Model{
 	function getAverageSleepToday(){
 		$today = date("Y-m-d", time() - 60 * 60 * 24);
 		//get activities data
-		$sql = "SELECT avg(total_time) AS avg_time
+		$sql = "SELECT avg(time_asleep) AS avg_time
 		FROM sleep
-		WHERE date='".$today."' AND total_time>0";
+		WHERE date='".$today."' AND time_asleep>0";
 		$query = $this->db->query($sql);
-		return $query->row();
+		if($query->num_rows() > 0) {
+			return $query->row()->avg_time;
+		} else {
+			return 0;
+		}
 	}
 
 

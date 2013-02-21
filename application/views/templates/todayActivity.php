@@ -24,8 +24,8 @@
 							</div>
 							<div class="span3">
 								<div class="row-fluid">
-									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "You: ".$me_today->calories ?>" alt="" style="width:40px; height:<?php echo $max_today->max_calories==0?0:$me_today->calories/$max_today->max_calories*100 ?>px !important; margin-top:<?php echo $max_today->max_calories==0?0:100 - $me_today->calories/$max_today->max_calories*100 ?>px"></div>
-									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_calories ?>" alt="" style="width:40px; height:<?php echo $max_today->max_calories==0?0:$avg->avg_calories/$max_today->max_calories*100 ?>px !important; margin-top:<?php echo $max_today->max_calories==0?0:100 - $avg->avg_calories/$max_today->max_calories*100 ?>px"></div>
+									<div class="span5 offset2"><img src="/assets/img/pixelorange.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "You: ".$me_today->sleep ?>" alt="" style="width:40px; height:<?php echo $max_today->max_sleep==0?0:$me_today->sleep/$max_today->max_sleep*100 ?>px !important; margin-top:<?php echo $max_today->max_sleep==0?0:100 - $me_today->sleep/$max_today->max_sleep*100 ?>px"></div>
+									<div class="span5"><img src="/assets/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_sleep ?>" alt="" style="width:40px; height:<?php echo $max_today->max_sleep==0?0:$avg->avg_sleep/$max_today->max_sleep*100 ?>px !important; margin-top:<?php echo $max_today->max_sleep==0?0:100 - $avg->avg_sleep/$max_today->max_sleep*100 ?>px"></div>
 								</div>
 							</div>
 						</div>
@@ -61,7 +61,7 @@
 									<td class="activity-stats"><strong><span><?php echo $me_today->steps ?></span><br><span class="activityIcon steps"></span>&nbsp;Steps&nbsp;</strong><i class="<?php if($delta_steps>0) echo "icon-arrow-up"; else if ($delta_steps<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_steps!=0) echo abs(floor($delta_steps*100)) .'%' ?></td>
 									<td class="activity-stats"><strong><span><?php echo $me_today->floors ?></span><br><span class="activityIcon floors"></span>&nbsp;Floors&nbsp;</strong><i class="<?php if($delta_floors>0) echo "icon-arrow-up"; else if ($delta_floors<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_floors!=0) echo abs(floor($delta_floors*100)) . '%' ?></td>
 									<td class="activity-stats"><strong><span><?php echo $me_today->distance ?></span><br><span class="activityIcon distance"></span>&nbsp;Distance&nbsp;</strong><i class="<?php if($delta_distance>0) echo "icon-arrow-up"; else if ($delta_distance<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_distance!=0) echo abs(floor($delta_distance*100)) . '%' ?></td>
-									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br><span class="activityIcon"></span>&nbsp;Calories&nbsp;</strong><i class="<?php if($delta_calories>0) echo "icon-arrow-up"; else if ($delta_calories<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_calories!=0) echo abs(floor($delta_calories*100)) . '%' ?></td>
+									<td class="activity-stats"><strong><span><?php echo $me_today->calories ?></span><br><span class="activityIcon sleep"></span>&nbsp;Sleep&nbsp;</strong><i class="<?php if($delta_sleep>0) echo "icon-arrow-up"; else if ($delta_sleep<0) echo "icon-arrow-down"; ?>"></i><?php if($delta_sleep!=0) echo abs(floor($delta_sleep*100)) . '%' ?></td>
 								</tbody>
 							</table>
 						</div>
