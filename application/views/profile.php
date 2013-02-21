@@ -41,8 +41,6 @@
 	</div>
 </div>
 </div>
-
-<script src="/assets/js/bootstrap.min.js"></script>
 <script>
 jQuery(document).ready(function($) {
 	$(".checkbox input").click(function(event){
