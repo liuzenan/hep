@@ -52,7 +52,11 @@ function loadUsers($uids) {
 }
 
 function loadGroupMemberAvatar($house_id) {
-	$query = $this->db->get_where('user', array('house_id' => $house_id, 'phantom'=>0, 'hide_progress'=>0));
+	if($house_id == -1) {
+		$query = $this->db->get_where('user', array('house_id' => $house_id, 'phantom'=>0));
+	} else {
+		$query = $this->db->get_where('user', array('house_id' => $house_id, 'phantom'=>0, 'hide_progress'=>0));
+	}
 	return $query->result();
 
 }

@@ -14,8 +14,13 @@ class Masquerade extends CI_Controller {
 
 
 	public function index(){
-		$data = array();		
-		$this->loadPage($data);
+		
+		if($this->session->userdata('isadmin')){
+			$data = array();		
+			$this->loadPage($data);
+		} else {
+			redirect(base_url() . "home");
+		}
 	}
 
 	public function suggestions()
@@ -56,7 +61,6 @@ class Masquerade extends CI_Controller {
 			'avatar' => $row->profile_pic,
 			'isleader'=> $row->leader,
 			'isTutor' => $row->staff,
-			'isAdmin' => 1,
 			'name' => $row->first_name
 			);
 

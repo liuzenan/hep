@@ -65,7 +65,7 @@ class Challenges extends CI_Controller {
 
 		// $data["tab"] = "my";
 		// $this->loadPage($data);	
-		$this->all();
+		$this->completed();
 	}		
 
 	public function all(){

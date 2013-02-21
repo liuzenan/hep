@@ -45,14 +45,13 @@ class Stats extends CI_Controller {
 		$span = $this->session->userdata('span');
 		$type = $this->session->userdata('type');
 		$uid = $this->session->userdata('stats_uid');
-		echo $type." ".$span." ".$uid;
+		//echo $type." ".$span." ".$uid;
 
 		$data['chartTitle'] = $type;
 		$currentDate = date('Y-m-d');
-
 		if ($span=="week") {
 			$weekBegin = date('Y-m-d', strtotime($currentDate)-604800);
-		} else if ($span=="month") {
+		} else {
 			$weekBegin = date('Y-m-d', strtotime($currentDate)-604800*4);
 		}
 		
