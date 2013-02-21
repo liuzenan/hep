@@ -12,18 +12,20 @@ class Manage extends CI_Controller {
 	}
 	
 	public function index(){
-		if($this->session->userdata('isadmin')){
-			$this->house(1);
-		} else {
-			redirect(base_url() . "home");
-		}
-
-		
+		$this->house(1);
+	
 	}
 
 	public function house($house_id) {
-		$data['students'] = $this->getAllUsers($house_id);
-		$this->loadPage($data, "admin");
+		if($this->session->userdata('isadmin')){
+			
+			$data['students'] = $this->getAllUsers($house_id);
+			$data['house_id'] = $house_id;
+			$this->loadPage($data, "admin");
+		} else {
+			redirect(base_url() . "home");
+
+		}
 	}
 
 	public function user($user_id){
@@ -43,7 +45,7 @@ class Manage extends CI_Controller {
 			$email = $this->input->post("email");
 			$house = $this->input->post("house");
 			$gender = $this->input->post("gender");
-
+			$phantom = $this->input->post("phantom");
 			$staff = ($house == -1) ? 1 : 0;
 			$data=array();
 
@@ -53,7 +55,7 @@ class Manage extends CI_Controller {
 			$data['house_id'] = $house;
 			$data['staff'] = $staff;
 			$data['gender'] = $gender;
-			$data['phantom'] = empty($phantom)?1:0;
+			$data['phantom'] = empty($phantom)?0:1;
 		//$data['badge_email_unsub'] = empty($badge_email)?1:0;
 		//$data['daily_email_unsub'] = empty($daily_email)?1:0;
 		//$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
@@ -105,7 +107,6 @@ class Manage extends CI_Controller {
 	private function getAllUsers($house_id){
 
 		$sql = "SELECT
-
 		sum(c.points)  AS points,
 		count(cp.id) AS challenges,
 		u.*
@@ -116,7 +117,6 @@ class Manage extends CI_Controller {
 		c.id = cp.challenge_id
 		AND cp.user_id = u.id
 		AND cp.complete_time > cp.start_time
-		AND u.phantom = 0
 		AND u.staff = 0
 		AND u.house_id = ?
 		GROUP BY u.id
@@ -128,7 +128,7 @@ class Manage extends CI_Controller {
 			$progress[$row->id] = $row;
 		}
 
-		$query = $this->db->query("SELECT * FROM user");
+		$query = $this->db->query("SELECT * FROM user WHERE house_id = ?", array($house_id));
 		foreach($query->result() as $row2) {
 			if(empty($progress[$row2->id])) {
 				$row2->challenges = 0;

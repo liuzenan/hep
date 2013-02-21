@@ -74,7 +74,26 @@ class Masquerade extends CI_Controller {
 	}
 
 	public function switchBack() {
-		$row = $this->User_model->loadUser($this->session->userdata('masquerade_id'));
+		$this->resetUser();
+		echo json_encode(array("success" => true));
+
+	}
+
+	public function unmasquerade() {
+		if($this->resetUser()) {
+			redirect(base_url() . "home");
+		} else {
+			$this->index();
+		}
+
+	}
+
+	private function resetUser() {
+		$origin_id = $this->session->userdata('masquerade_id');
+		if(empty($origin_id)) {
+			return true;
+		}
+		$row = $this->User_model->loadUser($origin_id);
 		
 		$userdata = array(
 			'user_id' => $row->id,
@@ -86,12 +105,10 @@ class Masquerade extends CI_Controller {
 			'isadmin'=> $row->admin,
 			'isleader'=> $row->leader,
 			'isTutor' => $row->staff,
-			'masquerade_id' => $this->session->userdata('user_id'),
 			'name' => $row->first_name
 			);
 		$this->session->set_userdata($userdata);
-		echo json_encode(array("success" => true));
-
+		return true;
 	}
 
 	private function loadPage($data){
