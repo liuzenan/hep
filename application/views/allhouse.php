@@ -8,6 +8,7 @@
 		<li class="<?php if($house_id==-1) echo "active" ?>"><a href="<?php echo base_url() . "allhouse/house/-1"; ?>">Tutor</a></li>
 
 	</ul>
+	<?php if ($house_id!=-1): ?>
 	<p class="section-title">House Stats</p>
 	<table class="table house-stats">
 		<tbody>
@@ -17,7 +18,8 @@
 			<td><span class="house-points"><?php echo $rank['points']; ?></span><br>Points</td>
 		</tbody>
 	</table>
-	<p class="section-title">House Members</p>
+	<p class="section-title">House Members</p>		
+	<?php endif ?>
 	<div class="row-fluid myhouse">
 		<?php if (!empty($data)): ?>
 		<?php foreach ($data as $value): ?>

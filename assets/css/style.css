@@ -169,6 +169,10 @@ span.activityIcon{
 	background-image: url(../img/activityIcon.png);
 }
 
+span.activityIcon.sleep{
+	background-image: url(../img/sleep_default.png);
+}
+
 span.activityIcon.steps{
 	background-position: -100px 0; 
 }
