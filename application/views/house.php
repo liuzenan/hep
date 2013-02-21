@@ -1,6 +1,7 @@
 <div class="row-fluid">
 	<?php $this->load->view('templates/sidebar'); ?>
 	<div class="span10">
+		<?php if (!empty($rank['house_name'])): ?>
 	<p class="section-title">My House</p>
 							<table class="table house-stats">
 								<tbody>
@@ -10,7 +11,9 @@
 									<td><span class="house-points"><?php echo $rank['points']; ?></span><br>Points</td>
 								</tbody>
 							</table>
-	<p class="section-title">House Members</p>
+	<p class="section-title">House Members</p>			
+		<?php endif ?>
+
 		<div class="row-fluid myhouse">
 			<?php if (!empty($data)): ?>
 			<?php foreach ($data as $value): ?>

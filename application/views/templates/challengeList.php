@@ -41,6 +41,7 @@
 						<?php else: ?>
 				<div class="challengeItem box empty">
 					<div class="challengeContainer">
+						<h4>No Challenge Selected</h4>
 					</div>
 				</div>				
 						<?php endif ?>
@@ -72,6 +73,7 @@
 			<a href="#challengeModal" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
 				<div class="challengeItem box empty">
 					<div class="challengeContainer">
+						<h4>Click to Select</h4>
 					</div>
 				</div>
 			</a>		
@@ -100,6 +102,7 @@
 			<a href="#challengeModal" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
 				<div class="challengeItem box empty">
 					<div class="challengeContainer">
+						<h4>Click to Select</h4>
 					</div>
 				</div>
 			</a>
