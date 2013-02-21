@@ -28,7 +28,7 @@ class Badge_model extends CI_Model{
        	INNER JOIN userbadge ub
                ON b.id = ub.badge_id
 		WHERE  ub.user_id = ?
-   		AND ub.date = ?"
+   		AND ub.date = ?";
    		$query = $this->db->query($sql, array($user_id, $date));
    		return $query->result();
 	}
