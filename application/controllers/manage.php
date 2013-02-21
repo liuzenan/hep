@@ -48,6 +48,7 @@ class Manage extends CI_Controller {
 		$data['house_id'] = $house;
 		$data['staff'] = $staff;
 		$data['gender'] = $gender;
+		$data['phantom'] = empty($phantom)?1:0;
 		//$data['badge_email_unsub'] = empty($badge_email)?1:0;
 		//$data['daily_email_unsub'] = empty($daily_email)?1:0;
 		//$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
