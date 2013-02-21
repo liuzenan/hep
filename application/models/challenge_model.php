@@ -435,6 +435,7 @@ function getTutorLearderboard() {
 	AND cp.user_id = u.id
 	AND cp.complete_time > cp.start_time
 	AND u.phantom = 0
+	AND u.hide_progress = 0
 	AND (u.staff = 1)
 	GROUP BY u.id
 	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
