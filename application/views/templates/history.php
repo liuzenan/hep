@@ -3,7 +3,7 @@
 	<div class="span4">
 		<ul id="activitybtns" class="nav nav-pills">
 			<li class="<?php if($activeActivity=='steps') echo 'active' ?>">
-				<a href="<?php echo base_url() . 'stats/history' ?>">steps</a>
+				<a href="<?php echo base_url() . 'stats/history/steps' ?>">steps</a>
 			</li>
 			<li class="<?php if($activeActivity=='floors') echo 'active' ?>"><a href="<?php echo base_url() . 'stats/history/floors' ?>">floors</a></li>
 			<li class="<?php if($activeActivity=='sleep') echo 'active' ?>"><a href="<?php echo base_url() . 'stats/history/sleep' ?>">sleep</a></li>

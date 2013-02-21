@@ -2,40 +2,51 @@
 
 class Stats extends CI_Controller {
 	private $uid;
+	private $accessible;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
+		
+			$this->accessible = ($this->session->userdata('isadmin') || $this->session->userdata('isTutor'));
 		}
 	}
 	public function index(){
-		
-		$this->history();
-		
+		$this->session->set_userdata(array('stats_uid'=>$this->uid));			
+		$this->history('steps', 'week');		
 	}
 
-	public function statistics(){
-		$data['active'] = 'stats';
-		$data['displayName'] = $this->session->userdata('name');
-		$data['avatar'] = $this->session->userdata('avatar');
-		$data['stats'] = $this->getStats();
+	public function statistics($uid = NULL){
+		if(!is_null($uid) && $this->accessible) {
+			$this->session->set_userdata(array('stats_uid'=>$uid));			
+		}
+		$uid = $this->session->userdata('stats_uid');
+		$data['stats'] = $this->getStats($uid);
 		$data['currentTab'] = "statistics";
-		$data['isAdmin'] = $this->session->userdata('isadmin');
-		$data['isLeader'] = $this->session->userdata('isleader');
-		$data['isTutor'] = $this->session->userdata('isTutor');
+		$data['stats_uid'] = $uid;
+		$this->loadPage($data);
 		
-		$data['notifications'] = $this->User_model->getNotifications($this->uid);
-		$this->load->view("templates/header", $data);
-		$this->load->view("stats", $data);
-		$this->load->view("templates/footer");
 	}
 
-	public function history($type='steps', $span="week"){
-		$data['active'] = 'stats';
-		$data['displayName'] = $this->session->userdata('name');
-		$data['avatar'] = $this->session->userdata('avatar');
+
+
+	public function history($type=NULL, $span=NULL, $uid = NULL){
+		if(!is_null($uid) && $this->accessible) {
+			$this->session->set_userdata(array('stats_uid'=>$uid));			
+		} 
+		if(!is_null($span)) {
+			$this->session->set_userdata(array('span'=>$span));			
+		}
+		if(!is_null($type)) {
+			$this->session->set_userdata(array('type'=>$type));				
+		}
+		$span = $this->session->userdata('span');
+		$type = $this->session->userdata('type');
+		$uid = $this->session->userdata('stats_uid');
+		echo $type." ".$span." ".$uid;
+
 		$data['chartTitle'] = $type;
 		$currentDate = date('Y-m-d');
 
@@ -47,13 +58,22 @@ class Stats extends CI_Controller {
 		
 
 		$data['startDate'] = $weekBegin;
-		$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate);
+		$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate, $this->uid);
 		$data['activeActivity'] = $type;
 		$data['currentTab'] = "history";
+		$data['span'] = $span;
+		$data['stats_uid'] = $uid;
+		
+		$this->loadPage($data);
+	}
+
+	private function loadPage($data) {
+		$data['active'] = 'stats';
+		$data['displayName'] = $this->session->userdata('name');
+		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');
 		$data['isLeader'] = $this->session->userdata('isleader');
-		$data['span'] = $span;
-		
+		$data['isTutor'] = $this->session->userdata('isTutor');
 		$data['notifications'] = $this->User_model->getNotifications($this->uid);
 		$this->load->view("templates/header", $data);
 		$this->load->view("stats", $data);
@@ -65,9 +85,9 @@ class Stats extends CI_Controller {
 		var_dump($this->Activity_model->get_activity(date('Y-m-d', strtotime($currentDate)-604800), $currentDate , $this->uid));
 	}
 
-	private function getActivity($type, $startDate, $endDate){
+	private function getActivity($type, $startDate, $endDate, $uid){
 
-		$data = $this->Activity_model->get_activity($startDate, $endDate, $this->uid);
+		$data = $this->Activity_model->get_activity($startDate, $endDate, $uid);
 		
 		if($data){
 			switch ($type) {
@@ -110,9 +130,12 @@ class Stats extends CI_Controller {
 		}
 	}
 
-	private function getStats(){
-		if($this->session->userdata('oauth_token')&&$this->session->userdata('oauth_secret')){
-			$this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
+	private function getStats($uid){
+
+		$user = $this->User_model->loadUser($uid);
+
+		if($user->oauth_token&&$user->oauth_secret){
+			$this->fitbitphp->setOAuthDetails($user->oauth_token, $user->oauth_secret);
 			$xml = $this->fitbitphp->getActivityStats();
 			$best = $xml->best->tracker;
 			$lifetime = $xml->lifetime->tracker;
