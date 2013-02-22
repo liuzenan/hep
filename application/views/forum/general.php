@@ -20,7 +20,7 @@
 			<div class="thread-container clearfix">
 				<div class="thread-content">
 					<div>
-						<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>
+						<strong><?php echo $thread["title"]; ?></strong>
 						&middot;
 						<small><span><?php echo $users[$thread["creator_id"]]->first_name . ' ' . $users[$thread["creator_id"]]->last_name; ?></span></small>
 						&middot;

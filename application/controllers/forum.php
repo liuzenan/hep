@@ -58,8 +58,6 @@ class Forum extends CI_Controller {
 		echo "<pre>"; print_r($data);echo "</pre><br>";
 	}
 	
-	
-
 	public function createThread(){
 		if(!$this->session->userdata('user_id')){
 			$msg = array(

@@ -11,7 +11,7 @@
 				</div>
 				<div class="thread-content">
 				<div>
-					<a href="#"><strong><?php echo $thread["title"]; ?></strong></a>
+					<strong><?php echo $thread["title"]; ?></strong>
 					<?php if ($thread["subscribe"]==0): ?>
 						<a href="javascript:(void);" class="subscribe-link pull-right" data-thread-id="<?php echo $thread_id ?>"><small>Subscribe</small></a>
 					<?php endif ?>
