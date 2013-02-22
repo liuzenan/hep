@@ -626,7 +626,7 @@ margin-bottom: 10px;
 }
 
 .myactivity .current-challenge-list .challengeItem.box{
-	min-height: 100px;
+	height: 120px;
 }
 
 .current-challenge-list .challengeItem.box.empty{

@@ -17,9 +17,11 @@
 			<?php if (!empty($data)): ?>
 			<?php foreach ($data as $value): ?>
 				<div class="house-people clearfix">
-					<div class="house-people-pic">
-						<img src="<?php if(!empty($value['profile'])) echo $value['profile']->profile_pic ?>" alt="">
-					</div>
+					<a href="<?php if($value['profile']->fb==1) echo "http://www.facebook.com/" . $value['profile']->username; else echo "http://www.fitbit.com/user/" . $value['profile']->fitbit_id; ?>">
+						<div class="house-people-pic">
+							<img src="<?php if(!empty($value['profile'])) echo $value['profile']->profile_pic ?>" alt="">
+						</div>
+					</a>
 					<div class="house-people-content">
 						
 						<div class="house-people-name">

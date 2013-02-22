@@ -36,6 +36,12 @@
 					<?php else: ?>
 						<input type="checkbox" id="phantom" name="phantom" checked> Set as phantom
 					<?php endif ?>
+				<br>
+				<?php if($user->admin==0):?>	
+						<input type="checkbox" id="admin" name="admin"> Set as admin
+					<?php else: ?>
+						<input type="checkbox" id="admin" name="admin" checked> Set as admin
+					<?php endif ?>
 				<button id="submitbtn" class="btn btn-large btn-block">Update</button>
 			</fieldset>
 		</form>

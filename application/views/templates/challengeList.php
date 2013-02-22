@@ -63,9 +63,13 @@
 					<div class="challengeContainer">
 						<div class="challengeTitle challengeTitleTooltip"  data-original-title="<?php echo $me_challenges[$i]->description ?>"><?php echo $me_challenges[$i]->title ?></div>
 						<h4><?php echo $me_challenges[$i]->points ?> points &middot; <i class="icon-time icon-large"></i>&nbsp;<?php echo date('H:i',strtotime($me_challenges[$i]->start_time)) ?>-<?php echo date('H:i', strtotime($me_challenges[$i]->end_time)) ?></h4>	
-						<div class="progress progress-warning progress-striped">
-							<div class="bar" style="width:<?php echo floor($me_challenges[$i]->progress*100) ?>%"></div>
-						</div>						
+						<?php if ($me_challenges[$i]->progress==1): ?>
+							<h4>Completed</h4>
+						<?php else: ?>
+							<div class="progress progress-warning progress-striped">
+								<div class="bar" style="width:<?php echo floor($me_challenges[$i]->progress*100) ?>%"></div>
+							</div>				
+						<?php endif ?>
 					</div>
 				</div>				
 			</a>					

@@ -385,6 +385,9 @@ function getParticipationCount($uid, $challenge_id) {
 
 function getLearderboard() {
 	$sql = "SELECT u.first_name  AS firstname,
+	u.fitbit_id AS fitbit_id,
+	u.username AS username,
+	u.fb AS fb,
 	u.last_name   AS lastname,
 	u.profile_pic AS avatar,
 	u.house_id    AS house_id,
@@ -431,6 +434,9 @@ function getLearderboardByGender($gender) {
 function getTutorLearderboard() {
 	$sql = "SELECT u.first_name  AS firstname,
 	u.last_name   AS lastname,
+	u.fitbit_id AS fitbit_id,
+	u.username AS username,
+	u.fb AS fb,
 	u.profile_pic AS avatar,
 	u.house_id    AS house_id,
 	h.name        AS house,
@@ -459,7 +465,10 @@ function getHouseLeaderboard() {
 	h.picture     AS picture,
 	Count(u.id) as user_num,
 	GROUP_CONCAT(u.profile_pic) as avatars,
-	GROUP_CONCAT(u.first_name) as names
+	GROUP_CONCAT(u.first_name) as names,
+	GROUP_CONCAT(u.fitbit_id) AS fitbit_ids,
+	GROUP_CONCAT(u.username) AS usernames,
+	GROUP_CONCAT(u.fb) AS fbs
 	FROM   user AS u,
 	house AS h
 	WHERE  u.house_id = h.id
