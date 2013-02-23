@@ -21,8 +21,10 @@ class Forum_model extends CI_Model{
 			return;
 		}
 
-		$sql = "SELECT t.*, p.*
+		$sql = "SELECT t.*, p.*, c.*
 		FROM   forumthread AS t
+		LEFT JOIN challenge AS c
+		ON t.challenge_id = c.id
 		LEFT JOIN threadpost AS p
 		ON t.id = p.thread_id
 		WHERE  t.challenge_id > 0
@@ -38,6 +40,7 @@ class Forum_model extends CI_Model{
 					$thread = array();
 					$thread["challenge_id"] = $row->challenge_id;
 					$thread["title"]= $row->message;
+					$thread["badge_pic"] = $row->badge_pic;
 					$thread["thread_id"] = $row->id;
 					$thread["subscribe"] = 1;
 					$thread["tutor_only"] = 0;

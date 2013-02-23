@@ -424,6 +424,11 @@ td.forum-stats{
 	width: 10%;
 }
 
+.thread-container .thread-pic img{
+	width: 64px;
+	height: 64px;
+}
+
 .thread-container .thread-content{
 	width: 90%;
 }
