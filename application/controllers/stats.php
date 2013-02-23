@@ -142,35 +142,51 @@ class Stats extends CI_Controller {
 			$lifetime = $xml->lifetime->tracker;
 			
 			$stats =array();
+			$sleep = $this->Activity_model->getBestSleepData($uid);
+			$sleep_time = $sleep->time;
+			$sleep_date = $sleep->date;
+			if(empty($sleep_time)) {
+				$sleep_time = 0;
+				$sleep_date = "N.A.";
+			} else {
+				$sleep_time = $sleep_time / 60;
+			}
+
 			if(!empty($best)) {
 				$stats['best'] = array(
-					'calories' => array(
+					'Calories' => array(
 						'date'=>(string) $best->caloriesOut->date,
 						'value'=>(string) $best->caloriesOut->value . " Calories"
 						),
-					'distance' => array(
+					'Distance' => array(
 						'date'=>(string) $best->distance->date,
-						'value'=>(string) $best->distance->value . " km"
+						'value'=>(string) number_format((double) $best->distance->value,2) . " Km"
 						),
-					'floors' => array(
+					'Floors' => array(
 						'date'=>(string) $best->floors->date,
-						'value'=>(string) $best->floors->value . " levels"
+						'value'=>(string) $best->floors->value . " Levels"
 						),
-					'steps' => array(
+					'Steps' => array(
 						'date'=>(string) $best->steps->date,
-						'value'=>(string) $best->steps->value . " steps"
-						)
+						'value'=>(string) $best->steps->value . " Steps"
+						),
+					'Sleep' => array(
+						'date' => (string) $sleep_date,
+						'value'=> (string) number_format($sleep_time,2) . " Hours"
+						),
 					);
 			}else {
 				$stats['best'] = array();
 			}
-
+			//var_dump($lifetime);
+			$hepLifeTime = $this->Activity_model->getLifetimeActivityData($uid);
 			if(!empty($lifetime)) {
 				$stats['lifetime'] = array(
-					'calories' => (string) $lifetime->caloriesOut . " Calories",
-					'distance' => (string) $lifetime->distance . " km",
-				//'floors' => (string) $lifetime->floors . " levels",
-					'steps' => (string) $lifetime->steps . " steps"
+					'Calories' => (string) $lifetime->caloriesOut . " Calories",
+					'Distance' => (string) number_format((double) $lifetime->distance, 2) . " Km",
+					'Floors' => (string) (empty($hepLifeTime->total_floors) ? 0: $hepLifeTime->total_floors) . " Levels",
+					'Steps' => (string) $lifetime->steps . " Steps", 
+					'Sleep' => (string) number_format($this->Activity_model->getLifetimeSleepData($uid)/60, 2) . " Hours"
 					);
 			}
 			return $stats;
