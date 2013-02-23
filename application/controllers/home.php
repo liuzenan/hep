@@ -86,10 +86,13 @@ class Home extends CI_Controller{
 		$timestr .= microtime()."<br>";
 
 		$data['me_today']->sleep = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time()))->total_time;
+		$data['me_today']->sleep = number_format($data['me_today']->sleep/60,2);
 		$timestr .= microtime()."<br>";
 
 		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ",time() - 60 * 60 * 24));
 		$data['me_yesterday']->sleep = $data['me_sleep_yesterday']->total_time;
+		$data['me_yesterday']->sleep = number_format($data['me_yesterday']->sleep/60,2);
+
 		$timestr .= microtime()."<br>";
 
 		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);
@@ -127,7 +130,7 @@ class Home extends CI_Controller{
 		$data['avg_today'] = $this->Activity_model->getAverageActivityToday();
 		$timestr .= microtime()."<br>";
 
-		$data['avg_today']->avg_sleep = $this->Activity_model->getAverageSleepToday();
+		$data['avg_today']->avg_sleep = number_format($this->Activity_model->getAverageSleepToday()/60,2);
 		$timestr .= microtime()."<br>";
 
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
@@ -141,6 +144,7 @@ class Home extends CI_Controller{
 		$data['max_today']->max_calories = max($data['avg_today']->avg_calories,$data['me_today']->calories);
 		$data['max_today']->max_sleep = max($data['avg_today']->avg_sleep, $data['me_today']->sleep);
 
+
 		$timestr .= microtime()."<br>";
 
 		$this->load->library('../controllers/challenges');
@@ -153,7 +157,9 @@ class Home extends CI_Controller{
 		}
 		$timestr .= microtime()."<br>";
 
-		$data['profiling'] = $timestr;
+		//$data['profiling'] = $timestr;
+		$data['my_points'] = $this->Challenge_model->getTotalPoints($this->uid);
+		$data['cohor_points'] = $this->Challenge_model->getAveragePoints();
 		return $data;
 	}
 
@@ -207,21 +213,14 @@ class Home extends CI_Controller{
 	private function loadActivityData($user_id, &$data) {
 		$activityRow = $this->Activity_model->getActivityToday($user_id);
 		$average = $this->Activity_model->getAverageActivityToday();
-		$average->avg_sleep = $this->Activity_model->getAverageSleepToday();
+		$average->avg_sleep = number_format($this->Activity_model->getAverageSleepToday()/60,2);
 		$data['avg'] = $average;
 
-		if($activityRow != FALSE){
-			$data['activescore'] = $activityRow->active_score;
-			$data['calories'] = $activityRow->activity_calories;
-			$data['distance'] = $activityRow->distance;
-			$data['floors'] = $activityRow->floors;
-			$data['steps'] = $activityRow->steps;
-		}else{
-			$data['activescore'] = 0;
-			$data['calories'] = 0;
-			$data['distance'] = 0;
-			$data['floors'] = 0;
-			$data['steps'] = 0;
-		}
+		$data['activescore'] = $activityRow->active_score;
+		$data['calories'] = $activityRow->activity_calories;
+		$data['distance'] = $activityRow->distance;
+		$data['floors'] = $activityRow->floors;
+		$data['steps'] = $activityRow->steps;
+		
 	}
 }

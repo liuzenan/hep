@@ -540,7 +540,6 @@ function getMyHouseStats($house_id) {
 	AND cp.user_id = u.id
 	AND cp.complete_time > '0000-00-00 00:00:00'
 	AND u.phantom = 0
-	AND u.staff = 0
 	GROUP BY u.id
 	ORDER BY count(cp.id)";
 	$query = $this->db->query($sql, array($house_id));
@@ -562,10 +561,29 @@ function getTotalPoints($user_id) {
    		AND cp.user_id = ?";
    	$query = $this->db->query($sql, array($user_id));
    	if($query->num_rows()>0) {
-   		return $query->row()->total;
-   	} else {
-   		return 0;
-   	}
+   		$total = $query->row()->total;
+   	} 
+   	return empty($total)? 0 : $total;
+}
+
+function getAveragePoints() {
+	$sql="SELECT Avg(temp.total) as points
+		FROM   (SELECT Sum(points) AS total,
+               cp.user_id
+        FROM   challengeparticipant AS cp
+               LEFT JOIN challenge AS c
+                      ON cp.challenge_id = c.id
+        WHERE  cp.complete_time > cp.start_time
+           AND cp.user_id IN (SELECT id
+                              FROM   user
+                              WHERE  phantom = 0)
+        GROUP  BY cp.user_id) AS temp";
+	$query = $this->db->query($sql);
+	if($query->num_rows()>0) {
+		return $query->row()->points;
+	} else {
+		return 0;
+	}
 }
 
 }

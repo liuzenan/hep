@@ -26,6 +26,7 @@ class Activity_model extends CI_Model{
 			$vars->min_lightlyactive = 0;
 			$vars->min_veryactive = 0;
 			$vars->activity_calories = 0;
+			$vars->last_update = $this->getLastUpdate($user_id);
 		}
 		return $vars;
 	}
@@ -34,11 +35,11 @@ class Activity_model extends CI_Model{
 		$sql="SELECT Max(last_update) as time
 				FROM   activity	
 				WHERE  user_id = ?";
-		$lastupdate = $this->db->query($sql, array($user_id))->row();
+		$lastupdate = $this->db->query($sql, array($user_id))->row()->time;
 		if(empty($lastupdate)) {
 			return "2013-02-14 00:00:00";
 		}else {
-			return $lastupdate->time;
+			return $lastupdate;
 		}
 	}
 	function getActivityYesterday($user_id) {
@@ -129,13 +130,14 @@ class Activity_model extends CI_Model{
 
 
 	function getAverageSleepToday(){
-		$today = date("Y-m-d", time() - 60 * 60 * 24);
+		$today = date("Y-m-d", time());
 		//get activities data
 		$sql = "SELECT avg(time_asleep) AS avg_time
 		FROM sleep
-		WHERE date='".$today."' AND time_asleep>0";
-		$query = $this->db->query($sql);
+		WHERE date=? AND time_asleep>0";
+		$query = $this->db->query($sql, array($today));
 		if($query->num_rows() > 0) {
+
 			return $query->row()->avg_time;
 		} else {
 			return 0;
@@ -172,10 +174,19 @@ class Activity_model extends CI_Model{
 		}
 	}
 
+	function getBestSleepData($user_id) {
+		$sql="select max(time_asleep) as time, date from sleep where user_id = ?";
+		$query = $this->db->query($sql, array($user_id));
+		return $query->row();
+	}
 	function getLifetimeSleepData($user_id){
-
+		$sql="select sum(time_asleep) as time from sleep where user_id = ?";
+		$query = $this->db->query($sql, array($user_id));
+		$time =  $query->row()->time;
+		return empty($time) ? 0 : $time;
 
 	}
+
 
 
 	function get_activity($startDate, $endDate, $user_id){
