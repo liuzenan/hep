@@ -39,9 +39,45 @@
 				<br>
 				<?php if($user->admin==0):?>	
 						<input type="checkbox" id="admin" name="admin"> Set as admin
-					<?php else: ?>
+				<?php else: ?>
 						<input type="checkbox" id="admin" name="admin" checked> Set as admin
-					<?php endif ?>
+				<?php endif ?>
+				<br>
+
+				<?php if($user->leader==0):?>	
+						<input type="checkbox" id="leader" name="leader"> Set as leader
+				<?php else: ?>
+						<input type="checkbox" id="leader" name="leader" checked> Set as leader
+				<?php endif ?>
+				<br>
+
+				<?php if($user->badge_email_unsub==0):?>	
+						<input type="checkbox" id="badge_email_unsub" name="badge_email_unsub"> Unsubscribe badge email notification
+				<?php else: ?>
+						<input type="checkbox" id="badge_email_unsub" name="badge_email_unsub" checked> Unsubscribe badge email notification
+				<?php endif ?>
+				<br>
+
+				<?php if($user->daily_email_unsub==0):?>	
+						<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub"> Unsubscribe daily email
+				<?php else: ?>
+						<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub" checked> Unsubscribe daily email
+				<?php endif ?>
+				<br>
+
+				<?php if($user->challenge_email_unsub==0):?>	
+						<input type="checkbox" id="challenge_email_unsub" name="challenge_email_unsub"> Unsubscribe challenge email
+				<?php else: ?>
+						<input type="checkbox" id="challenge_email_unsub" name="challenge_email_unsub" checked> Unsubscribe challenge email
+				<?php endif ?>
+				<br>
+
+				<?php if($user->hide_progress==0):?>	
+						<input type="checkbox" id="hide_progress" name="hide_progress"> Hide progress
+				<?php else: ?>
+						<input type="checkbox" id="hide_progress" name="hide_progress" checked> Hide progress
+				<?php endif ?>
+				<br>
 				<button id="submitbtn" class="btn btn-large btn-block">Update</button>
 			</fieldset>
 		</form>

@@ -46,6 +46,13 @@ class Manage extends CI_Controller {
 			$house = $this->input->post("house");
 			$gender = $this->input->post("gender");
 			$phantom = $this->input->post("phantom");
+			$leader = $this->input->post("leader");
+
+			$badge_email = $this->input->post("badge_email_unsub");
+			$daily_email = $this->input->post("daily_email_unsub");
+			$challenge_email = $this->input->post("challenge_email_unsub"); 
+			$hide_progress = $this->input->post("hide_progress");
+			$admin = $this->input->post("admin");
 			$staff = ($house == -1) ? 1 : 0;
 			$data=array();
 
@@ -55,7 +62,15 @@ class Manage extends CI_Controller {
 			$data['house_id'] = $house;
 			$data['staff'] = $staff;
 			$data['gender'] = $gender;
+			$data['admin'] = empty($phantom)?0:1;
 			$data['phantom'] = empty($phantom)?0:1;
+			$data['leader'] = empty($leader)?0:1;
+			$data['phantom'] = empty($phantom)?0:1;
+			$data['badge_email_unsub'] = empty($badge_email)?0:1;
+			$data['daily_email_unsub'] = empty($daily_email)?0:1;
+			$data['challenge_email_unsub'] = empty($challenge_email)?0:1;
+			$data['hide_progress'] = empty($hide_progress)?0:1;
+			
 		//$data['badge_email_unsub'] = empty($badge_email)?1:0;
 		//$data['daily_email_unsub'] = empty($daily_email)?1:0;
 		//$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
