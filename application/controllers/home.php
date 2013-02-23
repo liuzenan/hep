@@ -37,12 +37,12 @@ class Home extends CI_Controller{
 					|| $this->session->userdata('isTutor'));
 
 				if($this->disabled) {
-					$this->date_today="2013-02-24";
-					$this->date_tomorrow="2013-02-25";
-					$this->tomorrow_start = "2013-02-25 00:00:00";		
-					$this->tomorrow_end = "2013-02-25 23:59:59";
-					$this->today_start = "2013-02-24 00:00:00";
-					$this->today_end = "2013-02-24 23:59:59";
+					$this->date_today="2013-02-28";
+					$this->date_tomorrow="2013-03-01";
+					$this->tomorrow_start = "2013-03-01 00:00:00";		
+					$this->tomorrow_end = "2013-03-01 23:59:59";
+					$this->today_start = "2013-02-28 00:00:00";
+					$this->today_end = "2013-02-28 23:59:59";
 				}
 			}
 		}

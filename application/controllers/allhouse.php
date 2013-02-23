@@ -3,12 +3,15 @@
 class Allhouse extends CI_Controller {
 	
 	private $uid;
+	private $accessible;
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
+			$this->accessible = ($this->session->userdata('isadmin') || $this->session->userdata('isTutor'));
+
 		}
 	}
 
@@ -21,6 +24,12 @@ class Allhouse extends CI_Controller {
 		$this->loadPage($this->loadData($house_id));
 	}
 	private function loadData($house_id) {
+		if(!$this->accessible) {
+			redirect(base_url() . "home");
+			return;
+		}
+
+
 		$data = array();
 
 		$data['house_id'] = $house_id;

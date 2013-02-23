@@ -42,6 +42,7 @@ class Forum_model extends CI_Model{
 					$thread["subscribe"] = 1;
 					$thread["tutor_only"] = 0;
 					$thread["user_id"] = $user_id;
+					$thread["badge_pic"] = $this->getBadgePic($thread["challenge_id"]);
 					if(empty($thread["comments"])) {
 						$thread["comments"] = array();
 					}
@@ -65,6 +66,12 @@ class Forum_model extends CI_Model{
 			return $res;
 		} 
 
+	}
+
+	function getBadgePic($cid) {
+		$sql = "SELECT badge_pic FROM challenge WHERE id = ?";
+		$query = $this->db->query($sql, $cid);
+		return $query->row()->badge_pic;
 	}
 
 	function getSubscribedThread($user_id) {
