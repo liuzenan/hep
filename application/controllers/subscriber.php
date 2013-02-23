@@ -81,6 +81,25 @@ class Subscriber extends CI_Controller {
 		}
 	}
 
+	public function validateFitbitRecord() {
+		$dates_sql = "SELECT DISTINCT date from activity where date >= '2013-02-13' ORDER BY date DESC";
+		$dquery = $this->db->query($dates_sql);
+		foreach($dquery->result() as $date_row) {
+			$uids_sql = "
+			select temp.* from
+			(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
+			a.steps, a.user_id from intradayactivity as ia, activity as a 
+			where ia.user_id=a.user_id AND DATE(ia.activity_time)=a.date AND a.date=?  group by a.user_id) as temp
+			where temp.ifloors<>temp.floors OR temp.isteps<> temp.steps";
+			$query = $this->db->query($uids_sql, array($date_row->date));
+			foreach($query->result() as $row) {
+				echo "refresh ". $row->user_id;
+				$this->getActivities($row->user_id, $date_row->date);
+			}
+		}
+
+	}
+
 	public function getActivities($user_id, $date){
 
 		$keypair = $this->getUserKeyPair($user_id);
