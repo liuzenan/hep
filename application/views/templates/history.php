@@ -81,7 +81,7 @@ jQuery(document).ready(function($) {
 		},
 		series: [{
 			type:'column',
-			name:'Step counter',
+			name:'<?php echo $chartTitle ?>',
 			data:[<?php echo implode(",", $currentActivity) ?>]
 		}]
 	});

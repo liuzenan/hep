@@ -34,7 +34,7 @@
 					<?php if($hide_progress==0):?>	
 						<input type="checkbox" id="hide_progress" name="hide_progress" checked> Show my challenges to public
 					<?php else: ?>
-						<input type="checkbox" id="hide_progress" name="hide_progress" > Show my challenges to public
+						<input type="checkbox" id="hide_progress" name="hide_progress"> Show my challenges to public
 					<?php endif ?>
 				</label>
 				<?php endif ?>
@@ -49,7 +49,6 @@ jQuery(document).ready(function($) {
 	$(".checkbox input").click(function(event){
 		$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
 				console.log(msg);
-				$("#savealertcontainer").html('<div class="alert alert-success save-alert show"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success!</strong> Your settings have been saved</div>');
 			});
 	});
 	$("#submitbtn").click(function(event){

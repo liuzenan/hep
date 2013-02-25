@@ -43,7 +43,12 @@ class Profile extends CI_Controller {
 		$data['badge_email_unsub'] = empty($badge_email)?1:0;
 		$data['daily_email_unsub'] = empty($daily_email)?1:0;
 		$data['challenge_email_unsub'] = empty($challenge_email)?1:0;
-		$data['hide_progress'] = empty($hide_progress)?1:0;
+		if ($this->session->userdata('isTutor')==1) {
+			$data['hide_progress'] = empty($hide_progress)?1:0;
+		} else {
+			$data['hide_progress'] = 0;
+		}
+		
 		//$data['house_id'] = $house;
 		$this->db->where('id',$this->session->userdata('user_id'));
 		$this->db->update('user', $data);
