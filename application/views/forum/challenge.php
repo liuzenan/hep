@@ -7,7 +7,7 @@
 			<?php foreach ($threads as $thread_id => $thread): ?>
 			<div class="thread-container clearfix">
 				<div class="thread-pic pull-left">
-					<img src="http://placehold.it/64x64" alt="">
+					<img src="<?php echo $thread["badge_pic"]; ?>" alt="">
 				</div>
 				<div class="thread-content">
 				<div>

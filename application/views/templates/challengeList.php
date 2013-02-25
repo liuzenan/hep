@@ -4,19 +4,22 @@
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
-					<td class="stats-label">	
-						<strong>Total Completed:</strong>							
+					<td class="stats-label middle-col">	
+						<strong>Challenge Completed:</strong><br>	
+						<strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy"></i>						
 					</td>
 					<td class="stats-label middle-col">
-						<strong><span><?php echo $me_completed ?></span></strong>&nbsp;<i class="icon-trophy icon-2x"></i>
+						<strong>Cohort Average:</strong><br>
+						<strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group"></i>
 					</td>
-					<td class="stats-label">
-						<strong>Cohort Average:</strong>
+					<td class="stats-label middle-col">	
+						<strong>Points Contributed:</strong><br>
+						<strong><span><?php echo $my_points ?>&nbsp;</span></strong><i class="icon-dashboard"></i>					
 					</td>
-					<td class="stats-label">
-						<strong><span><?php echo $avg_completed ?>&nbsp;</span></strong><i class="icon-group icon-2x"></i>
+					<td class="stats-label">	
+						<strong>Corhort Average:</strong><br>
+						<strong><span><?php echo $cohor_points ?>&nbsp;</span></strong><i class="icon-group"></i>						
 					</td>
-					
 				</tbody>
 			</table>
 		</div>
@@ -52,7 +55,7 @@
 				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
 					<div class="challenge-title">28th Feb</div>
 			    <?php else: ?>
-					<div class="challenge-title">Today</div>
+					<div class="challenge-title">Today (<?php echo date("d M");?>)</div>
       			<?php endif ?>
 
 				<?php for ($i=0; $i < 4; $i++) { ?>

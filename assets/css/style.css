@@ -92,13 +92,6 @@ td.activity-stats, td.stats-label, td.stats-count{
 	width: 25%;
 }
 
-td.stats-label:nth-child(2n+1){
-	text-align: right;
-}
-
-td.stats-label:nth-child(2n){
-	text-align: left;
-}
 
 td.middle-col{
 	border-right: solid 1px #E6D9B8;
@@ -114,7 +107,7 @@ td.activity-stats strong, td.stats-label strong{
 }
 
 td.activity-stats strong span, td.stats-label strong span{
-	font-size: 2em;
+	font-size: 1em;
 	line-height: 1em;
 }
 
@@ -424,6 +417,11 @@ td.forum-stats{
 	width: 10%;
 }
 
+.thread-container .thread-pic img{
+	width: 64px;
+	height: 64px;
+}
+
 .thread-container .thread-content{
 	width: 90%;
 }
@@ -500,7 +498,7 @@ table.challenge-stats thead td{
 	text-align: center;
 	width: 25%;
 	font-family: "Grandesign Neue Serif", Serif;
-	font-size: 2em;
+	font-size: 1em;
 }
 
 div.challenge-stats{
