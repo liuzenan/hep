@@ -9,12 +9,22 @@ class Activity_model extends CI_Model{
 
 	function getActivityToday($user_id){
 		$today = date("Y-m-d");
-		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$today));
+		return $this->getActivityOnDate($user_id, $today);
+
+	}
+
+		function getActivityYesterday($user_id) {
+		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
+		return $this->getActivityOnDate($user_id, $yesterday);
+	}
+
+	function getActivityOnDate($user_id, $date) {
+		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$date));
 		$vars = $query->row();
 		if(empty($vars)) {
 			$vars = new StdClass();
 			$vars->user_id = $user_id;
-			$vars->date =date("Y-m-d");
+			$vars->date = $date;
 			$vars->steps = 0;
 			$vars->floors= 0;
 			$vars->calories = 0;
@@ -27,7 +37,7 @@ class Activity_model extends CI_Model{
 			$vars->min_veryactive = 0;
 			$vars->activity_calories = 0;
 			$vars->last_update = $this->getLastUpdate($user_id);
-		}
+		}	
 		return $vars;
 	}
 
@@ -42,28 +52,7 @@ class Activity_model extends CI_Model{
 			return $lastupdate;
 		}
 	}
-	function getActivityYesterday($user_id) {
-		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-		$query = $this->db->get_where('activity', array('user_id'=>$user_id, 'date'=>$yesterday));
-		$vars = $query->row();
-		if(empty($vars)) {
-			$vars = new StdClass();
-			$vars->user_id = $user_id;
-			$vars->date =date("Y-m-d", time() - 60 * 60 * 24);
-			$vars->steps = 0;
-			$vars->floors= 0;
-			$vars->calories = 0;
-			$vars->active_score = 0;
-			$vars->distance = 0;
-			$vars->elevation = 0;
-			$vars->min_sedentary = 0;
-			$vars->min_lightlyactive = 0;
-			$vars->min_lightlyactive = 0;
-			$vars->min_veryactive = 0;
-			$vars->activity_calories = 0;
-		}	
-		return $vars;
-	}
+
 
 	function getMaxActivityToday() {
 		$today = date("Y-m-d");
@@ -174,7 +163,7 @@ class Activity_model extends CI_Model{
 	}
 
 	function getBestSleepData($user_id) {
-		$sql="select max(time_asleep) as time, date from sleep where user_id = ?";
+		$sql="select max(time_asleep) as time, date from sleep where user_id = ? group by date ORDER by time DESC";
 		$query = $this->db->query($sql, array($user_id));
 		return $query->row();
 	}
@@ -203,6 +192,7 @@ class Activity_model extends CI_Model{
 		$resultSet['activity_calories'] = array();
 		$resultSet['elevation'] = array();
 		$resultSet['sleep'] = array();
+		$resultSet['sedentary'] = array();
 		if($query->num_rows()>0){
 			foreach($query->result() as $row){
 				$resultSet['steps'][$row->date] = $row->steps;
@@ -211,6 +201,7 @@ class Activity_model extends CI_Model{
 				$resultSet['distance'][$row->date] = $row->distance;
 				$resultSet['activity_calories'][$row->date] = $row->activity_calories;
 				$resultSet['elevation'][$row->date] = $row->elevation;
+				$resultSet['sedentary'][$row->date] = number_format($row->min_sedentary/60,2);
 			}
 		}
 

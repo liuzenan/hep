@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Mail extends CI_Controller {
-	
+
 
 	function __construct(){
 		parent::__construct();
@@ -46,5 +46,6 @@ class Mail extends CI_Controller {
 		$this->User_model->unsubDailyNotification($user_id);
 		echo "You have been sucessfully unsubscribed from daily notification";
 	}
-	
+
+
 }
