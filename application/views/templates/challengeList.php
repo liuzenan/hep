@@ -50,7 +50,7 @@
 			</div>
 			<div class="span4 today">
 				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
-					<div class="challenge-title">24th Feb</div>
+					<div class="challenge-title">28th Feb</div>
 			    <?php else: ?>
 					<div class="challenge-title">Today</div>
       			<?php endif ?>
@@ -87,7 +87,7 @@
 			</div>
 			<div class="span4 tomorrow">
 				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
-					<div class="challenge-title">25th Feb</div>
+					<div class="challenge-title">1st March</div>
 			    <?php else: ?>
 					<div class="challenge-title">Tomorrow</div>
       			<?php endif ?>				
