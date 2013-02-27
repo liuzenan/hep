@@ -13,6 +13,49 @@ class Challenge_model extends CI_Model{
 		parent::__construct();
 	}
 
+
+
+	function loadAvailableChallanges($user_id, $today, $tomorrow) {
+
+		$challenges = $this->getAllChallenges($user_id);
+		$joinedToday = $this->loadJoinedCategory($user_id, $today);
+		$joinedTomorrow = $this->loadJoinedCategory($user_id, $tomorrow);
+		$today = array(0=>0,1=>0,2=>0,3=>0);
+		$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
+
+		$todayJoined = array();
+		$cpIds = array();
+		foreach($joinedToday as $a) {
+			$today[$a->category]++;
+			$todayJoined[] = $a->challenge_id;
+			$cpIds[$a->category] = $a->cp_id;
+		}
+		$tomorrowJoined = array();
+		$cpIds2 = array();
+
+		foreach($joinedTomorrow as $b) {
+			$tomorrow[$b->category]++;
+			$tomorrowJoined[] = $b->challenge_id;
+			$cpIds2[$b->category] = $b->cp_id;
+
+		}
+
+		foreach($challenges as $c) {
+			$c->user_id = $user_id;
+			$c->disabled_today = ($today[$c->category]>0);
+			$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
+			$c->joined_today = in_array($c->id, $todayJoined);
+			$c->joined_tomorrow = in_array($c->id, $tomorrowJoined);
+			$c->cp_id_today = empty($cpIds[$c->category])? -1: $cpIds[$c->category];
+			$c->cp_id_tomorrow = empty($cpIds2[$c->category])? -1:$cpIds2[$c->category];
+			
+		}
+
+
+		return $challenges;
+
+	}
+
 	function loadUserChallenge($user_id, $date) {
 		$sql = "SELECT * 
 		FROM challenge 

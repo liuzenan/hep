@@ -121,6 +121,9 @@ class Stats extends CI_Controller {
 				case 'sleep':
 				$activity = $data['sleep'];
 				break;
+				case 'sedentary':
+				$activity = $data['sedentary'];
+				break;
 				default:
 					# code..
 				break;

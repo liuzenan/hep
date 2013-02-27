@@ -45,33 +45,14 @@ class Challenges extends CI_Controller {
 	}
 
 	public function index(){
-		// $data["challenges"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
-		// $tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
-
-		// foreach($data["challenges"] as $c) {
-		// 	$data["today"][$c->category]=$c;
-		// }
-
-		// $data["tomorrow"] = array();
-		// foreach($tomorrow as $c2) {
-		// 	$data["tomorrow"][$c2->category]=$c2;
-		// }
-
-		// $all = $this->loadAvailableChallanges();
-		// foreach($all as $c3) {
-		// 	$data['all'][$c3->category][] = $c3;
-		// }
-		// //echo "<pre>"; print_r($data);echo "</pre><br>";
-
-		// $data["tab"] = "my";
-		// $this->loadPage($data);	
+		
 		$this->completed();
 	}		
 
 	public function all(){
 		$data["tab"] = "all";
 		
-		$data["challenges"] = $this->loadAvailableChallanges();
+		$data["challenges"] = $this->Challenge_model->loadAvailableChallanges($this->uid, $this->date_today, $this->date_tomorrow);
 
 		$data["user_id"] = $this->uid;
 		//echo "<pre>"; print_r($data);echo "</pre><br>";
@@ -92,7 +73,7 @@ class Challenges extends CI_Controller {
 			$data["tomorrow"][$c2->category]=$c2;
 		}
 
-		$all = $this->loadAvailableChallanges();
+		$all = $this->Challenge_model->loadAvailableChallanges($this->uid);
 		foreach($all as $c3) {
 			$data['all'][$c3->category][] = $c3;
 		}
@@ -102,46 +83,7 @@ class Challenges extends CI_Controller {
 
 	
 
-	public function loadAvailableChallanges() {
-
-		$challenges = $this->Challenge_model->getAllChallenges($this->uid);
-		$joinedToday = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_today);
-		$joinedTomorrow = $this->Challenge_model->loadJoinedCategory($this->uid, $this->date_tomorrow);
-		$today = array(0=>0,1=>0,2=>0,3=>0);
-		$tomorrow = array(0=>0,1=>0,2=>0,3=>0);
-
-		$todayJoined = array();
-		$cpIds = array();
-		foreach($joinedToday as $a) {
-			$today[$a->category]++;
-			$todayJoined[] = $a->challenge_id;
-			$cpIds[$a->category] = $a->cp_id;
-		}
-		$tomorrowJoined = array();
-		$cpIds2 = array();
-
-		foreach($joinedTomorrow as $b) {
-			$tomorrow[$b->category]++;
-			$tomorrowJoined[] = $b->challenge_id;
-			$cpIds2[$b->category] = $b->cp_id;
-
-		}
-
-		foreach($challenges as $c) {
-			$c->user_id = $this->uid;
-			$c->disabled_today = ($today[$c->category]>0);
-			$c->disabled_tomorrow = ($tomorrow[$c->category]>0);
-			$c->joined_today = in_array($c->id, $todayJoined);
-			$c->joined_tomorrow = in_array($c->id, $tomorrowJoined);
-			$c->cp_id_today = empty($cpIds[$c->category])? -1: $cpIds[$c->category];
-			$c->cp_id_tomorrow = empty($cpIds2[$c->category])? -1:$cpIds2[$c->category];
-			
-		}
-
-
-		return $challenges;
-
-	}
+	
 	public function completed(){
 		$data["tab"] = "completed";
 		$data["challenges"] = $this->Challenge_model->getIndividualCompletedChallenges($this->uid);

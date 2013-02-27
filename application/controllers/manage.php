@@ -83,6 +83,50 @@ class Manage extends CI_Controller {
 		}
 		echo json_encode(array('success'=>true, 'uid'=>$uid));
 	}
+
+	public function invalid() {
+
+		$sql = "SELECT
+		sum(c.points)  AS points,
+		count(cp.id) AS challenges,
+		u.*
+		FROM   user AS u,
+		challengeparticipant AS cp,
+		challenge as c
+		WHERE 
+		c.id = cp.challenge_id
+		AND cp.user_id = u.id
+		AND cp.complete_time > cp.start_time
+		AND u.staff = 0
+		AND u.id IN (select id from user where house_id = 0 or house_id IS NULL or first_name is null or last_name is null or email is null)
+		GROUP BY u.id
+		ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
+
+		$query1 = $this->db->query($sql);
+		$progress = array();
+		foreach($query1->result() as $row) {
+			$progress[$row->id] = $row;
+		}
+
+		$query = $this->db->query("select * from user where house_id = 0 or house_id IS NULL or first_name is null or last_name is null or email is null");
+		foreach($query->result() as $row2) {
+			if(empty($progress[$row2->id])) {
+				$row2->challenges = 0;
+				$row2->points = 0;
+				$progress[$row2->id] = $row2;
+			}
+		}
+		
+		if($this->session->userdata('isadmin')){
+			
+			$data['students'] = $progress;
+			$data['house_id'] = 0;
+			$this->loadPage($data, "admin");
+		} else {
+			redirect(base_url() . "home");
+
+		}
+	}
 /*
 	public function studentList(){
 		

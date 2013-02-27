@@ -1,9 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Mail_model extends CI_Model{
+	//const HepAccount = 'hepnusmedical@gmail.com';
 
-	const HepAccount = 'root@hep.d2.comp.nus.edu.sg';
-	//const HepAccount = 'hep-support@googlegroup.com';
+	//const HepAccount = 'root@hep.d2.comp.nus.edu.sg';
+	const HepAccount = 'hep-support@googlegroup.com';
 	//const HepAccount = 'hep@hep.d2.comp.nus.edu.sg';
 	const HepName = 'Health Enhancement Program';
 	const TitleBadgeEarned = 'Congrats for earning %s badge!';
@@ -17,11 +18,18 @@ class Mail_model extends CI_Model{
 	</head>
 	<body>';
 	const Footer = '<br><br>Happy exercise!<br>
-	HEP Team<br>--<br></body>
+	HEP Team<br>--<br>
+	If you don\'t want to receive this message any more, you can change your mail setting <a href="http://hep.d2.comp.nus.edu.sg/profile">at the profile page</a>.
+	<br></body>
 	</html>';
 	function __construct(){
 		parent::__construct();
-		$this->load->library('email');
+		$config = Array(
+    	'protocol' => 'sendmail',    
+    	'mailtype'  => 'html', 
+    	'charset'   => 'utf-8'
+		);
+		$this->load->library('email', $config);
 	}
 
 	function sendChallengeCompletionMessage($user, $title, $time) {
@@ -30,15 +38,12 @@ class Mail_model extends CI_Model{
 			Congradulation! You just completed the challenge %s at %s.<br><br><br>
 			";
 			$msg = sprintf($message, $user->first_name." ".$user->last_name, $title, $time);
-			$link = sprintf(base_url(). "mail/unsubChallengeNotification/%d", $user->id);
-
-			$msg .= sprintf('If you don\'t want to receive this message any more, <a href="%s">you can unsubscribe</a>.', $link);
 
 			$this->send("HEP Challenge Completed", $msg, $user->email);
 		}
 
 	}
-	function sendBadgeEarnedMessage($user_id, $badge_id) {
+	public function sendBadgeEarnedMessage($user_id, $badge_id) {
 		$u = $this->User_model->loadUser($user_id);
 		if($u->badge_email_unsub == 0) {
 			$badge = $this->Badge_model->getBadge($badge_id);
@@ -52,10 +57,7 @@ class Mail_model extends CI_Model{
 
 				$message = 'Congrats! You\'ve just earned %s ';
 				$message .= '<br> %s<br><br>';
-				$message .= 'If you don\'t want to receive this message any more, <a href="%s">you can unsubscribe</a>.';
-
-				$link = sprintf(base_url(). "mail/unsubBadgeNotification/%d", $user_id);
-				$this->email->message($this->getFullHTML(sprintf($message, $badge->name, $badge->description, $link)));	
+				$this->email->message($this->getFullHTML(sprintf($message, $badge->name, $badge->description)));	
 
 				$this->email->send();
 
@@ -73,17 +75,19 @@ class Mail_model extends CI_Model{
 
 	private function loadData($user_id, $user) {
 		$daily = "Good Morning %s, <br><br>
-		Yesterday you walked %d steps, climbed %d floors, slept %d hours and burnt %d calories. You had %d challenges yesterday and you completed %d of them.
-		Now you had completed %d challenges in total.<br>
+		Yesterday, you walked <b>%d steps (%s)</b>, climbed <b>%d floors (%s)</b>, 
+		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>. 
+		<br><br>You selected <b>%s</b> challenges yesterday and you completed <b>%d</b> of them.
+		You have completed <b>%d</b> challenges in total.<br>
 
-		<br><u>Yesterday's Completed Challenges</u>: <br>
+		<br><u>Challenges Completed Yesterday</u>: <br>
 		%s
 		<br><br>
-		<u>Yesterday's Incomplete Challenges</u>: <br>
+		<u>Yesterday's Challenges Not Completed</u>: <br>
 		%s
 		<br><br>
 		%s
-		<u>Today you have %d challenge to work on</u>:
+		<u>Today you are working on the following challenges</u>:
 		<br>%s<br><br>
 
 
@@ -91,21 +95,29 @@ class Mail_model extends CI_Model{
 		$ci =& get_instance();
 		$ci->load->model('Activity_model');
 		$ci->load->model('Badge_model');
-		$data;
+		$data = array();
 
 
-		$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
+		//$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
 		$data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
-
-		$data['me_sleep'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time()));
 		$data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time() - 60 * 60 * 24));
+		//var_dump($data['me_sleep_yesterday']);
+		$data['me_yesterday']->sleep = number_format((float) $data['me_sleep_yesterday']->total_time/60,2);
+
+		$data['me_two_days_ago'] = $this->Activity_model->getActivityOnDate($user_id, date("Y-m-d ",time() - 2*60 * 60 * 24));
+		$data['me_sleep_two_days_ago'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time() - 2*60 * 60 * 24));
+		$data['me_two_days_ago']->sleep = number_format((float) $data['me_sleep_two_days_ago']->total_time/60,2);
+
+	
 
 
-		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps),2);
-		$data['delta_floors'] = number_format($this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors),2);
-		$data['delta_calories'] = number_format($this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories),2);
-		$data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance),2);
 
+
+		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_yesterday']->steps, $data['me_two_days_ago']->steps),2);
+		$data['delta_floors'] = number_format($this->cauculateDelta($data['me_yesterday']->floors, $data['me_two_days_ago']->floors),2);
+		$data['delta_calories'] = number_format($this->cauculateDelta($data['me_yesterday']->calories, $data['me_two_days_ago']->calories),2);
+		$data['delta_distance'] = number_format($this->cauculateDelta($data['me_yesterday']->distance, $data['me_two_days_ago']->distance),2);
+		$data['delta_sleep'] = number_format($this->cauculateDelta($data['me_yesterday']->sleep, $data['me_two_days_ago']->sleep),2);
 
 		$data['me_challenges'] = $this->Challenge_model->loadUserChallenge($user_id, date("Y-m-d ",time()));
 		$data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($user_id);
@@ -118,6 +130,7 @@ class Mail_model extends CI_Model{
 		$data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(),2);
 		$data['max_today'] = $this->Activity_model->getMaxActivityToday();
 		$data['new_badge'] = $this->Badge_model->getBadgesByDate($user_id, date("Y-m-d ",time() - 60 * 60 * 24));
+		
 		$new_badge = "";
 		if(!empty($data['new_badge'])) {
 			$new_badge .= "<u>Newly earned badges</u>: <br>";
@@ -150,16 +163,26 @@ class Mail_model extends CI_Model{
 		$data['msg'] = sprintf($daily, 
 			$user->first_name." ".$user->last_name, 
 			$data['me_yesterday']->steps, 
+			($data['delta_steps']>0? "up by " : "down by ").$data['delta_steps']. "%",
+
 			$data['me_yesterday']->floors, 
-			number_format($data['me_sleep_yesterday']->total_time,2),
+			($data['delta_floors']>0? "up by " : "down by ").$data['delta_floors']. "%",
+
+			number_format($data['me_yesterday']->sleep,2),
+			($data['delta_sleep']>0? "up by " : "down by ").$data['delta_sleep']. "%",
+
+
 			$data['me_yesterday']->calories, 
+			($data['delta_calories']>0? "up by " : "down by ").$data['delta_calories']. "%",
+
+
 			count($data['me_challenges_yesterday']), 
 			$count, 
 			$data['me_completed'], 
 			$titlesY, 
 			$titlesF, 
 			$new_badge,
-			count($data['me_challenges']), 
+			//count($data['me_challenges']), 
 			$titlesX);
 		return $data;
 	}
@@ -172,16 +195,14 @@ class Mail_model extends CI_Model{
 		}
 	}
 	public function sendDailyReport($user_id) {
-
+		echo $user_id;
 		$u = $this->User_model->loadUser($user_id);
-		if($u->badge_email_unsub == 0) {
+		if($u->daily_email_unsub == 0) {
 			$data = $this->loadData($user_id, $u);
-			//echo "<pre>"; print_r($data);echo "</pre><br>";
+			$msg = $data['msg']; 
+			//$this->load->view('dailyemail', $data);
 
-			//$content = 
-			$link = sprintf(base_url(). "mail/unsubDailyNotification/%d", $user_id);
-			$msg = $data['msg'] . sprintf('If you don\'t want to receive this message any more, you can <a href="%s">unsubscribe here</a>.', $link);
-
+			var_dump($data);
 			$this->send(Mail_model::TitleDailyReport, $msg, $u->email);
 
 			echo $this->email->print_debugger();
@@ -190,11 +211,13 @@ class Mail_model extends CI_Model{
 
 	}
 
-	private function send($title, $msg, $to) {
+
+	public function send($title, $msg, $to) {
 		$this->email->from(Mail_model::HepAccount, Mail_model::HepName);
 		$this->email->to($to);
 		$this->email->subject($title);
 		$this->email->message($this->getFullHTML($msg));
+		//$this->email->message($msg);
 		$this->email->send();
 
 		echo $this->email->print_debugger();

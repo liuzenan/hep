@@ -12,6 +12,8 @@ class Home extends CI_Controller{
 	private $disabled;
 	public function __construct() {
 		parent::__construct();
+				$this->load->model("Mail_model");
+
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		} else {
@@ -61,7 +63,7 @@ class Home extends CI_Controller{
 		
 	}
 
-	private function loadData() {
+	public function loadData() {
 		$data['active'] = 'home';
 		//echo xdebug_get_profiler_filename();
 
@@ -144,14 +146,7 @@ class Home extends CI_Controller{
 		$data['max_today']->max_calories = max($data['avg_today']->avg_calories,$data['me_today']->calories);
 		$data['max_today']->max_sleep = max($data['avg_today']->avg_sleep, $data['me_today']->sleep);
 
-
-		$timestr .= microtime()."<br>";
-
-		$this->load->library('../controllers/challenges');
-
-		$timestr .= microtime()."<br>";
-
-		$data['all_challenge'] = $this->challenges->loadAvailableChallanges();
+		$data['all_challenge'] = $this->Challenge_model->loadAvailableChallanges($this->uid, $this->date_today, $this->date_tomorrow);
 		foreach($data['all_challenge'] as $c) {
 			$data['all'][$c->category][]=$c;	
 		}
@@ -159,10 +154,20 @@ class Home extends CI_Controller{
 
 		//$data['profiling'] = $timestr;
 		$data['my_points'] = $this->Challenge_model->getTotalPoints($this->uid);
-		$data['cohor_points'] = $this->Challenge_model->getAveragePoints();
+		$data['cohor_points'] = number_format($this->Challenge_model->getAveragePoints(),1);
 		return $data;
 	}
-
+/*
+	public function email() {
+		
+		$data = $this->loadData();
+		$str = $this->load->view('templates/header', $data, true);
+		$str .= $this->load->view('home', $data, true);
+		$str .= $this->load->view('templates/footer', true);
+		$this->Mail_model->send("hello", $str, "wangshasg@gmail.com");
+		echo $str;
+	}
+*/
 	public function data() {
 		echo "<pre>"; print_r($this->loadData());echo "</pre><br>";
 	}
