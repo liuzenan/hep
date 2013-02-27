@@ -80,12 +80,15 @@ class Signup extends CI_Controller{
 			$data['phantom'] = 0;
 			$data['staff'] = 0;
 
-
 			if($house!="0"){
 				$data['house_id'] = $house;
 			}
 			if($house == -1) {
 				$data['staff'] = 1;
+				$data['hide_progress'] = 1;
+			} else {
+				$data['hide_progress'] = 0;
+
 			}
 			$this->db->where('id',$this->session->userdata('user_id'));
 			$this->db->update('user', $data);

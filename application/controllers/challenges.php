@@ -26,7 +26,7 @@ class Challenges extends CI_Controller {
 			$this->now = date("Y-m-d G:i:s",time());
 			$this->date_today = date("Y-m-d", time());
 			$this->date_tomorrow = date("Y-m-d", time()+ 60*60*24);
-
+/*
 			$this->disabled = !( $this->session->userdata('isadmin')
 				|| $this->session->userdata('isleader')
 				|| $this->session->userdata('isTutor'));
@@ -40,7 +40,7 @@ class Challenges extends CI_Controller {
 					$this->today_end = "2013-02-28 23:59:59";
 				$this->now = $this->today_start;
 			}
-
+*/
 		} 
 	}
 

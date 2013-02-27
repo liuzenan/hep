@@ -52,11 +52,8 @@
 				<?php } ?>
 			</div>
 			<div class="span4 today">
-				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
-					<div class="challenge-title">28th Feb</div>
-			    <?php else: ?>
+				
 					<div class="challenge-title">Today (<?php echo date("d M");?>)</div>
-      			<?php endif ?>
 
 				<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
@@ -89,11 +86,8 @@
 				<?php } ?>
 			</div>
 			<div class="span4 tomorrow">
-				<?php if (!($isLeader || $isTutor || $isAdmin)): ?>
-					<div class="challenge-title">1st March</div>
-			    <?php else: ?>
+			
 					<div class="challenge-title">Tomorrow</div>
-      			<?php endif ?>				
       			<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 						<?php if (!empty($me_challenges_tomorrow) && !empty($me_challenges_tomorrow[$i])): ?>

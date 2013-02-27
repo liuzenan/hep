@@ -33,7 +33,7 @@ class Home extends CI_Controller{
 				$this->now = date("Y-m-d G:i:s",time());
 				$this->date_today = date("Y-m-d", time());
 				$this->date_tomorrow = date("Y-m-d", time()+ 60*60*24);
-
+/*
 				$this->disabled = !( $this->session->userdata('isadmin')
 					|| $this->session->userdata('isleader')
 					|| $this->session->userdata('isTutor'));
@@ -45,7 +45,7 @@ class Home extends CI_Controller{
 					$this->tomorrow_end = "2013-03-01 23:59:59";
 					$this->today_start = "2013-02-28 00:00:00";
 					$this->today_end = "2013-02-28 23:59:59";
-				}
+			}*/
 			}
 		}
 	}
