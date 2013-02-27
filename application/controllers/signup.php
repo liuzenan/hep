@@ -79,7 +79,7 @@ class Signup extends CI_Controller{
 			$data['leader'] = 0;
 			$data['phantom'] = 0;
 			$data['staff'] = 0;
-
+			$data['hide_progress'] = 0;
 
 			if($house!="0"){
 				$data['house_id'] = $house;

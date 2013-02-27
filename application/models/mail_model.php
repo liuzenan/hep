@@ -191,7 +191,7 @@ class Mail_model extends CI_Model{
 		if($yesterday == 0) {
 			return $today == 0 ? 0 : 1;
 		} else {
-			return ($today-$yesterday)/($yesterday);
+			return ($today-$yesterday)/($yesterday)*100;
 		}
 	}
 	public function sendDailyReport($user_id) {
