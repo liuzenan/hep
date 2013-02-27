@@ -32,6 +32,33 @@
         // connected
             FB.api('/me',function(response){
 
+              $.ajax({
+                url:"<?php echo base_url() . 'signup/fbLogin' ?>",
+                type:"POST",
+                data:{
+                  username: response.username
+                }
+              }).done(function(msg){
+
+                FB.api('/me?fields=picture.width(100).height(100)', function(response){
+
+                  $.ajax({
+                    url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
+                    type:"POST",
+                    data:{
+                      profile_pic: response.picture.data.url
+                    }
+
+                  }).done(function(msg){
+                    console.log('data saved: ' + msg);
+                  });
+                });
+
+              });
+            });
+            
+            FB.api('/me',function(response){
+
                   $.ajax({
                     type:"POST",
                     url:base_url + "login/facebookLogin",
@@ -55,6 +82,7 @@
                     }
                   });
             });
+
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
