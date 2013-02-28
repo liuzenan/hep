@@ -29,34 +29,7 @@
       // Additional initialization code such as adding Event Listeners goes here
     FB.getLoginStatus(function(response) {
       if (response.status === 'connected') {
-        // connected
-            FB.api('/me',function(response){
-
-              $.ajax({
-                url:"<?php echo base_url() . 'signup/fbLogin' ?>",
-                type:"POST",
-                data:{
-                  username: response.username
-                }
-              }).done(function(msg){
-
-                FB.api('/me?fields=picture.width(100).height(100)', function(response){
-
-                  $.ajax({
-                    url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
-                    type:"POST",
-                    data:{
-                      profile_pic: response.picture.data.url
-                    }
-
-                  }).done(function(msg){
-                    console.log('data saved: ' + msg);
-                  });
-                });
-
-              });
-            });
-            
+        // connected            
             FB.api('/me',function(response){
 
                   $.ajax({

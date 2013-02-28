@@ -225,7 +225,7 @@ class Challenge_model extends CI_Model{
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
 		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
-		WHERE challengeparticipant.complete_time > challengeparticipant.start_time
+		WHERE challengeparticipant.complete_time >= challengeparticipant.start_time
 		GROUP BY challengeparticipant.challenge_id";
 
 		$query = $this->db->query($sql, array($house_id));
@@ -348,7 +348,7 @@ class Challenge_model extends CI_Model{
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
 		AND challengeparticipant.user_id= ?
-		WHERE challengeparticipant.complete_time > challengeparticipant.start_time
+		WHERE challengeparticipant.complete_time >= challengeparticipant.start_time
 		GROUP BY challengeparticipant.challenge_id";
 
 		$query = $this->db->query($sql, array($user_id));
@@ -359,7 +359,7 @@ class Challenge_model extends CI_Model{
 		$sql = "SELECT Count(cp.id) AS count
 		FROM   challengeparticipant AS cp
 		WHERE  cp.user_id = ?
-		AND cp.complete_time > cp.start_time";
+		AND cp.complete_time >= cp.start_time";
 		return $this->db->query($sql,array($user_id))->row()->count;
 	}
 
@@ -377,7 +377,7 @@ class Challenge_model extends CI_Model{
 			FROM   user
 			WHERE  admin = 0
 			AND phantom = 0
-			AND staff = 0) AS temp ON cp.user_id = temp.id WHERE  cp.complete_time > cp.start_time";
+			AND staff = 0) AS temp ON cp.user_id = temp.id WHERE  cp.complete_time >= cp.start_time";
 $total = $this->db->query($sql2)->row()->total;
 
 return $total/$count;		
@@ -441,7 +441,7 @@ function getLearderboard() {
 	challengeparticipant AS cp
 	WHERE  u.house_id = h.id
 	AND cp.user_id = u.id
-	AND cp.complete_time > cp.start_time
+	AND cp.complete_time >= cp.start_time
 	AND u.phantom = 0
 	AND u.staff = 0
 	GROUP BY u.id
@@ -464,7 +464,7 @@ function getLearderboardByGender($gender) {
 	challengeparticipant AS cp
 	WHERE  u.house_id = h.id
 	AND cp.user_id = u.id
-	AND cp.complete_time > cp.start_time
+	AND cp.complete_time >= cp.start_time
 	AND u.gender = ?
 	AND u.phantom = 0
 	AND u.staff = 0
@@ -489,7 +489,7 @@ function getTutorLearderboard() {
 	challengeparticipant AS cp
 	WHERE  u.house_id = h.id
 	AND cp.user_id = u.id
-	AND cp.complete_time > cp.start_time
+	AND cp.complete_time >= cp.start_time
 	AND u.phantom = 0
 	AND u.hide_progress = 0
 	AND (u.staff = 1)
@@ -531,7 +531,7 @@ function getHouseLeaderboard() {
 	WHERE 
 	c.id = cp.challenge_id
 	AND cp.user_id = u.id
-	AND cp.complete_time > cp.start_time
+	AND cp.complete_time >= cp.start_time
 	AND u.phantom = 0
 	AND u.staff = 0
 	AND u.house_id > 0
@@ -600,7 +600,7 @@ function getTotalPoints($user_id) {
 			FROM   challengeparticipant AS cp
        LEFT JOIN challenge AS c
               ON cp.challenge_id = c.id
-		WHERE  cp.complete_time > cp.start_time
+		WHERE  cp.complete_time >= cp.start_time
    		AND cp.user_id = ?";
    	$query = $this->db->query($sql, array($user_id));
    	if($query->num_rows()>0) {
@@ -616,7 +616,7 @@ function getAveragePoints() {
         FROM   challengeparticipant AS cp
                LEFT JOIN challenge AS c
                       ON cp.challenge_id = c.id
-        WHERE  cp.complete_time > cp.start_time
+        WHERE  cp.complete_time >= cp.start_time
            AND cp.user_id IN (SELECT id
                               FROM   user
                               WHERE  phantom = 0)
