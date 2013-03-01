@@ -7,13 +7,24 @@ class Activity_model extends CI_Model{
 	}
 
 
+	function getActivitySummary() {
+		$sql="SELECT format(Sum(steps)/1000,0) as steps, format(Sum(floors)/1000,2) as floors, format(Sum(distance),0) as distance FROM activity";
+		$query = $this->db->query($sql);
+
+		$res = $query->row();
+		$sql2="SELECT format(Sum(time_asleep)/1000/60,2) as sleep_time FROM sleep";
+		$query2 = $this->db->query($sql2);
+
+		$res->sleep = $query2->row()->sleep_time;
+		return $res;
+	}
 	function getActivityToday($user_id){
 		$today = date("Y-m-d");
 		return $this->getActivityOnDate($user_id, $today);
 
 	}
 
-		function getActivityYesterday($user_id) {
+	function getActivityYesterday($user_id) {
 		$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
 		return $this->getActivityOnDate($user_id, $yesterday);
 	}
