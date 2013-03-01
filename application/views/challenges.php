@@ -22,7 +22,6 @@
 			<?php else: ?>
 				<?php $this->load->view('templates/challenge'); ?>
 			<?php endif ?>
-			
 		</div>
 	</div>
 </div>

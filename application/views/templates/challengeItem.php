@@ -6,5 +6,7 @@
 			<h4><i class="icon-time icon-large"></i>&nbsp;<?php echo date('H:i',strtotime($start_time)) ?>-<?php echo date('H:i', strtotime($end_time)) ?></h4>	
 		<?php endif ?>
 		<p><?php echo $description ?></p>
+		<small>Complete <?php echo $complete_count ?> times</small><br>
+		<small>Incomplete <?php echo $incomplete_count ?> times</small>
 	</div>
 </li>

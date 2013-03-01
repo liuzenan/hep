@@ -238,7 +238,7 @@ span.activityIcon.floors{
 
 .challenge .challengeItem.box {
     width: 240px;
-    height: 240px;
+    height: 280px;
     float: left;
     margin-left: 10px;
     margin-bottom: 10px;
@@ -783,4 +783,57 @@ width: 96%;
 	color:white;
 	padding-top: 40px;
 	opacity: 0.6;
+}
+
+.history-time{
+	position: relative;
+	padding: 20px;
+	background: dodgerblue;
+	border-radius: 50px;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	color: white;
+	font-weight: 700;
+}
+
+.history-time:after{
+	left: 85%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.history-time:after{
+	border-color: rgba(136, 183, 213, 0);
+	border-left-color: dodgerblue;
+	border-width: 20px;
+	top: 50%;
+	margin-top: -20px;
+}
+
+.history-day{
+	margin-bottom: 50px;
+}
+
+.history-challenge-item
+{
+	height: 60px;
+	width: 80px;
+	background-size: 100px 100px;
+	margin-top: -5px;
+	padding: 40px 10px 0 10px;
+	opacity: 0.6;
+}
+
+.history-challenge-item:hover{
+	opacity: 1;
+}
+
+.history-challenge-item .progress{
+	opacity: 0.8;
 }
