@@ -165,7 +165,7 @@
       </div> 
       <div>
         Total <?php echo $summary->steps ?>K steps, <?php echo $summary->floors ?>K floors, <?php echo $summary->distance ?> kilometers,
-        <?php echo $summary->sleep ?> hours of sleep recorded in the system.
+        <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
       </div>       
       </div>
     </div>  

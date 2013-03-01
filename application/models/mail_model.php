@@ -17,7 +17,7 @@ class Mail_model extends CI_Model{
 	<title>HEP Email</title>
 	</head>
 	<body>';
-	const Footer = '<br><br>Happy exercise!<br>
+	const Footer = '<br><br>Have a nice day and happy exercise!<br>
 	HEP Team<br>--<br>
 	If you don\'t want to receive this message any more, you can change your mail setting <a href="http://hep.d2.comp.nus.edu.sg/profile">at the profile page</a>.
 	<br></body>
@@ -90,8 +90,9 @@ class Mail_model extends CI_Model{
 		<u>Today you are working on the following challenges</u>:
 		<br>%s<br><br>
 
-
-		";
+		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%dK</b> floors, <b>%d kilometers</b> of movement, <b>%s hours</b> of sleep recorded with the system.  <br>
+		That's awesome! Thanks! :)
+		<br><br>";
 		$ci =& get_instance();
 		$ci->load->model('Activity_model');
 		$ci->load->model('Badge_model');
@@ -160,6 +161,8 @@ class Mail_model extends CI_Model{
 			$titlesX .= '<i>'.$c->description.'</i><br><br>';
 
 		}
+
+		$summary = $this->Activity_model->getActivitySummary();
 		$data['msg'] = sprintf($daily, 
 			$user->first_name." ".$user->last_name, 
 			$data['me_yesterday']->steps, 
@@ -183,7 +186,14 @@ class Mail_model extends CI_Model{
 			$titlesF, 
 			$new_badge,
 			//count($data['me_challenges']), 
-			$titlesX);
+			$titlesX,
+			$summary->steps,
+			$summary->floors,
+			$summary->distance,
+			$summary->sleep
+
+
+			);
 		return $data;
 	}
 
