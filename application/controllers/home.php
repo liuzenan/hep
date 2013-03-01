@@ -12,7 +12,6 @@ class Home extends CI_Controller{
 	private $disabled;
 	public function __construct() {
 		parent::__construct();
-				$this->load->model("Mail_model");
 
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
@@ -54,8 +53,8 @@ class Home extends CI_Controller{
 	
 	public function index(){
 			
-		$this->Challenge_model->preAllocateChallenge($this->uid, $this->date_today, $this->date_tomorrow);
-		
+		//$this->Challenge_model->preAllocateChallenge($this->uid, $this->date_today, $this->date_tomorrow);
+	
 		$data = $this->loadData();
 		$this->load->view('templates/header', $data);
 		$this->load->view('home', $data);

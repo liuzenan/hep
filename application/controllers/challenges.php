@@ -61,8 +61,16 @@ class Challenges extends CI_Controller {
 		
 	}
 
+	public function history() {
+		$data["tab"] = "history";
+		$data["history"] = $this->Challenge_model->loadChallengeHistory($this->uid);
+		$this->loadPage($data);
+	}
+
 
 	public function data() {
+		$data["history"] = $this->Challenge_model->loadChallengeHistory($this->uid);
+
 		$data["challenges"] = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
 		$tomorrow= $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
 
@@ -73,7 +81,7 @@ class Challenges extends CI_Controller {
 			$data["tomorrow"][$c2->category]=$c2;
 		}
 
-		$all = $this->Challenge_model->loadAvailableChallanges($this->uid);
+		$all = $this->Challenge_model->loadAvailableChallanges($this->uid, $this->date_today, $this->date_tomorrow);
 		foreach($all as $c3) {
 			$data['all'][$c3->category][] = $c3;
 		}
