@@ -113,6 +113,20 @@ jQuery(document).ready(function($) {
 		}
 		
 	});
+	$('#challengeModal').ready(function() {
+		console.log("pull data from fitbit")
+		$.ajax({
+				type:'POST',
+				url:base_url+'subscriber/refresh',
+				dataType:'json',
+				data:{
+				}
+			}).done(function(msg){
+				console.log(msg);
+				window.location.reload();
+			});
+
+	});
 
 	//check word limit
 	$(".messageBox").keyup(function(event){

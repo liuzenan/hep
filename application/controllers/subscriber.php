@@ -12,7 +12,7 @@ class Subscriber extends CI_Controller {
 	public function update() {
 		$sql1= "SELECT DISTINCT id
 				FROM   user
-				WHERE  fitbit_id IS NOT NULL AND id NOT IN ('264','59', '93')";
+				WHERE  fitbit_id IS NOT NULL";
 		$query1 = $this->db->query($sql1);
 		foreach($query1->result() as $row1) {
 			$uid = $row1->id;
@@ -31,8 +31,26 @@ class Subscriber extends CI_Controller {
 				$this->getSleep($uid, $date);
 			}
 	}
-	echo "finish";
+		echo "finish";
+	}
 
+	public function refresh() {
+		if(!$this->session->userdata('user_id')){
+			$msg = array(
+				"success" => false,
+				"login" => false
+				);
+		}else{
+			$user_id = $this->session->userdata('user_id');
+			$date = date("Y-m-d", time());
+			$this->getActivities($user_id, $date);
+			$this->getSleep($user_id, $date);
+
+			$msg = array(
+				"success" => true,
+			);				
+		}
+		echo json_encode($msg);
 	}
 	public function activities(){
 		try {

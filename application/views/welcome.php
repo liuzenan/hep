@@ -2,6 +2,8 @@
   if ($this->session->userdata("user_id")) {
     # code...
     redirect(base_url() . "home");
+  } else {
+    $summary = $this->Activity_model->getActivitySummary();
   }
  ?>
 <!DOCTYPE html>
@@ -146,6 +148,7 @@
     });
   }
   </script>
+
 <div class="wrapper welcome">
     <div class="container">
       <h3 class="maintitle">Health Enhancement Programme</h3>
@@ -159,7 +162,11 @@
         <label for="email"><small class="muted">Please enter your email registered with HEP</small></label>
         <input type="text" class="input-block-level" id="email" name="email"><br>
         <button id="linkWithFacebook" class="btn btn-block">Link to Account</button>
-      </div>        
+      </div> 
+      <div>
+        Total <?php echo $summary->steps ?>K steps, <?php echo $summary->floors ?>K floors, <?php echo $summary->distance ?> kilometers,
+        <?php echo $summary->sleep ?> hours of sleep recorded in the system.
+      </div>       
       </div>
     </div>  
 </div>

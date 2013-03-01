@@ -48,12 +48,26 @@ class Challenge_model extends CI_Model{
 			$c->joined_tomorrow = in_array($c->id, $tomorrowJoined);
 			$c->cp_id_today = empty($cpIds[$c->category])? -1: $cpIds[$c->category];
 			$c->cp_id_tomorrow = empty($cpIds2[$c->category])? -1:$cpIds2[$c->category];
+			$c->complete_count = $this->getCompleteCount($user_id, $c->id);
+			$c->incomplete_count = $this->getIncompleteCount($user_id, $c->id);
 			
 		}
 
 
 		return $challenges;
 
+	}
+
+	function getCompleteCount($id, $cid) {
+		$sql = "select count(id) as count from challengeparticipant where user_id = ? and challenge_id= ? and progress >=1 and end_time<=NOW()";
+		$query = $this->db->query($sql, array($id, $cid));
+		return $query->row()->count;
+	}
+
+	function getIncompleteCount($id, $cid) {
+		$sql = "select count(id) as count from challengeparticipant where user_id = ? and challenge_id= ? and progress <=1 and end_time<=NOW()";
+		$query = $this->db->query($sql, array($id, $cid));
+		return $query->row()->count;
 	}
 
 	function loadUserChallenge($user_id, $date) {
@@ -177,6 +191,22 @@ class Challenge_model extends CI_Model{
 		return $this->db->get_where(Challenge_model::table_challenge_participant, $data)->row();
 	}
 
+	function loadChallengeHistory($id) {
+		$sql = "SELECT *, DATE(cp.start_time) as date
+				FROM   challengeparticipant AS cp,
+       				  	challenge AS c
+				WHERE  c.id = cp.challenge_id
+   					AND cp.user_id = ?
+   					AND Date(cp.start_time) <= Date(Now())
+					ORDER  BY Date(cp.start_time) DESC";
+
+		$query = $this->db->query($sql, array($id));
+		$res = array();
+		foreach($query->result() as $row) {
+			$res[$row->date][] = $row;
+		}
+		return $res;
+	}
 	function quitChallenge($id) {
 		return $this->db->delete(Challenge_model::table_challenge_participant,
 			array(Challenge_model::col_cp_id=>$id));

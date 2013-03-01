@@ -299,7 +299,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -348,13 +348,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -386,7 +386,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -409,7 +409,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -437,7 +437,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -465,7 +465,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -493,7 +493,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -548,13 +548,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -656,7 +656,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -684,7 +684,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -718,7 +718,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -747,7 +747,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -775,7 +775,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -803,7 +803,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -855,13 +855,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -962,7 +962,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -989,7 +989,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1017,7 +1017,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1046,7 +1046,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1095,13 +1095,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1131,7 +1131,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1170,13 +1170,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1231,7 +1231,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1266,13 +1266,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1327,7 +1327,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1391,13 +1391,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1433,7 +1433,7 @@ class FitBitPHP
         if (!strcmp($responseInfo['http_code'], '201')) {
             return true;
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1463,7 +1463,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1502,13 +1502,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1562,7 +1562,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1603,13 +1603,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1639,7 +1639,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1678,13 +1678,13 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -1736,7 +1736,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1926,7 +1926,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1953,7 +1953,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -1986,7 +1986,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if(!strcmp($responseInfo['http_code'], '200')){
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if($xml)
                 return $xml;
             else
@@ -2013,7 +2013,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -2041,7 +2041,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -2079,7 +2079,7 @@ class FitBitPHP
         if (!strcmp($responseInfo['http_code'], '201')) {
             return true;
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -2111,7 +2111,7 @@ class FitBitPHP
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -2143,7 +2143,7 @@ class FitBitPHP
         if (!strcmp($responseInfo['http_code'], '204')) {
             return true;
         } else {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if (!$xml)
                 throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
             else
@@ -2182,7 +2182,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200') || !strcmp($responseInfo['http_code'], '201')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -2244,7 +2244,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xml = simplexml_load_string($response);
+            $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
                 return $xml;
             else
@@ -2272,7 +2272,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xmlClientAndUser = simplexml_load_string($response);
+            $xmlClientAndUser = $this->fitbit_simplexml_load_string($response);
         } else {
             throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
@@ -2283,7 +2283,7 @@ class FitBitPHP
         $response = $this->oauth->getLastResponse();
         $responseInfo = $this->oauth->getLastResponseInfo();
         if (!strcmp($responseInfo['http_code'], '200')) {
-            $xmlClient = simplexml_load_string($response);
+            $xmlClient = $this->fitbit_simplexml_load_string($response);
         } else {
             throw new FitBitException($responseInfo['http_code'], 'Fitbit request failed. Code: ' . $responseInfo['http_code']);
         }
@@ -2369,6 +2369,10 @@ class FitBitPHP
         return $headers;
     }
 
+    private function fitbit_simplexml_load_string($xml) {
+        $temp = str_replace('Logged In','LoggedIn',$xml);
+        return simplexml_load_string($temp);
+    }
 
 }
 
