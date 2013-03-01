@@ -3,6 +3,10 @@ var game_start_date = new Date(2013, 1, 28, 0);
 
 jQuery(document).ready(function($) {
 
+	$(".history-challenge-item").popover({
+		trigger:'hover'
+	});
+
 	$(".example").popover({
 		animation: false,
 		trigger: 'hover'
