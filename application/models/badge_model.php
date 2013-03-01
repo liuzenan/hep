@@ -70,22 +70,39 @@ class Badge_model extends CI_Model{
             (badge_id,
              user_id,
              date)
-SELECT a1.category,
-       a1.user_id,
-       DATE(a1.start_time)
-FROM   challengeparticipant AS a1
-WHERE  a1.challenge_id > (SELECT Max(a2.challenge_id)
+				SELECT a1.category,
+       					a1.user_id,
+       				DATE(a1.start_time)
+					FROM   challengeparticipant AS a1
+					WHERE  a1.challenge_id > (SELECT Max(a2.challenge_id)
                    FROM   challengeparticipant AS a2
                    WHERE  a1.user_id = a2.user_id
                    	   AND a1.category = a2.category
                    	   AND a2.progress >= 1
                       AND DATE(a2.start_time) < DATE(a1.start_time))
-   AND a1.progress >= 1
-   AND (a1.category = 1 OR a1.category = 2)
-   AND DATE(a1.start_time) = ?";
+   						AND a1.progress >= 1
+   						AND (a1.category = 1 OR a1.category = 2)
+  						 AND DATE(a1.start_time) = ?";
    		$query = $this->db->query($sql, array($yest));
 
 
+   		// challenge count
+   		$challenge_count_badge = array(3=>10, 4=>20, 5=>50, 6=>100, 7=>200);
+   		foreach($challenge_count_badge as $badge_id=>$challenge_count) {
+   			$sql = sprintf("INSERT IGNORE INTO userbadge (badge_id,
+   				user_id,
+   				date)
+   			SELECT %d,
+   			cp.user_id,
+   			DATE(now())
+   			from challengeparticipant as cp where cp.progress>=1 
+   			and cp.user_id NOT IN (select user_id from userbadge where badge_id=%d) 
+   			group by cp.user_id having count(cp.id)>%d", $badge_id, $badge_id, $challenge_count);
+   			//echo $sql;
+   			$this->db->query($sql);
+   		}
+
 	}
+
 
 }
