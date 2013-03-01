@@ -29,7 +29,7 @@
       // Additional initialization code such as adding Event Listeners goes here
     FB.getLoginStatus(function(response) {
       if (response.status === 'connected') {
-        // connected
+        // connected            
             FB.api('/me',function(response){
 
                   $.ajax({
@@ -55,6 +55,7 @@
                     }
                   });
             });
+
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
