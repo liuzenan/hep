@@ -166,7 +166,8 @@
       <div>
         Total <?php echo $summary->steps ?>K steps, <?php echo $summary->floors ?>K floors, <?php echo $summary->distance ?> kilometers,
         <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
-      </div>       
+      </div>
+      <a href="<?php echo base_url() . 'staticpages/faq'?>" target="_blank">FAQ</a>       
       </div>
     </div>  
 </div>

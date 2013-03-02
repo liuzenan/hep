@@ -7,6 +7,8 @@
 			<li class="<?php if($active=='house') echo "active" ?>"><a href="<?php echo base_url() . 'house'?>"><?php if(!empty($isTutor) && $isTutor==1) echo "Tutors"; else echo "My House"; ?></a></li>
 			<li class="<?php if($active=='challenge_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/challenge'?>">Challenge Forum</a></li>
 			<li class="<?php if($active=='general_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/general'?>">General Forum</a></li>
+			<li ><a href="<?php echo base_url() . 'staticpages/faq'?>" target="_blank">FAQ</a></li>
+			
 			<hr>
 			<?php if((!empty($isTutor) && $isTutor==1)  || (!empty($isAdmin) && $isAdmin==1)) {?>
 			<li class="<?php if($active=='allhouse') echo "active" ?>"><a href="<?php echo base_url() . 'allhouse'?>">All Houses</a></li>
