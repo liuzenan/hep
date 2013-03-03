@@ -108,7 +108,7 @@ class Subscriber extends CI_Controller {
 			(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
 			a.steps, a.user_id from intradayactivity as ia, activity as a 
 			where ia.user_id=a.user_id AND DATE(ia.activity_time)=a.date AND a.date=?  group by a.user_id) as temp
-			where temp.ifloors<>temp.floors OR temp.isteps<> temp.steps";
+			where temp.ifloors<>temp.floors";
 			$query = $this->db->query($uids_sql, array($date_row->date));
 			foreach($query->result() as $row) {
 				echo "refresh ". $row->user_id;

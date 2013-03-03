@@ -231,7 +231,8 @@ class Challenge_model extends CI_Model{
 		INNER JOIN challengeparticipant 
 		ON challenge.id=challengeparticipant.challenge_id 
 		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
-		WHERE DATE(challengeparticipant.start_time) = ?";
+		WHERE DATE(challengeparticipant.start_time) = ?
+		AND challengeparticipant.inactive=0";
 
 		$query = $this->db->query($sql, array($house_id, $date));
 		$challenges = $query->result();
@@ -255,7 +256,8 @@ class Challenge_model extends CI_Model{
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
 		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
-		WHERE challengeparticipant.complete_time >= challengeparticipant.start_time
+		WHERE challengeparticipant.progress >= 1
+		AND challengeparticipant.inactive=0
 		GROUP BY challengeparticipant.challenge_id";
 
 		$query = $this->db->query($sql, array($house_id));
@@ -323,8 +325,9 @@ class Challenge_model extends CI_Model{
 
 				$progress = number_format(($value->total_time/60)/$c->sleep_value, 2);
 				$this->updateProgress($c->id, $progress, $date." 07:00:00", $date." 07:00:00", 0, "sleep", $c->thread_id);
-			} else if ($c->sleep_time != 0) {
-				$value = $this->Activity_model->getSleepStartTime($user_id, $c->sleep_time);
+			
+			} else if ($c->sleep_time != "00:00:00") {
+				$value = $this->Activity_model->getSleepStartTime($user_id, $c->sleep_time, $date);
 				if(empty($value)) {
 					$progress = 0;
 					$this->updateProgress($c->id, $progress, $date." 00:00:00",$date." 00:00:00", 0, "sleep", $c->thread_id);
@@ -378,7 +381,9 @@ class Challenge_model extends CI_Model{
 		INNER JOIN challengeparticipant
 		ON challenge.id=challengeparticipant.challenge_id
 		AND challengeparticipant.user_id= ?
-		WHERE challengeparticipant.complete_time >= challengeparticipant.start_time
+		AND challengeparticipant.inactive=0
+		WHERE challengeparticipant.progress >= 1
+
 		GROUP BY challengeparticipant.challenge_id";
 
 		$query = $this->db->query($sql, array($user_id));
@@ -389,7 +394,8 @@ class Challenge_model extends CI_Model{
 		$sql = "SELECT Count(cp.id) AS count
 		FROM   challengeparticipant AS cp
 		WHERE  cp.user_id = ?
-		AND cp.complete_time >= cp.start_time";
+		AND cp.inactive=0
+		AND cp.progress>=1";
 		return $this->db->query($sql,array($user_id))->row()->count;
 	}
 
@@ -407,54 +413,57 @@ class Challenge_model extends CI_Model{
 			FROM   user
 			WHERE  admin = 0
 			AND phantom = 0
-			AND staff = 0) AS temp ON cp.user_id = temp.id WHERE  cp.complete_time >= cp.start_time";
-$total = $this->db->query($sql2)->row()->total;
+			AND staff = 0) AS temp ON cp.user_id = temp.id 
+		WHERE  cp.progress>=1
+		AND cp.inactive=0";
+		$total = $this->db->query($sql2)->row()->total;
 
-return $total/$count;		
-}
-
-function getAllChallenges($user_id) {
-	$query = $this->db->get(Challenge_model::table_challenge);
-	$count_sql = "SELECT challenge_id,
-	Count(id) AS count
-	FROM   challengeparticipant
-	WHERE  user_id = ?
-	GROUP  BY challenge_id";
-	$counts = $this->db->query($count_sql, array($user_id))->result();
-	$participations = array();
-	foreach($counts as $c) {
-		$participations[$c->challenge_id]=$c->count;
+		return $total/$count;		
 	}
 
-	foreach($query->result() as $m) {
-		
-		if(empty($participations[$m->id]) || $participations[$m->id]<$m->quota) {
-			$m->quota_exceeded = 0;
-		} else {
-			$m->quota_exceeded = 1;
+	function getAllChallenges($user_id) {
+		$query = $this->db->get(Challenge_model::table_challenge);
+		$count_sql = "SELECT challenge_id,
+		Count(id) AS count
+		FROM   challengeparticipant
+		WHERE  user_id = ?
+		GROUP  BY challenge_id";
+		$counts = $this->db->query($count_sql, array($user_id))->result();
+		$participations = array();
+		foreach($counts as $c) {
+			$participations[$c->challenge_id]=$c->count;
 		}
 
-		
-	}
-	return $query->result();
-}
+		foreach($query->result() as $m) {
 
-function getParticipationCount($uid, $challenge_id) {
-	$sql = "SELECT
-	Count(id) AS count
-	FROM   challengeparticipant
-	WHERE  user_id = ?
-	AND challenge_id = ?
-	GROUP BY challenge_id";
-	$query = $this->db->query($sql, array($uid, $challenge_id));
+			if(empty($participations[$m->id]) || $participations[$m->id]<$m->quota) {
+				$m->quota_exceeded = 0;
+			} else {
+				$m->quota_exceeded = 1;
+			}
 
-	if($query->num_rows()>0) {
-		return $query->row()->count;
-	} else {
-		return 0;
+
+		}
+		return $query->result();
 	}
-	
-}
+
+	function getParticipationCount($uid, $challenge_id) {
+		$sql = "SELECT
+		Count(id) AS count
+		FROM   challengeparticipant
+		WHERE  user_id = ?
+		AND challenge_id = ?
+		AND inactive = 0
+		GROUP BY challenge_id";
+		$query = $this->db->query($sql, array($uid, $challenge_id));
+
+		if($query->num_rows()>0) {
+			return $query->row()->count;
+		} else {
+			return 0;
+		}
+
+	}
 
 function getLearderboard() {
 	$sql = "SELECT u.first_name  AS firstname,
@@ -471,7 +480,8 @@ function getLearderboard() {
 	challengeparticipant AS cp
 	WHERE  u.house_id = h.id
 	AND cp.user_id = u.id
-	AND cp.complete_time >= cp.start_time
+	AND cp.progress >= 1
+	AND cp.inactive = 0
 	AND u.phantom = 0
 	AND u.staff = 0
 	GROUP BY u.id
@@ -494,7 +504,8 @@ function getLearderboardByGender($gender) {
 	challengeparticipant AS cp
 	WHERE  u.house_id = h.id
 	AND cp.user_id = u.id
-	AND cp.complete_time >= cp.start_time
+	AND cp.progress >= 1
+	AND cp.inactive = 0
 	AND u.gender = ?
 	AND u.phantom = 0
 	AND u.staff = 0
@@ -519,7 +530,8 @@ function getTutorLearderboard() {
 	challengeparticipant AS cp
 	WHERE  u.house_id = h.id
 	AND cp.user_id = u.id
-	AND cp.complete_time >= cp.start_time
+	AND cp.progress >= 1
+ 	AND cp.inactive = 0
 	AND u.phantom = 0
 	AND u.hide_progress = 0
 	AND (u.staff = 1)
@@ -561,7 +573,8 @@ function getHouseLeaderboard() {
 	WHERE 
 	c.id = cp.challenge_id
 	AND cp.user_id = u.id
-	AND cp.complete_time >= cp.start_time
+	AND cp.progress >= 1 
+	AND cp.inactive = 0
 	AND u.phantom = 0
 	AND u.staff = 0
 	AND u.house_id > 0
@@ -630,7 +643,8 @@ function getTotalPoints($user_id) {
 			FROM   challengeparticipant AS cp
        LEFT JOIN challenge AS c
               ON cp.challenge_id = c.id
-		WHERE  cp.complete_time >= cp.start_time
+		WHERE  cp.progress>=1
+		AND cp.inactive = 0
    		AND cp.user_id = ?";
    	$query = $this->db->query($sql, array($user_id));
    	if($query->num_rows()>0) {
@@ -646,7 +660,8 @@ function getAveragePoints() {
         FROM   challengeparticipant AS cp
                LEFT JOIN challenge AS c
                       ON cp.challenge_id = c.id
-        WHERE  cp.complete_time >= cp.start_time
+        WHERE  cp.progress>=1
+           AND cp.inactive = 0
            AND cp.user_id IN (SELECT id
                               FROM   user
                               WHERE  phantom = 0)

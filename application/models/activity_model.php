@@ -110,10 +110,9 @@ class Activity_model extends CI_Model{
 		return $vars;
 	}
 
-	function getSleepStartTime($user_id, $start) {
-		$offset = strtotime("23:59:59") - strtotime($start);
-		$sql = "SELECT start_time FROM sleep WHERE total_time>=? AND start_time<=? AND user_id=?";
-		return $this->db->query($sql, array($offset, $start, $user_id))->row();
+	function getSleepStartTime($user_id, $start, $date) {
+		$sql = "SELECT start_time FROM sleep WHERE start_time<=? AND start_time>='12:00:00' AND user_id=? AND date = ?";
+		return $this->db->query($sql, array($start, $user_id, $date))->row();
 	}
 	function getActivityStats($user_id, $start, $end) {
 		$sql = "SELECT Sum(steps)     AS steps,

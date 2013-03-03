@@ -96,7 +96,8 @@ class Manage extends CI_Controller {
 		WHERE 
 		c.id = cp.challenge_id
 		AND cp.user_id = u.id
-		AND cp.complete_time > cp.start_time
+		AND cp.progress >= 1
+		AND cp.inactive = 0
 		AND u.staff = 0
 		AND u.id IN (select id from user where house_id = 0 or house_id IS NULL or first_name is null or last_name is null or email is null)
 		GROUP BY u.id
@@ -175,7 +176,8 @@ class Manage extends CI_Controller {
 		WHERE 
 		c.id = cp.challenge_id
 		AND cp.user_id = u.id
-		AND cp.complete_time > cp.start_time
+		AND cp.inactive = 0
+		AND cp.progress >= 1
 		AND u.staff = 0
 		AND u.house_id = ?
 		GROUP BY u.id

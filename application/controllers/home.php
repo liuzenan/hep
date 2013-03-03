@@ -195,7 +195,7 @@ class Home extends CI_Controller{
 		$isleader = $user->leader;
 		//$isadmin = $user->admin;
 		$isphantom = $user->phantom;
-
+		$data['fitbit_id'] = $user->fitbit_id;
 
 
 		$data['avatar'] = $avatar;

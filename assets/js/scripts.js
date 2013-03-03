@@ -117,7 +117,8 @@ jQuery(document).ready(function($) {
 		}
 		
 	});
-	$('#challengeModal').ready(function() {
+	
+	$('#verifydata').click(function(e) {
 		console.log("pull data from fitbit")
 		$.ajax({
 				type:'POST',
