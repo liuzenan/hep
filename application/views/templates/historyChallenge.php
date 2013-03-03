@@ -18,7 +18,7 @@
 										<div class="bar" style="width:<?php echo floor($challenge->progress*100) ?>%"></div>
 									</div>		
 								<?php else: ?>
-									<h3>Completed</h3>
+									<h5>Completed</h5>
 								<?php endif ?>
 							</div>
 						</div>
