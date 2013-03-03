@@ -541,6 +541,34 @@ function getTutorLearderboard() {
 	return $query->result();
 }
 
+function getPersonalAverage($user_id) {
+	$point_sql = "select sum(c.points) as total_points from challengeparticipant as cp, challenge as c where cp.progress>=1 and cp.inactive=0 and cp.challenge_id = c.id and cp.user_id=?";
+	$point_query = $this->db->query($point_sql, array($user_id));
+
+	$date_sql = "select count(distinct DATE(cp.start_time)) as active_date from challengeparticipant as cp where cp.inactive=0 and cp.user_id=?";
+	$date_query = $this->db->query($date_sql, array($user_id));
+
+	$point = $point_query->row()->total_points;
+	$dates = $date_query->row()->active_date;
+	if($dates == 0) {
+		return 0;
+	} else {
+		return $point/$dates;
+	}
+}
+
+function getHouseScore($house_id) {
+	$sql = "select distinct id from user where house_id=?";
+	$query = $this->db->query($sql, array($house_id));
+
+	$total = 0;
+	foreach($query->result() as $row) {
+		$user_id = $row->id;
+		$total += $this->getPersonalAverage($user_id);
+	}
+	return $total;
+}
+
 function getHouseLeaderboard() {
 
 	$this->db->query('SET GLOBAL group_concat_max_len=15000');
@@ -564,6 +592,8 @@ function getHouseLeaderboard() {
 	";
 	$houses = $this->db->query($house_sql)->result();
 
+
+	/*
 	$rank_sql = "SELECT
 	u.house_id    AS house_id,
 	sum(c.points)  AS score
@@ -581,20 +611,29 @@ function getHouseLeaderboard() {
 	GROUP BY u.house_id
 	ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
 
+
 	$ranks = $this->db->query($rank_sql)->result();
+	*/
 	$res = array();
 
 	$res1 = array(); $res2 = array();
+	/*
 	foreach($ranks as $r) {
+		$house_id = $r->house_id;
+
 		$res1[$r->house_id] = $r->score;
-	}
+	}*/
 	foreach($houses as $h) {
-		$h->score = empty($res1[$h->house_id]) ? 0 : $res1[$h->house_id];
-		$h->average = number_format($h->score/$h->user_num,2);
-		$res2[$h->house_id] = $h;
-		$res1[$h->house_id] = $h;
+		$h->score = $this->getHouseScore($h->house_id);
+		$h->average = number_format((float)$h->score/$h->user_num,2);
+		$h->score = number_format($h->score, 2);
+
+		//echo $h->score." ".$h->user_num." ".$h->average." ".$h->score/$h->user_num.'<br>';
+		$res[$h->average] = $h;
+		//$res1[$h->house_id] = $h;
 	}
-	return $res1;
+	krsort($res);
+	return $res;
 }
 
 function getHouseRankAndPoints($house_id) {
