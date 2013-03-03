@@ -35,7 +35,7 @@ class Mail_model extends CI_Model{
 	function sendChallengeCompletionMessage($user, $title, $time) {
 		if($user->challenge_email_unsub == 0) {
 			$message = "Hello %s, <br><br>
-			Congradulation! You just completed the challenge %s at %s.<br><br><br>
+			Congrats! You have just completed the challenge <b>%s</b> at %s.<br><br><br>
 			";
 			$msg = sprintf($message, $user->first_name." ".$user->last_name, $title, $time);
 
@@ -90,7 +90,7 @@ class Mail_model extends CI_Model{
 		<u>Today you are working on the following challenges</u>:
 		<br>%s<br><br>
 
-		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%dK</b> floors, <b>%d kilometers</b> of movement, <b>%s hours</b> of sleep recorded with the system.  <br>
+		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%dK</b> floors, <b>%d kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
 		That's awesome! Thanks! :)
 		<br><br>";
 		$ci =& get_instance();
