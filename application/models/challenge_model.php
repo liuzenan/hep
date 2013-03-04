@@ -323,7 +323,8 @@ class Challenge_model extends CI_Model{
 			} else if ($c->sleep_value != 0) {
 				$value = $this->Activity_model->getSleepData($user_id, $date);
 
-				$progress = number_format(($value->total_time/60)/$c->sleep_value, 2);
+				//time asleep * 110%
+				$progress = number_format((($value->total_time/60)/$c->sleep_value)*1.1, 2);
 				$this->updateProgress($c->id, $progress, $date." 07:00:00", $date." 07:00:00", 0, "sleep", $c->thread_id);
 			
 			} else if ($c->sleep_time != "00:00:00") {
@@ -454,6 +455,7 @@ class Challenge_model extends CI_Model{
 		WHERE  user_id = ?
 		AND challenge_id = ?
 		AND inactive = 0
+		AND progress >= 1
 		GROUP BY challenge_id";
 		$query = $this->db->query($sql, array($uid, $challenge_id));
 

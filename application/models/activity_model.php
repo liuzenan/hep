@@ -286,7 +286,7 @@ class Activity_model extends CI_Model{
 				$intradaySteps = $steps->{'activities-steps-intraday'};
 				$intradayFloors = $floors->{'activities-floors-intraday'};
 				$intradayElevation = $elevation->{'activities-elevation-intraday'};
-
+				//var_dump($steps);
 				$intradayActivityData = array();
 				$minute = 0;
 				foreach($intradayCalories->dataset->intradayData as $value){
@@ -335,6 +335,7 @@ class Activity_model extends CI_Model{
 					}
 					$minute++;
 				}
+				//var_dump($intradayActivityData);
 				foreach ($intradayActivityData as $key => $value) {
 					# code...
 					$sql = "INSERT INTO intradayactivity(user_id, activity_time, steps, calories, calories_level, floors, elevation)
