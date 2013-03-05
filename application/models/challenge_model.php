@@ -595,7 +595,7 @@ function getHouseLeaderboard() {
 	$houses = $this->db->query($house_sql)->result();
 
 
-	/*
+	
 	$rank_sql = "SELECT
 	u.house_id    AS house_id,
 	sum(c.points)  AS score
@@ -615,20 +615,22 @@ function getHouseLeaderboard() {
 
 
 	$ranks = $this->db->query($rank_sql)->result();
-	*/
+	
 	$res = array();
 
 	$res1 = array(); $res2 = array();
-	/*
+	
 	foreach($ranks as $r) {
 		$house_id = $r->house_id;
 
 		$res1[$r->house_id] = $r->score;
-	}*/
+	}
 	foreach($houses as $h) {
-		$h->score = $this->getHouseScore($h->house_id);
-		$h->average = number_format((float)$h->score/$h->user_num,2);
-		$h->score = number_format($h->score, 2);
+		$h->score = $res1[$h->house_id];
+		$h->sum_person_days = $this->getPersonDays($house_id);
+		//$h->score = $this->getHouseScore($h->house_id);
+		$h->average = number_format((float)$h->score/$h->sum_person_days,2);
+		$h->score = number_format($h->score, 0);
 
 		//echo $h->score." ".$h->user_num." ".$h->average." ".$h->score/$h->user_num.'<br>';
 		$res[$h->average] = $h;
@@ -636,6 +638,13 @@ function getHouseLeaderboard() {
 	}
 	krsort($res);
 	return $res;
+}
+
+function getPersonDays($house_id) {
+	$sql = "select sum(dates) as total_dates from (select count(distinct DATE(start_time)) as dates, user_id from challengeparticipant where user_id IN (select id from user where house_id = ? and phantom=0) and inactive=0 group by user_id) as temp";
+	$query = $this->db->query($sql, array($house_id));
+	return $query->row()->total_dates;
+
 }
 
 function getHouseRankAndPoints($house_id) {
