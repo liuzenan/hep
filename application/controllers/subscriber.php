@@ -108,13 +108,82 @@ class Subscriber extends CI_Controller {
 			(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
 			a.steps, a.user_id from intradayactivity as ia, activity as a 
 			where ia.user_id=a.user_id AND DATE(ia.activity_time)=a.date AND a.date=?  group by a.user_id) as temp
-			where temp.ifloors<>temp.floors";
+			where temp.ifloors<temp.floors OR temp.isteps<temp.steps";
 			$query = $this->db->query($uids_sql, array($date_row->date));
 			foreach($query->result() as $row) {
 				echo "refresh ". $row->user_id;
 				$this->getActivities($row->user_id, $date_row->date);
 			}
 		}
+
+	}
+
+	public function synchronizeActivityData() {
+		$dates_sql = "SELECT DISTINCT date from activity where date >= '2013-02-13' ORDER BY date DESC";
+		$dquery = $this->db->query($dates_sql);
+		foreach($dquery->result() as $date_row) {
+			$date = $date_row->date;
+			$uids_sql = "
+			SELECT temp.* from
+			(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
+			a.steps, a.user_id from intradayactivity as ia, activity as a 
+			WHERE ia.user_id=a.user_id AND DATE(ia.activity_time)=a.date AND a.date=?  group by a.user_id) as temp
+			WHERE temp.ifloors<temp.floors OR temp.isteps<temp.steps";
+			$query = $this->db->query($uids_sql, array($date));
+			foreach($query->result() as $row) {
+				$delta_floor = $row->floors - $row->ifloors;
+				$delta_steps = $row->steps - $row->isteps;
+				$user_id = $row->user_id;
+				echo "increase ".$user_id. " floor ". $delta_floor . " step ". $delta_steps ." ". $date."<br>";
+
+				if($delta_floor > 0) {
+					$this->synchronizeFloor($user_id, $date, $delta_floor);
+				}
+				if($delta_steps > 0) {
+					$this->synchronizeSteps($user_id, $date, $delta_steps);
+				}
+				$this->updateProgress($user_id, $date);
+
+			}
+		}	
+	}
+
+	public function synchronizeFloor($user_id, $date, $delta) {
+		$sql1 = "select MAX(activity_time) as time, floors from intradayactivity where user_id = ? and DATE(activity_time)=? and floors>0";
+		$query1 = $this->db->query($sql1, array($user_id, $date));
+		$row1 = $query1->row();
+		$time = $row1->time;
+		if(empty($row1)) {
+			$sql1 = "select MAX(activity_time) as time, floors from intradayactivity where user_id = ? and DATE(activity_time)=?";
+			$query1 = $this->db->query($sql1, array($user_id, $date));
+			$row1 = $query1->row();
+		}
+
+			$floors = $row1->floors;
+			$sql2 = "update intradayactivity set floors = floors + ? where user_id = ? and activity_time=?";
+			$this->db->query($sql2, array($delta, $user_id, $time));
+			echo "increase floor value for ".$user_id. " at ". $time . " by ".($floors+$delta);
+
+	}
+
+	public function synchronizeSteps($user_id, $date, $delta) {
+		$sql1 = "select MAX(activity_time) as time, steps from intradayactivity where user_id = ? and DATE(activity_time)=? and steps>0";
+		$query1 = $this->db->query($sql1, array($user_id, $date));
+		$row1 = $query1->row();
+		$time = $row1->time;
+
+		if(empty($time)) {
+			$sql2 = "select MAX(activity_time) as time from intradayactivity where user_id = ? and DATE(activity_time)=?";
+			$query2 = $this->db->query($sql2, array($user_id, $date));
+			$row2 = $query2->row();
+			$time = $row2->time;
+
+		}
+			$sql2 = "update intradayactivity set steps=steps+? where user_id = ? and activity_time=?";
+			$this->db->query($sql2, array($delta, $user_id, $time));
+			echo "increase step value for ".$user_id. " at ". $time ." by " .($delta);
+
+		
 
 	}
 
