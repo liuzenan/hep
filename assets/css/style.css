@@ -837,3 +837,7 @@ width: 96%;
 .history-challenge-item .progress{
 	opacity: 0.8;
 }
+
+.refresh-challenge-button{
+	margin-right: 10px;
+}

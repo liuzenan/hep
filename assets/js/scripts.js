@@ -11,6 +11,10 @@ jQuery(document).ready(function($) {
 		animation: false,
 		trigger: 'hover'
 	});
+
+	$(".refresh-challenge-button").click(function(event){
+		
+	});
 	//post message
 	$(".postMessage").click(function(event){
 		var currentBtn = $(this);

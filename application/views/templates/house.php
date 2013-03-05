@@ -7,9 +7,9 @@
 					<div class="span1 leaderboard-house-rank"><?php echo $n ?></div>
 					<div class="span3 leaderboard-house-content">
 						<strong>House <?php echo $row->house_name ?></strong><br>
-						<strong class="muted">Weighted Personal Average <?php echo $row->average ?></strong><br>
-						<small>Total Member: <?php echo $row->user_num ?></small><br>
-						<small>Total Personal Average: <?php echo $row->score ?> </small>
+						<strong class="muted">Daily average: <?php echo $row->average ?></strong><br>
+						<small>Members: <?php echo $row->user_num ?></small><br>
+						<small>Total points: <?php echo $row->score ?> </small>
 					</div>
 					<div class="span8 leaderboard-house-profile-pic">
 					<?php $fitbit_ids = explode(",", $row->fitbit_ids); $usernames = explode(",", $row->usernames); $fbs = explode(",", $row->fbs); $avatars = explode(",", $row->avatars);  $names=explode(",", $row->names); for($i=count($avatars)-1; $i>=0; $i--): ?>

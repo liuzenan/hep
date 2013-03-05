@@ -1,6 +1,6 @@
 <div class="row-fluid current-challenges">
 	<div class="span12">
-		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="expandbtn pull-right"><i class="icon-chevron-down icon-large"></i></a></p>
+		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="expandbtn pull-right"><i class="icon-chevron-down icon-large"></i></a><a href="javascript:void(0);" class="refresh-challenge-button pull-right"><i class="icon-refresh icon-large"></i></a></p>
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
