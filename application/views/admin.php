@@ -7,8 +7,6 @@
 		<?php endfor ?>
 		<li class="<?php if($house_id==-1) echo "active" ?>"><a href="<?php echo base_url() . "manage/house/-1"; ?>">Tutor</a></li>
 		<li class="<?php if($house_id==0) echo "active" ?>"><a href="<?php echo base_url() . "manage/invalid"; ?>">Invalid</a></li>
-
-
 		</ul>
 
 
