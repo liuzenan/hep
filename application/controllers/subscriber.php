@@ -52,7 +52,7 @@ class Subscriber extends CI_Controller {
 		}
 		echo json_encode($msg);
 	}
-	public function activities(){
+	public function activities() {
 		try {
 			$notifications = $this->getNotification();
 			if($notifications){
@@ -69,8 +69,7 @@ class Subscriber extends CI_Controller {
 			}
 		} catch (Exception $e) {
 			
-		}
-		
+		}	
 	}
 
 	public function updateProgress($user_id, $date) {
