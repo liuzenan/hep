@@ -306,6 +306,7 @@ class Challenge_model extends CI_Model{
 				continue;
 			}
 			$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
+			var_dump($status)
 			if($c->steps_value != 0 && $c->floor_value !=0) {
 				$progress = 0.5 * ($status->steps/$c->steps_value) +
 				0.5 * ($status->floors/$c->floor_value);
