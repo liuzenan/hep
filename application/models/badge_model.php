@@ -10,6 +10,13 @@ class Badge_model extends CI_Model{
 		return $query->row();
 	}
 
+	function getAllBadges()
+	{
+		# code...
+		$query = $this->db->query("SELECT * FROM badge");
+		return $query->result();
+	}
+
 	function getBadges($user_id) {
 		$sql = "SELECT b.*, ub.*
 		FROM badge AS b
