@@ -13,8 +13,6 @@ class Challenge_model extends CI_Model{
 		parent::__construct();
 	}
 
-
-
 	function loadAvailableChallanges($user_id, $today, $tomorrow) {
 
 		$challenges = $this->getAllChallenges($user_id);
@@ -306,7 +304,6 @@ class Challenge_model extends CI_Model{
 				continue;
 			}
 			$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
-			var_dump($status)
 			if($c->steps_value != 0 && $c->floor_value !=0) {
 				$progress = 0.5 * ($status->steps/$c->steps_value) +
 				0.5 * ($status->floors/$c->floor_value);
@@ -627,15 +624,17 @@ function getHouseLeaderboard() {
 		$res1[$r->house_id] = $r->score;
 	}
 	foreach($houses as $h) {
-		$h->score = $res1[$h->house_id];
-		$h->sum_person_days = $this->getPersonDays($house_id);
-		//$h->score = $this->getHouseScore($h->house_id);
-		$h->average = number_format((float)$h->score/$h->sum_person_days,2);
-		$h->score = number_format($h->score, 0);
+		if (!empty($res1[$h->house_id])) {
+			$h->score = $res1[$h->house_id];
+			$h->sum_person_days = $this->getPersonDays($house_id);
+			$h->average = number_format((float)$h->score/$h->sum_person_days,2);
+			$h->score = number_format($h->score, 0);
 
-		//echo $h->score." ".$h->user_num." ".$h->average." ".$h->score/$h->user_num.'<br>';
-		$res[$h->average] = $h;
-		//$res1[$h->house_id] = $h;
+			//echo $h->score." ".$h->user_num." ".$h->average." ".$h->score/$h->user_num.'<br>';
+			$res[$h->average] = $h;
+			//$res1[$h->house_id] = $h;
+		}
+
 	}
 	krsort($res);
 	return $res;

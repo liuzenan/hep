@@ -204,6 +204,24 @@ class Subscriber extends CI_Controller {
 
 	}
 
+	public function getCurrentUserActivities(){
+		$user = $this->session->userdata("user_id");
+		$date = $this->input->post("date");
+		if (!empty($user) && !empty($date)) {
+			# code...
+			$date = date('Y-m-d', floor($date/1000));
+			$this->getActivities($user, $date);
+			$msg['success'] = true;
+			echo json_encode($msg);
+			return;
+		} else {
+			$msg['success'] = false;
+			echo json_encode($msg);
+			return;
+		}
+
+	}
+
 	public function getSleep($user_id, $date){
 		$keypair = $this->getUserKeyPair($user_id);
 		if($keypair){

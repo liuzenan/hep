@@ -13,12 +13,10 @@
 						<?php foreach ($value as $challenge): ?>
 						<div class="span3">
 							<div class="history-challenge-item" data-toggle="popover" data-placement="top" data-content="<?php echo $challenge->description ?>" data-original-title="<?php echo $challenge->title ?>" style="background-image:url(<?php echo $challenge->badge_pic?>);">
-								<?php if ($challenge->progress<1): ?>
-									<div class="progress progress-warning progress-striped">
-										<div class="bar" style="width:<?php echo floor($challenge->progress*100) ?>%"></div>
-									</div>		
+								<?php if ($challenge->progress>=1): ?>
+									<h3 class="complete"><i class="icon-ok icon-2x"></i></h3>
 								<?php else: ?>
-									<h5>Completed</h5>
+									<h3 class="incomplete"><i class="icon-remove icon-2x"></i></h3>
 								<?php endif ?>
 							</div>
 						</div>

@@ -12,7 +12,7 @@ class Badges extends CI_Controller {
 		}
 	}
 
-	public index()
+	public function index()
 	{
 		$badges = $this->Badge_model->getAllBadges();
 		$data['badges'] = $badges;
@@ -20,7 +20,7 @@ class Badges extends CI_Controller {
 	}
 
 	private function loadPage($data){
-		$data['active'] = 'house';
+		$data['active'] = 'badges';
 		$data['displayName'] = $this->session->userdata('name');
 		$data['avatar'] = $this->session->userdata('avatar');
 		$data['isAdmin'] = $this->session->userdata('isadmin');

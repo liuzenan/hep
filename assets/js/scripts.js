@@ -1,5 +1,6 @@
 var base_url = 'http://hep.d2.comp.nus.edu.sg/';
 var game_start_date = new Date(2013, 1, 28, 0);
+var today = new Date();
 
 jQuery(document).ready(function($) {
 
@@ -13,7 +14,26 @@ jQuery(document).ready(function($) {
 	});
 
 	$(".refresh-challenge-button").click(function(event){
-		
+		console.log("refesh");
+		var currentBtn = $(this);
+		currentBtn.attr("disabled","disabled");
+		currentBtn.addClass("icon-spin");
+		$.ajax({
+			type:'POST',
+			url:base_url+'subscriber/getCurrentUserActivities',
+			dataType:'json',
+			data:{
+				date: today.getTime()
+			}
+		}).done(function(message){
+			if (message.success) {
+				alert("Challenge progress updates successfully");
+			} else {
+				alert("Challenge progress cannot be updated, please refresh page.");
+			}
+			currentBtn.removeClass("icon-spin");
+			currentBtn.removeAttr("disabled");
+		});
 	});
 	//post message
 	$(".postMessage").click(function(event){

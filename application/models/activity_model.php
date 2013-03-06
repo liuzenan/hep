@@ -290,9 +290,10 @@ class Activity_model extends CI_Model{
 				$intradayActivityData = array();
 				$minute = 0;
 				foreach($intradayCalories->dataset->intradayData as $value){
-
+					$currentTime = (string) $value->time;
+					$intradayActivityData[$currentTime]['calories'] = 0;
+					$intradayActivityData[$currentTime]['level'] = 0;
 					if($minute%10 == 0) {
-						$currentTime = (string) $value->time;
 						$intradayActivityData[$currentTime]['calories'] = $value->value;
 						$intradayActivityData[$currentTime]['level'] = $value->level;
 					}else {
@@ -303,8 +304,10 @@ class Activity_model extends CI_Model{
 				}
 				$minute = 0;
 				foreach($intradaySteps->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					$intradayActivityData[$currentTime]['steps'] = 0;
 					if($minute%10 == 0) {
-						$currentTime = (string) $value->time;
+						
 						$intradayActivityData[$currentTime]['steps'] = $value->value;
 					}else {
 						$intradayActivityData[$currentTime]['steps'] += $value->value; 
@@ -315,8 +318,11 @@ class Activity_model extends CI_Model{
 				$minute = 0;
 
 				foreach($intradayFloors->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					$intradayActivityData[$currentTime]['floors'] = 0;
+
 					if($minute%10 == 0) {
-						$currentTime = (string) $value->time;
+						
 						$intradayActivityData[$currentTime]['floors'] = $value->value;
 					}else {
 						$intradayActivityData[$currentTime]['floors'] += $value->value;
@@ -326,8 +332,10 @@ class Activity_model extends CI_Model{
 				$minute = 0;
 
 				foreach($intradayElevation->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					$intradayActivityData[$currentTime]['elevation'] = 0;
 					if($minute%10 == 0) {
-						$currentTime = (string) $value->time;
+						
 						$intradayActivityData[$currentTime]['elevation'] = $value->value;
 
 					} else {
@@ -472,7 +480,7 @@ function sync_activity($basedate, $period, $user_id=NULL, $keypair=NULL) {
 
 				//insert into database
 		foreach($activitiesData as $key=>$value){
-			var_dump($value);
+			//var_dump($value);
 			$sql = "INSERT INTO activity(user_id, date, steps, floors, calories, active_score, distance, elevation, min_sedentary,
 					min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
 				VALUES (" . $user_id . ", '" . $key . "', "

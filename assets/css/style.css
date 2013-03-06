@@ -298,7 +298,6 @@ span.activityIcon.floors{
 .maintitle{
 	font-family: "Grandesign Neue Serif", serif;
 	text-align: center;
-	margin-top: 100px;
 	font-weight: 400;
 }
 
@@ -822,11 +821,11 @@ width: 96%;
 
 .history-challenge-item
 {
-	height: 60px;
-	width: 80px;
+	height: 80px;
+	width: 65px;
 	background-size: 100px 100px;
 	margin-top: -5px;
-	padding: 40px 10px 0 10px;
+	padding: 20px 10px 0 25px;
 	opacity: 0.6;
 }
 
@@ -834,10 +833,26 @@ width: 96%;
 	opacity: 1;
 }
 
-.history-challenge-item .progress{
-	opacity: 0.8;
+.history-challenge-item .complete{
+	color: darkolivegreen;
+	text-shadow: 2px 2px 0px white;
+}
+
+.history-challenge-item .incomplete{
+	color: indianred;
+	text-shadow: 2px 2px 0px white;
 }
 
 .refresh-challenge-button{
 	margin-right: 10px;
+}
+
+.badges-list.thumbnails>div
+{
+	margin-bottom: 20px;
+}
+
+.badges-list.thumbnails .badge-item
+{
+	height: 210px;
 }

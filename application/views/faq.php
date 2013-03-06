@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Fitbit App</title>
-  <!-- Bootstrap -->
-  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-  <div id="fb-root"></div>
-  <div class="wrapper welcome">
-    <div class="container">
+<div class="row-fluid">
+  <?php $this->load->view('templates/sidebar'); ?>
+  <div class="span10">
+    <div class="row-fluid">
       <h3 class="maintitle">FAQ</h3>
-      <div class="">
         <ol>
           <li><b> Unable to login from fitbit </b><br>
             Try to use another browser or use facebook login.
@@ -39,12 +30,7 @@
           <li><b> If I sync data only once a week, can I still get the challenges in the past?</b> <br>
               Yes, as long as your data is recorded in the device. We can backtrack all past challenges.
           </li>
-          
         </ol>
-      </div>  
-    </div>  
-  </div>
-  <script src="/assets/js/jquery-1.9.1.min.js"></script>
-  <script src="/assets/js/bootstrap.min.js"></script>
-</body>
-</html>
+    </div>
+    </div> 
+  </div> 
