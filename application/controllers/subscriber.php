@@ -73,7 +73,6 @@ class Subscriber extends CI_Controller {
 	}
 
 	public function updateProgress($user_id, $date) {
-		
 		$this->Challenge_model->updateActivityProgress($user_id, $date);
 	}
 
@@ -186,6 +185,10 @@ class Subscriber extends CI_Controller {
 
 	}
 
+	public function test(){
+		echo "hello world";
+	}
+
 	public function getActivities($user_id, $date){
 
 		$keypair = $this->getUserKeyPair($user_id);
@@ -201,25 +204,26 @@ class Subscriber extends CI_Controller {
 				
 			}
 		}
-
 	}
 
-	public function getCurrentUserActivities(){
-		$user = $this->session->userdata("user_id");
-		$date = $this->input->post("date");
-		if (!empty($user) && !empty($date)) {
-			# code...
-			$date = date('Y-m-d', floor($date/1000));
-			$this->getActivities($user, $date);
-			$msg['success'] = true;
-			echo json_encode($msg);
-			return;
-		} else {
-			$msg['success'] = false;
-			echo json_encode($msg);
-			return;
-		}
+	public function updateAllUsers($date){
+		$query = $this->db->query("SELECT id from user");
+		foreach ($query->result() as $value) {
+			$user_id = $value->id;
+			$keypair = $this->getUserKeyPair($user_id);
+			if($keypair){
+				try {
+					$this->load->model('Activity_model','activities');
+					$this->activities->insert_intraday_activity($user_id, $date, $keypair);
+					$this->activities->sync_activity($date, '1d', $user_id, $keypair);
+					$this->updateProgress($user_id, $date);
+					echo "updated for user". $user_id ."\n";
+				} catch (Exception $e) {
+					echo "error for user". $user_id ."\n";
+				}
+			}
 
+		}
 	}
 
 	public function getSleep($user_id, $date){

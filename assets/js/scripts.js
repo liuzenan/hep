@@ -19,15 +19,12 @@ jQuery(document).ready(function($) {
 		currentBtn.attr("disabled","disabled");
 		currentBtn.addClass("icon-spin");
 		$.ajax({
-			type:'POST',
-			url:base_url+'subscriber/getCurrentUserActivities',
-			dataType:'json',
-			data:{
-				date: today.getTime()
-			}
+			type:'GET',
+			url:base_url+'subscriber/refresh',
+			dataType:'json'
 		}).done(function(message){
 			if (message.success) {
-				alert("Challenge progress updates successfully");
+				alert("Challenge progress updated successfully");
 			} else {
 				alert("Challenge progress cannot be updated, please refresh page.");
 			}
@@ -260,7 +257,7 @@ jQuery(document).ready(function($) {
 			if(currentChallenge.joined_today==1){
 				$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
 			} else {
-				if (currentChallenge.quota_exceeded==1) {
+				if (currentChallenge.quota_exceeded==1 || ((today.getDay() == 6 ||today.getDay() == 0) && data.type == 0)) {
 					$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeNow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+currentChallenge.points+'</div></div></a>');
 				} else {
 					$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeNow enabled" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_today +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id +'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
@@ -279,9 +276,8 @@ $(".tomorrow .challenge-type-"+i+" a").bind('click', {type:i},function(event){
 		var currentChallenge = allChallenges[data.type][j];
 		if(currentChallenge.joined_tomorrow==1){
 			$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeTomorrow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id+'"><div class="row-fluid"><div class="span1"><i class="icon-ok-sign"></i></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
-
 		} else {
-			if (currentChallenge.quota_exceeded==1) {
+			if (currentChallenge.quota_exceeded==1 || ((today.getDay() == 5 || today.getDay() == 6) && data.type == 0)) {
 				$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeTomorrow" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id+'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');
 			} else {
 				$("#challengeModal .challenge-wrapper").append('<a class="joinChallengeTomorrow enabled" href="javascript:void(0);" data-cpid="'+ currentChallenge.cp_id_tomorrow +'" data-user-id="'+ currentChallenge.user_id +'" data-challenge-id="'+ currentChallenge.id+'"><div class="row-fluid"><div class="span1"></div><div class="span4 challenge-modal-title">'+ currentChallenge.title +'</div><div class="span6 challenge-modal-description">'+ currentChallenge.description +'</div><div class="span1 challenge-modal-points">'+ currentChallenge.points +'</div></div></a>');

@@ -157,13 +157,15 @@ class Challenge_model extends CI_Model{
 		$nextLevel = array(1=>2, 2=>3, 7=>8, 8=>9, 13=>14, 14=>15);
 		foreach($uids as $u) {
 			$uid = $u->user_id;
-			$sql2="SELECT distinct challenge_id
+			$sql2="SELECT distinct challenge_id, category
 			FROM   challengeparticipant
 			WHERE  DATE(start_time) = ?
 			AND user_id=?";
 			$cids = $this->db->query($sql2, array($ystd, $uid))->result();
+
 			foreach($cids as $c) {
 				$cid = $c->challenge_id;
+				$category = $c->category;
 				$new = $this->loadChallenge($cid);
 				$count = $this->Challenge_model->getParticipationCount($uid, $new->id);
 				if($count>= ($new->quota)) {
@@ -177,7 +179,7 @@ class Challenge_model extends CI_Model{
 					$start = $now." 00:00:00";
 					$end = $now." 23:59:59";
 				}
-				$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
+				$this->joinChallenge($uid, $new->id, $new->category, $start, $end);				
 			}
 		}
 
@@ -545,8 +547,8 @@ function getPersonalAverage($user_id) {
 	$point_sql = "select sum(c.points) as total_points from challengeparticipant as cp, challenge as c where cp.progress>=1 and cp.inactive=0 and cp.challenge_id = c.id and cp.user_id=?";
 	$point_query = $this->db->query($point_sql, array($user_id));
 
-	$date_sql = "select count(distinct DATE(cp.start_time)) as active_date from challengeparticipant as cp where cp.inactive=0 and cp.user_id=?";
-	$date_query = $this->db->query($date_sql, array($user_id));
+	$date_sql = "select count(distinct DATE(cp.start_time)) as active_date from challengeparticipant as cp where cp.inactive=0 and cp.user_id=? and cp.start_time<?";
+	$date_query = $this->db->query($date_sql, array($user_id, date("Y-m-d H:i:s")));
 
 	$point = $point_query->row()->total_points;
 	$dates = $date_query->row()->active_date;
@@ -641,8 +643,8 @@ function getHouseLeaderboard() {
 }
 
 function getPersonDays($house_id) {
-	$sql = "select sum(dates) as total_dates from (select count(distinct DATE(start_time)) as dates, user_id from challengeparticipant where user_id IN (select id from user where house_id = ? and phantom=0) and inactive=0 group by user_id) as temp";
-	$query = $this->db->query($sql, array($house_id));
+	$sql = "select sum(dates) as total_dates from (select count(distinct DATE(start_time)) as dates, user_id from challengeparticipant where user_id IN (select id from user where house_id = ? and phantom=0) and inactive=0 and start_time < ? group by user_id) as temp";
+	$query = $this->db->query($sql, array($house_id, date("Y-m-d H:i:s")));
 	return $query->row()->total_dates;
 
 }
