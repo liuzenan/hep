@@ -177,7 +177,10 @@ class Challenges extends CI_Controller {
 			$msg = $this->joinChallenge($uid, $old_cpid, $challenge_id, $this->date_today);
 
 			//auto join tomorrow
-			$this->joinChallenge($uid, -1, $challenge_id, $this->date_tomorrow);
+			if (intval(date("N"))<5) {
+				$this->joinChallenge($uid, -1, $challenge_id, $this->date_tomorrow);
+			}
+			
 
 		}
 		echo json_encode($msg);

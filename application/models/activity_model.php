@@ -225,7 +225,7 @@ class Activity_model extends CI_Model{
 
 		if($query2->num_rows()>0){
 			foreach($query2->result() as $row){
-				if(empty($resultSet['elevation'][$row->date])) {
+				if(empty($resultSet['steps'][$row->date])) {
 					$resultSet['steps'][$row->date] = 0;
 					$resultSet['floors'][$row->date] = 0;
 					$resultSet['calories'][$row->date] = 0;
@@ -274,6 +274,9 @@ class Activity_model extends CI_Model{
 
 
 	function insert_intraday_activity($user_id, $date, $keypair){
+		// echo "insert intraday activity\n";
+		// var_dump($user_id);
+		// var_dump($date);
 		try {
 			if($keypair){
 				$this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
@@ -343,9 +346,13 @@ class Activity_model extends CI_Model{
 					}
 					$minute++;
 				}
-				//var_dump($intradayActivityData);
+				// var_dump($intradayActivityData);
 				foreach ($intradayActivityData as $key => $value) {
 					# code...
+
+					if (empty($value['steps']) || empty($value['calories']) || empty($value['level']) || empty($value['floors']) || empty($value['elevation'])) {
+						# code...
+					} else {
 					$sql = "INSERT INTO intradayactivity(user_id, activity_time, steps, calories, calories_level, floors, elevation)
 					VALUES (". $user_id .", '". $date . " " . $key ."', ". $value['steps'] .", ".
 						$value['calories'] .", ". $value['level'] .", " 
@@ -353,7 +360,9 @@ class Activity_model extends CI_Model{
 						steps = ".$value['steps'].", calories = ".$value['calories'].", calories_level= ". $value['level'].
 						", floors=".$value['floors'].",elevation=".$value['elevation'];
 
-$this->db->query($sql);					
+$this->db->query($sql);							
+					}
+	
 }
 }else{
 
@@ -386,6 +395,7 @@ WHERE  y.running_total >= ?
 ORDER  BY y.activity_time
 LIMIT  1";
 $sql = sprintf($sql, $type, $type, $type);
+
 $result = $this->db->query($sql, array($user_id, $end, $start, $end, $start, $threshold));
 if($result->num_rows()>0) {
 	return $result->row()->activity_time;
@@ -393,6 +403,7 @@ if($result->num_rows()>0) {
 	return $end;
 }
 }
+
 
 function sync_activity($basedate, $period, $user_id=NULL, $keypair=NULL) {
 

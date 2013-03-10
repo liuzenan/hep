@@ -13,24 +13,32 @@ jQuery(document).ready(function($) {
 		trigger: 'hover'
 	});
 
-	$(".refresh-challenge-button").click(function(event){
+	$(".date-picker").datepicker();
+	$(".refresh-challenge-button.enabled").on("click",function(event){
 		console.log("refesh");
 		var currentBtn = $(this);
-		currentBtn.attr("disabled","disabled");
-		currentBtn.addClass("icon-spin");
-		$.ajax({
-			type:'GET',
-			url:base_url+'subscriber/refresh',
-			dataType:'json'
-		}).done(function(message){
-			if (message.success) {
-				alert("Challenge progress updated successfully");
-			} else {
-				alert("Challenge progress cannot be updated, please refresh page.");
-			}
-			currentBtn.removeClass("icon-spin");
-			currentBtn.removeAttr("disabled");
-		});
+		if (currentBtn.hasClass("enabled")) {
+			currentBtn.removeClass("enabled");
+			currentBtn.addClass("icon-spin");
+			
+			$.ajax({
+				type:'GET',
+				url:base_url+'subscriber/refresh',
+				dataType:'json'
+			}).done(function(message){
+				if (message.success) {
+					alert("Challenge progress updated successfully");
+				} else {
+					alert("Challenge progress cannot be updated, please refresh page.");
+				}
+				currentBtn.removeClass("icon-spin");
+				currentBtn.addClass("enabled");
+				currentBtn.removeAttr("disabled");
+			});
+		} else {
+			event.preventDefault();
+		}
+
 	});
 	//post message
 	$(".postMessage").click(function(event){

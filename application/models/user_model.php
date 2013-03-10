@@ -138,4 +138,13 @@ function removeNotification($notification_id){
 	}
 }
 
+function getInvalidPeriod($user_id){
+	try {
+		$query = $this->db->get_where("invalidperiod", array("user_id"=>$user_id));
+		return $query->result();
+	} catch (Exception $e) {
+		
+	}
+}
+
 }

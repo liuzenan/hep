@@ -31,6 +31,8 @@ class Manage extends CI_Controller {
 	public function user($user_id){
 		if($this->session->userdata('isadmin') && $user_id){
 			$data['user'] = $this->currentUser($user_id);
+			$data['invalidperiod'] = $this->User_model->getInvalidPeriod($user_id);
+			var_dump($data['invalidperiod']);
 			$this->loadPage($data, "manageuser");
 			$this->session->set_userdata(array("manage_user_id"=>$user_id));
 		} else {

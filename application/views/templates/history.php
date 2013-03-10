@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
 		plotOptions:{
 			column:{
 				pointInterval:24 * 3600 * 1000,
-				pointStart: getTimestamp('<?php echo $startDate ?> 00:00:00') + 3600*24*500
+				pointStart: <?php echo strtotime($startDate)*1000; ?> + 24*3600*500
 			}
 		},
 		series: [{

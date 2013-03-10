@@ -11,6 +11,7 @@ class Mail extends CI_Controller {
 	public function dailyReport() {
 		$this->Challenge_model->carryOverToToday();
 		$this->Challenge_model->carryOverToTomorrow();
+		$this->Challenge_model->carryOverLastWeekTimeBasedChallenges(date("Y-m-d"));
 		$this->updateBadge();
 		$uids = $this->User_model->loadDailyReportUsers();
 		foreach($uids as $uid) {

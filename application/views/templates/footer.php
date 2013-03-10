@@ -3,6 +3,7 @@
 	<script src="/assets/js/moment.min.js"></script>
 	<script src="/assets/js/livestamp.min.js"></script>
 	<script src="/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/js/bootstrap-datepicker.js"></script>
 	<script src="/assets/js/jquery.autosize-min.js"></script>
 	<script src="/assets/js/scripts.js"></script>
 	<script type="text/javascript" src="https://loader.engage.gsfn.us/loader.js"></script>

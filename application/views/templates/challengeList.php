@@ -1,6 +1,6 @@
 <div class="row-fluid current-challenges">
 	<div class="span12">
-		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="expandbtn pull-right"><i class="icon-chevron-down icon-large"></i></a><a href="javascript:void(0);" class="refresh-challenge-button pull-right"><i class="icon-refresh icon-large"></i></a></p>
+		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="expandbtn pull-right"><i class="icon-chevron-down icon-large"></i></a><a href="javascript:void(0);" class="refresh-challenge-button pull-right enabled"><i class="icon-refresh icon-large"></i></a></p>
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
@@ -57,7 +57,14 @@
 
 				<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
-						<?php if (!empty($me_challenges) && !empty($me_challenges[$i])): ?>
+			<?php if ((intval(date("N"))==6 || intval(date("N"))==7) && $i==0): ?>
+				<div class="challengeItem box empty">
+					<div class="challengeContainer">
+						<h4>Rest on Weekends &#9786;</h4>
+					</div>
+				</div>
+			<?php else: ?>
+			<?php if (!empty($me_challenges) && !empty($me_challenges[$i])): ?>
 			<a href="#challengeModal" role="button" data-challenge-id="<?php echo $me_challenges[$i]->id ?>" data-toggle="modal">
 				<div class="challengeItem box">
 					<div class="challengeContainer">
@@ -73,7 +80,7 @@
 					</div>
 				</div>				
 			</a>					
-						<?php else: ?>
+			<?php else: ?>
 			<a href="#challengeModal" class="challenge-empty" data-challenge-id="-1" role="button" data-toggle="modal">
 				<div class="challengeItem box empty">
 					<div class="challengeContainer">
@@ -81,7 +88,9 @@
 					</div>
 				</div>
 			</a>		
-						<?php endif ?>
+			<?php endif ?>
+			<?php endif ?>			
+
 					</div>
 				<?php } ?>
 			</div>
@@ -90,6 +99,14 @@
 					<div class="challenge-title">Tomorrow</div>
       			<?php for ($i=0; $i < 4; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
+			<?php if ((intval(date("N"))==5 || intval(date("N"))==6) && $i==0): ?>
+				<div class="challengeItem box empty">
+					<div class="challengeContainer">
+						<h4>Rest on Weekends &#9786;</h4>
+					</div>
+				</div>
+			<?php else: ?>
+
 						<?php if (!empty($me_challenges_tomorrow) && !empty($me_challenges_tomorrow[$i])): ?>
 			<a href="#challengeModal" role="button" data-challenge-id="<?php echo $me_challenges_tomorrow[$i]->id ?>" data-toggle="modal">
 				<div class="challengeItem box">
@@ -107,6 +124,7 @@
 					</div>
 				</div>
 			</a>
+						<?php endif ?>
 						<?php endif ?>
 					</div>
 				<?php } ?>

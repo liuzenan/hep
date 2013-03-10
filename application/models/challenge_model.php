@@ -155,6 +155,7 @@ class Challenge_model extends CI_Model{
 			WHERE  DATE(start_time) = ?)";
 		$uids = $this->db->query($sql, array($ystd, $now))->result();
 		$nextLevel = array(1=>2, 2=>3, 7=>8, 8=>9, 13=>14, 14=>15);
+		$today = intval(date("N", strtotime($ystd)));
 		foreach($uids as $u) {
 			$uid = $u->user_id;
 			$sql2="SELECT distinct challenge_id, category
@@ -179,10 +180,140 @@ class Challenge_model extends CI_Model{
 					$start = $now." 00:00:00";
 					$end = $now." 23:59:59";
 				}
-				$this->joinChallenge($uid, $new->id, $new->category, $start, $end);				
+
+				if ($category==0 && ($today == 6 || $today == 7)) {
+					# code...
+				} else {
+					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
+				}
+				
 			}
 		}
 
+	}
+
+	function carryOverLastWeekTimeBasedChallenges($now) {
+		$today = intval(date("N", strtotime($now)));
+		$nextLevel = array(1=>2, 2=>3, 7=>8, 8=>9, 13=>14, 14=>15);
+		$sql = "SELECT DISTINCT c1.user_id
+					FROM   challengeparticipant AS c1
+					WHERE  c1.user_id IN (SELECT DISTINCT user_id
+						FROM   challengeparticipant
+						WHERE  DATE(start_time) = ?)
+						AND c1.category = 0
+						AND c1.user_id NOT 
+						IN (SELECT DISTINCT user_id
+						FROM   challengeparticipant
+						WHERE  DATE(start_time) = ?
+						AND category = 0)";
+		$sql2="SELECT distinct challenge_id, category
+						FROM   challengeparticipant
+						WHERE  DATE(start_time) = ?
+						AND category = 0
+						AND user_id=?";
+		var_dump($today);
+		if ($today==1) {
+			# code...
+			$last_friday = date("Y-m-d", strtotime($now) - 24*60*60*3);
+			$tmr = date("Y-m-d", strtotime($now)+24*60*60);
+			$uids = $this->db->query($sql, array($last_friday, $now))->result();
+			foreach($uids as $u) {
+				$uid = $u->user_id;		
+				echo "current user: " . $uid;			
+				$cids = $this->db->query($sql2, array($last_friday, $uid))->result();
+				foreach ($cids as $c) {
+					# code...
+					$cid = $c->challenge_id;
+					$category = $c->category;
+					$new = $this->loadChallenge($cid);
+					$count = $this->Challenge_model->getParticipationCount($uid, $new->id);
+					if($count>= ($new->quota)) {
+						$cid = $nextLevel[$cid];
+						$new = $this->loadChallenge($cid);
+					}
+					if($new->start_time != "00:00:00") {
+						$start = $now." ".$new->start_time;
+						$end = $now." ".$new->end_time;
+					} else {
+						$start = $now." 00:00:00";
+						$end = $now." 23:59:59";
+					}
+
+					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
+
+					if($new->start_time != "00:00:00") {
+						$start = $tmr." ".$new->start_time;
+						$end = $tmr." ".$new->end_time;
+					} else {
+						$start = $tmr." 00:00:00";
+						$end = $tmr." 23:59:59";
+					}
+
+					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
+
+				}
+			}
+
+
+			$uids = $this->db->query($sql, array($last_friday, $tmr))->result();
+			foreach($uids as $u) {
+				$uid = $u->user_id;		
+				echo "current user: " . $uid;			
+				$cids = $this->db->query($sql2, array($last_friday, $uid))->result();
+				foreach ($cids as $c) {
+					# code...
+					$cid = $c->challenge_id;
+					$category = $c->category;
+					$new = $this->loadChallenge($cid);
+					$count = $this->Challenge_model->getParticipationCount($uid, $new->id);
+					if($count>= ($new->quota)) {
+						$cid = $nextLevel[$cid];
+						$new = $this->loadChallenge($cid);
+					}
+					if($new->start_time != "00:00:00") {
+						$start = $tmr." ".$new->start_time;
+						$end = $tmr." ".$new->end_time;
+					} else {
+						$start = $tmr." 00:00:00";
+						$end = $tmr." 23:59:59";
+					}
+					var_dump($tmr);
+					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
+					echo "updated tomorrow for user: " . $uid;
+				}
+			}
+
+		} else if($today==7) {
+			$last_friday = date("Y-m-d", strtotime($now) - 24*60*60*2);
+			$tmr = date("Y-m-d", strtotime($now)+24*60*60);
+			$uids = $this->db->query($sql, array($last_friday, $tmr))->result();
+			foreach($uids as $u) {
+
+				$uid = $u->user_id;			
+				echo "current user: " . $uid;	
+				$cids = $this->db->query($sql2, array($last_friday, $uid))->result();
+				foreach ($cids as $c) {
+					# code...
+					$cid = $c->challenge_id;
+					$category = $c->category;
+					$new = $this->loadChallenge($cid);
+					$count = $this->Challenge_model->getParticipationCount($uid, $new->id);
+					if($count>= ($new->quota)) {
+						$cid = $nextLevel[$cid];
+						$new = $this->loadChallenge($cid);
+					}
+					if($new->start_time != "00:00:00") {
+						$start = $tmr." ".$new->start_time;
+						$end = $tmr." ".$new->end_time;
+					} else {
+						$start = $tmr." 00:00:00";
+						$end = $tmr." 23:59:59";
+					}
+
+					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
+				}
+			}
+		}
 	}
 
 
@@ -343,6 +474,7 @@ class Challenge_model extends CI_Model{
 	}
 
 	function updateProgress($cp_id, $progress, $start_time, $end_time, $thresh_hold, $type, $thread_id) {
+
 		if($progress >= 1.0) {
 			$cp = $this->loadChallengeParticipation($cp_id);
 			$ci =& get_instance();
@@ -359,14 +491,12 @@ class Challenge_model extends CI_Model{
 			if(empty($data)) {
 				$data = array('progress'=>1, 'complete_time'=>date("Y-m-d H:i:s"));
 			}
-		//post to forum
+
 			$challenge = $this->loadChallenge($cp->challenge_id);
 			$user = $this->User_model->loadUser($cp->user_id);
 			$message = $user->first_name." ".$user->last_name. " completed this challenge at ". substr($data['complete_time'],0,-3).".";
 			$this->Forum_model->createPost($cp->user_id, $thread_id, $message, false);
 			$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
-
-			
 
 		} else {
 			$data = array('progress'=>$progress);
@@ -374,6 +504,8 @@ class Challenge_model extends CI_Model{
 		}
 		$this->db->where('id',$cp_id);
 		$this->db->update(Challenge_model::table_challenge_participant, $data);
+		// echo "updated" . $cp_id . "\n";
+		// flush();
 	}
 
 	function getIndividualCompletedChallenges($user_id){

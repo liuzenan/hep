@@ -54,7 +54,6 @@ class Stats extends CI_Controller {
 		} else {
 			$weekBegin = date('Y-m-d', strtotime($currentDate)-604800*4);
 		}
-		
 
 		$data['startDate'] = $weekBegin;
 		$data['currentActivity'] = $this->getActivity($type, $weekBegin, $currentDate, $uid);

@@ -9,6 +9,10 @@ class Subscriber extends CI_Controller {
 		
 	}
 
+	public function carryOverLastFridayChallenge(){
+		$this->Challenge_model->carryOverLastWeekTimeBasedChallenges(date("Y-m-d"));
+	}
+
 	public function update() {
 		$sql1= "SELECT DISTINCT id
 				FROM   user
@@ -26,12 +30,12 @@ class Subscriber extends CI_Controller {
 			$query = $this->db->query($sql, array($uid));
 			foreach($query->result() as $row) {
 				$date = $row->date;
-				echo $uid.'-'.$date.'<br>';
+				// echo $uid.'-'.$date.'<br>';
 				$this->getActivities($uid, $date);
 				$this->getSleep($uid, $date);
 			}
 	}
-		echo "finish";
+		// echo "finish";
 	}
 
 	public function refresh() {
@@ -43,9 +47,13 @@ class Subscriber extends CI_Controller {
 		}else{
 			$user_id = $this->session->userdata('user_id');
 			$date = date("Y-m-d", time());
+			$ysd = date("Y-m-d", time()-24*60*60);
 			$this->getActivities($user_id, $date);
 			$this->getSleep($user_id, $date);
-
+			$this->getActivities($user_id, $ysd);
+			$this->getSleep($user_id, $ysd);
+			$this->updateProgress($user_id, $date);
+			$this->updateProgress($user_id, $ysd);
 			$msg = array(
 				"success" => true,
 			);				
@@ -62,6 +70,7 @@ class Subscriber extends CI_Controller {
 						$user_id = $data['user_id'];
 						$date = $data['date'];
 						$this->getActivities($user_id, $date);
+						$this->updateProgress($user_id, $date);
 					}else{
 						
 					}
@@ -74,6 +83,14 @@ class Subscriber extends CI_Controller {
 
 	public function updateProgress($user_id, $date) {
 		$this->Challenge_model->updateActivityProgress($user_id, $date);
+	}
+
+	public function updateAllProgress($date) {
+		$query = $this->db->query("SELECT id FROM user");
+		foreach ($query->result() as $value) {
+			$user_id = $value->id;
+			$this->updateProgress($user_id, $date);
+		}
 	}
 
 	public function sleep(){
@@ -109,7 +126,7 @@ class Subscriber extends CI_Controller {
 			where temp.ifloors<temp.floors OR temp.isteps<temp.steps";
 			$query = $this->db->query($uids_sql, array($date_row->date));
 			foreach($query->result() as $row) {
-				echo "refresh ". $row->user_id;
+				// echo "refresh ". $row->user_id;
 				$this->getActivities($row->user_id, $date_row->date);
 			}
 		}
@@ -186,7 +203,8 @@ class Subscriber extends CI_Controller {
 	}
 
 	public function test(){
-		echo "hello world";
+		$today = date("N");
+		echo $today;
 	}
 
 	public function getActivities($user_id, $date){
@@ -198,8 +216,6 @@ class Subscriber extends CI_Controller {
 				$this->load->model('Activity_model','activities');
 				$this->activities->insert_intraday_activity($user_id, $date, $keypair);
 				$this->activities->sync_activity($date, '1d', $user_id, $keypair);
-				$this->updateProgress($user_id, $date);
-
 			} catch (Exception $e) {
 				
 			}
@@ -216,10 +232,13 @@ class Subscriber extends CI_Controller {
 					$this->load->model('Activity_model','activities');
 					$this->activities->insert_intraday_activity($user_id, $date, $keypair);
 					$this->activities->sync_activity($date, '1d', $user_id, $keypair);
+					$this->getSleep($user_id, $date);
 					$this->updateProgress($user_id, $date);
 					echo "updated for user". $user_id ."\n";
+					flush();
 				} catch (Exception $e) {
 					echo "error for user". $user_id ."\n";
+					flush();
 				}
 			}
 
@@ -285,8 +304,6 @@ class Subscriber extends CI_Controller {
 				ON DUPLICATE KEY UPDATE total_time=" . $value['timeInBed'] . ", time_asleep= " . $value['minutesAsleep'] . ", start_time= '" . $value['startTime'] . "', awaken_count= " . $value['awakeningsCount'] . ", min_awake= " . $value['minutesAwake'] .", min_to_asleep= " . $value['minutesToFallAsleep'] . ", min_after_wakeup= " . $value['minutesAfterWakeup'] . ", efficiency= " . $value['efficiency'];
 				$this->db->query($sql);	
 			}
-
-			//var_dump($sleepData);
 		}
 
 	}
