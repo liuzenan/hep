@@ -20,6 +20,10 @@ class Mail extends CI_Controller {
 
 	}
 
+	public function testMail($uid) {
+		$this->Mail_model->sendDailyReport($uid);
+	}
+
 	public function preAllocateChallenges() {
 		$sql = "select id from user where house_id>0 and phantom=0";
 		$query = $this->db->query($sql);

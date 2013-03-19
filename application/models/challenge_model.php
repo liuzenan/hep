@@ -432,11 +432,14 @@ class Challenge_model extends CI_Model{
 		} else {
 			$data = $this->getIndividualChallenges($user_id, $date);
 		}
+
 		foreach($data as $c) {
 			if($c->progress >=1 ) {
 				continue;
 			}
 			$status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
+			//var_dump($status);
+			//var_dump($c);
 			if($c->steps_value != 0 && $c->floor_value !=0) {
 				$progress = 0.5 * ($status->steps/$c->steps_value) +
 				0.5 * ($status->floors/$c->floor_value);
@@ -449,6 +452,7 @@ class Challenge_model extends CI_Model{
 				$this->updateProgress($c->id, $progress, $c->start_time, $c->end_time, $c->steps_value, "steps", $c->thread_id);
 			} else if($c->floor_value != 0) {
 				$progress = number_format($status->floors/$c->floor_value,2);
+				var_dump($c);
 				$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
 
 			} else if ($c->sleep_value != 0) {
@@ -483,25 +487,29 @@ class Challenge_model extends CI_Model{
 			$ci->load->model('Activity_model');
 			$ci->load->model('Mail_model');
 			if($type == "sleep") {
+
 				$data = array('progress'=>1, 'complete_time'=>$start_time);
 			}else {
+
 				$time = $this->Activity_model->getChallengeCompletionTime($cp->user_id, $start_time, $end_time, $thresh_hold, $type);
+
 				$data = array('progress'=>1, 'complete_time'=>$time);
 			}
 			if(empty($data)) {
 				$data = array('progress'=>1, 'complete_time'=>date("Y-m-d H:i:s"));
 			}
 
-			$challenge = $this->loadChallenge($cp->challenge_id);
-			$user = $this->User_model->loadUser($cp->user_id);
-			$message = $user->first_name." ".$user->last_name. " completed this challenge at ". substr($data['complete_time'],0,-3).".";
-			$this->Forum_model->createPost($cp->user_id, $thread_id, $message, false);
-			$this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
+			// $challenge = $this->loadChallenge($cp->challenge_id);
+			// $user = $this->User_model->loadUser($cp->user_id);
+			// $message = $user->first_name." ".$user->last_name. " completed this challenge at ". substr($data['complete_time'],0,-3).".";
+			// $this->Forum_model->createPost($cp->user_id, $thread_id, $message, false);
+			// $this->Mail_model->sendChallengeCompletionMessage($user, $challenge->title, $data['complete_time']);
 
 		} else {
 			$data = array('progress'=>$progress);
 
 		}
+
 		$this->db->where('id',$cp_id);
 		$this->db->update(Challenge_model::table_challenge_participant, $data);
 		// echo "updated" . $cp_id . "\n";

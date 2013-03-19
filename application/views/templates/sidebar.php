@@ -18,7 +18,7 @@
 			<li class="<?php if($active=='manage') echo "active" ?>"><a href="<?php echo base_url() . 'manage'?>">Manage Users</a></li>
 			<li class="<?php if($active=='masquerade') echo "active" ?>"><a href="<?php echo base_url() . 'masquerade'?>">Masquerade</a></li>
 			<li ><a href="<?php echo base_url() . 'masquerade/unmasquerade'?>">Unmasquerade</a></li>
-
+			<li class="<?php if($active=='mail') echo "active" ?>"><a href="<?php echo base_url() . 'editmail'?>">Edit Mail</a></li>
 			<?php } ?>
 		</ul>
 	</div>

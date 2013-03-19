@@ -13,6 +13,24 @@ jQuery(document).ready(function($) {
 		trigger: 'hover'
 	});
 
+	$("#updateMail").click(function(event){
+		var emailMsg = $("#mailMsg").val();
+		$.ajax({
+			type:"POST",
+			url:base_url+'editmail/updateEmailMessage',
+			dataType:'json',
+			data:{
+				msg: emailMsg
+			}
+		}).done(function(msg){
+			if (msg.success) {
+				alert("Email message has been updated");
+			} else {
+				alert("Something went wrong...");
+			}
+		});
+	});
+
 	$(".date-picker").datepicker();
 	$(".refresh-challenge-button.enabled").on("click",function(event){
 		console.log("refesh");

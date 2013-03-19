@@ -338,7 +338,6 @@ class Activity_model extends CI_Model{
 					$currentTime = (string) $value->time;
 					$intradayActivityData[$currentTime]['elevation'] = 0;
 					if($minute%10 == 0) {
-						
 						$intradayActivityData[$currentTime]['elevation'] = $value->value;
 
 					} else {
@@ -397,6 +396,9 @@ LIMIT  1";
 $sql = sprintf($sql, $type, $type, $type);
 
 $result = $this->db->query($sql, array($user_id, $end, $start, $end, $start, $threshold));
+
+echo "challenge complete time: \n";
+var_dump($result);
 if($result->num_rows()>0) {
 	return $result->row()->activity_time;
 } else {

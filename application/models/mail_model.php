@@ -75,6 +75,8 @@ class Mail_model extends CI_Model{
 
 	private function loadData($user_id, $user) {
 		$daily = "Good Morning %s, <br><br>
+		%s
+		<br><br>
 		Yesterday, you walked <b>%d steps (%s)</b>, climbed <b>%d floors (%s)</b>, 
 		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>. 
 		<br><br>You selected <b>%s</b> challenges yesterday and you completed <b>%d</b> of them.
@@ -108,11 +110,6 @@ class Mail_model extends CI_Model{
 		$data['me_two_days_ago'] = $this->Activity_model->getActivityOnDate($user_id, date("Y-m-d ",time() - 2*60 * 60 * 24));
 		$data['me_sleep_two_days_ago'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ",time() - 2*60 * 60 * 24));
 		$data['me_two_days_ago']->sleep = number_format((float) $data['me_sleep_two_days_ago']->total_time/60,2);
-
-	
-
-
-
 
 		$data['delta_steps'] = number_format($this->cauculateDelta($data['me_yesterday']->steps, $data['me_two_days_ago']->steps),2);
 		$data['delta_floors'] = number_format($this->cauculateDelta($data['me_yesterday']->floors, $data['me_two_days_ago']->floors),2);
@@ -163,8 +160,11 @@ class Mail_model extends CI_Model{
 		}
 
 		$summary = $this->Activity_model->getActivitySummary();
+		$this->load->helper('file');
+		$data["emailmsg"] = nl2br(read_file('emailmsg.txt'));
 		$data['msg'] = sprintf($daily, 
 			$user->first_name." ".$user->last_name, 
+			$data["emailmsg"],
 			$data['me_yesterday']->steps, 
 			($data['delta_steps']>0? "up by " : "down by ").$data['delta_steps']. "%",
 

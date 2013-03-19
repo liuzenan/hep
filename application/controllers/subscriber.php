@@ -33,6 +33,7 @@ class Subscriber extends CI_Controller {
 				// echo $uid.'-'.$date.'<br>';
 				$this->getActivities($uid, $date);
 				$this->getSleep($uid, $date);
+				$this->updateProgress($uid, $date);
 			}
 	}
 		// echo "finish";
@@ -83,6 +84,10 @@ class Subscriber extends CI_Controller {
 
 	public function updateProgress($user_id, $date) {
 		$this->Challenge_model->updateActivityProgress($user_id, $date);
+	}
+
+	public function updateTodayAllProgress() {
+		$this->updateAllProgress(date("Y-m-d"));
 	}
 
 	public function updateAllProgress($date) {

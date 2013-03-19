@@ -834,12 +834,12 @@ width: 96%;
 }
 
 .history-challenge-item .complete{
-	color: darkolivegreen;
+	color: lawngreen;
 	text-shadow: 2px 2px 0px white;
 }
 
 .history-challenge-item .incomplete{
-	color: indianred;
+	color: darkorange;
 	text-shadow: 2px 2px 0px white;
 }
 
