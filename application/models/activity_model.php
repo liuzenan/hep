@@ -291,59 +291,40 @@ class Activity_model extends CI_Model{
 				$intradayElevation = $elevation->{'activities-elevation-intraday'};
 				//var_dump($steps);
 				$intradayActivityData = array();
-				$minute = 0;
-				foreach($intradayCalories->dataset->intradayData as $value){
-					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['calories'] = 0;
-					$intradayActivityData[$currentTime]['level'] = 0;
-					if($minute%10 == 0) {
-						$intradayActivityData[$currentTime]['calories'] = $value->value;
-						$intradayActivityData[$currentTime]['level'] = $value->level;
-					}else {
-						$intradayActivityData[$currentTime]['calories'] += $value->value;
-						$intradayActivityData[$currentTime]['level'] += $value->level;
-					}
-					$minute++;
-				}
-				$minute = 0;
+
 				foreach($intradaySteps->dataset->intradayData as $value){
 					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['steps'] = 0;
-					if($minute%10 == 0) {
-						
+					if (intval($value->value)>0) {
+						# code...
 						$intradayActivityData[$currentTime]['steps'] = $value->value;
-					}else {
-						$intradayActivityData[$currentTime]['steps'] += $value->value; 
-					}  
-					$minute++; 
+					}
+					
 				}
 
-				$minute = 0;
+				foreach($intradayCalories->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					if (!empty($intradayActivityData[$currentTime])) {
+						# code...
+						$intradayActivityData[$currentTime]['calories'] = $value->value;
+						$intradayActivityData[$currentTime]['level'] = $value->level;
+					}
+				}
 
 				foreach($intradayFloors->dataset->intradayData as $value){
 					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['floors'] = 0;
-
-					if($minute%10 == 0) {
-						
+					if (!empty($intradayActivityData[$currentTime])) {
 						$intradayActivityData[$currentTime]['floors'] = $value->value;
-					}else {
-						$intradayActivityData[$currentTime]['floors'] += $value->value;
 					}
-					$minute++;
+					
+
 				}
-				$minute = 0;
 
 				foreach($intradayElevation->dataset->intradayData as $value){
 					$currentTime = (string) $value->time;
-					$intradayActivityData[$currentTime]['elevation'] = 0;
-					if($minute%10 == 0) {
+					if (!empty($intradayActivityData[$currentTime])) {
 						$intradayActivityData[$currentTime]['elevation'] = $value->value;
-
-					} else {
-						$intradayActivityData[$currentTime]['elevation'] += $value->value;
 					}
-					$minute++;
+					
 				}
 				// var_dump($intradayActivityData);
 				foreach ($intradayActivityData as $key => $value) {
@@ -359,7 +340,87 @@ class Activity_model extends CI_Model{
 						steps = ".$value['steps'].", calories = ".$value['calories'].", calories_level= ". $value['level'].
 						", floors=".$value['floors'].",elevation=".$value['elevation'];
 
-$this->db->query($sql);							
+					$this->db->query($sql);							
+					}
+	
+}
+}else{
+
+}	
+} catch (Exception $e) {
+
+}
+}
+
+
+	function insert_intraday_activity_new($user_id, $date, $keypair){
+		// echo "insert intraday activity\n";
+		// var_dump($user_id);
+		// var_dump($date);
+		try {
+			if($keypair){
+				$this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
+				$calories = $this->fitbitphp->getIntradayTimeSeries("calories",$date);
+				$steps = $this->fitbitphp->getIntradayTimeSeries("steps",$date);
+				$floors = $this->fitbitphp->getIntradayTimeSeries("floors",$date);
+				$elevation = $this->fitbitphp->getIntradayTimeSeries("elevation",$date);
+
+				$intradayCalories = $calories->{'activities-calories-intraday'};
+				$intradaySteps = $steps->{'activities-steps-intraday'};
+				$intradayFloors = $floors->{'activities-floors-intraday'};
+				$intradayElevation = $elevation->{'activities-elevation-intraday'};
+				//var_dump($steps);
+				$intradayActivityData = array();
+
+				foreach($intradaySteps->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					if (intval($value->value)>0) {
+						# code...
+						$intradayActivityData[$currentTime]['steps'] = $value->value;
+					}
+					
+				}
+
+				foreach($intradayCalories->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					if (!empty($intradayActivityData[$currentTime])) {
+						# code...
+						$intradayActivityData[$currentTime]['calories'] = $value->value;
+						$intradayActivityData[$currentTime]['level'] = $value->level;
+					}
+				}
+
+				foreach($intradayFloors->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					if (!empty($intradayActivityData[$currentTime])) {
+						$intradayActivityData[$currentTime]['floors'] = $value->value;
+					}
+					
+
+				}
+
+				foreach($intradayElevation->dataset->intradayData as $value){
+					$currentTime = (string) $value->time;
+					if (!empty($intradayActivityData[$currentTime])) {
+						$intradayActivityData[$currentTime]['elevation'] = $value->value;
+					}
+					
+				}
+				// var_dump($intradayActivityData);
+				foreach ($intradayActivityData as $key => $value) {
+					# code...
+
+					if (empty($value['steps']) || empty($value['calories']) || empty($value['level']) || empty($value['floors']) || empty($value['elevation'])) {
+						# code...
+					} else {
+					$sql = "INSERT INTO intradayactivitynew(user_id, activity_time, steps, calories, calories_level, floors, elevation)
+					VALUES (". $user_id .", '". $date . " " . $key ."', ". $value['steps'] .", ".
+						$value['calories'] .", ". $value['level'] .", " 
+						. $value['floors'] . ", " . $value['elevation'] .") ON DUPLICATE KEY UPDATE 
+						steps = ".$value['steps'].", calories = ".$value['calories'].", calories_level= ". $value['level'].
+						", floors=".$value['floors'].",elevation=".$value['elevation'];
+
+					$this->db->query($sql);							
 					}
 	
 }
@@ -397,8 +458,6 @@ $sql = sprintf($sql, $type, $type, $type);
 
 $result = $this->db->query($sql, array($user_id, $end, $start, $end, $start, $threshold));
 
-echo "challenge complete time: \n";
-var_dump($result);
 if($result->num_rows()>0) {
 	return $result->row()->activity_time;
 } else {

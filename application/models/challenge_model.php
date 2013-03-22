@@ -211,7 +211,7 @@ class Challenge_model extends CI_Model{
 						WHERE  DATE(start_time) = ?
 						AND category = 0
 						AND user_id=?";
-		var_dump($today);
+		//var_dump($today);
 		if ($today==1) {
 			# code...
 			$last_friday = date("Y-m-d", strtotime($now) - 24*60*60*3);
@@ -277,7 +277,7 @@ class Challenge_model extends CI_Model{
 						$start = $tmr." 00:00:00";
 						$end = $tmr." 23:59:59";
 					}
-					var_dump($tmr);
+					//var_dump($tmr);
 					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);
 					echo "updated tomorrow for user: " . $uid;
 				}
@@ -452,7 +452,7 @@ class Challenge_model extends CI_Model{
 				$this->updateProgress($c->id, $progress, $c->start_time, $c->end_time, $c->steps_value, "steps", $c->thread_id);
 			} else if($c->floor_value != 0) {
 				$progress = number_format($status->floors/$c->floor_value,2);
-				var_dump($c);
+				
 				$this->updateProgress($c->id, $progress,$c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
 
 			} else if ($c->sleep_value != 0) {
@@ -568,6 +568,8 @@ class Challenge_model extends CI_Model{
 		Count(id) AS count
 		FROM   challengeparticipant
 		WHERE  user_id = ?
+		AND inactive = 0
+		AND progress >= 1
 		GROUP  BY challenge_id";
 		$counts = $this->db->query($count_sql, array($user_id))->result();
 		$participations = array();

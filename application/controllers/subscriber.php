@@ -21,20 +21,11 @@ class Subscriber extends CI_Controller {
 		foreach($query1->result() as $row1) {
 			$uid = $row1->id;
 
-			$sql = "SELECT DISTINCT date
-					FROM   activity
-   					WHERE date NOT IN (SELECT DISTINCT date
-                    FROM   activity
-                    WHERE  user_id =? )
-					AND date>='2013-02-13'";
-			$query = $this->db->query($sql, array($uid));
-			foreach($query->result() as $row) {
-				$date = $row->date;
+			$date = date("Y-m-d", time()-24*60*60);
 				// echo $uid.'-'.$date.'<br>';
-				$this->getActivities($uid, $date);
-				$this->getSleep($uid, $date);
-				$this->updateProgress($uid, $date);
-			}
+			$this->getActivities($uid, $date);
+			$this->getSleep($uid, $date);
+			$this->updateProgress($uid, $date);
 	}
 		// echo "finish";
 	}
@@ -92,10 +83,28 @@ class Subscriber extends CI_Controller {
 
 	public function updateAllProgress($date) {
 		$query = $this->db->query("SELECT id FROM user");
+		ob_end_flush(); 
 		foreach ($query->result() as $value) {
 			$user_id = $value->id;
 			$this->updateProgress($user_id, $date);
+			ob_start();
+			echo "update progress for user " . $user_id . " " . $date . "\n";
+			ob_flush();
+			flush();
+			ob_end_flush();
 		}
+	}
+
+	public function updateAllProgressSince($date){
+		ignore_user_abort(1);
+		set_time_limit(0);
+		$end_date = date('Y-m-d');
+		while (strtotime($date) <= strtotime($end_date)) {
+			$this->updateAllProgress($date);
+			$date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
+		}
+
+		echo "finish\n";
 	}
 
 	public function sleep(){
@@ -120,7 +129,8 @@ class Subscriber extends CI_Controller {
 	}
 
 	public function validateFitbitRecord() {
-		$dates_sql = "SELECT DISTINCT date from activity where date >= '2013-02-13' ORDER BY date DESC";
+		$ysd = date("Y-m-d", time()-24*60*60);
+		$dates_sql = "SELECT DISTINCT date from activity where date = ". $ysd ." ORDER BY date DESC";
 		$dquery = $this->db->query($dates_sql);
 		foreach($dquery->result() as $date_row) {
 			$uids_sql = "
@@ -133,40 +143,133 @@ class Subscriber extends CI_Controller {
 			foreach($query->result() as $row) {
 				// echo "refresh ". $row->user_id;
 				$this->getActivities($row->user_id, $date_row->date);
+				$this->updateProgress($row->user_id, $date_row->date);
 			}
 		}
-
 	}
 
-	public function synchronizeActivityData() {
-		$dates_sql = "SELECT DISTINCT date from activity where date >= '2013-02-13' ORDER BY date DESC";
-		$dquery = $this->db->query($dates_sql);
-		foreach($dquery->result() as $date_row) {
-			$date = $date_row->date;
-			$uids_sql = "
-			SELECT temp.* from
-			(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
-			a.steps, a.user_id from intradayactivity as ia, activity as a 
-			WHERE ia.user_id=a.user_id AND DATE(ia.activity_time)=a.date AND a.date=?  group by a.user_id) as temp
-			WHERE temp.ifloors<temp.floors OR temp.isteps<temp.steps";
-			$query = $this->db->query($uids_sql, array($date));
-			foreach($query->result() as $row) {
-				$delta_floor = $row->floors - $row->ifloors;
-				$delta_steps = $row->steps - $row->isteps;
-				$user_id = $row->user_id;
-				echo "increase ".$user_id. " floor ". $delta_floor . " step ". $delta_steps ." ". $date."<br>";
-
-				if($delta_floor > 0) {
-					$this->synchronizeFloor($user_id, $date, $delta_floor);
+	public function getAllUserIntradayActivityFromDate($date) {
+		ignore_user_abort(1);
+		set_time_limit(0);
+		// Start date
+		
+		// End date
+		$end_date = date('Y-m-d');
+	 
+		while (strtotime($date) <= strtotime($end_date)) {
+			$sql1= "SELECT DISTINCT id
+					FROM   user
+					WHERE  fitbit_id IS NOT NULL
+					ORDER BY id";
+			$query1 = $this->db->query($sql1);
+			ob_end_flush(); 
+			foreach($query1->result() as $row1) {
+				$uid = $row1->id;
+				ob_start();
+				echo "syncing activity data for user " . $uid . " " . $date . "\n";
+				ob_flush();
+				flush();
+				ob_end_flush();
+				try {
+					$keypair = $this->getUserKeyPair($uid);
+					if($keypair){
+						try {
+									
+							$this->load->model('Activity_model','activities');
+							$this->activities->insert_intraday_activity($uid, $date, $keypair);
+						} catch (Exception $e) {
+									
+						}
+					}
+					ob_start();
+					echo "synced activity data for user " . $uid . " \n";
+					ob_flush();
+					flush();
+				} catch (Exception $e) {
+					ob_start();
+					echo "error for user " . $uid . " \n";
+					ob_flush();
+					flush();
 				}
-				if($delta_steps > 0) {
-					$this->synchronizeSteps($user_id, $date, $delta_steps);
-				}
-				$this->updateProgress($user_id, $date);
-
+				ob_end_flush();
 			}
-		}	
+			$date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
+		}
+		echo "finish\n";		
 	}
+
+	public function getAllUserIntradayActivity($date) {
+		ignore_user_abort(1);
+		set_time_limit(0);
+		$sql1= "SELECT DISTINCT id
+				FROM   user
+				WHERE  fitbit_id IS NOT NULL
+				ORDER BY id";
+		$query1 = $this->db->query($sql1);
+		ob_end_flush(); 
+		foreach($query1->result() as $row1) {
+			$uid = $row1->id;
+			ob_start();
+			echo "syncing activity data for user " . $uid . " \n";
+			ob_flush();
+			flush();
+			ob_end_flush();
+			try {
+				$keypair = $this->getUserKeyPair($uid);
+				if($keypair){
+					try {
+								
+						$this->load->model('Activity_model','activities');
+						$this->activities->insert_intraday_activity($uid, $date, $keypair);
+					} catch (Exception $e) {
+								
+					}
+				}
+				ob_start();
+				echo "synced activity data for user " . $uid . " \n";
+				ob_flush();
+				flush();
+			} catch (Exception $e) {
+				ob_start();
+				echo "error for user " . $uid . " \n";
+				ob_flush();
+				flush();
+			}
+			ob_end_flush();
+		}
+
+		echo "finish\n";
+	}
+
+	// public function synchronizeActivityData() {
+	// 	$dates_sql = "SELECT DISTINCT date from activity where date >= '2013-02-13' ORDER BY date DESC";
+	// 	$dquery = $this->db->query($dates_sql);
+	// 	foreach($dquery->result() as $date_row) {
+	// 		$date = $date_row->date;
+	// 		$uids_sql = "
+	// 		SELECT temp.* from
+	// 		(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
+	// 		a.steps, a.user_id from intradayactivity as ia, activity as a 
+	// 		WHERE ia.user_id=a.user_id AND DATE(ia.activity_time)=a.date AND a.date=?  group by a.user_id) as temp
+	// 		WHERE temp.ifloors<temp.floors OR temp.isteps<temp.steps";
+	// 		$query = $this->db->query($uids_sql, array($date));
+	// 		foreach($query->result() as $row) {
+	// 			$delta_floor = $row->floors - $row->ifloors;
+	// 			$delta_steps = $row->steps - $row->isteps;
+	// 			$user_id = $row->user_id;
+	// 			echo "increase ".$user_id. " floor ". $delta_floor . " step ". $delta_steps ." ". $date."<br>";
+
+	// 			if($delta_floor > 0) {
+	// 				$this->synchronizeFloor($user_id, $date, $delta_floor);
+	// 			}
+	// 			if($delta_steps > 0) {
+	// 				$this->synchronizeSteps($user_id, $date, $delta_steps);
+	// 			}
+	// 			$this->updateProgress($user_id, $date);
+
+	// 		}
+	// 	}	
+	// }
 
 	public function synchronizeFloor($user_id, $date, $delta) {
 		$sql1 = "select MAX(activity_time) as time, floors from intradayactivity where user_id = ? and DATE(activity_time)=? and floors>0";
@@ -208,8 +311,16 @@ class Subscriber extends CI_Controller {
 	}
 
 	public function test(){
-		$today = date("N");
-		echo $today;
+		ob_end_flush(); 
+		for( $x=1; $x<=100; $x=$x+1 ) {
+			ob_start();
+			echo $x . "\n";
+			ob_flush();
+			flush();
+			ob_end_flush(); 
+			usleep(100000);
+		}
+		
 	}
 
 	public function getActivities($user_id, $date){
