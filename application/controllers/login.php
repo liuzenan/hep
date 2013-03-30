@@ -4,8 +4,13 @@ class Login extends CI_Controller{
 	const BASELINE = "2013-02-13";
 	public function index(){
 		if(!$this->session->userdata('user_id')){
-			$this->fitbitphp->initSession(base_url() . "login/callBack");
-			$this->callBack();
+			try {
+				$this->fitbitphp->initSession(base_url() . "login/callBack");
+				$this->callBack();
+			} catch (Exception $e) {
+				echo "Sorry, Fitbit Login is currently unavailable. Please try again later or login with Facebook.";	
+				var_dump($e);
+			}
 		}else{
 			redirect(base_url() . "home");
 		}

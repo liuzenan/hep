@@ -131,14 +131,14 @@ class Challenge_model extends CI_Model{
 
 
 	public function carryOverToToday() {
-		$now = date("Y-m-d",time());	
-		$ystd = date("Y-m-d",time() - 24*60*60);
+		$now = date("Y-m-d",time() + 24*60*60);	
+		$ystd = date("Y-m-d",time());
 		return $this->carryOverChallenges($ystd, $now);
 	}
 
 	public function carryOverToTomorrow() {
-		$now = date("Y-m-d",time() + 24*60*60);	
-		$ystd = date("Y-m-d",time());
+		$now = date("Y-m-d",time() + 24*60*60 * 2);	
+		$ystd = date("Y-m-d",time() + 24*60*60);
 		return $this->carryOverChallenges($ystd, $now);
 	}
 	
@@ -181,7 +181,7 @@ class Challenge_model extends CI_Model{
 					$end = $now." 23:59:59";
 				}
 
-				if ($category==0 && ($today == 6 || $today == 7)) {
+				if ($category==0 && ($today == 5 || $today == 6)) {
 					# code...
 				} else {
 					$this->joinChallenge($uid, $new->id, $new->category, $start, $end);

@@ -10,7 +10,21 @@ class Subscriber extends CI_Controller {
 	}
 
 	public function carryOverLastFridayChallenge(){
+		ignore_user_abort(1);
+		set_time_limit(0);
 		$this->Challenge_model->carryOverLastWeekTimeBasedChallenges(date("Y-m-d"));
+	}
+
+	public function carryOverToTomorrow(){
+		ignore_user_abort(1);
+		set_time_limit(0);
+		$this->Challenge_model->carryOverToTomorrow();
+	}
+
+	public function carryOverToToday(){
+		ignore_user_abort(1);
+		set_time_limit(0);
+		$this->Challenge_model->carryOverToToday();
 	}
 
 	public function update() {
@@ -89,6 +103,25 @@ class Subscriber extends CI_Controller {
 			$this->updateProgress($user_id, $date);
 			ob_start();
 			echo "update progress for user " . $user_id . " " . $date . "\n";
+			ob_flush();
+			flush();
+			ob_end_flush();
+		}
+	}
+
+	public function getUserAllActivitySince($uid, $date) {
+		ignore_user_abort(1);
+		set_time_limit(0);
+		$end_date = date('Y-m-d');
+		ob_end_flush(); 
+		while (strtotime($date) <= strtotime($end_date)) {
+			ob_start();
+			$this->getActivities($uid, $date);
+			$this->getSleep($uid, $date);
+			$this->updateProgress($uid, $date);
+			$date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
+			
+			echo "update progress for user " . $uid . " " . $date . "\n";
 			ob_flush();
 			flush();
 			ob_end_flush();
