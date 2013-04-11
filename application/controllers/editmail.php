@@ -1,20 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Editmail extends CI_Controller {
+
 	public function __construct() {
 		parent::__construct();
 		if(!$this->session->userdata('user_id')){
 			redirect(base_url() . "login");
 		} else {
 			$this->uid = $this->session->userdata('user_id');
+			$this->filePath = "./messages";
 		}
 	}
 
 	public function index() {
 
+		if ( !file_exists($this->filePath) ) {
+  			mkdir($this->filePath, 0777);
+ 		}
+
 		if($this->session->userdata('isadmin')){
 			$this->load->helper('file');
-			$data["emailmsg"] = read_file('emailmsg.txt');
+			$data["emailmsg"] = read_file($this->filePath . '/emailmsg.txt');
 			$this->loadPage($data);
 		} else {
 			redirect(base_url() . "home");
@@ -25,8 +31,7 @@ class Editmail extends CI_Controller {
 		$emailMsg = $this->input->post("msg");
 		$emailMsg = htmlspecialchars($emailMsg);
 		$this->load->helper('file');
-		echo $emailMsg;
-		if (!write_file('emailmsg.txt', $emailMsg)) {
+		if (!write_file($this->filePath . 'emailmsg.txt', $emailMsg)) {
 			# code...
 			$msg['success'] = false;
 			
