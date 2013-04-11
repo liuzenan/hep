@@ -25,6 +25,7 @@ class Editmail extends CI_Controller {
 		$emailMsg = $this->input->post("msg");
 		$emailMsg = htmlspecialchars($emailMsg);
 		$this->load->helper('file');
+		echo $emailMsg;
 		if (!write_file('emailmsg.txt', $emailMsg)) {
 			# code...
 			$msg['success'] = false;

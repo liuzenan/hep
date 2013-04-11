@@ -100,6 +100,8 @@ class Subscriber extends CI_Controller {
 		ob_end_flush(); 
 		foreach ($query->result() as $value) {
 			$user_id = $value->id;
+			$this->getFullDayActivities($user_id, $date);
+			$this->getSleep($user_id, $date);
 			$this->updateProgress($user_id, $date);
 			ob_start();
 			echo "update progress for user " . $user_id . " " . $date . "\n";
@@ -364,6 +366,21 @@ class Subscriber extends CI_Controller {
 				
 				$this->load->model('Activity_model','activities');
 				$this->activities->insert_intraday_activity($user_id, $date, $keypair);
+				$this->activities->sync_activity($date, '1d', $user_id, $keypair);
+			} catch (Exception $e) {
+				
+			}
+		}
+	}
+
+	public function getFullDayActivities($user_id, $date){
+
+		$keypair = $this->getUserKeyPair($user_id);
+		if($keypair){
+			try {
+				
+				$this->load->model('Activity_model','activities');
+				//$this->activities->insert_intraday_activity($user_id, $date, $keypair);
 				$this->activities->sync_activity($date, '1d', $user_id, $keypair);
 			} catch (Exception $e) {
 				
