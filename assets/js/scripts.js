@@ -168,15 +168,15 @@ jQuery(document).ready(function($) {
 	$('#verifydata').click(function(e) {
 		console.log("pull data from fitbit")
 		$.ajax({
-				type:'POST',
-				url:base_url+'subscriber/refresh',
-				dataType:'json',
-				data:{
-				}
-			}).done(function(msg){
-				console.log(msg);
-				window.location.reload();
-			});
+			type:'POST',
+			url:base_url+'subscriber/refresh',
+			dataType:'json',
+			data:{
+			}
+		}).done(function(msg){
+			console.log(msg);
+			window.location.reload();
+		});
 
 	});
 
@@ -451,11 +451,29 @@ $(".myactivity .current-challenges").mouseleave(function(event){
 });
 
 var counter = setInterval(timer, 1000);
-	console.log(game_start_date);
+console.log(game_start_date);
 });
 
+$(".refresh-challenge-history").click(function () {
+	var btn = $(this)
+	btn.button('loading')
 
+	var uid = btn.data("uid");	
+	var date = btn.data("date");
+	$(".refresh-challenge-history").attr("disabled", true);
 
+	$.ajax({
+		type:'GET',
+		url:base_url+'subscriber/refreshUserPastRecord/'+uid+'/'+date,
+
+	}).done(function(msg){
+		$(".refresh-challenge-history").attr("disabled", false);
+		btn.button('reset');
+		window.location.reload();
+	});
+	
+
+});
 
 
 

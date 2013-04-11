@@ -4,7 +4,7 @@ class Mail_model extends CI_Model{
 	//const HepAccount = 'hepnusmedical@gmail.com';
 
 	//const HepAccount = 'root@hep.d2.comp.nus.edu.sg';
-	const HepAccount = 'hep-support@googlegroup.com';
+	const HepAccount = 'hep-support@googlegroups.com';
 	//const HepAccount = 'hep@hep.d2.comp.nus.edu.sg';
 	const HepName = 'Health Enhancement Program';
 	const TitleBadgeEarned = 'Congrats for earning %s badge!';

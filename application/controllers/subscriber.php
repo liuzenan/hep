@@ -111,12 +111,7 @@ class Subscriber extends CI_Controller {
 		}
 	}
 
-	public function getUserAllActivitySince($uid, $date) {
-		ignore_user_abort(1);
-		set_time_limit(0);
-		$end_date = date('Y-m-d');
-		ob_end_flush(); 
-		while (strtotime($date) <= strtotime($end_date)) {
+	public function refreshUserPastRecord($uid, $date) {
 			ob_start();
 			$this->getActivities($uid, $date);
 			$this->getSleep($uid, $date);
@@ -127,6 +122,14 @@ class Subscriber extends CI_Controller {
 			ob_flush();
 			flush();
 			ob_end_flush();
+	}
+	public function getUserAllActivitySince($uid, $date) {
+		ignore_user_abort(1);
+		set_time_limit(0);
+		$end_date = date('Y-m-d');
+		ob_end_flush(); 
+		while (strtotime($date) <= strtotime($end_date)) {
+			$this->refreshUserPastRecord($uid, $date);
 		}
 	}
 

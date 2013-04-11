@@ -7,6 +7,7 @@
 						<div class="history-time">
 							<?php echo date("d M", strtotime($key)); ?>
 						</div>
+						<button type="button" class="btn btn-primary refresh-challenge-history" data-uid="<?php echo $value[0]->user_id ?>" data-date="<?php echo $key; ?>" data-loading-text="Refreshing...">Refresh</button>	
 					</div>
 					<div class="span7">
 						<div class="row-fluid">
