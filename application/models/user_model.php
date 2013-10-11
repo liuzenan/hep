@@ -67,6 +67,22 @@ function loadDailyReportUsers() {
 	$query = $this->db->query($sql);
 	return $query->result();
 }
+
+function loadAllStudents() {
+	$sql = "SELECT id FROM user";
+	$query = $this->db->query($sql);
+	return $query->result();
+}
+
+function loadStudentDidntCompleteSurvey() {
+	$sql = "SELECT id FROM user
+			WHERE user.id NOT IN ( SELECT userid FROM survey )";
+
+	$query = $this->db->query($sql);
+
+	return $query->result();
+}
+
 function insertAchievement($user_id, $achievement_id, $date){
 	try {
 		if($user_id&&$achievement_id&&$date){

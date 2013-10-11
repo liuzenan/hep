@@ -17,9 +17,14 @@ class Mail_model extends CI_Model{
 	<title>HEP Email</title>
 	</head>
 	<body>';
-	const Footer = '<br><br>Have a nice day and happy exercise!<br>
-	HEP Team<br>--<br>
-	If you don\'t want to receive this message any more, you can change your mail setting <a href="http://hep.d2.comp.nus.edu.sg/profile">at the profile page</a>.
+	const AnnouncementHeader = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+	<html>
+	<head>
+	<title>HEP Announcement</title>
+	</head>
+	<body>';
+	const AnnouncementFooter = '
 	<br></body>
 	</html>';
 	function __construct(){
@@ -43,6 +48,13 @@ class Mail_model extends CI_Model{
 		}
 
 	}
+
+	public function sendAnnouncement($user_id, $title, $msg) {
+		$uid = intval($user_id);
+		$u = $this->User_model->loadUser($uid);
+		$this->sendMessage($title, nl2br($msg), $u->email);
+	}
+
 	public function sendBadgeEarnedMessage($user_id, $badge_id) {
 		$u = $this->User_model->loadUser($user_id);
 		if($u->badge_email_unsub == 0) {
@@ -70,6 +82,10 @@ class Mail_model extends CI_Model{
 
 	private function getFullHTML($message) {
 		return Mail_model::Header . $message . Mail_model::Footer;
+	}
+
+	private function getAnnouncementHTML($message) {
+		return Mail_model::AnnouncementHeader . nl2br($message) . Mail_model::AnnouncementFooter;
 	}
 
 
@@ -161,7 +177,20 @@ class Mail_model extends CI_Model{
 
 		$summary = $this->Activity_model->getActivitySummary();
 		$this->load->helper('file');
-		$data["emailmsg"] = nl2br(read_file('emailmsg.txt'));
+		$todayDate = date("Y-m-d");
+		$ysdDate = date("Y-m-d", time() - 24*60*60);
+
+		$todayMsg = read_file('./messages/' . $todayDate);
+		if (empty($todayMsg)) {
+			$todayMsg = read_file('./messages/' . $ysdDate);
+		}
+
+		$data["emailmsg"] = "";
+		if (!empty($todayMsg)) {
+			# code...
+			$data["emailmsg"] = nl2br($todayMsg);
+		}
+		
 		$data['msg'] = sprintf($daily, 
 			$user->first_name." ".$user->last_name, 
 			$data["emailmsg"],
@@ -231,6 +260,15 @@ class Mail_model extends CI_Model{
 		$this->email->send();
 
 		echo $this->email->print_debugger();
+	}
+
+	public function sendMessage($title, $msg, $to) {
+		$this->email->from(Mail_model::HepAccount, Mail_model::HepName);
+		$this->email->to($to);
+		$this->email->subject($title);
+		$this->email->message($this->getAnnouncementHTML($msg));
+		$this->email->send();
+		//echo $this->email->print_debugger();
 	}
 
 

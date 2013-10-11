@@ -9,6 +9,7 @@ class Editmail extends CI_Controller {
 		} else {
 			$this->uid = $this->session->userdata('user_id');
 			$this->filePath = "./messages";
+			$this->load->helper('file');
 		}
 	}
 
@@ -19,19 +20,51 @@ class Editmail extends CI_Controller {
  		}
 
 		if($this->session->userdata('isadmin')){
-			$this->load->helper('file');
-			$data["emailmsg"] = read_file($this->filePath . '/emailmsg.txt');
+			$fileNames = get_filenames($this->filePath.'/');
+			$data["emailmsg"]=array();
+			$data["filenames"]=array();
+			$todayDate = date("Y-m-d");
+			$data["today"]=read_file($this->filePath . "/" . $todayDate);
+			foreach ($fileNames as $fileName) {
+				array_push($data["emailmsg"], read_file($this->filePath . "/" . $fileName));
+				array_push($data["filenames"], $fileName);
+			}
+			
 			$this->loadPage($data);
 		} else {
 			redirect(base_url() . "home");
 		}
 	}
 
+	public function textWriteFile() {
+		if (!write_file("./test.txt", "test")) {
+			# code...
+			echo "error";
+		} else {
+			echo "success";
+		}
+	}
+
 	public function updateEmailMessage(){
 		$emailMsg = $this->input->post("msg");
+		$emailDate = $this->input->post("date");
 		$emailMsg = htmlspecialchars($emailMsg);
 		$this->load->helper('file');
-		if (!write_file($this->filePath . 'emailmsg.txt', $emailMsg)) {
+		if (!write_file($this->filePath . '/' . $emailDate, $emailMsg)) {
+			# code...
+			$msg['success'] = false;
+			
+		} else {
+			$msg['success'] = true;
+			
+		}
+		echo json_encode($msg);
+	}
+
+	public function deleteEmailMessage(){
+		$emailDate = $this->input->post("date");
+		$this->load->helper('file');
+		if (!unlink($this->filePath . '/' . $emailDate)) {
 			# code...
 			$msg['success'] = false;
 			
