@@ -1,0 +1,28 @@
+<tr>
+	<td><a href="<?php echo base_url() . "stats/history/steps/week/" . $id; ?>"><strong><?php echo $first_name . ' ' . $last_name ?></strong></a></td>
+	<td><?php echo $email ?></td>
+	<td>
+		<?php if ($admin==1): ?>
+			<span class="label"><?php echo "Admin" ?></span>
+		<?php endif ?>
+		<?php if ($phantom==1): ?>
+			<span class="label"><?php echo "Phantom User" ?></span>
+		<?php endif ?>
+		<?php if ($staff==1): ?>
+			<span class="label"><?php echo "Tutor" ?></span>
+		<?php endif ?>
+		<?php if ($staff==0 && $house_id>0): ?>
+			<span class="label"><?php echo "Student" ?></span>
+			<span class="label"><?php echo "House: " . $house_id ?></span>
+		<?php endif ?>
+		<?php if ($leader==1): ?>
+			<span class="label"><?php echo "House Leader" ?></span>
+		<?php endif ?>	
+	</td>
+	<td><a href="<?php echo base_url() . "manage/user/" . $id; ?>" class="btn">Edit</a></td>
+	<td>
+	<?php if (!empty($doneSurvey)): ?>
+		<a href="<?php echo base_url() . "survey/surveyResult/" . $id  ?>">Survey</a>
+	<?php endif ?>
+	</td>
+</tr>

@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+
+    RewriteEngine on
+
+    # If the start of the URL doesn't match one of these...
+    RewriteCond $1 !^(index\.php|robots\.txt|assets|cache|themes|uploads)
+
+    # Route through index.php
+    RewriteRule ^(.*)$ index.php/$1 [L]
+
+</IfModule>
