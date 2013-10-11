@@ -52,7 +52,7 @@ class FitBitPHP
      * @param int $debug Debug mode (0/1) enables OAuth internal debug
      * @param string $userAgent User-agent to use in API calls
      */
-    public function __construct($consumer_key='56d1356a33db48c68f211d2507d93497', $consumer_secret='94d3834447df4944814130fcdf04e8f8', $debug = 1, $userAgent = null)
+    public function __construct($consumer_key='1052c599fa93418e8b3e6ac920110751', $consumer_secret='45e414dd49784ec3872a8ebbb74dcbb9', $debug = 1, $userAgent = null)
     {
         $this->initUrls();
 
@@ -60,8 +60,6 @@ class FitBitPHP
         $this->consumer_secret = $consumer_secret;
 
         $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
-
-        $this->oauth->disableSSLChecks();
 
         $this->debug = $debug;
         if (isset($userAgent))
@@ -93,7 +91,7 @@ class FitBitPHP
      * @param string $apiHost API host, i.e. api.fitbit.com (do you know any others?)
      * @param string $authHost Auth host, i.e. www.fitbit.com
      */
-    public function setEndpointBase($apiHost, $authHost, $https = false, $httpsApi = false)
+    public function setEndpointBase($apiHost, $authHost, $https = true, $httpsApi = false)
     {
         $this->apiHost = $apiHost;
         $this->authHost = $authHost;
@@ -101,7 +99,7 @@ class FitBitPHP
         $this->initUrls($https, $httpsApi);
     }
 
-    private function initUrls($https = false, $httpsApi = false)
+    private function initUrls($https = true, $httpsApi = false)
     {
 
         if ($httpsApi)
@@ -179,7 +177,6 @@ class FitBitPHP
 
         if ($_SESSION['fitbit_Session'] == 0) {
 
-            $this->oauth->disableSSLChecks();
             $request_token_info = $this->oauth->getRequestToken($this->requestTokenUrl, $callbackUrl);
 
             $_SESSION['fitbit_Secret'] = $request_token_info['oauth_token_secret'];

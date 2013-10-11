@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <IfModule mod_rewrite.c>
 
     RewriteEngine on
@@ -9,3 +10,9 @@
     RewriteRule ^(.*)$ index.php/$1 [L]
 
 </IfModule>
+=======
+RewriteEngine on
+RewriteBase /CmpOnline
+RewriteCond $1 !^(index\.php|images|javascript|stylesheets|uploads|robots\.txt)
+RewriteRule ^(.*)$ /index.php/$1 [L]
+>>>>>>> 6efa5f4eb853cfa007bef7bc39073910474f3293

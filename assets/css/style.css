@@ -24,39 +24,6 @@ body{
 	background: url(../img/brillant.png);
 }
 
-input[type="radio"]{
-	margin-right: 10px;
-	margin-left: 20px;
-	margin-top: -5px;
-}
-
-ul.survey-result>li{
-	list-style: none;
-}
-
-ul.survey-result .progress {
-	width: 40%;
-}
-
-ol.surveyresult li{
-	margin: 20px 0;
-}
-
-ul.survey-result li{
-	margin: 20px 0;
-}
-ul.survey-result p{
-	margin: 0;
-}
-
-ul.survey-result table tbody tr>td:last-child{
-	text-align: center;
-}
-
-.or {
-	margin: 5px;
-}
-
 .container{
 	margin-bottom: 20px;
 }

@@ -13,76 +13,6 @@ jQuery(document).ready(function($) {
 		trigger: 'hover'
 	});
 
-	$("#sendReminder").click(function(event){
-		
-		var emailMsg = $("#mailMsg").val();
-		var title = $("#mailTitle").val();
-		$("#sending-indicator").show();
-		$.ajax({
-			type:"POST",
-			url:base_url+'sendmail/sendReminder',
-			dataType:'json',
-			data:{
-				msg: emailMsg,
-				title: title
-			}
-		}).done(function(msg){
-			$("#sending-indicator").hide();
-			if (msg.success) {
-				alert("Email message sent!");
-				window.location.reload();
-			} else {
-				alert("Something went wrong...");
-			}
-		});
-	});
-
-	$("#sendMail").click(function(event){
-		var emailMsg = $("#mailMsg").val();
-		var title = $("#mailTitle").val();
-
-		$.ajax({
-			type:"POST",
-			url:base_url+'sendmail/sendMailMessage',
-			dataType:'json',
-			data:{
-				msg: emailMsg,
-				title: title
-			}
-		}).done(function(msg){
-			if (msg.success) {
-				alert("Email message sent!");
-				window.location.reload();
-			} else {
-				alert("Something went wrong...");
-			}
-		});
-	});
-
-	$("#survey_form").submit(function(event){
-
-		var num_selected = $("input[type='radio']:checked").length;
-		var finished = true;
-		console.log(num_selected);
-
-		if (num_selected != 7) {
-			finished = false;
-		};
-
-		var texts = $("#survey_form>textarea");
-		$.each(texts, function(index, value){
-			console.log($(value).val());
-			if ($(value).val() == "") {
-				finished = false;
-			};
-		})
-
-		if (!finished) {
-			alert("please finish all questions, thanks!");
-			return false;
-		}
-	});
-
 	$("#updateMail").click(function(event){
 		var emailMsg = $("#mailMsg").val();
 		$.ajax({
@@ -90,48 +20,11 @@ jQuery(document).ready(function($) {
 			url:base_url+'editmail/updateEmailMessage',
 			dataType:'json',
 			data:{
-				msg: emailMsg,
-				date: $("#emailDate").val()
+				msg: emailMsg
 			}
 		}).done(function(msg){
 			if (msg.success) {
 				alert("Email message has been updated");
-				window.location.reload();
-			} else {
-				alert("Something went wrong...");
-			}
-		});
-	});
-
-	$(".emailedit").click(function(event){
-		event.preventDefault();
-		var currentBtn = $(this);
-
-		var editdate = currentBtn.data("date");
-		var contentItem = $("#content"+currentBtn.data("msgId"));
-		var content = $("#content"+currentBtn.data("msgId")).text();
-		console.log(contentItem);
-
-		$("#emailDate").val(editdate);
-		$("#mailMsg").val(content);
-	});
-
-	$(".emaildelete").click(function(event){
-		event.preventDefault();
-		var currentBtn = $(this);
-
-		var editdate = currentBtn.data("date");
-		$.ajax({
-			type:"POST",
-			url:base_url+'editmail/deleteEmailMessage',
-			dataType:'json',
-			data:{
-				date: editdate
-			}
-		}).done(function(msg){
-			if (msg.success) {
-				alert("Email message has been deleted");
-				window.location.reload();
 			} else {
 				alert("Something went wrong...");
 			}

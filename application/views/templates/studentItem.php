@@ -20,9 +20,5 @@
 		<?php endif ?>	
 	</td>
 	<td><a href="<?php echo base_url() . "manage/user/" . $id; ?>" class="btn">Edit</a></td>
-	<td>
-	<?php if (!empty($doneSurvey)): ?>
-		<a href="<?php echo base_url() . "survey/surveyResult/" . $id  ?>">Survey</a>
-	<?php endif ?>
-	</td>
+	<td></td>
 </tr>
