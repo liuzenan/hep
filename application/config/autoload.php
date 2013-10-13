@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------
 | AUTO-LOADER
@@ -96,7 +96,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array();
+$autoload['language'] = array('hep');
 
 
 /*
@@ -109,7 +109,8 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('Challenge_model', 'Activity_model','Badge_model','Event_model','Forum_model','User_model');
+$autolod['model'] = array('Challenge_model', 'Activity_model', 'Badge_model', 'Event_model', 'Forum_model', 'User_model');
+
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */
