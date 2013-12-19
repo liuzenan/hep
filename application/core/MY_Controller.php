@@ -48,7 +48,7 @@ class My_Controller extends CI_Controller {
                 $this->date_today = date("Y-m-d", time());
                 $this->date_tomorrow = date("Y-m-d", time() + 60 * 60 * 24);
 
-                $this->isDemo = true;
+                $this->isDemo = false;
 
                 if ($this->isDemo) {
                     $this->date_today = "2013-03-10";
