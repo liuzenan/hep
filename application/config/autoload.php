@@ -109,7 +109,7 @@ $autoload['language'] = array('hep');
 |
 */
 
-$autolod['model'] = array('Challenge_model', 'Activity_model', 'Badge_model', 'Event_model', 'Forum_model', 'User_model');
+$autoload['model'] = array('Challenge_model', 'Activity_model', 'Badge_model', 'Event_model', 'Forum_model', 'User_model');
 
 
 /* End of file autoload.php */
