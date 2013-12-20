@@ -2,11 +2,6 @@
 
 class Forum_model extends My_Model
 {
-
-    const step = 1;
-    const floor = 2;
-    const sleep = 3;
-    const misc = 0;
     const table_thread = 'forumthread';
     const table_post = 'threadpost';
     const table_subscribe = 'postsubscription';
