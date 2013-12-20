@@ -9,25 +9,19 @@
 	<?php endif ?>
 <p class="section-title">Steps Challenges</p>
 <div class="clearfix steps">
-	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>1) ?>
-	<?php $this->load->view("templates/challengeCategory", $data) ?>
-</div>
-
-<p class="section-title">Climb Challenges</p>
-<div class="clearfix floors">
-	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>2) ?>
+	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>STEPS_CHALLENGE) ?>
 	<?php $this->load->view("templates/challengeCategory", $data) ?>
 </div>
 
 <p class="section-title">Sleep Challenges</p>
 <div class="clearfix sleep">
-	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>3) ?>
+	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>SLEEP_CHALLENGE) ?>
 	<?php $this->load->view("templates/challengeCategory", $data) ?>
 </div>
 
 <p class="section-title">Time-based Challenges</p>
 <div class="clearfix time-based">
-	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>0) ?>
+	<?php $data=array("path"=>$path,"challenges"=>$challenges, "type"=>TIMED_CHALLENGE) ?>
 	<?php $this->load->view("templates/challengeCategory", $data) ?>
 </div>
 <?php endif ?>

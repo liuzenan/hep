@@ -11,7 +11,7 @@ class Activity_model extends My_Model
 
     function getActivitySummary()
     {
-        $sql = "SELECT format(Sum(steps)/1000,0) as steps, format(Sum(floors)/1000,2) as floors, format(Sum(distance),0) as distance FROM activity";
+        $sql = "SELECT format(Sum(steps)/1000,0) as steps, format(Sum(distance),0) as distance FROM activity";
         $query = $this->db->query($sql);
 
         $res = $query->row();
@@ -42,7 +42,6 @@ class Activity_model extends My_Model
             $vars->user_id = $user_id;
             $vars->date = $date;
             $vars->steps = 0;
-            $vars->floors = 0;
             $vars->calories = 0;
             $vars->active_score = 0;
             $vars->distance = 0;
@@ -75,7 +74,6 @@ class Activity_model extends My_Model
     {
         //get activities data
         $sql = "SELECT max(a.steps) AS max_steps,
-		max(a.floors) AS max_floors, 
 		max(a.distance) AS max_distance, max(a.calories) as max_calories
 		FROM activity AS a
 		WHERE a.date=?";
@@ -89,11 +87,10 @@ class Activity_model extends My_Model
     {
         //get activities data
         $sql = "SELECT CEILING(avg(a.steps)) AS avg_steps,
-		CEILING(avg(a.floors)) AS avg_floors, 
 		CEILING(avg(a.distance)) AS avg_distance, 
 		CEILING(avg(a.calories)) as avg_calories
 		FROM activity AS a
-		WHERE a.date=? AND (a.steps>0 OR a.floors>0 OR a.distance>0)";
+		WHERE a.date=? AND (a.steps>0 OR a.distance>0)";
         $query = $this->db->query($sql, array(parent::getDateToday()));
         return $query->row();
     }
@@ -167,7 +164,7 @@ class Activity_model extends My_Model
 
     function getLifetimeActivityData($user_id)
     {
-        $sql = "SELECT sum(steps) AS total_steps, sum(floors) AS total_floors,
+        $sql = "SELECT sum(steps) AS total_steps,
 		sum(calories) AS total_calories, sum(active_score) AS total_activescore, 
 		sum(distance) AS total_distance, sum(elevation) AS total_elevation, 
 		sum(activity_calories) AS total_activitycalories
@@ -208,7 +205,6 @@ class Activity_model extends My_Model
 
         $query = $this->db->query($sql, array($user_id));
         $resultSet['steps'] = array();
-        $resultSet['floors'] = array();
         $resultSet['distance'] = array();
         $resultSet['calories'] = array();
         $resultSet['activity_calories'] = array();
@@ -218,7 +214,6 @@ class Activity_model extends My_Model
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $resultSet['steps'][$row->date] = $row->steps;
-                $resultSet['floors'][$row->date] = $row->floors;
                 $resultSet['calories'][$row->date] = $row->calories;
                 $resultSet['distance'][$row->date] = $row->distance;
                 $resultSet['activity_calories'][$row->date] = $row->activity_calories;
@@ -239,7 +234,6 @@ class Activity_model extends My_Model
             foreach ($query2->result() as $row) {
                 if (empty($resultSet['steps'][$row->date])) {
                     $resultSet['steps'][$row->date] = 0;
-                    $resultSet['floors'][$row->date] = 0;
                     $resultSet['calories'][$row->date] = 0;
                     $resultSet['distance'][$row->date] = 0;
                     $resultSet['activity_calories'][$row->date] = 0;
@@ -254,7 +248,6 @@ class Activity_model extends My_Model
             $date = date('Y-m-d', $i);
             if (empty($resultSet['steps'][$date])) {
                 $resultSet['steps'][$date] = 0;
-                $resultSet['floors'][$date] = 0;
                 $resultSet['distance'][$date] = 0;
                 $resultSet['calories'][$date] = 0;
                 $resultSet['activity_calories'][$date] = 0;
@@ -266,7 +259,6 @@ class Activity_model extends My_Model
         }
 
         ksort($resultSet['steps']);
-        ksort($resultSet['floors']);
 
         ksort($resultSet['distance']);
 

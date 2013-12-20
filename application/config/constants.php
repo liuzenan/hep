@@ -36,6 +36,20 @@ define('FOPEN_READ_WRITE_CREATE', 'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
+/*
+|--------------------------------------------------------------------------
+| Application Constants
+|--------------------------------------------------------------------------
+|
+| These are constants for the application
+|
+*/
+
+// Challenges
+define('TIMED_CHALLENGE', 0);
+define('STEPS_CHALLENGE', 1);
+define('SLEEP_CHALLENGE', 2);
+define('MAX_CHALLENGE_CATEGORY', 2);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

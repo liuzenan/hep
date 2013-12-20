@@ -26,7 +26,7 @@
 		<div class="current-challenge-list row-fluid expandable">
 			<div class="span4 yesterday">
 				<div class="challenge-title">Yesterday</div>
-				<?php for ($i=0; $i < 4; $i++) { ?>
+				<?php for ($i=0; $i <= MAX_CHALLENGE_CATEGORY; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 						<?php if (!empty($me_challenges_yesterday) && !empty($me_challenges_yesterday[$i])): ?>
 				<div class="challengeItem box">
@@ -55,7 +55,7 @@
 				
 					<div class="challenge-title">Today (<?php echo date("d M");?>)</div>
 
-				<?php for ($i=0; $i < 4; $i++) { ?>
+				<?php for ($i=0; $i <= MAX_CHALLENGE_CATEGORY; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 			<?php if ((intval(date("N"))==6 || intval(date("N"))==7) && $i==0): ?>
 				<div class="challengeItem box empty">
@@ -97,7 +97,7 @@
 			<div class="span4 tomorrow">
 			
 					<div class="challenge-title">Tomorrow</div>
-      			<?php for ($i=0; $i < 4; $i++) { ?>
+      			<?php for ($i=0; $i <= MAX_CHALLENGE_CATEGORY; $i++) { ?>
 					<div class="challenge-type-<?php echo $i ?>">
 			<?php if ((intval(date("N"))==5 || intval(date("N"))==6) && $i==0): ?>
 				<div class="challengeItem box empty">

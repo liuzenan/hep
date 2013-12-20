@@ -85,7 +85,7 @@ ul.survey-result table tbody tr>td:last-child{
 	border-bottom: 1px solid #ccc;
 }
 
-.activity-chart>.span3{
+.activity-chart>.span4{
 	height: 100%;
 	position: relative;
 }

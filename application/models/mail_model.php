@@ -100,7 +100,7 @@ class Mail_model extends My_Model
         $daily = "Good Morning %s, <br><br>
 		%s
 		<br><br>
-		Yesterday, you walked <b>%d steps (%s)</b>, climbed <b>%d floors (%s)</b>, 
+		Yesterday, you walked <b>%d steps (%s)</b>, 
 		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>. 
 		<br><br>You selected <b>%s</b> challenges yesterday and you completed <b>%d</b> of them.
 		You have completed <b>%d</b> challenges in total.<br>
@@ -115,7 +115,7 @@ class Mail_model extends My_Model
 		<u>Today you are working on the following challenges</u>:
 		<br>%s<br><br>
 
-		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%dK</b> floors, <b>%d kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
+		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%d kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
 		That's awesome! Thanks! :)
 		<br><br>";
         $ci =& get_instance();
@@ -135,7 +135,6 @@ class Mail_model extends My_Model
         $data['me_two_days_ago']->sleep = number_format((float)$data['me_sleep_two_days_ago']->total_time / 60, 2);
 
         $data['delta_steps'] = number_format($this->cauculateDelta($data['me_yesterday']->steps, $data['me_two_days_ago']->steps), 2);
-        $data['delta_floors'] = number_format($this->cauculateDelta($data['me_yesterday']->floors, $data['me_two_days_ago']->floors), 2);
         $data['delta_calories'] = number_format($this->cauculateDelta($data['me_yesterday']->calories, $data['me_two_days_ago']->calories), 2);
         $data['delta_distance'] = number_format($this->cauculateDelta($data['me_yesterday']->distance, $data['me_two_days_ago']->distance), 2);
         $data['delta_sleep'] = number_format($this->cauculateDelta($data['me_yesterday']->sleep, $data['me_two_days_ago']->sleep), 2);
@@ -204,9 +203,6 @@ class Mail_model extends My_Model
             $data['me_yesterday']->steps,
             ($data['delta_steps'] > 0 ? "up by " : "down by ") . $data['delta_steps'] . "%",
 
-            $data['me_yesterday']->floors,
-            ($data['delta_floors'] > 0 ? "up by " : "down by ") . $data['delta_floors'] . "%",
-
             number_format($data['me_yesterday']->sleep, 2),
             ($data['delta_sleep'] > 0 ? "up by " : "down by ") . $data['delta_sleep'] . "%",
 
@@ -224,7 +220,6 @@ class Mail_model extends My_Model
             //count($data['me_challenges']),
             $titlesX,
             $summary->steps,
-            $summary->floors,
             $summary->distance,
             $summary->sleep
 

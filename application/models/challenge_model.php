@@ -21,8 +21,8 @@ class Challenge_model extends My_Model
         $challenges = $this->getAllChallenges($user_id);
         $joinedToday = $this->loadJoinedCategory($user_id, $today);
         $joinedTomorrow = $this->loadJoinedCategory($user_id, $tomorrow);
-        $today = array(0 => 0, 1 => 0, 2 => 0, 3 => 0);
-        $tomorrow = array(0 => 0, 1 => 0, 2 => 0, 3 => 0);
+        $today = array(0 => 0, 1 => 0, 2 => 0);
+        $tomorrow = array(0 => 0, 1 => 0, 2 => 0);
 
         $todayJoined = array();
         $cpIds = array();
@@ -119,22 +119,20 @@ class Challenge_model extends My_Model
         return $this->db->insert_id();
     }
 
+    // TODO: refactor
     function preAllocateChallenge($user_id, $day1, $day2)
     {
         $sql1 = 'select * from challengeparticipant where (DATE(start_time)=? or DATE(start_time)=?) and user_id=?';
         $exists = $this->db->query($sql1, array($day1, $day2, $user_id))->result();
         if (empty($exists)) {
             $this->joinChallenge($user_id, 1, 1, $day1 . " 00:00:00", $day1 . " 23:59:59");
-            $this->joinChallenge($user_id, 7, 2, $day1 . " 00:00:00", $day1 . " 23:59:59");
-            $this->joinChallenge($user_id, 13, 3, $day1 . " 00:00:00", $day1 . " 23:59:59");
+            $this->joinChallenge($user_id, 13, 2, $day1 . " 00:00:00", $day1 . " 23:59:59");
             $this->joinChallenge($user_id, 22, 0, $day1 . " 00:00:00", $day1 . " 23:59:59");
             $this->joinChallenge($user_id, 1, 1, $day2 . " 00:00:00", $day2 . " 23:59:59");
-            $this->joinChallenge($user_id, 7, 2, $day2 . " 00:00:00", $day2 . " 23:59:59");
-            $this->joinChallenge($user_id, 13, 3, $day2 . " 00:00:00", $day2 . " 23:59:59");
+            $this->joinChallenge($user_id, 13, 2, $day2 . " 00:00:00", $day2 . " 23:59:59");
             $this->joinChallenge($user_id, 22, 0, $day2 . " 00:00:00", $day2 . " 23:59:59");
             $sql = "INSERT IGNORE INTO `postsubscription` (`thread_id`, `user_id`) VALUES (?, ?)";
             $this->db->query($sql, array(1, $user_id));
-            $this->db->query($sql, array(7, $user_id));
             $this->db->query($sql, array(13, $user_id));
             $this->db->query($sql, array(22, $user_id));
 
@@ -156,6 +154,7 @@ class Challenge_model extends My_Model
         return $this->carryOverChallenges($ystd, $now);
     }
 
+    // TODO: Refactor
     public function carryOverChallenges($ystd, $now)
     {
 
@@ -169,7 +168,7 @@ class Challenge_model extends My_Model
 			FROM   challengeparticipant
 			WHERE  DATE(start_time) = ?)";
         $uids = $this->db->query($sql, array($ystd, $now))->result();
-        $nextLevel = array(1 => 2, 2 => 3, 7 => 8, 8 => 9, 13 => 14, 14 => 15);
+        $nextLevel = array(1 => 2, 2 => 3, 13 => 14, 14 => 15);
         $today = intval(date("N", strtotime($ystd)));
         foreach ($uids as $u) {
             $uid = $u->user_id;
@@ -207,10 +206,11 @@ class Challenge_model extends My_Model
 
     }
 
+    // TODO: refactor
     function carryOverLastWeekTimeBasedChallenges($now)
     {
         $today = intval(date("N", strtotime($now)));
-        $nextLevel = array(1 => 2, 2 => 3, 7 => 8, 8 => 9, 13 => 14, 14 => 15);
+        $nextLevel = array(1 => 2, 2 => 3, 13 => 14, 14 => 15);
         $sql = "SELECT DISTINCT c1.user_id
 					FROM   challengeparticipant AS c1
 					WHERE  c1.user_id IN (SELECT DISTINCT user_id
@@ -467,21 +467,9 @@ class Challenge_model extends My_Model
             $status = $this->Activity_model->getActivityStats($user_id, $c->start_time, $c->end_time);
             //var_dump($status);
             //var_dump($c);
-            if ($c->steps_value != 0 && $c->floor_value != 0) {
-                $progress = 0.5 * ($status->steps / $c->steps_value) +
-                    0.5 * ($status->floors / $c->floor_value);
-
-                $progress = number_format($progress, 2);
-                $this->updateProgress($c->id, $progress, $c->start_time, $c->end_time, $c->steps_value, "steps", $c->thread_id);
-
-            } else if ($c->steps_value != 0) {
+            if ($c->steps_value != 0) {
                 $progress = number_format($status->steps / $c->steps_value, 2);
                 $this->updateProgress($c->id, $progress, $c->start_time, $c->end_time, $c->steps_value, "steps", $c->thread_id);
-            } else if ($c->floor_value != 0) {
-                $progress = number_format($status->floors / $c->floor_value, 2);
-
-                $this->updateProgress($c->id, $progress, $c->start_time, $c->end_time, $c->floor_value, "floors", $c->thread_id);
-
             } else if ($c->sleep_value != 0) {
                 $value = $this->Activity_model->getSleepData($user_id, $date);
 

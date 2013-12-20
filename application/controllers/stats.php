@@ -87,10 +87,6 @@ class Stats extends Admin_Controller
                     # code...
                     $activity = $data['steps'];
                     break;
-                case 'floors':
-                    # code...
-                    $activity = $data['floors'];
-                    break;
                 case 'calories':
                     # code...
                     $activity = $data['calories'];
@@ -157,10 +153,6 @@ class Stats extends Admin_Controller
                         'date' => (string)$best->distance->date,
                         'value' => (string)number_format((double)$best->distance->value, 2) . " Km"
                     ),
-                    'Floors' => array(
-                        'date' => (string)$best->floors->date,
-                        'value' => (string)$best->floors->value . " Levels"
-                    ),
                     'Steps' => array(
                         'date' => (string)$best->steps->date,
                         'value' => (string)$best->steps->value . " Steps"
@@ -179,7 +171,6 @@ class Stats extends Admin_Controller
                 $stats['lifetime'] = array(
                     'Calories' => (string)$lifetime->caloriesOut . " Calories",
                     'Distance' => (string)number_format((double)$lifetime->distance, 2) . " Km",
-                    'Floors' => (string)(empty($hepLifeTime->total_floors) ? 0 : $hepLifeTime->total_floors) . " Levels",
                     'Steps' => (string)$lifetime->steps . " Steps",
                     'Sleep' => (string)number_format($this->Activity_model->getLifetimeSleepData($uid) / 60, 2) . " Hours"
                 );

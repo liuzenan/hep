@@ -105,17 +105,15 @@ class Challenges extends MY_Controller
                     $msg = "You can join only one challenge in %s category per day. Please drop %s to join this one.";
                     $category = "";
                     switch ($now->category) {
-                        case 1:
+                        case STEPS_CHALLENGE:
                             $category = "Steps";
                             break;
-                        case 2:
-                            $category = "Floors";
-                            break;
-                        case 3:
+                        case SLEEP_CHALLENGE:
                             $category = "Sleeping";
                             break;
-                        case 0:
+                        case TIMED_CHALLENGE:
                             $category = "Time Based";
+                            break;
                     }
                     return sprintf($msg, $category, $now->title);
                 }

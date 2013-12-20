@@ -41,7 +41,6 @@ class Home extends MY_Controller
         $timestr .= microtime() . "<br>";
 
         $data['delta_steps'] = number_format($this->cauculateDelta($data['me_today']->steps, $data['me_yesterday']->steps), 2);
-        $data['delta_floors'] = number_format($this->cauculateDelta($data['me_today']->floors, $data['me_yesterday']->floors), 2);
         $data['delta_calories'] = number_format($this->cauculateDelta($data['me_today']->calories, $data['me_yesterday']->calories), 2);
         $data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance), 2);
         $data['delta_sleep'] = number_format($this->cauculateDelta($data['me_today']->sleep, $data['me_yesterday']->sleep), 2);
@@ -84,7 +83,6 @@ class Home extends MY_Controller
         //$data['max_today'] = $this->Activity_model->getMaxActivityToday();
         $data['max_today'] = new stdClass;
         $data['max_today']->max_steps = max($data['avg_today']->avg_steps, $data['me_today']->steps);
-        $data['max_today']->max_floors = max($data['avg_today']->avg_floors, $data['me_today']->floors);
         $data['max_today']->max_distance = max($data['avg_today']->avg_distance, $data['me_today']->distance);
         $data['max_today']->max_calories = max($data['avg_today']->avg_calories, $data['me_today']->calories);
         $data['max_today']->max_sleep = max($data['avg_today']->avg_sleep, $data['me_today']->sleep);
@@ -139,7 +137,6 @@ class Home extends MY_Controller
         $data['activescore'] = $activityRow->active_score;
         $data['calories'] = $activityRow->activity_calories;
         $data['distance'] = $activityRow->distance;
-        $data['floors'] = $activityRow->floors;
         $data['steps'] = $activityRow->steps;
 
     }
