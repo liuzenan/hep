@@ -41,13 +41,50 @@
 			</fieldset>
 		</form>
 		<button class="btn btn-large btn-block btn-primary" id="facebookbtn">Link with Facebook</button>
+		<br/>
+		<p id='status'></p>
 	</div>
 </div>
 </div>
 <script>
 jQuery(document).ready(function($) {
+	var lastTimestamp;
+	var animation;
+	function updateSuccess() {
+		$('#status')
+			.text('All settings updated')
+			.removeClass('text-info')
+			.addClass('text-success');
+
+		animation = window.setTimeout(function() {
+			$('#status').fadeOut();
+		}, 1000);
+
+	}
+
+	function updateSaving() {
+		window.clearTimeout(animation);
+
+		$('#status')
+			.stop()
+			.text('Updating your settings...')
+			.show()
+			.css('opacity', 1)
+			.removeClass('text-success')
+			.addClass('text-info');
+	}
+
+	function updateFailure() {
+
+	}
 	$(".checkbox input").click(function(event){
+		var now = new Date().getTime();
+		lastTimestamp = now;
+		updateSaving();
 		$.post("<?php echo base_url() . 'profile/update' ?>", $("#userinfo").serialize(), function(msg){
+				if (now === lastTimestamp) {
+					updateSuccess();
+				}
 				console.log(msg);
 			});
 	});
