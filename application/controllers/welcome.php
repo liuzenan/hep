@@ -20,7 +20,8 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		if(!$this->session->userdata('user_id')){
-			$this->load->view('welcome');
+			$data['summary'] = $this->Activity_model->getActivitySummary();
+			$this->load->view('welcome', $data);
 		}else{
 			redirect(base_url() . "home");
 		}
