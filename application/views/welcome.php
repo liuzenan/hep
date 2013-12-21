@@ -149,9 +149,9 @@
         <p class="registerbtn">
           <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Register</a>
         </p>
+        <p class="muted text-center">or</p>
         <p class="loginbtn">
           <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Login with Fitbit</a>
-          <span class="muted">or</span>
           <a href="javascript:void(0);" id="facebooklogin" class="btn btn-primary">Login with Facebook</a>
         </p>
         <div class="emailinput">
@@ -165,6 +165,9 @@
       <p class='text-center'>
         Total <?php echo $summary->steps ?>K steps, <?php echo $summary->distance ?> kilometers,
         <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
+      </p>
+      <p class='text-center'>
+        <a href='mailto:hep-support@googlegroups.com'>Contact Us</a>
       </p>
     </div>
 </div>
