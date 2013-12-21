@@ -340,9 +340,14 @@ span.activityIcon.floors{
 	margin-right: auto;
 }
 
+
+.registerbtn{
+	text-align: center;
+}
+
 .loginbtn{
 	text-align: center;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 .loginbtn span{

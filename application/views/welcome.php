@@ -159,12 +159,14 @@
           <input type="text" class="input-block-level" id="email" name="email"><br>
           <button id="linkWithFacebook" class="btn btn-block">Link to Account</button>
         </div> 
-        <div>
-          Total <?php echo $summary->steps ?>K steps, <?php echo $summary->distance ?> kilometers,
-          <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
-        </div>
       </div>
     </div>  
+    <div>
+      <p class='text-center'>
+        Total <?php echo $summary->steps ?>K steps, <?php echo $summary->distance ?> kilometers,
+        <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
+      </p>
+    </div>
 </div>
     <script src="/assets/js/jquery-1.9.1.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
