@@ -152,22 +152,25 @@
 <div class="wrapper welcome">
     <div class="container">
       <h3 class="maintitle">Health Enhancement Programme</h3>
+      
       <div class="logincontrol well">
-      <p class="loginbtn">
-        <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Login with Fitbit</a>
-        <span class="muted">or</span>
-        <a href="javascript:void(0);" id="facebooklogin" class="btn btn-primary">Login with Facebook</a>
-      </p>
-      <div class="emailinput">
-        <label for="email"><small class="muted">Please enter your email registered with HEP</small></label>
-        <input type="text" class="input-block-level" id="email" name="email"><br>
-        <button id="linkWithFacebook" class="btn btn-block">Link to Account</button>
-      </div> 
-      <div>
-        Total <?php echo $summary->steps ?>K steps, <?php echo $summary->distance ?> kilometers,
-        <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
-      </div>
-      <a href="<?php echo base_url() . 'staticpages/faq'?>" target="_blank">FAQ</a>       
+        <p class="registerbtn">
+          <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Register</a>
+        </p>
+        <p class="loginbtn">
+          <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Login with Fitbit</a>
+          <span class="muted">or</span>
+          <a href="javascript:void(0);" id="facebooklogin" class="btn btn-primary">Login with Facebook</a>
+        </p>
+        <div class="emailinput">
+          <label for="email"><small class="muted">Please enter your email registered with HEP</small></label>
+          <input type="text" class="input-block-level" id="email" name="email"><br>
+          <button id="linkWithFacebook" class="btn btn-block">Link to Account</button>
+        </div> 
+        <div>
+          Total <?php echo $summary->steps ?>K steps, <?php echo $summary->distance ?> kilometers,
+          <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
+        </div>
       </div>
     </div>  
 </div>
