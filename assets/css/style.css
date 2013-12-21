@@ -643,16 +643,6 @@ margin-bottom: 10px;
 
 .myactivity .current-challenges .current-challenge-list{
 	position: relative;
-	height: 220px;
-	overflow: hidden;
-	transition: height 0.6s;
-	-moz-transition: height 0.6s; /* Firefox 4 */
-	-webkit-transition: height 0.6s; /* Safari and Chrome */
-	-o-transition: height 0.6s; /* Opera */
-}
-
-.expandable.expand{
-	overflow: visible !important;
 }
 
 .section-title a{

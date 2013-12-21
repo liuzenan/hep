@@ -1,6 +1,6 @@
 <div class="row-fluid current-challenges">
 	<div class="span12">
-		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="expandbtn pull-right"><i class="icon-chevron-down icon-large"></i></a><a href="javascript:void(0);" class="refresh-challenge-button pull-right enabled"><i class="icon-refresh icon-large"></i></a></p>
+		<p class="section-title">Current Challenges <a href="javascript:void(0);" class="refresh-challenge-button pull-right enabled"><i class="icon-refresh icon-large"></i></a></p>
 		<div class="row-fluid challenge-stats">
 			<table class="table challenge-stats">
 				<tbody>
@@ -23,7 +23,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="current-challenge-list row-fluid expandable">
+		<div class="current-challenge-list row-fluid">
 			<div class="span4 yesterday">
 				<div class="challenge-title">Yesterday</div>
 				<?php for ($i=0; $i <= MAX_CHALLENGE_CATEGORY; $i++) { ?>
