@@ -8,7 +8,7 @@ class User_model extends My_Model
         parent::__construct();
     }
 
-    function validateUser($user_id)
+    function validateUserInfo($user_id)
     {
         $sql = "SELECT id
 		FROM   user
@@ -23,11 +23,26 @@ AND id=?";
         return false;
     }
 
-    function loadUser($user_id)
-    {
+    private function loadUserCore($user_id) {
         $query = $this->db->get_where('user', array('id' => $user_id));
         if ($query->num_rows() > 0) {
             return $query->row();
+        } else {
+            return null;
+        }
+    }
+
+    function validateUser($user_id) {
+        $user = $this->loadUserCore($user_id);
+        return !empty($user);
+    }
+
+    function loadUser($user_id)
+    {
+        
+        $user = $this->loadUserCore($user_id);
+        if (!empty($user)) {
+            return $user;
         } else {
             show_error('Cannot find user', 501);
         }

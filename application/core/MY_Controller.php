@@ -33,8 +33,11 @@ class My_Controller extends CI_Controller {
             $this->load->model('Challenge_model');
             $this->load->model('Badge_model');
 
-            $valid = $this->User_model->validateUser($this->session->userdata('user_id'));
-            if (!empty($valid)) {
+            $validUser = $this->User_model->validateUser($this->session->userdata('user_id'));
+            $validInfo = $this->User_model->validateUserInfo($this->session->userdata('user_id'));
+            if (!$validUser) {
+                redirect(base_url() . 'logout');
+            } else if (!empty($valid)) {
                 redirect(base_url() . "signup");
             } else if (! $this->User_model->hasAccess($this->session->userdata('user_id'))) {
                 redirect(base_url() . 'welcome/thankyou');
