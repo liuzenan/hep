@@ -25,6 +25,7 @@
         // connected
         $("#facebookbtn").attr("disabled","disabled");
         $("#facebookbtn").html("Facebook Connected");
+        $("#skip").text('Continue');
       } else if (response.status === 'not_authorized') {
         // not_authorized
         login();
@@ -98,7 +99,7 @@
         <button class="btn btn-large btn-block btn-primary" id="facebookbtn">Link with Facebook</button>
       </div>
       <?php if(empty($active) || $active!="profile"): ?>
-        <div class="span4 skip"><p><a href="<?php echo base_url() . 'home' ?>">Skip</a></p></div>
+        <div class="span4 skip"><p><a href="<?php echo base_url() . 'home' ?>" id="skip">Skip</a></p></div>
       <?php endif ?>
     </div>
   </div>

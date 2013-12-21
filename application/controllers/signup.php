@@ -22,7 +22,14 @@ class Signup extends CI_Controller
             redirect(base_url() . "login");
         } else {
             $this->uid = $this->session->userdata('user_id');
-            $this->load->view('signup');
+            $query = $this->db->get('house');
+            $houses = [];
+            foreach ($query->result() as $row) {
+                $houses['id'] = $row->id;
+                $houses['name'] = $row->name;
+            }
+            $data['houses'] = $houses;
+            $this->load->view('signup', $data);
         }
 
     }
