@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fitbit App</title>
+    <!-- Bootstrap -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="/assets/css/style.css">
+  </head>
+  <body>
+<div class="wrapper welcome">
+    <div class="container">
+      <h3 class="maintitle">Health Enhancement Programme</h3>
+      
+      <div class="logincontrol well">
+        <p class="text-info text-center">Thank you for registering with us.</p>
+        <p class="text-info text-center">You will be notified when you can access the system.</p>
+       
+      </div>
+    </div>  
+     <div>
+      <p class='text-center'>
+        Total <?php echo $summary->steps ?>K steps, <?php echo $summary->distance ?> kilometers,
+        <?php echo $summary->sleep ?>K hours of sleep recorded in the system.
+      </p>
+      </div>
+</div>
+    <script src="/assets/js/jquery-1.9.1.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+  </body>
+</html>

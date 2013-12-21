@@ -19,6 +19,10 @@ AND id=?";
         return $this->db->query($sql, array($user_id))->row();
     }
 
+    function hasAccess($user_id) {
+        return false;
+    }
+
     function loadUser($user_id)
     {
         $query = $this->db->get_where('user', array('id' => $user_id));

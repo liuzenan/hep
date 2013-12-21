@@ -36,6 +36,8 @@ class My_Controller extends CI_Controller {
             $valid = $this->User_model->validateUser($this->session->userdata('user_id'));
             if (!empty($valid)) {
                 redirect(base_url() . "signup");
+            } else if (! $this->User_model->hasAccess($this->session->userdata('user_id'))) {
+                redirect(base_url() . 'welcome/thankyou');
             } else {
                 $this->uid = $this->session->userdata('user_id');
                 $this->load->library('ga_api');

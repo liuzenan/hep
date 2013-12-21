@@ -25,6 +25,12 @@ class Welcome extends CI_Controller {
 			redirect(base_url() . "home");
 		}
 	}
+
+	public function thankyou() {
+		$data['summary'] = $this->Activity_model->getActivitySummary();
+		$this->load->view('thankyou', $data);
+	}
+
 }
 
 /* End of file welcome.php */
