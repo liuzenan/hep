@@ -35,7 +35,6 @@ class Manage extends Admin_Controller
         if ($this->session->userdata('isadmin') && $user_id) {
             $data['user'] = $this->currentUser($user_id);
             $data['invalidperiod'] = $this->User_model->getInvalidPeriod($user_id);
-            var_dump($data['invalidperiod']);
             $this->loadPage($data, "manageuser");
             $this->session->set_userdata(array("manage_user_id" => $user_id));
         } else {
