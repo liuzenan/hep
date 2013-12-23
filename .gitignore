@@ -3,3 +3,5 @@
 /application/.DS_Store
 /.DS_Store
 /assets/.DS_Store
+application/config/database.php
+index.php
