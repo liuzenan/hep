@@ -16,6 +16,8 @@ class Mail_model extends My_Model
 	<title>HEP Email</title>
 	</head>
 	<body>';
+
+    const Footer = '';
     const AnnouncementHeader = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	"http://www.w3.org/TR/html4/strict.dtd">
 	<html>

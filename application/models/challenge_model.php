@@ -577,8 +577,11 @@ class Challenge_model extends My_Model
 		WHERE  cp.progress>=1
 		AND cp.inactive=0";
         $total = $this->db->query($sql2)->row()->total;
-
-        return $total / $count;
+        if ($count) {
+            return $total / $count;
+        } else {
+            return 0;
+        }
     }
 
     function getAllChallenges($user_id)
