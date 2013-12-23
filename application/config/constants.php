@@ -50,6 +50,6 @@ define('TIMED_CHALLENGE', 0);
 define('STEPS_CHALLENGE', 1);
 define('SLEEP_CHALLENGE', 2);
 define('MAX_CHALLENGE_CATEGORY', 2);
-
+define('BASELINE', '2013-12-15');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

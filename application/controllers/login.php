@@ -2,7 +2,6 @@
 
 class Login extends CI_Controller
 {
-    const BASELINE = "2013-02-13";
 
     public function index()
     {
@@ -102,7 +101,7 @@ class Login extends CI_Controller
     {
         $user_id = $this->session->userdata('user_id');
         $this->load->model('Activity_model', 'activities');
-        $this->activities->sync_activity('today', Login::BASELINE, $user_id);
+        $this->activities->sync_activity('today', BASELINE, $user_id);
     }
 
     private function getSleep()
@@ -118,7 +117,7 @@ class Login extends CI_Controller
         if ($this->session->userdata('oauth_token') && $this->session->userdata('oauth_secret')) {
             $this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
             $basedate = 'today';
-            $period = Login::BASELINE;
+            $period = BASELINE;
 
             $startTime = $this->fitbitphp->getTimeSeries('startTime', $basedate, $period);
             $timeInBed = $this->fitbitphp->getTimeSeries('timeInBed', $basedate, $period);
