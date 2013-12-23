@@ -9,7 +9,7 @@
 
 class My_Model extends CI_Model
 {
-    private $isTesting = true;
+    private $isTesting = false;
 
     private $date_today = "2013-03-10";
     private $date_yesterday = "2013-03-09";
