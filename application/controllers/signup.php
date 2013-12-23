@@ -25,8 +25,7 @@ class Signup extends CI_Controller
             $query = $this->db->get('house');
             $houses = [];
             foreach ($query->result() as $row) {
-                $houses['id'] = $row->id;
-                $houses['name'] = $row->name;
+                $houses[$row->id] = $row->name;
             }
             $data['houses'] = $houses;
             $this->load->view('signup', $data);
