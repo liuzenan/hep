@@ -5,3 +5,5 @@
 /assets/.DS_Store
 application/config/database.php
 index.php
+application/config/development
+application/config/production

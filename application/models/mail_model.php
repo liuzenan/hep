@@ -32,11 +32,8 @@ class Mail_model extends My_Model
     function __construct()
     {
         parent::__construct();
-        $config = Array(
-            'protocol' => 'sendmail',
-            'mailtype' => 'html',
-            'charset' => 'utf-8'
-        );
+        $this->config->load('mail');
+        $config = $this->config->item('mailconfig');
         $this->load->library('email', $config);
     }
 
