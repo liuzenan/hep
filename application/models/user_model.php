@@ -20,7 +20,7 @@ AND id=?";
     }
 
     function hasAccess($user_id) {
-        return false;
+        return !false;
     }
 
     private function loadUserCore($user_id) {
