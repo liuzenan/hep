@@ -81,13 +81,15 @@ class Checksubscribe extends CI_Controller
         $user_set = array();
         if ($query->num_rows() > 0) {
             # code...
-            foreach ($query->result() as $row) {
-                $result = $query->row();
+            foreach ($query->result() as $result) {
                 $user_token = $result->oauth_token;
                 $user_secret = $result->oauth_secret;
                 $this->fitbitphp->setOAuthDetails($user_token, $user_secret);
                 try {
                     $xml = $this->fitbitphp->getSubscriptions();
+                    if (count($xml->apiSubscriptions->apiSubscription) == 0) {
+                        echo '<p>No subscription for: ' . $result->id . '</p>';
+                    } 
                     foreach ($xml->apiSubscriptions->apiSubscription as $value) {
                         var_dump((string)$value->collectionType);
                         $collectionType = (string)$value->collectionType;
