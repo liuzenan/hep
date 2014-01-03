@@ -8,6 +8,7 @@ class Mail_model extends My_Model
     const HepName = 'Health Enhancement Program';
     const TitleBadgeEarned = 'Congrats for earning %s badge!';
     const TitleDailyReport = 'HEP Daily Report';
+    const TitleInvitation = 'HEP Registration Code';
 
     const Header = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	"http://www.w3.org/TR/html4/strict.dtd">
@@ -254,6 +255,18 @@ class Mail_model extends My_Model
 
     }
 
+    public function sendInvitation($name, $email, $code) {
+        $msg = "Dear " . $name . ", <br/><br/>
+        Your HEP registration code is:<br/>
+        <p style=\"font-size:x-large\">".$code."</p><br/>
+
+        Please register on the <a href=\"http://hep.d2.comp.nus.edu.sg/\">HEP Platform</a> with
+        your Fitbit account as soon as possible.<br/><br/><br/>
+
+        Health Enhancement Programme";
+
+        $this->send(Mail_model::TitleInvitation, $msg, $email);
+    }
 
     public function send($title, $msg, $to)
     {
@@ -264,7 +277,7 @@ class Mail_model extends My_Model
         //$this->email->message($msg);
         $this->email->send();
 
-        echo $this->email->print_debugger();
+        //echo $this->email->print_debugger();
     }
 
     public function sendMessage($title, $msg, $to)

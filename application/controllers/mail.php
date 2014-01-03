@@ -22,6 +22,25 @@ class Mail extends CI_Controller
 
     }
 
+    public function invite($code = NULL) {
+        if ($code) {
+            $query = $this->db->get_where('registration', array('code' => $code));
+            if ($query->num_rows() > 0) {
+                $row = $query->row();
+                $this->Mail_model->sendInvitation($row->name, $row->email, $row->code);
+            } else {
+                echo 'code not found';
+            }
+        } else {
+            // invite all codes that have not been used
+            $query = $this->db->get_where('registration', array('supercode' => 0, 'used' => 0));
+            foreach ($query->result() as $row) {
+                $this->Mail_model->sendInvitation($row->name, $row->email, $row->code);
+            }
+        }
+        echo 'success';
+    }
+
     private function checkSubscribe()
     {
         $query = $this->db->query("SELECT * FROM user");

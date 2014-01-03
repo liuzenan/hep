@@ -135,6 +135,21 @@ class Manage extends Admin_Controller
         }
     }
 
+    public function unregistered() {
+        if ($this->session->userdata('isadmin')) {
+            $data = array();
+            $data['students'] = array();
+
+            $query = $this->db->get_where('registration', array('used' => 0));
+            foreach ($query->result_array() as $student) {
+                $data['students'][] = $student;
+            }
+            $data['house_id'] = -2;
+            $this->loadPage($data, "adminUnregistered");
+        } else {
+            redirect(base_url() . "home");
+        }
+    }
     /*
         public function studentList(){
 
