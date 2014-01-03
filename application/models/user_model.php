@@ -20,7 +20,8 @@ AND id=?";
     }
 
     function hasAccess($user_id) {
-        return !false;
+        $query = $this->db->get_where('user', array('id' => $user_id));
+        return $query->row()->access == 1;
     }
 
     private function loadUserCore($user_id) {
