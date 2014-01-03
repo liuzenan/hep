@@ -78,10 +78,43 @@ class Signup extends CI_Controller
 
     public function submit()
     {
+        $msg = array('success' => false, 'message' => '');
+
         $firstname = $this->input->post("firstname");
         $lastname = $this->input->post("lastname");
         $email = $this->input->post("email");
         $house = $this->input->post("house");
+        $code = $this->input->post('registrationcode');
+
+        $query = $this->db->get_where('registration', array('code' => $code));
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            $access = $row->access;
+            $used = $row->used;
+            $is_super = $row->supercode;
+
+            if (!$is_super) {
+                if ($used) {
+                    $msg['message'] = 'The registration code has already been used.';
+                    echo json_encode($msg); 
+                    return false;
+                } else if ($house < 0) {
+                    $msg['message'] = 'You cannot register as a Tutor.';
+                    echo json_encode($msg);
+                    return false;
+                } else {
+                    $data = array();
+                    $data['used'] = 1;
+                    $this->db->where('code', $code);
+                    $this->db->update('registration', $data);
+                }
+            }
+
+        } else {
+            $msg['message'] = 'You have entered an invalid registration code';
+            echo json_encode($msg); 
+            return false;
+        }
 
         if ($firstname && $lastname && $email) {
             $data = array();
@@ -93,6 +126,7 @@ class Signup extends CI_Controller
             $data['leader'] = 0;
             $data['phantom'] = 0;
             $data['staff'] = 0;
+            $data['access'] = $access;
 
             if ($house != "0") {
                 $data['house_id'] = $house;
@@ -107,8 +141,13 @@ class Signup extends CI_Controller
             $this->db->where('id', $this->session->userdata('user_id'));
             $this->db->update('user', $data);
         } else {
-
+            $msg['message'] = 'Make sure that you have filled in all fields';
+            echo json_encode($msg);
+            return false;
         }
+
+        $msg['success'] = true;
+        echo json_encode($msg);
 
     }
 }

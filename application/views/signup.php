@@ -27,6 +27,8 @@
 								<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
 							<?php } ?>
 						</select>
+						<label for="registrationcode">Registration Code</label>
+						<input id="registrationcode" type="text" name="registrationcode">
 						<button id="submitbtn" class="btn btn-large btn-block">Next</button>
 					</fieldset>
 				</form>
@@ -37,16 +39,23 @@
     <script>
     	jQuery(document).ready(function($) {
     		$("#submitbtn").attr('disabled','disabled');
-    		$('input[type="text"], input[type="email"]').keyup(function() {
-		        if($("#firstname").val() != '' && $("#lastname").val() != '' && $("#email").val()!='') {
+    		$('#userinfo').change(function() {
+		        if($("#firstname").val() != '' && $("#lastname").val() != '' && $("#email").val()!='' && $("#registrationcode").val()!='' && $("#house").val() != '0') {
 		           $('#submitbtn').removeAttr('disabled');
+		        } else {
+		        	$("#submitbtn").attr('disabled','disabled');
 		        }
 		     });
 
     		$("#submitbtn").click(function(event){
     			event.preventDefault();
-    			$.post("<?php echo base_url() . 'signup/submit' ?>", $("#userinfo").serialize(), function(msg){
-    				window.location.replace("<?php echo base_url() . 'signup/linkFB' ?>");
+    			$.post("<?php echo base_url() . 'signup/submit' ?>", $("#userinfo").serialize(), function(data){
+    				var msg = JSON.parse(data); 
+    				if (msg.success) {
+    					window.location.replace("<?php echo base_url() . 'signup/linkFB' ?>");
+    				} else {
+    					alert(msg.message);
+    				}
     			});
     		});
     	});
