@@ -8,21 +8,6 @@ class Forum extends MY_Controller
         $this->load->model("Forum_model");
     }
 
-    public function challenge()
-    {
-
-        $forums = $this->Forum_model->getChallengeForum($this->uid);
-        $data['threads'] = $forums;
-        $data['users'] =
-            count($data['threads']['uids']) > 0
-                ? $this->User_model->loadUsers($data['threads']['uids'])
-                : array();
-        unset($data['threads']['uids']);
-        $data['active'] = 'challenge_forum';
-        //echo "<pre>"; print_r($data);echo "</pre><br>";
-        $this->loadView($data, "challenge");
-    }
-
     public function general()
     {
         $forums = $this->Forum_model->getGeneralForum($this->uid);
