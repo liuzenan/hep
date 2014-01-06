@@ -11,27 +11,6 @@ class Subscriber extends CI_Controller
 
     }
 
-    public function carryOverLastFridayChallenge()
-    {
-        ignore_user_abort(1);
-        set_time_limit(0);
-        $this->Challenge_model->carryOverLastWeekTimeBasedChallenges(date("Y-m-d"));
-    }
-
-    public function carryOverToTomorrow()
-    {
-        ignore_user_abort(1);
-        set_time_limit(0);
-        $this->Challenge_model->carryOverToTomorrow();
-    }
-
-    public function carryOverToToday()
-    {
-        ignore_user_abort(1);
-        set_time_limit(0);
-        $this->Challenge_model->carryOverToToday();
-    }
-
     public function update()
     {
         $sql1 = "SELECT DISTINCT id
@@ -45,7 +24,6 @@ class Subscriber extends CI_Controller
             // echo $uid.'-'.$date.'<br>';
             $this->getActivities($uid, $date);
             $this->getSleep($uid, $date);
-            $this->updateProgress($uid, $date);
         }
         // echo "finish";
     }
@@ -65,8 +43,6 @@ class Subscriber extends CI_Controller
             $this->getSleep($user_id, $date);
             $this->getActivities($user_id, $ysd);
             $this->getSleep($user_id, $ysd);
-            $this->updateProgress($user_id, $date);
-            $this->updateProgress($user_id, $ysd);
             $msg = array(
                 "success" => true,
             );
@@ -85,7 +61,6 @@ class Subscriber extends CI_Controller
                         $user_id = $data['user_id'];
                         $date = $data['date'];
                         $this->getActivities($user_id, $date);
-                        $this->updateProgress($user_id, $date);
                     } else {
 
                     }
@@ -114,7 +89,6 @@ class Subscriber extends CI_Controller
             $user_id = $value->id;
             $this->getFullDayActivities($user_id, $date);
             $this->getSleep($user_id, $date);
-            $this->updateProgress($user_id, $date);
             ob_start();
             echo "update progress for user " . $user_id . " " . $date . "\n";
             ob_flush();
@@ -128,7 +102,6 @@ class Subscriber extends CI_Controller
         ob_start();
         $this->getActivities($uid, $date);
         $this->getSleep($uid, $date);
-        $this->updateProgress($uid, $date);
         $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
 
         echo "update progress for user " . $uid . " " . $date . "\n";
@@ -148,18 +121,6 @@ class Subscriber extends CI_Controller
         }
     }
 
-    public function updateAllProgressSince($date)
-    {
-        ignore_user_abort(1);
-        set_time_limit(0);
-        $end_date = date('Y-m-d');
-        while (strtotime($date) <= strtotime($end_date)) {
-            $this->updateAllProgress($date);
-            $date = date("Y-m-d", strtotime("+1 day", strtotime($date)));
-        }
-
-        echo "finish\n";
-    }
 
     public function sleep()
     {
@@ -172,7 +133,6 @@ class Subscriber extends CI_Controller
                         $user_id = $data['user_id'];
                         $date = $data['date'];
                         $this->getSleep($user_id, $date);
-                        $this->updateProgress($user_id, $date);
                     } else {
 
                     }
@@ -200,7 +160,6 @@ class Subscriber extends CI_Controller
             foreach ($query->result() as $row) {
                 echo "refresh ". $row->user_id;
                 $this->getActivities($row->user_id, $date_row->date);
-                $this->updateProgress($row->user_id, $date_row->date);
             }
         }
     }
@@ -428,7 +387,6 @@ class Subscriber extends CI_Controller
                     $this->activities->insert_intraday_activity($user_id, $date, $keypair);
                     $this->activities->sync_activity($date, '1d', $user_id, $keypair);
                     $this->getSleep($user_id, $date);
-                    $this->updateProgress($user_id, $date);
                     echo "updated for user" . $user_id . "\n";
                     flush();
                 } catch (Exception $e) {

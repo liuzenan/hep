@@ -4,9 +4,6 @@ class Home extends MY_Controller
 {
     public function index()
     {
-
-        //$this->Challenge_model->preAllocateChallenge($this->uid, $this->date_today, $this->date_tomorrow);
-      //  print_r($_SERVER);
         $data = $this->loadData();
         $this->load->view('templates/header', $data);
         $this->load->view('home', $data);
