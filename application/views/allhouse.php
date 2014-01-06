@@ -40,13 +40,12 @@
 						</div>
 						<div class="span3">
 							<strong class="muted">
-								<small>Today's Challenges</small>
+								<small>Daily Steps</small>
 							</strong>
 						</div>
 						<div class="span3">
 							<strong class="muted">
-								<small>Tomorrow's Challenges</small>
-
+								<small>Daily Sleep</small>
 							</strong>
 						</div>
 						<div class="span4">
@@ -57,35 +56,29 @@
 				</div>
 				<div class="row-fluid house-people-stats">
 					<div class="span2">
-						<small class="muted">completed <?php echo empty($value['completed']) ? 0 : $value['completed']->score ?> challenges</small>
 					</div>
-					<div class="span3 house-people-current">
-						<?php if (!empty($value['current'])): ?>
-						<?php foreach ($value['current'] as $current): ?>
-						<img class="challengeTitleTooltip" data-original-title="<?php echo $current->title ?>" src="<?php echo $current->badge_pic ?>" alt="">
-					<?php endforeach ?>
-				<?php endif ?>
+					<div class="span3 house-people-steps">
+						<span class="leaderboardTooltip" data-toggle="tooltip" data-placement="bottom" title="base on data collected from <?php empty($value['steps']->valid) ? print(0) : print(round($value['steps']->valid, 0)) ?> days">
+							<?php empty($value['steps']->score) ? print(0) : print(round($value['steps']->score, 0)) ?> steps
+						</span>
+					</div>
+					<div class="span3 house-people-sleep">
+						<span class="leaderboardTooltip" data-toggle="tooltip" data-placement="bottom" title="base on data collected from <?php empty($value['steps']->valid) ? print(0) : print(round($value['steps']->valid, 0)) ?> days">
+							<?php empty($value['sleep']->score) ? print(0) : print(round($value['sleep']->score / 60, 1)) ?> hours
+						</span>
+					</div>
+					<div class="span4 house-pepople-badges">
+						<?php if (!empty($value['badge'])): ?>
+							<?php foreach ($value['badge'] as $badge): ?>
+								<img class="challengeTitleTooltip" data-original-title="<?php echo $badge->name ?>"  src="<?php echo $badge->badge_pic ?>" alt="">
+							<?php endforeach ?>
+						<?php endif ?>
+					</div>
+				</div>
 			</div>
-			<div class="span3 house-people-tomorrow">
-				<?php if (!empty($value['tomorrow'])): ?>
-				<?php foreach ($value['tomorrow'] as $tomorrow): ?>
-				<img class="challengeTitleTooltip" data-original-title="<?php echo $tomorrow->title ?>" src="<?php echo $tomorrow->badge_pic ?>" alt="">
-			<?php endforeach ?>
-		<?php endif ?>
+		</div>
+	<?php endforeach ?>				
+	<?php endif ?>
 	</div>
-	<div class="span4 house-pepople-badges">
-		<?php if (!empty($value['badge'])): ?>
-		<?php foreach ($value['badge'] as $badge): ?>
-		<img class="challengeTitleTooltip" data-original-title="<?php echo $badge->name ?>"  src="<?php echo $badge->badge_pic ?>" alt="">
-	<?php endforeach ?>
-<?php endif ?>
-</div>
-
-</div>
-</div>
-</div>
-<?php endforeach ?>				
-<?php endif ?>
-</div>
 </div>
 </div>

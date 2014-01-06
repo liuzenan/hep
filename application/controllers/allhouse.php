@@ -23,10 +23,8 @@ class Allhouse extends Admin_Controller
         $data['house_id'] = $house_id;
         $members = $this->User_model->loadGroupMemberAvatar($house_id);
         $badges = $this->Badge_model->getHouseBadges($house_id);
-        $completed = $this->Challenge_model->getMyHouseStats($house_id);
-        $current = $this->Challenge_model->getHouseCurrentChallenges($house_id);
-        $tomorrow = $this->Challenge_model->getHouseTomorrowChallenges($house_id);
-
+        $sleep = $this->Challenge_model->getHouseSleepStats($house_id);
+        $steps = $this->Challenge_model->getHouseStepsStats($house_id);
 
         foreach ($members as $m) {
             $data['data'][$m->id]['profile'] = $m;
@@ -34,17 +32,13 @@ class Allhouse extends Admin_Controller
         foreach ($badges as $uid => $b) {
             $data['data'][$uid]['badge'] = $b;
         }
-
-        foreach ($completed as $uid => $c) {
-            $data['data'][$uid]['completed'] = $c;
+        foreach ($sleep as $row) {
+            $data['data'][$row->id]['sleep'] = $row;
+        }
+        foreach ($steps as $row) {
+            $data['data'][$row->id]['steps'] = $row;
         }
 
-        foreach ($current as $uid => $u) {
-            $data['data'][$uid]['current'] = $u;
-        }
-        foreach ($tomorrow as $uid => $u) {
-            $data['data'][$uid]['tomorrow'] = $u;
-        }
         $rank = $this->Challenge_model->getHouseRankAndPoints($house_id);
         $data['rank'] = $rank;
         return $data;

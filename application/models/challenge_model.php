@@ -129,70 +129,6 @@ class Challenge_model extends My_Model
         return $res;
     }
 
-    function getHouseCurrentChallenges($house_id)
-    {
-        return $this->getHouseChallenges($house_id, date("Y-m-d", time()));
-    }
-
-    function getHouseChallenges($house_id, $date)
-    {
-        $sql = "SELECT *
-		FROM challenge 
-		INNER JOIN challengeparticipant 
-		ON challenge.id=challengeparticipant.challenge_id 
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
-		WHERE DATE(challengeparticipant.start_time) = ?
-		AND challengeparticipant.inactive=0";
-
-        $query = $this->db->query($sql, array($house_id, $date));
-        $challenges = $query->result();
-        $res = array();
-        foreach ($challenges as $c) {
-            if (!isset($res[$c->user_id])) {
-                $res[$c->user_id] = array();
-            }
-            $res[$c->user_id][] = $c;
-        }
-
-        return $res;
-    }
-
-    function getHouseTomorrowChallenges($house_id)
-    {
-        return $this->getHouseChallenges($house_id, date("Y-m-d", time() + 24 * 60 * 60));
-    }
-
-    function getHouseCompletedChallenges($house_id)
-    {
-        $sql = "SELECT challenge.* , count(challengeparticipant.id) as times
-		FROM challenge
-		INNER JOIN challengeparticipant
-		ON challenge.id=challengeparticipant.challenge_id
-		AND challengeparticipant.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0) 
-		WHERE challengeparticipant.progress >= 1
-		AND challengeparticipant.inactive=0
-		GROUP BY challengeparticipant.challenge_id";
-
-        $query = $this->db->query($sql, array($house_id));
-        return $query->result();
-    }
-
-
-    function getIndividualChallenges($user_id, $date)
-    {
-
-        $sql = "SELECT *
-		FROM challenge
-		INNER JOIN challengeparticipant
-		ON challenge.id=challengeparticipant.challenge_id
-		AND challengeparticipant.user_id= ?
-		WHERE Date(challengeparticipant.start_time) = ?
-		GROUP BY challengeparticipant.challenge_id";
-
-        $query = $this->db->query($sql, array($user_id, $date));
-        return $query->result();
-    }
-
     function logMessage($message)
     {
         $data = array(
@@ -506,6 +442,42 @@ class Challenge_model extends My_Model
                     'picture' => $house->picture);
             }
         }
+    }
+
+    function getHouseSleepStats($house_id) {
+        $sql = "SELECT u.id as id,
+            AVG(s.total_time)  AS score,
+            COUNT(s.total_time) AS valid
+            FROM   user AS u,
+            sleep AS s
+            WHERE s.user_id = u.id
+            AND s.total_time > 0
+            AND u.house_id = ".$house_id."
+            AND u.phantom = 0
+            AND s.date > '".VALID_STATS_BASELINE."'
+            GROUP BY u.id";
+
+        $data = $this->db->query($sql)->result();
+
+        return $data;
+    }
+
+    function getHouseStepsStats($house_id) {
+        $sql = "SELECT u.id as id,
+            AVG(a.steps)  AS score,
+            COUNT(a.steps) AS valid
+            FROM   user AS u,
+            activity AS a
+            WHERE a.user_id = u.id
+            AND a.steps > 0
+            AND u.house_id = ".$house_id."
+            AND u.phantom = 0
+            AND a.date > '".VALID_STATS_BASELINE."'
+            GROUP BY u.id";
+
+        $data = $this->db->query($sql)->result();
+
+        return $data;
     }
 
     function getTotalPoints($user_id)

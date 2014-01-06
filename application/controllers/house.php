@@ -14,9 +14,8 @@ class House extends MY_Controller
 
         $members = $this->User_model->loadGroupMemberAvatar($user->house_id);
         $badges = $this->Badge_model->getHouseBadges($user->house_id);
-        $completed = $this->Challenge_model->getMyHouseStats($user->house_id);
-        $current = $this->Challenge_model->getHouseCurrentChallenges($user->house_id);
-        $tomorrow = $this->Challenge_model->getHouseTomorrowChallenges($user->house_id);
+        $sleep = $this->Challenge_model->getHouseSleepStats($user->house_id);
+        $steps = $this->Challenge_model->getHouseStepsStats($user->house_id);
 
         $data = array();
         foreach ($members as $m) {
@@ -25,17 +24,13 @@ class House extends MY_Controller
         foreach ($badges as $uid => $b) {
             $data['data'][$uid]['badge'] = $b;
         }
-
-        foreach ($completed as $uid => $c) {
-            $data['data'][$uid]['completed'] = $c;
+        foreach ($sleep as $row) {
+            $data['data'][$row->id]['sleep'] = $row;
+        }
+        foreach ($steps as $row) {
+            $data['data'][$row->id]['steps'] = $row;
         }
 
-        foreach ($current as $uid => $u) {
-            $data['data'][$uid]['current'] = $u;
-        }
-        foreach ($tomorrow as $uid => $u) {
-            $data['data'][$uid]['tomorrow'] = $u;
-        }
         $rank = $this->Challenge_model->getHouseRankAndPoints($user->house_id);
         $data['rank'] = $rank;
         return $data;
