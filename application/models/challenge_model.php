@@ -305,32 +305,59 @@ class Challenge_model extends My_Model
 
     }
 
-    function getLearderboard()
+    function getLearderboardBySteps()
     {
         $sql = "SELECT u.first_name  AS firstname,
-	u.fitbit_id AS fitbit_id,
-	u.username AS username,
-	u.fb AS fb,
-	u.last_name   AS lastname,
-	u.profile_pic AS avatar,
-	u.house_id    AS house_id,
-	h.name        AS house,
-	Count(cp.id)  AS score
-	FROM   user AS u,
-	house AS h,
-	challengeparticipant AS cp
-	WHERE  u.house_id = h.id
-	AND cp.user_id = u.id
-	AND cp.progress >= 1
-	AND cp.inactive = 0
-	AND u.phantom = 0
-	AND u.staff = 0
-	GROUP BY u.id
-	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 20";
+    u.fitbit_id AS fitbit_id,
+    u.username AS username,
+    u.fb AS fb,
+    u.last_name   AS lastname,
+    u.profile_pic AS avatar,
+    u.house_id    AS house_id,
+    h.name        AS house,
+    AVG(a.steps)  AS score
+    FROM   user AS u,
+    activity AS a,
+    house AS h
+    WHERE a.user_id = u.id
+    AND a.steps > 0
+    AND u.house_id = h.id
+    AND u.phantom = 0
+    AND u.staff = 0
+    AND a.date > '".VALID_STATS_BASELINE."'
+    GROUP BY u.id
+    HAVING COUNT(*) >= ".$this->minimumValidDays()."
+    ORDER BY AVG(a.steps) DESC LIMIT 0, 10";
         $query = $this->db->query($sql);
         return $query->result();
     }
 
+    function getLearderboardBySleep()
+    {
+        $sql = "SELECT u.first_name  AS firstname,
+    u.fitbit_id AS fitbit_id,
+    u.username AS username,
+    u.fb AS fb,
+    u.last_name   AS lastname,
+    u.profile_pic AS avatar,
+    u.house_id    AS house_id,
+    h.name        AS house,
+    AVG(s.total_time)  AS score
+    FROM   user AS u,
+    sleep AS s,
+    house AS h
+    WHERE s.user_id = u.id
+    AND s.total_time > 0
+    AND u.house_id = h.id
+    AND u.phantom = 0
+    AND u.staff = 0
+    AND s.date > '".VALID_STATS_BASELINE."'
+    GROUP BY u.id
+    HAVING COUNT(*) >= ".$this->minimumValidDays()."
+    ORDER BY AVG(s.total_time) DESC LIMIT 0, 10";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
 
     function getLearderboardByGender($gender)
     {
@@ -356,29 +383,52 @@ class Challenge_model extends My_Model
         return $query->result();
     }
 
-    function getTutorLearderboard()
+    function getTutorLearderboardbySteps()
     {
         $sql = "SELECT u.first_name  AS firstname,
-	u.last_name   AS lastname,
-	u.fitbit_id AS fitbit_id,
-	u.username AS username,
-	u.fb AS fb,
-	u.profile_pic AS avatar,
-	u.house_id    AS house_id,
-	h.name        AS house,
-	Count(cp.id)  AS score
-	FROM   user AS u,
-	house AS h,
-	challengeparticipant AS cp
-	WHERE  u.house_id = h.id
-	AND cp.user_id = u.id
-	AND cp.progress >= 1
- 	AND cp.inactive = 0
-	AND u.phantom = 0
-	AND u.hide_progress = 0
-	AND (u.staff = 1)
-	GROUP BY u.id
-	ORDER BY count(cp.id) DESC, sum(cp.complete_time-cp.start_time) ASC LIMIT 0, 10";
+    u.last_name   AS lastname,
+    u.fitbit_id AS fitbit_id,
+    u.username AS username,
+    u.fb AS fb,
+    u.profile_pic AS avatar,
+    u.house_id    AS house_id,
+    AVG(a.steps)  AS score
+    FROM   user AS u,
+    activity AS a
+    WHERE a.steps > 0
+    AND a.user_id = u.id
+    AND u.phantom = 0
+    AND u.hide_progress = 0
+    AND (u.staff = 1)
+    AND a.date > '".VALID_STATS_BASELINE."'
+    GROUP BY u.id
+    HAVING COUNT(*) >= ".$this->minimumValidDays()."
+    ORDER BY AVG(a.steps) DESC LIMIT 0, 10";
+        $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    function getTutorLearderboardbySleep()
+    {
+        $sql = "SELECT u.first_name  AS firstname,
+    u.last_name   AS lastname,
+    u.fitbit_id AS fitbit_id,
+    u.username AS username,
+    u.fb AS fb,
+    u.profile_pic AS avatar,
+    u.house_id    AS house_id,
+    AVG(s.total_time)  AS score
+    FROM   user AS u,
+    sleep AS s
+    WHERE s.total_time > 0
+    AND s.user_id = u.id
+    AND u.phantom = 0
+    AND u.hide_progress = 0
+    AND (u.staff = 1)
+    AND s.date > '".VALID_STATS_BASELINE."'
+    GROUP BY u.id
+    HAVING COUNT(*) >= ".$this->minimumValidDays()."
+    ORDER BY AVG(s.total_time) DESC LIMIT 0, 10";
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -398,19 +448,6 @@ class Challenge_model extends My_Model
         } else {
             return $point / $dates;
         }
-    }
-
-    function getHouseScore($house_id)
-    {
-        $sql = "select distinct id from user where house_id=?";
-        $query = $this->db->query($sql, array($house_id));
-
-        $total = 0;
-        foreach ($query->result() as $row) {
-            $user_id = $row->id;
-            $total += $this->getPersonalAverage($user_id);
-        }
-        return $total;
     }
 
     function getHouseLeaderboard()
@@ -530,6 +567,13 @@ class Challenge_model extends My_Model
         } else {
             return 0;
         }
+    }
+
+    private function minimumValidDays() {
+         $now = time(); // or your date as well
+         $base = strtotime(VALID_STATS_BASELINE);
+         $datediff = $now - $base;
+         return floor(VALID_STATS_PERCENTAGE * $datediff/(60*60*24));
     }
 
 }
