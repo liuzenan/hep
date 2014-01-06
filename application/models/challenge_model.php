@@ -315,7 +315,8 @@ class Challenge_model extends My_Model
     u.profile_pic AS avatar,
     u.house_id    AS house_id,
     h.name        AS house,
-    AVG(a.steps)  AS score
+    AVG(a.steps)  AS score,
+    COUNT(a.steps) AS valid
     FROM   user AS u,
     activity AS a,
     house AS h
@@ -342,7 +343,8 @@ class Challenge_model extends My_Model
     u.profile_pic AS avatar,
     u.house_id    AS house_id,
     h.name        AS house,
-    AVG(s.total_time)  AS score
+    AVG(s.total_time)  AS score,
+    COUNT(s.total_time) AS valid
     FROM   user AS u,
     sleep AS s,
     house AS h
@@ -392,7 +394,8 @@ class Challenge_model extends My_Model
     u.fb AS fb,
     u.profile_pic AS avatar,
     u.house_id    AS house_id,
-    AVG(a.steps)  AS score
+    AVG(a.steps)  AS score,
+    COUNT(a.steps) AS valid
     FROM   user AS u,
     activity AS a
     WHERE a.steps > 0
@@ -417,7 +420,8 @@ class Challenge_model extends My_Model
     u.fb AS fb,
     u.profile_pic AS avatar,
     u.house_id    AS house_id,
-    AVG(s.total_time)  AS score
+    AVG(s.total_time)  AS score,
+    COUNT(s.total_time) AS valid
     FROM   user AS u,
     sleep AS s
     WHERE s.total_time > 0
@@ -502,33 +506,6 @@ class Challenge_model extends My_Model
                     'picture' => $house->picture);
             }
         }
-    }
-
-    function getMyHouseStats($house_id)
-    {
-        $sql = "SELECT
-	u.first_name  AS firstname,
-	u.last_name   AS lastname,
-	u.profile_pic AS avatar,
-	u.leader      AS is_leader,
-	u.id 		  AS user_id,
-	Count(cp.id)  AS score
-	FROM   user AS u,
-	challengeparticipant AS cp
-	WHERE  u.house_id = ?
-	AND cp.user_id = u.id
-	AND cp.complete_time > '0000-00-00 00:00:00'
-	AND u.phantom = 0
-	GROUP BY u.id
-	ORDER BY count(cp.id)";
-        $query = $this->db->query($sql, array($house_id));
-        $stats = $query->result();
-        $res = array();
-        foreach ($stats as $s) {
-            $res[$s->user_id] = $s;
-            $res[$s->user_id]->total_points = $this->getTotalPoints($s->user_id);
-        }
-        return $res;
     }
 
     function getTotalPoints($user_id)

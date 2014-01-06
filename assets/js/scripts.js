@@ -249,6 +249,8 @@ jQuery(document).ready(function($) {
 
 	$('.my-badges').tooltip();
 
+	$('.leaderboardTooltip').tooltip();
+
 	$("#newThread").click(function(e){
 		console.log("newThread");
 		e.preventDefault();
