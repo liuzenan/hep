@@ -6,10 +6,10 @@
 				<div class="row-fluid leaderboard-house">
 					<div class="span1 leaderboard-house-rank"><?php echo $n ?></div>
 					<div class="span3 leaderboard-house-content">
-						<strong>House <?php echo $row->house_name ?></strong><br>
-						<strong class="muted">Daily average: <?php echo $row->average ?></strong><br>
-						<small>Members: <?php echo $row->user_num ?></small><br>
-						<small>Total points: <?php echo $row->score ?> </small>
+						<strong>House <?php echo $row->house_name ?></strong><br/>
+						<strong class="muted">Total points: <?php echo $row->score ?></strong><br/>
+						<small>Daily Steps: placeholder</small><br/>
+						<small>Daily Sleep: placeholder hours</small>
 					</div>
 					<div class="span8 leaderboard-house-profile-pic">
 					<?php $fitbit_ids = explode(",", $row->fitbit_ids); $usernames = explode(",", $row->usernames); $fbs = explode(",", $row->fbs); $avatars = explode(",", $row->avatars);  $names=explode(",", $row->names); for($i=count($avatars)-1; $i>=0; $i--): ?>

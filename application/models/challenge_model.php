@@ -419,6 +419,7 @@ class Challenge_model extends My_Model
 //	$this->db->query('SET GLOBAL group_concat_max_len=15000');
         $house_sql = "SELECT
 	u.house_id    AS house_id,
+    h.score       AS score,
 	h.name        AS house_name,
 	h.picture     AS picture,
 	Count(u.id) as user_num,
@@ -434,55 +435,11 @@ class Challenge_model extends My_Model
 	AND u.staff = 0
 	AND u.house_id > 0
 	GROUP BY h.id
+    ORDER BY h.score DESC
 	";
         $houses = $this->db->query($house_sql)->result();
 
-
-        $rank_sql = "SELECT
-	u.house_id    AS house_id,
-	sum(c.points)  AS score
-	FROM   user AS u,
-	challengeparticipant AS cp,
-	challenge as c
-	WHERE 
-	c.id = cp.challenge_id
-	AND cp.user_id = u.id
-	AND cp.progress >= 1 
-	AND cp.inactive = 0
-	AND u.phantom = 0
-	AND u.staff = 0
-	AND u.house_id > 0
-	GROUP BY u.house_id
-	ORDER BY sum(c.points) DESC, sum(cp.complete_time-cp.start_time) ASC";
-
-
-        $ranks = $this->db->query($rank_sql)->result();
-
-        $res = array();
-
-        $res1 = array();
-        $res2 = array();
-
-        foreach ($ranks as $r) {
-            $house_id = $r->house_id;
-
-            $res1[$r->house_id] = $r->score;
-        }
-        foreach ($houses as $h) {
-            if (!empty($res1[$h->house_id])) {
-                $h->score = $res1[$h->house_id];
-                $h->sum_person_days = $this->getPersonDays($house_id);
-                $h->average = number_format((float)$h->score / $h->sum_person_days, 2);
-                $h->score = number_format($h->score, 0);
-
-                //echo $h->score." ".$h->user_num." ".$h->average." ".$h->score/$h->user_num.'<br>';
-                $res[$h->average] = $h;
-                //$res1[$h->house_id] = $h;
-            }
-
-        }
-        krsort($res);
-        return $res;
+        return $houses;
     }
 
     function getPersonDays($house_id)
