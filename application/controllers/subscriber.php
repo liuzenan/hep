@@ -189,6 +189,7 @@ class Subscriber extends CI_Controller
         $dates_sql = "SELECT DISTINCT date from activity where date = " . $ysd . " ORDER BY date DESC";
         $dquery = $this->db->query($dates_sql);
         foreach ($dquery->result() as $date_row) {
+            echo '<p>start validation</p>';
             $uids_sql = "
 			select temp.* from
 			(select sum(ia.floors) as ifloors, a.floors, sum(ia.steps) as isteps, 
@@ -197,7 +198,7 @@ class Subscriber extends CI_Controller
 			where temp.ifloors<temp.floors OR temp.isteps<temp.steps";
             $query = $this->db->query($uids_sql, array($date_row->date));
             foreach ($query->result() as $row) {
-                // echo "refresh ". $row->user_id;
+                echo "refresh ". $row->user_id;
                 $this->getActivities($row->user_id, $date_row->date);
                 $this->updateProgress($row->user_id, $date_row->date);
             }

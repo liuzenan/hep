@@ -20,6 +20,8 @@ class Checksubscribe extends CI_Controller
                     $xml = $this->fitbitphp->getSubscriptions();
                     if (count($xml->apiSubscriptions->apiSubscription) != 2) {
                         var_dump($xml);
+                    } else {
+
                     }
                     foreach ($xml->apiSubscriptions->apiSubscription as $value) {
                         $subscriber = $value->subscriberId;
@@ -37,7 +39,7 @@ class Checksubscribe extends CI_Controller
             }
         }
         var_dump($error_set);
-        echo "==========================";
+        echo "<br/>==========================<br/>";
         var_dump($user_set);
         echo "</pre>";
 
