@@ -38,19 +38,6 @@ class Mail_model extends My_Model
         $this->load->library('email', $config);
     }
 
-    function sendChallengeCompletionMessage($user, $title, $time)
-    {
-        if ($user->challenge_email_unsub == 0) {
-            $message = "Hello %s, <br><br>
-			Congrats! You have just completed the challenge <b>%s</b> at %s.<br><br><br>
-			";
-            $msg = sprintf($message, $user->first_name . " " . $user->last_name, $title, $time);
-
-            $this->send("HEP Challenge Completed", $msg, $user->email);
-        }
-
-    }
-
     public function sendAnnouncement($user_id, $title, $msg)
     {
         $uid = intval($user_id);
@@ -99,21 +86,10 @@ class Mail_model extends My_Model
     {
         $daily = "Good Morning %s, <br><br>
 		%s
-		<br><br>
 		Yesterday, you walked <b>%d steps (%s)</b>, 
 		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>. 
-		<br><br>You selected <b>%s</b> challenges yesterday and you completed <b>%d</b> of them.
-		You have completed <b>%d</b> challenges in total.<br>
 
-		<br><u>Challenges Completed Yesterday</u>: <br>
-		%s
-		<br><br>
-		<u>Yesterday's Challenges Not Completed</u>: <br>
-		%s
-		<br><br>
-		%s
-		<u>Today you are working on the following challenges</u>:
-		<br>%s<br><br>
+        %s<br/><br/>
 
 		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%d kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
 		That's awesome! Thanks! :)
@@ -139,15 +115,8 @@ class Mail_model extends My_Model
         $data['delta_distance'] = number_format($this->cauculateDelta($data['me_yesterday']->distance, $data['me_two_days_ago']->distance), 2);
         $data['delta_sleep'] = number_format($this->cauculateDelta($data['me_yesterday']->sleep, $data['me_two_days_ago']->sleep), 2);
 
-        $data['me_challenges'] = $this->Challenge_model->loadUserChallenge($user_id, date("Y-m-d ", time()));
-        $data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($user_id);
-        $time = date("Y-m-d", time() - 60 * 60 * 24);
-        $data['me_challenges_yesterday'] = $this->Challenge_model->loadUserChallenge($user_id, $time);
-        $tomorrow = date("Y-m-d", time() + 60 * 60 * 24);
-        $data['me_challenges_tomorrow'] = $this->Challenge_model->loadUserChallenge($user_id, $tomorrow);
         $data['avg_today'] = $this->Activity_model->getAverageActivityToday();
         $data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
-        $data['avg_completed'] = number_format($this->Challenge_model->getAverageChallengeCount(), 2);
         $data['max_today'] = $this->Activity_model->getMaxActivityToday();
         $data['new_badge'] = $this->Badge_model->getBadgesByDate($user_id, date("Y-m-d ", time() - 60 * 60 * 24));
 
@@ -159,26 +128,6 @@ class Mail_model extends My_Model
                 $new_badge .= '<b>' . $bd->name . '</b><br>';
             }
             $new_badge .= "<br><br>";
-        }
-
-        $count = 0;
-        $titlesY = "";
-        $titlesF = "";
-        foreach ($data['me_challenges_yesterday'] as $c) {
-            if ($c->progress >= 1) {
-                $count++;
-                $titlesY .= '<b>' . $c->title . '</b><br>';
-                $titlesY .= '<i>' . $c->description . '</i><br><br>';
-            } else {
-                $titlesF .= '<b>' . $c->title . '</b><br>';
-                $titlesF .= '<i>' . $c->description . '</i><br><br>';
-            }
-        }
-        $titlesX = "";
-        foreach ($data['me_challenges'] as $c) {
-            $titlesX .= '<b>' . $c->title . '</b><br>';
-            $titlesX .= '<i>' . $c->description . '</i><br><br>';
-
         }
 
         $summary = $this->Activity_model->getActivitySummary();
@@ -194,7 +143,7 @@ class Mail_model extends My_Model
         $data["emailmsg"] = "";
         if (!empty($todayMsg)) {
             # code...
-            $data["emailmsg"] = nl2br($todayMsg);
+            $data["emailmsg"] = nl2br($todayMsg).'<br/><br/>';
         }
 
         $data['msg'] = sprintf($daily,
@@ -206,19 +155,10 @@ class Mail_model extends My_Model
             number_format($data['me_yesterday']->sleep, 2),
             ($data['delta_sleep'] > 0 ? "up by " : "down by ") . $data['delta_sleep'] . "%",
 
-
             $data['me_yesterday']->calories,
             ($data['delta_calories'] > 0 ? "up by " : "down by ") . $data['delta_calories'] . "%",
 
-
-            count($data['me_challenges_yesterday']),
-            $count,
-            $data['me_completed'],
-            $titlesY,
-            $titlesF,
             $new_badge,
-            //count($data['me_challenges']),
-            $titlesX,
             $summary->steps,
             $summary->distance,
             $summary->sleep
