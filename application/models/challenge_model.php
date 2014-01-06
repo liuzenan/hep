@@ -105,20 +105,6 @@ class Challenge_model extends My_Model
         }
     }
 
-    function joinChallenge($user_id, $challenge_id, $category, $start_time, $end_time)
-    {
-        $data = array(
-            'user_id' => $user_id,
-            'challenge_id' => $challenge_id,
-            'category' => $category,
-            'start_time' => $start_time,
-            'end_time' => $end_time
-        );
-        $this->db->insert(Challenge_model::table_challenge_participant, $data);
-
-        return $this->db->insert_id();
-    }
-
     function loadChallengeParticipation($id)
     {
         $data = array('id' => $id);
@@ -142,21 +128,6 @@ class Challenge_model extends My_Model
         }
         return $res;
     }
-
-    function quitChallenge($id)
-    {
-        return $this->db->delete(Challenge_model::table_challenge_participant,
-            array(Challenge_model::col_cp_id => $id));
-    }
-
-    function completeChallenge($id, $complete_time)
-    {
-        $data = array('complete_time', $complete_time);
-        $this->db->where('id', $id);
-        $this->db->update(Challenge_model::table_challenge_participant,
-            $data);
-    }
-
 
     function getHouseCurrentChallenges($house_id)
     {
