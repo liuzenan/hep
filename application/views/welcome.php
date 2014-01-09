@@ -118,7 +118,21 @@
                     }
                   }).done(function(data){
                     if (data.success) {
-                        window.location.href = base_url + "home";
+
+                      FB.api('/me?fields=picture.width(100).height(100)', function(response){
+
+                        $.ajax({
+                          url:"<?php echo base_url() . 'signup/updateProfilePic' ?>",
+                          type:"POST",
+                          data:{
+                            profile_pic: response.picture.data.url
+                          }
+
+                        }).done(function(msg){
+                          console.log('data saved: ' + msg);
+                          window.location.href = base_url + "home";
+                        });
+                      });
                     } else {
                       if (data.error=="noemail") {
                         alert("you need to sign up for your detailed information first");
