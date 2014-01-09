@@ -50,6 +50,52 @@ class Subscriber extends CI_Controller
         echo json_encode($msg);
     }
 
+    public function weeklyTally($secret='') {
+        if ($secret != ACCESS_SECRET) {
+            echo 'Unauthorised access';
+            return;
+        } 
+        $stepsLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySteps(true);
+        $sleepLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbysleep(true);
+
+        $old_data = "SELECT * FROM house WHERE id > 0";
+        $data = $this->db->query($old_data)->result();
+        $houses = array();
+        foreach($data as $row) {
+            $houses[$row->id] = array('old' => array(
+                'score' => $row->score, 'steps_multiplier' => $row->steps_multiplier, 'sleep_multiplier' => $row->sleep_multiplier
+                ), 'new' => array());
+        }
+
+        $cap = WEEKLY_POINT_MAX;
+        $max = $stepsLeaderboard[0]->steps;
+        foreach($stepsLeaderboard as $row) {
+            $current = &$houses[$row->house_id];
+            $current['new']['score'] = $current['old']['score'] + $cap * $row->steps/$max * $current['old']['steps_multiplier'];
+            $current['new']['steps_multiplier'] = 2 - $row->steps/$max;
+        }
+
+        $max = $sleepLeaderboard[0]->sleep;
+        foreach($sleepLeaderboard as $row) {
+            $current = &$houses[$row->house_id];
+            $current['new']['score'] = $current['new']['score'] + $cap * $row->sleep/$max * $current['old']['sleep_multiplier'];
+            $current['new']['sleep_multiplier'] = 2 - $row->sleep/$max;
+        }
+
+        $data = array();
+        foreach ($houses as $id => $row) {
+            $data[] = array(
+                'id' => $id,
+                'score' => round($row['new']['score']),
+                'steps_multiplier' => $row['new']['steps_multiplier'],
+                'sleep_multiplier' => $row['new']['sleep_multiplier']
+            );
+            echo $id.': '. round($row['new']['score']).', '.$row['new']['steps_multiplier'].', '.$row['new']['sleep_multiplier'].'<br/>';
+        }
+        $this->db->update_batch('house', $data, 'id'); 
+
+    }
+
     public function activities()
     {
         try {
@@ -71,10 +117,6 @@ class Subscriber extends CI_Controller
         }
     }
 
-    public function updateProgress($user_id, $date)
-    {
-        $this->Challenge_model->updateActivityProgress($user_id, $date);
-    }
 
     public function updateTodayAllProgress()
     {

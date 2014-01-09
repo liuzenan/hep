@@ -53,5 +53,7 @@ define('MAX_CHALLENGE_CATEGORY', 2);
 define('BASELINE', '2013-12-15');
 define('VALID_STATS_BASELINE', '2013-02-13');
 define('VALID_STATS_PERCENTAGE', 0.1);
+define('WEEKLY_POINT_MAX', 50);
+define('ACCESS_SECRET', 'root');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

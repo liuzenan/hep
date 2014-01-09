@@ -419,12 +419,18 @@ class Challenge_model extends My_Model
         return $houses;
     }
 
-    function getWeeklyLeaderboardbySteps() {
-        $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
-        $today = date('Y-m-d', strtotime(parent::getDateToday()));
-        $day_of_week = date('w', strtotime(parent::getDateToday()));
-        if ($day_of_week == 0) {
+    function getWeeklyLeaderboardbySteps($last_week = false) {
+        if ($last_week) {
+            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateYesterday())));
+            $today = date('Y-m-d', strtotime(parent::getDateYesterday()));
             $day_of_week = 7;
+        } else {
+            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
+            $today = date('Y-m-d', strtotime(parent::getDateToday()));
+            $day_of_week = date('w', strtotime(parent::getDateToday()));
+                if ($day_of_week == 0) {
+                    $day_of_week = 7;
+            }
         }
 
         $sql = "SELECT 
@@ -450,14 +456,19 @@ class Challenge_model extends My_Model
         return $houses;
     }
 
-    function getWeeklyLeaderboardbySleep() {
-        $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
-        $today = date('Y-m-d', strtotime(parent::getDateToday()));
-        $day_of_week = date('w', strtotime(parent::getDateToday()));
-        if ($day_of_week == 0) {
+    function getWeeklyLeaderboardbySleep($last_week = false) {
+        if ($last_week) {
+            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateYesterday())));
+            $today = date('Y-m-d', strtotime(parent::getDateYesterday()));
             $day_of_week = 7;
+        } else {
+            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
+            $today = date('Y-m-d', strtotime(parent::getDateToday()));
+            $day_of_week = date('w', strtotime(parent::getDateToday()));
+            if ($day_of_week == 0) {
+                $day_of_week = 7;
+            }   
         }
-
         $sql = "SELECT 
         AVG(s.total_time) / 60 * %d AS sleep,
         h.name AS house,
