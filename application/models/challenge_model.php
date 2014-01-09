@@ -419,6 +419,68 @@ class Challenge_model extends My_Model
         return $houses;
     }
 
+    function getWeeklyLeaderboardbySteps() {
+        $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
+        $today = date('Y-m-d', strtotime(parent::getDateToday()));
+        $day_of_week = date('w', strtotime(parent::getDateToday()));
+        if ($day_of_week == 0) {
+            $day_of_week = 7;
+        }
+
+        $sql = "SELECT 
+        AVG(a.steps) * %d AS steps,
+        h.name AS house,
+        h.id AS house_id
+        FROM activity AS a
+        JOIN user u ON u.id=a.user_id
+        JOIN house h ON u.house_id = h.id
+        WHERE date BETWEEN '%s' AND '%s'
+        AND a.user_id NOT IN (
+            SELECT i.user_id FROM invalidperiod AS i
+            WHERE NOT (start_date > %s OR end_date < %s)
+        )
+        AND u.house_id > 0
+        AND u.phantom = 0
+        AND u.staff = 0
+        GROUP BY u.house_id
+        ORDER BY AVG(a.steps) DESC;
+        ";
+        $house_sql = sprintf($sql, $day_of_week, $start_of_week, $today, $today, $start_of_week);
+        $houses = $this->db->query($house_sql)->result();
+        return $houses;
+    }
+
+    function getWeeklyLeaderboardbySleep() {
+        $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
+        $today = date('Y-m-d', strtotime(parent::getDateToday()));
+        $day_of_week = date('w', strtotime(parent::getDateToday()));
+        if ($day_of_week == 0) {
+            $day_of_week = 7;
+        }
+
+        $sql = "SELECT 
+        AVG(s.total_time) * %d AS sleep,
+        h.name AS house,
+        h.id AS house_id
+        FROM sleep AS s
+        JOIN user u ON u.id=s.user_id
+        JOIN house h ON u.house_id = h.id
+        WHERE date BETWEEN '%s' AND '%s'
+        AND s.user_id NOT IN (
+            SELECT i.user_id FROM invalidperiod AS i
+            WHERE NOT (start_date > %s OR end_date < %s)
+        )
+        AND u.house_id > 0
+        AND u.phantom = 0
+        AND u.staff = 0
+        GROUP BY u.house_id
+        ORDER BY AVG(s.total_time) DESC;
+        ";
+        $house_sql = sprintf($sql, $day_of_week, $start_of_week, $today, $today, $start_of_week);
+        $houses = $this->db->query($house_sql)->result();
+        return $houses;
+    }
+
     function getPersonDays($house_id)
     {
         $sql = "select sum(dates) as total_dates from (select count(distinct DATE(start_time)) as dates, user_id from challengeparticipant where user_id IN (select id from user where house_id = ? and phantom=0) and inactive=0 and start_time < ? group by user_id) as temp";

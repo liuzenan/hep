@@ -9,7 +9,7 @@ class Leaderboard extends MY_Controller
 
     public function index()
     {
-        $this->overall();
+        $this->house();
     }
 
     public function overall()
@@ -73,6 +73,18 @@ AND date = ?";
         $data['house'] = $this->Challenge_model->getHouseLeaderboard();
 
         //	echo "<pre>"; print_r($data);echo "</pre><br>";
+        $this->loadPage($data);
+    }
+
+    public function weekly() {
+        $data['currentTab'] = "weekly";
+        $me = $this->User_model->loadUser($this->uid);
+        $data['my_house'] = $me->house_id;
+
+        $data['steps'] = $this->Challenge_model->getWeeklyLeaderboardbySteps();
+        
+        $data['sleep'] = $this->Challenge_model->getWeeklyLeaderboardbySleep();
+        
         $this->loadPage($data);
     }
 
