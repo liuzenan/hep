@@ -12,8 +12,8 @@ class Mail extends CI_Controller
 
     public function dailyReport()
     {
-        $this->updateBadge();
-        $this->checkSubscribe();
+        //$this->updateBadge();
+        //$this->checkSubscribe();
         $uids = $this->User_model->loadDailyReportUsers();
         foreach ($uids as $uid) {
             $this->Mail_model->sendDailyReport($uid->id);
