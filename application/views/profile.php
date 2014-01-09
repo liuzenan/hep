@@ -17,24 +17,17 @@
 				</label>
 				<label class="checkbox">
 					<?php if($daily_email_unsub==0):?>
-						<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub" checked> Daily challenge notification
+						<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub" checked> Daily email report
 					<?php else: ?>
-						<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub" > Daily challenge notification
-					<?php endif ?>
-				</label>
-				<label class="checkbox">
-					<?php if($challenge_email_unsub==0):?>	
-						<input type="checkbox" id="challenge_email_unsub" name="challenge_email_unsub" checked> Challenge completion notification
-					<?php else: ?>
-						<input type="checkbox" id="challenge_email_unsub" name="challenge_email_unsub" > Challenge completion notification
+						<input type="checkbox" id="daily_email_unsub" name="daily_email_unsub" > Daily email report
 					<?php endif ?>
 				</label>
 				<?php if ($isTutor): ?>
 				<label class="checkbox">
 					<?php if($hide_progress==0):?>	
-						<input type="checkbox" id="hide_progress" name="hide_progress" checked> Show my challenges to public
+						<input type="checkbox" id="hide_progress" name="hide_progress" checked> Show my progress to public
 					<?php else: ?>
-						<input type="checkbox" id="hide_progress" name="hide_progress"> Show my challenges to public
+						<input type="checkbox" id="hide_progress" name="hide_progress"> Show my progress to public
 					<?php endif ?>
 				</label>
 				<?php endif ?>

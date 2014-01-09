@@ -28,7 +28,6 @@ class Profile extends MY_Controller
 
         $badge_email = $this->input->post("badge_email_unsub");
         $daily_email = $this->input->post("daily_email_unsub");
-        $challenge_email = $this->input->post("challenge_email_unsub");
         $hide_progress = $this->input->post("hide_progress");
         $data = array();
 
@@ -37,7 +36,6 @@ class Profile extends MY_Controller
         //$data['email'] = $email;
         $data['badge_email_unsub'] = empty($badge_email) ? 1 : 0;
         $data['daily_email_unsub'] = empty($daily_email) ? 1 : 0;
-        $data['challenge_email_unsub'] = empty($challenge_email) ? 1 : 0;
         if ($this->session->userdata('isTutor') == 1) {
             $data['hide_progress'] = empty($hide_progress) ? 1 : 0;
         } else {

@@ -8,8 +8,8 @@
 			<li class="<?php if($active=='general_forum') echo "active" ?>"><a href="<?php echo base_url() . 'forum/general'?>">General Forum</a></li>
 			<li class="<?php if($active=='rules') echo "active" ?>"><a href="<?php echo base_url() . 'staticpages/rules'?>">Game Rules</a></li>
 			<li class="<?php if($active=='faq') echo "active" ?>"><a href="<?php echo base_url() . 'staticpages/faq'?>">FAQ</a></li>
-			<li class="<?php if($active=='survey') echo "active" ?>"><a href="<?php echo base_url() . 'survey'?>">Survey</a></li>
-			<hr>
+<!-- 			<li class="<?php if($active=='survey') echo "active" ?>"><a href="<?php echo base_url() . 'survey'?>">Survey</a></li>
+ -->			<hr>
 			<?php if((!empty($isTutor) && $isTutor==1)  || (!empty($isAdmin) && $isAdmin==1)) {?>
 			<li class="<?php if($active=='allhouse') echo "active" ?>"><a href="<?php echo base_url() . 'allhouse'?>">All Houses</a></li>
 			<?php } ?>
