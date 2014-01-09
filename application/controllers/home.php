@@ -46,7 +46,11 @@ class Home extends MY_Controller
         }
 
         $data['stepsLeaderboard'] = array();
-        $data['stepsLeaderboard'][] = $stepsLeaderboard[0];
+        if (count($stepsLeaderboard) > 0) {
+            $data['stepsLeaderboard'][] = $stepsLeaderboard[0];
+        } else {
+            $data['noStepsData'] = true;
+        }
 
         if ($prev_house && !in_array($prev_house, $data['stepsLeaderboard'])) {
             $data['stepsLeaderboard'][] = $prev_house;
@@ -87,7 +91,11 @@ class Home extends MY_Controller
         }
 
         $data['sleepLeaderboard'] = array();
-        $data['sleepLeaderboard'][] = $sleepLeaderboard[0];
+        if (count($sleepLeaderboard) > 0) {
+            $data['sleepLeaderboard'][] = $sleepLeaderboard[0];
+        } else {
+            $data['noSleepData'] = true;
+        }
 
         if ($prev_house && !in_array($prev_house, $data['sleepLeaderboard'])) {
             $data['sleepLeaderboard'][] = $prev_house;

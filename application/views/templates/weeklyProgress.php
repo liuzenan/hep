@@ -15,6 +15,10 @@
 							<strong><?php echo round($stepsPrevHouse->steps) ?></strong> more steps to overtake
 							House <?php echo $stepsPrevHouse->house ?>! Go go go!
 						</p>
+					<?php elseif (!empty($noStepsData)): ?>
+						<p class='text-center text-info'>
+							A brand new week awaits!
+						</p>
 					<?php elseif (empty($stepsTopHouse)): ?>
 						<p class='text-center text-info'>
 							Your house is in the lead! Keep it up!
@@ -27,6 +31,10 @@
 						<p class='text-center text-info'>
 							Another <strong><?php echo round($sleepPrevHouse->sleep) ?></strong> hours of sleep and you'll overtake
 							House <?php echo $sleepPrevHouse->house ?>! Go go go!
+						</p>
+					<?php elseif (!empty($noSleepData)): ?>
+						<p class='text-center text-info'>
+							A brand new week awaits!
 						</p>
 					<?php elseif (empty($sleepTopHouse)): ?>
 						<p class='text-center text-info'>
@@ -165,18 +173,20 @@ $(function() {
 			data: sleep_series_data
 		}]
 	};
+	<?php if (empty($noStepsData)): ?>
+		stepsChart = new Highcharts.Chart(stepsChartOptions);
+	<?php endif ?>
 
-	stepsChart = new Highcharts.Chart(stepsChartOptions);
-
-
-	$('#weekly-progress #sleepBtn').click(function() {
-		if (!sleepChartRendered) {
-			window.setTimeout(function() {
-				sleepChart = new Highcharts.Chart(sleepChartOptions);
-			}, 100);
-			//sleepChartRendered = true;
-		}
-	});
+	<?php if (empty($noSleepData)): ?>
+		$('#weekly-progress #sleepBtn').click(function() {
+			if (!sleepChartRendered) {
+				window.setTimeout(function() {
+					sleepChart = new Highcharts.Chart(sleepChartOptions);
+				}, 100);
+				//sleepChartRendered = true;
+			}
+		});
+	<?php endif ?>
 
 });
 
