@@ -22,7 +22,7 @@ var steps_categories = [];
 <?php foreach($steps as $row): ?>
 	steps_categories.push(<?php echo $row->house ?>);
 	steps_series_data.push({
-		y: <?php echo round($row->steps) ?>,
+		y: <?php echo $row->steps ?>,
 		<?php if ($my_house == $row->house_id) {
 			echo 'color: \'#BF0B23\'';
 		} ?>
@@ -35,7 +35,7 @@ var sleep_categories = [];
 <?php foreach($sleep as $row): ?>
 	sleep_categories.push(<?php echo $row->house ?>);
 	sleep_series_data.push({
-		y: <?php echo round($row->sleep) ?>,
+		y: <?php echo $row->sleep ?>,
 		<?php if ($my_house == $row->house_id) {
 			echo 'color: \'#BF0B23\'';
 		} ?>
@@ -57,7 +57,7 @@ $(function() {
 		yAxis: {
 			type:'linear',
 			title:{
-				text: null
+				text: 'Steps'
 			},
 			min: 0,
 		},
@@ -104,7 +104,7 @@ $(function() {
 		yAxis: {
 			type:'linear',
 			title:{
-				text: null
+				text: 'Hours'
 			},
 			min: 0,
 		},
