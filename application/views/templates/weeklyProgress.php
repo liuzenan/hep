@@ -50,7 +50,7 @@ $(function() {
 	var steps_series_data = [];
 	var steps_categories = [];
 	<?php foreach($stepsLeaderboard as $row): ?>
-		steps_categories.push(<?php echo $row->house ?>);
+		steps_categories.push('<?php echo $row->house ?>');
 		steps_series_data.push({
 			y: <?php echo $row->steps ?>,
 			<?php if ($my_house == $row->house_id) {
@@ -62,7 +62,7 @@ $(function() {
 	var sleep_series_data = [];
 	var sleep_categories = [];
 	<?php foreach($sleepLeaderboard as $row): ?>
-		sleep_categories.push(<?php echo $row->house ?>);
+		sleep_categories.push('<?php echo $row->house ?>');
 		sleep_series_data.push({
 			y: <?php echo $row->sleep ?>,
 			<?php if ($my_house == $row->house_id) {

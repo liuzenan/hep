@@ -419,7 +419,7 @@ class Challenge_model extends My_Model
         return $houses;
     }
 
-    function getWeeklyLeaderboardbySteps($last_week = false) {
+    function getWeeklyLeaderboardbySteps($last_week = false, $includeTutor = false) {
         if ($last_week) {
             $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateYesterday())));
             $today = date('Y-m-d', strtotime(parent::getDateYesterday()));
@@ -445,18 +445,23 @@ class Challenge_model extends My_Model
             SELECT i.user_id FROM invalidperiod AS i
             WHERE NOT (start_date > %s OR end_date < %s)
         )
-        AND u.house_id > 0
+        %s
         AND u.phantom = 0
-        AND u.staff = 0
         GROUP BY u.house_id
         ORDER BY AVG(a.steps) DESC;
         ";
-        $house_sql = sprintf($sql, $day_of_week, $start_of_week, $today, $today, $start_of_week);
+
+        if ($includeTutor) {
+            $tutorClause = '';
+        } else {
+            $tutorClause = ' AND u.house_id > 0 AND u.staff = 0 ';
+        }
+        $house_sql = sprintf($sql, $day_of_week, $start_of_week, $today, $today, $start_of_week, $tutorClause);
         $houses = $this->db->query($house_sql)->result();
         return $houses;
     }
 
-    function getWeeklyLeaderboardbySleep($last_week = false) {
+    function getWeeklyLeaderboardbySleep($last_week = false, $includeTutor = false) {
         if ($last_week) {
             $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateYesterday())));
             $today = date('Y-m-d', strtotime(parent::getDateYesterday()));
@@ -481,13 +486,17 @@ class Challenge_model extends My_Model
             SELECT i.user_id FROM invalidperiod AS i
             WHERE NOT (start_date > %s OR end_date < %s)
         )
-        AND u.house_id > 0
+        %s
         AND u.phantom = 0
-        AND u.staff = 0
         GROUP BY u.house_id
         ORDER BY AVG(s.total_time) DESC;
         ";
-        $house_sql = sprintf($sql, $day_of_week, $start_of_week, $today, $today, $start_of_week);
+        if ($includeTutor) {
+            $tutorClause = '';
+        } else {
+            $tutorClause = ' AND u.house_id > 0 AND u.staff = 0 ';
+        }
+        $house_sql = sprintf($sql, $day_of_week, $start_of_week, $today, $today, $start_of_week, $tutorClause);
         $houses = $this->db->query($house_sql)->result();
         return $houses;
     }

@@ -21,7 +21,7 @@ class Home extends MY_Controller
         
         $data['my_house'] = $me->house_id;
 
-        $stepsLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySteps();
+        $stepsLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySteps(false, $this->session->userdata('isTutor'));
         
         $n = 0;
         $prev_min = INF;
@@ -50,6 +50,8 @@ class Home extends MY_Controller
 
         if ($prev_house && !in_array($prev_house, $data['stepsLeaderboard'])) {
             $data['stepsLeaderboard'][] = $prev_house;
+        }
+        if ($prev_house) {
             $data['stepsPrevHouse'] = $prev_house;
         }
         if ($my_house && !in_array($my_house, $data['stepsLeaderboard'])) {
@@ -60,7 +62,7 @@ class Home extends MY_Controller
             $data['stepsLeaderboard'][] = $next_house;
         }
 
-        $sleepLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySleep();
+        $sleepLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySleep(false, $this->session->userdata('isTutor'));
 
         $n = 0;
         $prev_min = INF;
@@ -89,6 +91,8 @@ class Home extends MY_Controller
 
         if ($prev_house && !in_array($prev_house, $data['sleepLeaderboard'])) {
             $data['sleepLeaderboard'][] = $prev_house;
+        }
+        if ($prev_house) {
             $data['sleepPrevHouse'] = $prev_house;
         }
         if ($my_house && !in_array($my_house, $data['sleepLeaderboard'])) {
