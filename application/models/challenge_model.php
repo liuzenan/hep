@@ -397,6 +397,8 @@ class Challenge_model extends My_Model
         $house_sql = "SELECT
 	u.house_id    AS house_id,
     h.score       AS score,
+    h.steps_multiplier AS steps_multiplier,
+    h.sleep_multiplier AS sleep_multiplier,
 	h.name        AS house_name,
 	h.picture     AS picture,
 	Count(u.id) as user_num,
@@ -519,6 +521,8 @@ class Challenge_model extends My_Model
 
                 return array('rank' => $rank,
                     'points' => $house->score,
+                    'steps_multiplier' => $house->steps_multiplier,
+                    'sleep_multiplier' => $house->sleep_multiplier,
                     'house_id' => $house->house_id,
                     'house_name' => $house->house_name,
                     'picture' => $house->picture);

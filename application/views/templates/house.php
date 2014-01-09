@@ -8,6 +8,8 @@
 					<div class="span3 leaderboard-house-content">
 						<strong>House <?php echo $row->house_name ?></strong><br/>
 						<strong class="muted">Total points: <?php echo $row->score ?></strong><br/>
+						<small>Steps Multiplier: <?php echo round($row->steps_multiplier, 2) * 100 ?>%</small><br>
+						<small>Sleep Multiplier: <?php echo round($row->sleep_multiplier, 2) * 100 ?>%</small><br>
 						<small>Members: <?php echo $row->user_num ?></small><br>
 
 					</div>

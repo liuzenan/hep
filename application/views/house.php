@@ -5,10 +5,16 @@
 	<p class="section-title">My House</p>
 							<table class="table house-stats">
 								<tbody>
-									<td><img src="<?php echo $rank['picture']; ?>" alt=""></td>
-									<td><span class="house-name"><?php echo $rank['house_name']; ?></span><br>House No.</td>
-									<td><span class="house-rank"><?php echo $rank['rank']; ?></span><br>Rank</td>
-									<td><span class="house-points"><?php echo $rank['points']; ?></span><br>Points</td>
+								<tr>
+									<td rowspan="2"><img src="<?php echo $rank['picture']; ?>" alt=""></td>
+									<td colspan="2"><span class="house-name"><?php echo $rank['house_name']; ?></span><br>House No.</td>
+									<td colspan="2"><span class="house-rank"><?php echo $rank['rank']; ?></span><br>Rank</td>
+									<td colspan="2"><span class="house-points"><?php echo $rank['points']; ?></span><br>Points</td>
+								</tr>
+								<tr>
+									<td colspan="3"><span class="house-multiplier"><?php echo round($rank['steps_multiplier'], 2)*100; ?>%</span><br>Steps Boost</td>
+									<td colspan="3"><span class="house-multiplier"><?php echo round($rank['sleep_multiplier'], 2)*100; ?>%</span><br>Sleep Boost</td>
+								</tr>
 								</tbody>
 							</table>
 	<p class="section-title">House Members</p>			
