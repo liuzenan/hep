@@ -37,7 +37,7 @@ class Stats extends Admin_Controller
         //echo $type." ".$span." ".$uid;
 
         $data['chartTitle'] = $type;
-        $currentDate = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($this->date_today));
         if ($span == "week") {
             $weekBegin = date('Y-m-d', strtotime($currentDate) - 604800);
         } else {
@@ -72,7 +72,7 @@ class Stats extends Admin_Controller
 
     public function data()
     {
-        $currentDate = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($this->date_today));
         var_dump($this->Activity_model->get_activity(date('Y-m-d', strtotime($currentDate) - 604800), $currentDate, $this->uid));
     }
 

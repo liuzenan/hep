@@ -51,7 +51,7 @@ define('STEPS_CHALLENGE', 1);
 define('SLEEP_CHALLENGE', 2);
 define('MAX_CHALLENGE_CATEGORY', 2);
 define('BASELINE', '2013-12-15');
-define('VALID_STATS_BASELINE', '2013-02-15');
-define('VALID_STATS_PERCENTAGE', 0);
+define('VALID_STATS_BASELINE', '2013-02-13');
+define('VALID_STATS_PERCENTAGE', 0.1);
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
