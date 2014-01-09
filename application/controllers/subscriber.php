@@ -71,14 +71,14 @@ class Subscriber extends CI_Controller
         $max = $stepsLeaderboard[0]->steps;
         foreach($stepsLeaderboard as $row) {
             $current = &$houses[$row->house_id];
-            $current['new']['score'] = $current['old']['score'] + $cap * $row->steps/$max * $current['old']['steps_multiplier'];
+            $current['new']['score'] = $current['old']['score'] + MIN($cap * $row->steps/$max * $current['old']['steps_multiplier'], $cap);
             $current['new']['steps_multiplier'] = 2 - $row->steps/$max;
         }
 
         $max = $sleepLeaderboard[0]->sleep;
         foreach($sleepLeaderboard as $row) {
             $current = &$houses[$row->house_id];
-            $current['new']['score'] = $current['new']['score'] + $cap * $row->sleep/$max * $current['old']['sleep_multiplier'];
+            $current['new']['score'] = $current['new']['score'] + MIN($cap * $row->sleep/$max * $current['old']['sleep_multiplier'], $cap);
             $current['new']['sleep_multiplier'] = 2 - $row->sleep/$max;
         }
 
