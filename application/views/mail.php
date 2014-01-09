@@ -32,6 +32,7 @@
 			  <span class="add-on"><i class="icon-th"></i></span>
 			</div>
 			<textarea id="mailMsg" class="span12" rows="20"><?php if(!empty($today))echo nl2br($today); ?></textarea>
+			<p class="muted">Emails will be sent together with the daily report on the scheduled date.</p>
 			<button id="updateMail" class="btn btn-primary pull-right">Update</button>
 		</div>
 	</div>
