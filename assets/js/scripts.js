@@ -135,7 +135,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$(".date-picker").datepicker();
-	$(".refresh-challenge-button.enabled").on("click",function(event){
+	$(".refresh-data.enabled").on("click",function(event){
 		console.log("refesh");
 		var currentBtn = $(this);
 		if (currentBtn.hasClass("enabled")) {
@@ -148,13 +148,14 @@ jQuery(document).ready(function($) {
 				dataType:'json'
 			}).done(function(message){
 				if (message.success) {
-					alert("Challenge progress updated successfully");
+					alert("All data updated successfully");
 				} else {
-					alert("Challenge progress cannot be updated, please refresh page.");
+					alert("Data cannot be updated.");
 				}
 				currentBtn.removeClass("icon-spin");
 				currentBtn.addClass("enabled");
 				currentBtn.removeAttr("disabled");
+				location.reload();
 			});
 		} else {
 			event.preventDefault();
@@ -353,25 +354,9 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-};
-
-
-var counter = setInterval(timer, 1000);
-console.log(game_start_date);
 });
 
 
-function timer(){
-	var current = new Date();
-	var oneDay = 24*60*60*1000;
-	var oneHour = 60*60*1000;
-	var oneMinute = 60*1000;
-	var oneSecond = 1000;
-	$("#count-down-days").text(Math.floor((game_start_date.getTime()-current.getTime())/(oneDay))+" Days ");
-	$("#count-down-hours").text(""+Math.floor(((game_start_date.getTime()-current.getTime())%(oneDay))/(oneHour)) + " Hours ");
-	$("#count-down-minutes").text(""+Math.floor((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))/(oneMinute)) + " Minutes ");
-	$("#count-down-seconds").text(""+Math.floor(((((game_start_date.getTime()-current.getTime())%(oneDay))%(oneHour))%(oneMinute))/(oneSecond)) + " Seconds ");
-}
 
 //limit text
 function limitText(limitField, limitCount, limitNum) {

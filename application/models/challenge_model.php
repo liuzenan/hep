@@ -459,7 +459,7 @@ class Challenge_model extends My_Model
         }
 
         $sql = "SELECT 
-        AVG(s.total_time) * %d AS sleep,
+        AVG(s.total_time) / 60 * %d AS sleep,
         h.name AS house,
         h.id AS house_id
         FROM sleep AS s

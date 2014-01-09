@@ -17,6 +17,91 @@ class Home extends MY_Controller
         $data['active'] = 'home';
         $timestr = "";
 
+        $me = $this->User_model->loadUser($this->uid);
+        
+        $data['my_house'] = $me->house_id;
+
+        $stepsLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySteps();
+        
+        $n = 0;
+        $prev_min = INF;
+        $prev_house = null;
+        $next_max = INF;
+        $next_house = null;
+        $my_house = null;
+        foreach($stepsLeaderboard as $row) {
+            if ($my_house && $row->steps < $next_max) {
+                $next_max = $row->steps;
+                $next_house = $row;
+                break;
+            }
+            if ($row->house_id === $me->house_id) {
+                $my_house = $row;
+            }
+            if (!$my_house && $row->steps < $prev_min) {
+                $prev_min = $row->steps;
+                $prev_house = $row;
+            }
+
+        }
+
+        $data['stepsLeaderboard'] = array();
+        $data['stepsLeaderboard'][] = $stepsLeaderboard[0];
+
+        if ($prev_house && !in_array($prev_house, $data['stepsLeaderboard'])) {
+            $data['stepsLeaderboard'][] = $prev_house;
+            $data['stepsPrevHouse'] = $prev_house;
+        }
+        if ($my_house && !in_array($my_house, $data['stepsLeaderboard'])) {
+            $data['stepsLeaderboard'][] = $my_house;
+            $data['stepsTopHouse'] = $stepsLeaderboard[0];
+        }
+        if ($next_house && !in_array($next_house, $data['stepsLeaderboard'])) {
+            $data['stepsLeaderboard'][] = $next_house;
+        }
+
+        $sleepLeaderboard = $this->Challenge_model->getWeeklyLeaderboardbySleep();
+
+        $n = 0;
+        $prev_min = INF;
+        $prev_house = null;
+        $next_max = INF;
+        $next_house = null;
+        $my_house = null;
+        foreach($sleepLeaderboard as $row) {
+            if ($my_house && $row->sleep < $next_max) {
+                $next_max = $row->sleep;
+                $next_house = $row;
+                break;
+            }
+            if ($row->house_id === $me->house_id) {
+                $my_house = $row;
+            }
+            if (!$my_house && $row->sleep < $prev_min) {
+                $prev_min = $row->sleep;
+                $prev_house = $row;
+            }
+
+        }
+
+        $data['sleepLeaderboard'] = array();
+        $data['sleepLeaderboard'][] = $sleepLeaderboard[0];
+
+        if ($prev_house && !in_array($prev_house, $data['sleepLeaderboard'])) {
+            $data['sleepLeaderboard'][] = $prev_house;
+            $data['sleepPrevHouse'] = $prev_house;
+        }
+        if ($my_house && !in_array($my_house, $data['sleepLeaderboard'])) {
+            $data['sleepLeaderboard'][] = $my_house;
+            $data['sleepTopHouse'] = $sleepLeaderboard[0];
+
+        }
+        if ($next_house && !in_array($next_house, $data['sleepLeaderboard'])) {
+            $data['sleepLeaderboard'][] = $next_house;
+        }
+
+        $data['leaderboardHeight'] = max(count($data['stepsLeaderboard']), count($data['sleepLeaderboard'])) * 60 + 30;
+
         $this->loadActivityData($this->uid, $data);
         $timestr .= microtime() . "<br>";
         $data['me_today'] = $this->Activity_model->getActivityToday($this->uid);
@@ -42,12 +127,7 @@ class Home extends MY_Controller
         $data['delta_distance'] = number_format($this->cauculateDelta($data['me_today']->distance, $data['me_yesterday']->distance), 2);
         $data['delta_sleep'] = number_format($this->cauculateDelta($data['me_today']->sleep, $data['me_yesterday']->sleep), 2);
         $timestr .= microtime() . "<br>";
-
-
-        $cs1 = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_today);
-        foreach ($cs1 as $c1) {
-            $data['me_challenges'][$c1->category] = $c1;
-        }
+        
         $timestr .= microtime() . "<br>";
 
         $data['me_badges'] = $this->Badge_model->getBadges($this->uid);
@@ -56,16 +136,9 @@ class Home extends MY_Controller
         $data['me_completed'] = $this->Challenge_model->getIndividualChallengeCount($this->uid);
         $timestr .= microtime() . "<br>";
 
-        $cs2 = $this->Challenge_model->loadUserChallenge($this->uid, date("Y-m-d ", time() - 60 * 60 * 24));
-        foreach ($cs2 as $c2) {
-            $data['me_challenges_yesterday'][$c2->category] = $c2;
-        }
+        
         $timestr .= microtime() . "<br>";
 
-        $cs3 = $this->Challenge_model->loadUserChallenge($this->uid, $this->date_tomorrow);
-        foreach ($cs3 as $c3) {
-            $data['me_challenges_tomorrow'][$c3->category] = $c3;
-        }
         $timestr .= microtime() . "<br>";
 
         $data['avg_today'] = $this->Activity_model->getAverageActivityToday();
@@ -84,10 +157,6 @@ class Home extends MY_Controller
         $data['max_today']->max_calories = max($data['avg_today']->avg_calories, $data['me_today']->calories);
         $data['max_today']->max_sleep = max($data['avg_today']->avg_sleep, $data['me_today']->sleep);
 
-        $data['all_challenge'] = $this->Challenge_model->loadAvailableChallanges($this->uid, $this->date_today, $this->date_tomorrow);
-        foreach ($data['all_challenge'] as $c) {
-            $data['all'][$c->category][] = $c;
-        }
         $timestr .= microtime() . "<br>";
 
         //$data['profiling'] = $timestr;

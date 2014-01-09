@@ -606,3 +606,15 @@ margin-bottom: 10px;
 {
 	height: 210px;
 }
+
+.progressChart {
+	/*margin-bottom: 10px;*/
+}
+.centered-tabs {
+	text-align:center;
+}
+.centered-tabs ul.nav-tabs { display:inline-block; }
+.centered-tabs li { display:inline; }
+.centered-tabs a { float:left; }
+* html .centered-tabs ul.nav-tabs { display:inline; } /* IE6 */
+*+html .centered-tabs ul.nav-tabs { display:inline; } /* IE7 */
