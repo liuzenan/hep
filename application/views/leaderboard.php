@@ -8,7 +8,7 @@
 			<li class="<?php if($currentTab=="staff") echo "active" ?>"><a href="<?php echo base_url() . "leaderboard/staff"; ?>">Tutor</a></li>
 		</ul>
 		<?php 
-			if ($currentTab == "house" || $currentTab == "staff" || $currentTab == 'weekly') {
+			if ($currentTab == "overall" || $currentTab == "staff" || $currentTab == 'weekly') {
 				$this->load->view('templates/'.$currentTab);
 			} else {
 				$this->load->view('templates/house');
