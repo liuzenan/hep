@@ -261,58 +261,6 @@ span.activityIcon.floors{
 	width:50px !important;
 }
 
-.challenge .media{
-	padding-bottom: 20px;
-}
-
-.challenge>.media:last-child{
-	padding-bottom: 0;
-}
-
-.challenge .challengeItem.box {
-    width: 240px;
-    height: 280px;
-    float: left;
-    margin-left: 10px;
-    margin-bottom: 10px;
-}
-
-.completed .challenge .challengeItem.box{
-	height: 240px;
-}
-
-.challengeItem.box .challengeContainer{
-	width: 100%;
-	height: 100%;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}
-
-.challengeItem.box .challengeContainer{
-	text-align: center;
-	position: relative;
-}
-
-.challengeItem.box .challengeTitle{
-	padding-top: 15px;
-	font-family: "Grandesign Neue Serif", serif;
-	font-size: 1.3em;
-	margin: 0 10px;
-}
-
-.challengeItem.box .challengeContainer p{
-	font-size: 12px;
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.challengeItem.box .challengeControlBtns{
-	position: absolute;
-	bottom: 15px;
-	left: 15px;
-}
-
 .signup{
 	margin-top: 100px;
 }
@@ -419,33 +367,6 @@ td.forum-stats{
 	margin-bottom: 10px;
 }
 
-.challengeItem.media.well{
-	border-bottom: 1px solid #ccc;
-	padding: 0;
-}
-
-.challengeItem.media .progress{
-	margin-bottom: 0;
-}
-
-.challengeItem.media .media-object{
-	height: 120px;
-}
-.challengeItem.media .media-body{
-	padding: 10px;
-}
-
-.challengeControls .view-btn{
-	margin-bottom: 20px;
-}
-
-.challengeControls{
-	width: 200px;
-	border-left: 1px solid #CCC;
-	padding-left: 20px;
-	height: 120px;
-}
-
 .thread-container .thread-pic, .thread-container .thread-content{
 	float: left;
 }
@@ -497,7 +418,7 @@ td.forum-stats{
 	width: 90%;
 }
 
-.challenge-forum hr{
+.general-forum hr{
 	margin: 10px 0;
 }
 
@@ -526,29 +447,6 @@ td.forum-stats{
 
 .leaderboard-content{
 	float: left;
-}
-
-table.table.challenge-stats{
-	margin-bottom: 0;
-}
-table.challenge-stats thead td{
-	text-align: center;
-	width: 25%;
-	font-family: "Grandesign Neue Serif", Serif;
-	font-size: 1em;
-}
-
-div.challenge-stats{
-	margin: 0 2%;
-	width: 96%;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	background: #F7ECC9;
-	margin-bottom: 20px;
-}
-
-.current-challenges .section-title{
-	margin-bottom: 0;
 }
 
 /*.media-list.current-challenge-list{
@@ -632,79 +530,9 @@ margin-bottom: 10px;
 	float: left;
 }
 
-.myactivity .current-challenges .current-challenge-list{
-	position: relative;
-}
-
 .section-title a{
 	text-decoration: none;
 	color: white;
-}
-
-.myactivity .current-challenge-list .challengeItem.box{
-	height: 120px;
-}
-
-.current-challenge-list .challengeItem.box.empty{
-	opacity: 0.5;
-}
-
-.current-challenge-list .challengeItem.box.empty:hover{
-	opacity: 1;
-}
-
-.current-challenge-list .challenge-title{
-	text-align: center;
-	font-weight: 700;
-	margin-bottom: 20px;
-}
-
-.challengeItem.media.well .media-body p{
-	font-size: 11px;
-	line-height: 1em;
-}
-.current-challenge-list .challengeItem.box{
-/*	padding: 10px;*/
-	margin-bottom: 10px;
-	border-radius: 1em;
-	color: white;
-}
-
-.current-challenge-list .challengeItem.box .progress{
-	margin: 10px;
-}
-
-.current-challenge-list .challengeItem.box h3{
-	margin: 5px;
-}
-
-.current-challenge-list .challengeItem.box h4{
-	opacity: 0.6;
-	margin-top: 0;
-}
-
-.current-challenge-list .yesterday .challengeItem.box{
-	background-color: rgb(204, 102, 153);
-}
-
-.current-challenge-list .today .challengeItem.box{
-	background: rgb(226,103,74);
-}
-
-.current-challenge-list a{
-	text-decoration: none !important;
-}
-
-.current-challenge-list .tomorrow .challengeItem.box{
-	background: rgb(154,203,154);
-}
-
-#challenges .current-challenge-list .tomorrow .challengeItem.box .progress{
-	display: none;
-}
-
-#challenges .current-challenge-list .tomorrow .challengeItem.box h4{
-	line-height: 55px;
 }
 
 .modal table tbody{
@@ -716,32 +544,6 @@ margin-bottom: 10px;
 	text-decoration: none;
 }
 
-.challengeItem.box .quitchallengebtn{
-	margin: 10px;
-}
-
-#challenges .challenge .my .challengeItem.box{
-	height: auto;
-	width: 100%;
-	margin-left: 0;
-	float: none;
-}
-
-#challenges .challenge .steps .challengeItem.box{
-	background:rgb(204,102,153);
-}
-
-#challenges .challenge .floors .challengeItem.box{
-	background:rgb(51,153,102);
-}
-
-#challenges .challenge .sleep .challengeItem.box{
-	background:rgb(51,204,204);
-}
-
-#challenges .challenge .time-based .challengeItem.box{
-	background:rgb(153,102,153);
-}
 
 .badgelist a{
 	float: left;
@@ -752,55 +554,12 @@ margin-bottom: 10px;
 	height: auto;
 }
 
-.addChallenge .challengeItem.box{
-	height: 50px;
-}
-
-.addChallenge .challengeItem.box h2{
-	margin: 0;
-	line-height: 1em;
-	padding-top: 10px;
-}
-
-#challengeModal .challenge-wrapper .row-fluid{
-padding: 10px 2%;
-border-bottom: 1px solid #ccc;
-width: 96%;
-}
-
-#challengeModal .challenge-wrapper a{
-	text-decoration: none !important;
-	color: #999;
-	cursor: default;
-}
-
-#challengeModal .challenge-wrapper a.enabled{
-	cursor: pointer;
-	color: #4F8AC4;
-}
-
-#challengeModal .challenge-wrapper a.enabled .row-fluid:hover{
-	background-color: #4F8AC4;
-	color: white;
-}
-
-#challengeModal .modal-body{
-	margin: 0;
-	padding: 0;
-}
-
 .save-alert{
 	display: none;
 }
 
 .save-alert.show{
 	display: block;
-}
-
-.challengeItem.box.empty h4{
-	color:white;
-	padding-top: 40px;
-	opacity: 0.6;
 }
 
 .history-time{
@@ -836,34 +595,6 @@ width: 96%;
 
 .history-day{
 	margin-bottom: 50px;
-}
-
-.history-challenge-item
-{
-	height: 80px;
-	width: 65px;
-	background-size: 100px 100px;
-	margin-top: -5px;
-	padding: 20px 10px 0 25px;
-	opacity: 0.6;
-}
-
-.history-challenge-item:hover{
-	opacity: 1;
-}
-
-.history-challenge-item .complete{
-	color: lawngreen;
-	text-shadow: 2px 2px 0px white;
-}
-
-.history-challenge-item .incomplete{
-	color: darkorange;
-	text-shadow: 2px 2px 0px white;
-}
-
-.refresh-challenge-button{
-	margin-right: 10px;
 }
 
 .badges-list.thumbnails>div

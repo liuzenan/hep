@@ -15,7 +15,7 @@
 				</form>
 			</div>
 		</div>
-		<div class="row-fluid challenge-forum">
+		<div class="row-fluid general-forum">
 			<?php foreach ($threads as $thread_id => $thread): ?>
 			<div class="thread-container clearfix">
 				<div class="thread-content">
