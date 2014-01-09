@@ -338,7 +338,7 @@ jQuery(document).ready(function($) {
 
 	$('.modal').modal({
 		show:false,
-		backdrop:false
+		// backdrop:false
 	});
 
 	$(".thread-content .showmore").click(function(event){
