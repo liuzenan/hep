@@ -21,6 +21,30 @@ class Mail extends CI_Controller
 
     }
 
+    public function syncReminder($secret='') {
+        if ($secret != ACCESS_SECRET) {
+            echo 'Unauthorised access';
+            return;
+        } 
+
+        $today = date('Y-m-d', time());
+        $ago = date('Y-m-d', strtotime(NO_SYNC_REMINDER, time()));
+        
+        $query = "SELECT u.first_name as name, u.email as email 
+        FROM user u
+        JOIN activity a on a.user_id = u.id
+        WHERE `date` BETWEEN '$ago' AND '$today'
+        GROUP BY a.user_id
+        HAVING SUM(a.steps) = 0";
+
+        $data = $this->db->query($query)->result();
+        foreach ($data as $row) {
+            $this->Mail_model->sendReminder($row->name, $row->email);
+            echo 'Sent to '.$row->name.' on '.$row->email;
+        }
+
+    }
+
     public function invite($code = NULL) {
         if ($code) {
             $query = $this->db->get_where('registration', array('code' => $code));

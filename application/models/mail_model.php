@@ -208,6 +208,29 @@ class Mail_model extends My_Model
         $this->send(Mail_model::TitleInvitation, $msg, $email);
     }
 
+    public function sendReminder($name, $email) {
+        $msg = "Dear $name, <br/><br/>
+        We noticed that there are no recorded activity from your Fitbit account for the past few days.<br/><br/>
+
+        If you forgot to sync your device with Fitbit, please remember to do so. A daily sync is not required but recommended.<br/>
+        Once your tracker is within range of your wireless sync dongle that is connected to a USB port, it will automatically 
+        upload any stored data to your account.<br/>
+        You can also sync your tracker using your <a href=\"http://www.fitbit.com/sg/devices\">smartphones</a>. 
+        <br/><br/>
+        Remember that syncing regularly allows you to earn badges and contribute to your house!
+        <br/><br/>
+
+        More information can be found on <a href=\"https://help.fitbit.com/customer/portal/topics/79805-syncing-your-data-/articles\">Fitbit Help</a>.
+        <br/><br/>
+        If you misplaced your Fitbit tracker, or if it is damaged, please inform your House reps.
+        <br/><br/>
+
+        Health Enhancement Programme";
+        $title = "Having trouble syncing?";
+
+        $this->send($title, $msg, $email);
+    }
+
     public function send($title, $msg, $to)
     {
         $this->email->from(Mail_model::HepAccount, Mail_model::HepName);

@@ -55,5 +55,6 @@ define('VALID_STATS_BASELINE', '2013-01-13');
 define('VALID_STATS_PERCENTAGE', 0.5);
 define('WEEKLY_POINT_MAX', 50);
 define('ACCESS_SECRET', 'root');
+define('NO_SYNC_REMINDER', '- 3 days');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
