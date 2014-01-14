@@ -140,7 +140,7 @@ class Manage extends Admin_Controller
             $data = array();
             $data['students'] = array();
 
-            $query = $this->db->get_where('registration', array('used' => 0));
+            $query = $this->db->get_where('registration', array('used' => 0))->order_by('supercode desc, name asc');
             foreach ($query->result_array() as $student) {
                 $data['students'][] = $student;
             }

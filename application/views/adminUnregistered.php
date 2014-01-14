@@ -13,6 +13,13 @@
    				<a href="#" class="btn btn-primary" id="emailall">Email all unregistered students</a>
 			</div>
 			<table class="table">
+				<tr>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Registration Code</th>
+				<th>Type</th>
+				<th>Send Email</th>
+				</tr>
 					<?php foreach($students as $student){
 						$this->load->view("templates/unregisteredItem", $student);
 					} ?>
