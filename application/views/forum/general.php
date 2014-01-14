@@ -7,7 +7,7 @@
 					<fieldset>
 						<div class="row-fluid">
 							<div class="thread-comment-content clearfix">
-								<textarea name="message" class="required input-block-level" rows="1" id="description"></textarea>
+								<textarea name="message" class="required input-block-level messageBox" rows="1" id="description" placeholder="New thread topic..."></textarea>
 								<button id="newThread" class="btn btn-primary pull-right">Start New Thread</button>
 							</div>
 						</div>
