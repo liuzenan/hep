@@ -112,7 +112,7 @@ class Home extends MY_Controller
             $data['sleepLeaderboard'][] = $next_house;
         }
 
-        $data['leaderboardHeight'] = max(count($data['stepsLeaderboard']), count($data['sleepLeaderboard'])) * 60 + 30;
+        $data['leaderboardHeight'] = max(count($data['stepsLeaderboard']), count($data['sleepLeaderboard'])) * 60 + 40;
 
         $this->loadActivityData($this->uid, $data);
         $timestr .= microtime() . "<br>";
