@@ -86,9 +86,9 @@ class Subscriber extends CI_Controller
         foreach ($houses as $id => $row) {
             $data[] = array(
                 'id' => $id,
-                'score' => round($row['new']['score']),
-                'steps_multiplier' => $row['new']['steps_multiplier'],
-                'sleep_multiplier' => $row['new']['sleep_multiplier']
+                'score' => empty($row['new']['score']) ? $row['old']['score'] : round($row['new']['score']),
+                'steps_multiplier' => empty($row['new']['steps_multiplier']) ? $row['old']['steps_multiplier'] : $row['new']['steps_multiplier'],
+                'sleep_multiplier' => empty($row['new']['sleep_multiplier']) ? $row['old']['sleep_multiplier'] : $row['new']['sleep_multiplier']
             );
             echo $id.': '. round($row['new']['score']).', '.$row['new']['steps_multiplier'].', '.$row['new']['sleep_multiplier'].'<br/>';
         }
