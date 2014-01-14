@@ -4,14 +4,14 @@
     <div class="row-fluid">
       <h3 class="maintitle">HEP Challenge 2014 Rules</h3>
       <ol>
-        <li><p>Official Period of contest: ? March 2014 00:00 -- ? May 2014 23:59</p></li>
-        <li><p>Every week on Sunday 23:59, the top ranking houses in terms of steps and sleep 
+        <li><p>Official Period of contest: 10 March 2014 00:00 -- 27 April 2014 23:59</p></li>
+        <li><p>Every week, the top ranking houses in terms of steps and sleep 
         for that week will receive <strong><?php echo WEEKLY_POINT_MAX ?></strong> points each. All other
         houses will receive a fraction<sup><a href="#footnote1" data-toggle="modal">?</a></sup>
         of that amount based on their progress in steps and sleep clocked 
         respectively. Maximum points attainable is
         <?php echo WEEKLY_POINT_MAX ?>&nbsp;+&nbsp;<?php echo WEEKLY_POINT_MAX ?>&nbsp;=&nbsp;<strong><?php echo 2*WEEKLY_POINT_MAX ?></strong>
-        per week.</p>
+        per week.</p> The points will be updated on Tuesday nights to ensure that data are synced from your devices.
         
         <li><p> Weekly progress is calculated from total steps per person and number of hours of sleep per person to accomodate differences in 
         house sizes.</p></li>
