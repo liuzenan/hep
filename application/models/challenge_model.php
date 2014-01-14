@@ -261,7 +261,7 @@ class Challenge_model extends My_Model
     AND u.house_id = h.id
     AND u.phantom = 0
     AND u.staff = 0
-    AND a.date > '".VALID_STATS_BASELINE."'
+    AND a.date >= '".VALID_STATS_BASELINE."'
     GROUP BY u.id
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
     ORDER BY AVG(a.steps) DESC LIMIT 0, 10";
@@ -289,7 +289,7 @@ class Challenge_model extends My_Model
     AND u.house_id = h.id
     AND u.phantom = 0
     AND u.staff = 0
-    AND s.date > '".VALID_STATS_BASELINE."'
+    AND s.date >= '".VALID_STATS_BASELINE."'
     GROUP BY u.id
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
     ORDER BY AVG(s.total_time) DESC LIMIT 0, 10";
@@ -339,11 +339,12 @@ class Challenge_model extends My_Model
     AND u.phantom = 0
     AND u.hide_progress = 0
     AND (u.staff = 1)
-    AND a.date > '".VALID_STATS_BASELINE."'
+    AND a.date >= '".VALID_STATS_BASELINE."'
     GROUP BY u.id
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
     ORDER BY AVG(a.steps) DESC LIMIT 0, 10";
         $query = $this->db->query($sql);
+        echo $sql;
         return $query->result();
     }
 
@@ -365,7 +366,7 @@ class Challenge_model extends My_Model
     AND u.phantom = 0
     AND u.hide_progress = 0
     AND (u.staff = 1)
-    AND s.date > '".VALID_STATS_BASELINE."'
+    AND s.date >= '".VALID_STATS_BASELINE."'
     GROUP BY u.id
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
     ORDER BY AVG(s.total_time) DESC LIMIT 0, 10";
@@ -540,7 +541,7 @@ class Challenge_model extends My_Model
             AND s.total_time > 0
             AND u.house_id = ".$house_id."
             AND u.phantom = 0
-            AND s.date > '".VALID_STATS_BASELINE."'
+            AND s.date >= '".VALID_STATS_BASELINE."'
             GROUP BY u.id";
 
         $data = $this->db->query($sql)->result();
@@ -558,7 +559,7 @@ class Challenge_model extends My_Model
             AND a.steps > 0
             AND u.house_id = ".$house_id."
             AND u.phantom = 0
-            AND a.date > '".VALID_STATS_BASELINE."'
+            AND a.date >= '".VALID_STATS_BASELINE."'
             GROUP BY u.id";
 
         $data = $this->db->query($sql)->result();
