@@ -241,7 +241,7 @@ class Challenge_model extends My_Model
 
     }
 
-    function getLearderboardBySteps()
+    function getLeaderboardBySteps()
     {
         $sql = "SELECT u.first_name  AS firstname,
     u.fitbit_id AS fitbit_id,
@@ -269,7 +269,7 @@ class Challenge_model extends My_Model
         return $query->result();
     }
 
-    function getLearderboardBySleep()
+    function getLeaderboardBySleep()
     {
         $sql = "SELECT u.first_name  AS firstname,
     u.fitbit_id AS fitbit_id,
@@ -321,7 +321,7 @@ class Challenge_model extends My_Model
         return $query->result();
     }
 
-    function getTutorLearderboardbySteps()
+    function getTutorLeaderboardbySteps()
     {
         $sql = "SELECT u.first_name  AS firstname,
     u.last_name   AS lastname,
@@ -347,7 +347,7 @@ class Challenge_model extends My_Model
         return $query->result();
     }
 
-    function getTutorLearderboardbySleep()
+    function getTutorLeaderboardbySleep()
     {
         $sql = "SELECT u.first_name  AS firstname,
     u.last_name   AS lastname,

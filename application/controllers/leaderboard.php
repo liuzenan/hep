@@ -21,8 +21,8 @@ class Leaderboard extends MY_Controller
     private function loadData()
     {
         $data['currentTab'] = "overall";
-        $data['stepsLeader'] = $this->Challenge_model->getLearderboardbySteps();
-        $data['sleepLeader'] = $this->Challenge_model->getLearderboardbySleep();
+        $data['stepsLeader'] = $this->Challenge_model->getLeaderboardbySteps();
+        $data['sleepLeader'] = $this->Challenge_model->getLeaderboardbySleep();
         return $data;
     }
 
@@ -61,8 +61,8 @@ AND date = ?";
     public function staff()
     {
         $data['currentTab'] = "staff";
-        $data['stepsLeader'] = $this->Challenge_model->getTutorLearderboardbySteps();
-        $data['sleepLeader'] = $this->Challenge_model->getTutorLearderboardbySleep();
+        $data['stepsLeader'] = $this->Challenge_model->getTutorLeaderboardbySteps();
+        $data['sleepLeader'] = $this->Challenge_model->getTutorLeaderboardbySleep();
         //var_dump($data);
         $this->loadPage($data);
     }
