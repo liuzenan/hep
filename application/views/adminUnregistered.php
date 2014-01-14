@@ -16,7 +16,7 @@
 				<tr>
 				<th>Name</th>
 				<th>Email</th>
-				<th>Registration Code</th>
+				<th>Code</th>
 				<th>Type</th>
 				<th>Send Email</th>
 				</tr>
