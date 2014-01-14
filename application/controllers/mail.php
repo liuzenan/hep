@@ -34,6 +34,8 @@ class Mail extends CI_Controller
         FROM user u
         JOIN activity a on a.user_id = u.id
         WHERE `date` BETWEEN '$ago' AND '$today'
+        AND u.phantom = 0
+        AND u.staff = 0
         GROUP BY a.user_id
         HAVING SUM(a.steps) = 0";
 
