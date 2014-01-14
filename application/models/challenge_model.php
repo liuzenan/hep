@@ -344,7 +344,6 @@ class Challenge_model extends My_Model
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
     ORDER BY AVG(a.steps) DESC LIMIT 0, 10";
         $query = $this->db->query($sql);
-        echo $sql;
         return $query->result();
     }
 
