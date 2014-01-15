@@ -103,10 +103,7 @@ class Signup extends CI_Controller
                     echo json_encode($msg);
                     return false;
                 } else {
-                    $data = array();
-                    $data['used'] = 1;
-                    $this->db->where('code', $code);
-                    $this->db->update('registration', $data);
+                    
                 }
             }
 
@@ -141,6 +138,11 @@ class Signup extends CI_Controller
             }
             $this->db->where('id', $this->session->userdata('user_id'));
             $this->db->update('user', $data);
+
+            $data = array();
+            $data['used'] = 1;
+            $this->db->where('code', $code);
+            $this->db->update('registration', $data);
         } else {
             $msg['message'] = 'Make sure that you have filled in all fields';
             echo json_encode($msg);
