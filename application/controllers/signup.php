@@ -94,11 +94,12 @@ class Signup extends CI_Controller
             $is_super = $row->supercode;
 
             if (!$is_super) {
-                if ($used) {
-                    $msg['message'] = 'The registration code has already been used.';
-                    echo json_encode($msg); 
-                    return false;
-                } else if ($house < 0) {
+                // if ($used) {
+                //     $msg['message'] = 'The registration code has already been used.';
+                //     echo json_encode($msg); 
+                //     return false;
+                // } 
+                if ($house < 0) {
                     $msg['message'] = 'You cannot register as a Tutor.';
                     echo json_encode($msg);
                     return false;
