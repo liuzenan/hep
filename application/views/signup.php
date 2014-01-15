@@ -30,6 +30,7 @@
 						<label for="registrationcode">Registration Code</label>
 						<input id="registrationcode" type="text" name="registrationcode">
 						<button id="submitbtn" class="btn btn-large btn-block">Next</button>
+            <p><a href='mailto:hep-support@googlegroups.com'>Contact us</a> if you encountered problems.</p>
 					</fieldset>
 				</form>
 			</div>
