@@ -238,7 +238,11 @@ class Mail_model extends My_Model
         $this->email->subject($title);
         $this->email->message($this->getFullHTML($msg));
         //$this->email->message($msg);
-        $this->email->send();
+        if (! $this->email->send()) {
+            $data = array('message' => 'DeliveryFailed-'.$to.'-'.$title,
+                'content' =>$msg);
+            $this->db->insert('log', $data);
+        };
 
         //echo $this->email->print_debugger();
     }
@@ -249,7 +253,11 @@ class Mail_model extends My_Model
         $this->email->to($to);
         $this->email->subject($title);
         $this->email->message($this->getAnnouncementHTML($msg));
-        $this->email->send();
+        if (! $this->email->send()) {
+            $data = array('message' => 'DeliveryFailed-'.$to.'-'.$title,
+                'content' =>$msg);
+            $this->db->insert('log', $data);
+        };
         //echo $this->email->print_debugger();
     }
 
