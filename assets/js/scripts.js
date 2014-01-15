@@ -10,9 +10,12 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#sendReminder").click(function(event){
-		
+		if (($this).hasClass('disabled')) {
+			return;
+		}
 		var emailMsg = $("#mailMsg").val();
 		var title = $("#mailTitle").val();
+		($this).addClass('disabled');
 		$("#sending-indicator").show();
 		$.ajax({
 			type:"POST",
@@ -34,9 +37,12 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#sendMail").click(function(event){
+		if (($this).hasClass('disabled')) {
+			return;
+		}
 		var emailMsg = $("#mailMsg").val();
 		var title = $("#mailTitle").val();
-
+		($this).addClass('disabled');
 		$.ajax({
 			type:"POST",
 			url:base_url+'sendmail/sendMailMessage',

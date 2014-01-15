@@ -66,11 +66,19 @@ class Sendmail extends Admin_Controller
 
         }
 
-        $uids = $this->User_model->loadAllStudents();
+        $emails = $this->User_model->loadAllStudents();
+        $count = 0;
+        $tos = array();
+        foreach ($emails as $row) {
+            if ($count % 100 == 0) {
+                $tos[$count / 100] = array();
+            }
 
-        foreach ($uids as $uid) {
-            $this->Mail_model->sendAnnouncement($uid->id, $title, $emailMsg);
+            $tos[floor($count / 100)][] = $row->email;
+            $count += 1;
         }
+
+        $this->Mail_model->sendAnnouncement($tos, $title, $emailMsg);
 
         echo json_encode($msg);
     }
@@ -92,10 +100,19 @@ class Sendmail extends Admin_Controller
 
         }
 
-        $uids = $this->User_model->loadStudentDidntCompleteSurvey();
-        foreach ($uids as $uid) {
-            $this->Mail_model->sendAnnouncement($uid->id, $title, $emailMsg);
+        $emails = $this->User_model->loadStudentDidntCompleteSurvey();
+        $count = 0;
+        $tos = array();
+        foreach ($emails as $row) {
+            if ($count % 100 == 0) {
+                $tos[$count / 100] = array();
+            }
+
+            $tos[floor($count / 100)][] = $row->email;
+            $count += 1;
         }
+
+        $this->Mail_model->sendAnnouncement($tos, $title, $emailMsg);
         echo json_encode($msg);
     }
 

@@ -38,11 +38,11 @@ class Mail_model extends My_Model
         $this->load->library('email', $config);
     }
 
-    public function sendAnnouncement($user_id, $title, $msg)
+    public function sendAnnouncement($emails, $title, $msg)
     {
-        $uid = intval($user_id);
-        $u = $this->User_model->loadUser($uid);
-        $this->sendMessage($title, nl2br($msg), $u->email);
+        foreach ($emails as $bccs) {
+            $this->sendMessage($title, nl2br($msg), $bccs);
+        }
     }
 
     public function sendBadgeEarnedMessage($user_id, $badge_id)
@@ -247,15 +247,15 @@ class Mail_model extends My_Model
         //echo $this->email->print_debugger();
     }
 
-    public function sendMessage($title, $msg, $to)
+    public function sendMessage($title, $msg, $bccs)
     {
         $this->email->from(Mail_model::HepAccount, Mail_model::HepName);
-        $this->email->to($to);
+        $this->email->bcc($bccs);
         $this->email->subject($title);
         $this->email->message($this->getAnnouncementHTML($msg));
         if (! $this->email->send()) {
-            $data = array('message' => 'DeliveryFailed-'.$to.'-'.$title,
-                'content' =>$msg);
+            $data = array('message' => 'DeliveryFailed-'.$title,
+                'content' =>implode(', ', $bccs) . '_END_OF_LIST_' . $msg);
             $this->db->insert('log', $data);
         };
         //echo $this->email->print_debugger();

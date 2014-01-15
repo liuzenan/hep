@@ -99,15 +99,15 @@ AND id=?";
 
     function loadAllStudents()
     {
-        $sql = "SELECT id FROM user";
+        $sql = "SELECT id, email FROM user";
         $query = $this->db->query($sql);
         return $query->result();
     }
 
     function loadStudentDidntCompleteSurvey()
     {
-        $sql = "SELECT id FROM user
-			WHERE user.id NOT IN ( SELECT userid FROM survey )";
+        $sql = "SELECT email FROM user
+			WHERE user.id NOT IN ( SELECT userid FROM survey ) AND user.staff = 0";
 
         $query = $this->db->query($sql);
 
