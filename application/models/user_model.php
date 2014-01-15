@@ -93,6 +93,7 @@ AND id=?";
         $sql = "SELECT id
 	FROM   user
 	WHERE  daily_email_unsub = 0
+    AND access = 1
     AND email IS NOT NULL";
         $query = $this->db->query($sql);
         return $query->result();
