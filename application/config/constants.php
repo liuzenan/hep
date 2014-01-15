@@ -51,7 +51,7 @@ define('STEPS_CHALLENGE', 1);
 define('SLEEP_CHALLENGE', 2);
 define('MAX_CHALLENGE_CATEGORY', 2);
 define('BASELINE', '2014-01-13');
-define('VALID_STATS_BASELINE', '2013-01-13');
+define('VALID_STATS_BASELINE', '2014-01-13');
 define('VALID_STATS_PERCENTAGE', 0.5);
 define('WEEKLY_POINT_MAX', 50);
 define('ACCESS_SECRET', 'root');

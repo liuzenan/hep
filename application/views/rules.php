@@ -3,6 +3,7 @@
   <div class="span10">
     <div class="row-fluid">
       <h3 class="maintitle">HEP Challenge 2014 Rules</h3>
+      <h4>Subject to change</h4>
       <ol>
         <li><p>Official Period of contest: 10 March 2014 00:00 -- 27 April 2014 23:59</p></li>
         <li><p>Every week, the top ranking houses in terms of steps and sleep 
