@@ -13,7 +13,7 @@ class Subscriber extends CI_Controller
 
     public function update()
     {
-        $data = array('message' => 'Debug-StartDailyUpdate');
+        $data = array('message' => 'Debug-StartDailyUpdate-'.$this->input->ip_address());
         $this->db->insert('log', $data);
 
         $sql1 = "SELECT DISTINCT id

@@ -12,7 +12,7 @@ class Mail extends CI_Controller
 
     public function dailyReport()
     {
-        $data = array('message' => 'Debug-StartDailyReport');
+        $data = array('message' => 'Debug-StartDailyReport-'.$this->input->ip_address());
         $this->db->insert('log', $data);
 
         //$this->updateBadge();
