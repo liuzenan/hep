@@ -39,13 +39,16 @@
     <script>
     	jQuery(document).ready(function($) {
     		$("#submitbtn").attr('disabled','disabled');
-    		$('#userinfo').change(function() {
+
+    		function checkValidity() {
 		        if($("#firstname").val() != '' && $("#lastname").val() != '' && $("#email").val()!='' && $("#registrationcode").val()!='' && $("#house").val() != '0') {
 		           $('#submitbtn').removeAttr('disabled');
 		        } else {
 		        	$("#submitbtn").attr('disabled','disabled');
 		        }
-		     });
+		     }
+    		$('#userinfo').change(checkValidity);
+    		$('#userinfo').keyup(checkValidity);
 
     		$("#submitbtn").click(function(event){
     			event.preventDefault();
