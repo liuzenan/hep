@@ -127,6 +127,7 @@ class Signup extends CI_Controller
             $data['phantom'] = 0;
             $data['staff'] = 0;
             $data['access'] = $access;
+            $data['code'] =  $code;
 
             if ($house != "0") {
                 $data['house_id'] = $house;
