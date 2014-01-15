@@ -12,12 +12,17 @@ class Mail extends CI_Controller
 
     public function dailyReport()
     {
+        $data = array('message' => 'Debug-StartDailyReport');
+        $this->db->insert('log', $data);
+
         //$this->updateBadge();
         $this->checkSubscribe();
         $uids = $this->User_model->loadDailyReportUsers();
         foreach ($uids as $uid) {
             $this->Mail_model->sendDailyReport($uid->id);
         }
+        $data = array('message' => 'Debug-EndDailyReport');
+        $this->db->insert('log', $data);
 
     }
 

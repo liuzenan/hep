@@ -13,6 +13,9 @@ class Subscriber extends CI_Controller
 
     public function update()
     {
+        $data = array('message' => 'Debug-StartDailyUpdate');
+        $this->db->insert('log', $data);
+
         $sql1 = "SELECT DISTINCT id
 				FROM   user
 				WHERE  fitbit_id IS NOT NULL";
@@ -25,6 +28,8 @@ class Subscriber extends CI_Controller
             $this->getActivities($uid, $date);
             $this->getSleep($uid, $date);
         }
+        $data = array('message' => 'Debug-EndDailyUpdate');
+        $this->db->insert('log', $data);
         // echo "finish";
     }
 
