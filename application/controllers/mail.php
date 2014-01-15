@@ -41,6 +41,7 @@ class Mail extends CI_Controller
         WHERE `date` BETWEEN '$ago' AND '$today'
         AND u.phantom = 0
         AND u.staff = 0
+        AND u.email IS NOT NULL
         GROUP BY a.user_id
         HAVING SUM(a.steps) = 0";
 

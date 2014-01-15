@@ -92,14 +92,15 @@ AND id=?";
     {
         $sql = "SELECT id
 	FROM   user
-	WHERE  daily_email_unsub = 0";
+	WHERE  daily_email_unsub = 0
+    AND email IS NOT NULL";
         $query = $this->db->query($sql);
         return $query->result();
     }
 
     function loadAllStudents()
     {
-        $sql = "SELECT id, email FROM user";
+        $sql = "SELECT id, email FROM user WHERE email IS NOT NULL";
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -107,7 +108,8 @@ AND id=?";
     function loadStudentDidntCompleteSurvey()
     {
         $sql = "SELECT email FROM user
-			WHERE user.id NOT IN ( SELECT userid FROM survey ) AND user.staff = 0";
+			WHERE user.id NOT IN ( SELECT userid FROM survey ) AND user.staff = 0
+            AND user.email IS NOT NULL";
 
         $query = $this->db->query($sql);
 

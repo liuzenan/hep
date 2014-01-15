@@ -8,7 +8,7 @@ class Mail_model extends My_Model
     const HepName = 'Health Enhancement Program';
     const TitleBadgeEarned = 'Congrats for earning %s badge!';
     const TitleDailyReport = 'HEP Daily Report';
-    const TitleInvitation = 'HEP Registration Code';
+    const TitleInvitation = 'HEP Registration Reminder';
 
     const Header = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
 	"http://www.w3.org/TR/html4/strict.dtd">
@@ -197,11 +197,16 @@ class Mail_model extends My_Model
 
     public function sendInvitation($name, $email, $code) {
         $msg = "Dear " . $name . ", <br/><br/>
+        We noticed that you have either not signed up with HEP Platform, or have not 
+        filled in your information. <br/><br/>
+
         Your HEP registration code is:<br/>
         <p style=\"font-size:x-large\">".$code."</p><br/>
 
         Please register on the <a href=\"http://hep.d2.comp.nus.edu.sg/\">HEP Platform</a> with
-        your Fitbit account as soon as possible.<br/><br/><br/>
+        your Fitbit account and fill in the relevant information as soon as possible.<br/><br/>
+
+        If you have any questions or encountered any issues, please email us at hep-support@googlegroups.com<br/>
 
         Health Enhancement Programme";
 
