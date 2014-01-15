@@ -80,11 +80,11 @@ class Signup extends CI_Controller
     {
         $msg = array('success' => false, 'message' => '');
 
-        $firstname = $this->input->post("firstname");
-        $lastname = $this->input->post("lastname");
-        $email = $this->input->post("email");
-        $house = $this->input->post("house");
-        $code = $this->input->post('registrationcode');
+        $firstname = trim($this->input->post("firstname"));
+        $lastname = trim($this->input->post("lastname"));
+        $email = trim($this->input->post("email"));
+        $house = trim($this->input->post("house"));
+        $code = strtoupper(trim($this->input->post('registrationcode')));
 
         $query = $this->db->get_where('registration', array('code' => $code));
         if ($query->num_rows() > 0) {
