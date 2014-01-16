@@ -515,17 +515,22 @@ class Challenge_model extends My_Model
     {
         $leaderboard = $this->getHouseLeaderboard();
         $rank = 0;
+        $lastScore = -1;
+        $lastRank = 1;
         foreach ($leaderboard as $house) {
             $rank++;
             if ($house->house_id == $house_id) {
-
-                return array('rank' => $rank,
+                return array('rank' => ($house->score == $lastScore) ? $lastRank : $rank,
                     'points' => $house->score,
                     'steps_multiplier' => $house->steps_multiplier,
                     'sleep_multiplier' => $house->sleep_multiplier,
                     'house_id' => $house->house_id,
                     'house_name' => $house->house_name,
                     'picture' => $house->picture);
+            }
+            if ($house->score != $lastScore) {
+                $lastRank = $rank;
+                $lastScore = $house->score;
             }
         }
     }
