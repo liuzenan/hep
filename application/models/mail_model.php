@@ -5,7 +5,7 @@ class Mail_model extends My_Model
     //const HepAccount = 'hepnusmedical@gmail.com';
 
     const HepAccount = 'hep-support@googlegroups.com';
-    const HepName = 'Health Enhancement Program';
+    const HepName = 'Health Enhancement Programme';
     const TitleBadgeEarned = 'Congrats for earning %s badge!';
     const TitleDailyReport = 'HEP Daily Report';
     const TitleInvitation = 'HEP Registration Reminder';
@@ -91,12 +91,13 @@ class Mail_model extends My_Model
 
         %s<br/><br/>
 
-		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%d kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
+		Because of your contribution, we now have in total <b>%sK</b> steps, <b>%s kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
 		That's awesome! Thanks! :)
 
         <br/><br/>
         You may unsubscribe from daily report from <a href=\"http://hep.d2.comp.nus.edu.sg/profile\">your profile settings</a> after logging in to HEP Platform.
-		<br><br>";
+		<br><br>
+        Health Enhancement Programme";
         $ci =& get_instance();
         $ci->load->model('Activity_model');
         $ci->load->model('Badge_model');
