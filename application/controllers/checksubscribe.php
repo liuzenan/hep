@@ -182,6 +182,7 @@ class Checksubscribe extends CI_Controller
                 } catch (Exception $e) {
                     echo "<p>sleep error for user" . $user_id . ' '.$e->getMessage() ."</p>";
                 }
+            }
         }
     }
 
