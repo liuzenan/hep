@@ -57,7 +57,7 @@ class Checksubscribe extends CI_Controller
                     $xml = $this->fitbitphp->getSubscriptions();
                     foreach ($xml->apiSubscriptions->apiSubscription as $value) {
                         var_dump((string)$value);
-                        echo '<br/>-----<br/>'
+                        echo '<br/>-----<br/>';
                         $collectionType = (string)$value->collectionType;
                         $subscriptionId = (string)$value->subscriptionId;
                         //$this->fitbitphp->deleteSubscription($subscriptionId, "/" . $collectionType, $collectionType);
@@ -180,8 +180,7 @@ class Checksubscribe extends CI_Controller
 
                     }
                 } catch (Exception $e) {
-                    // $xml = $this->fitbitphp->getSubscriptions();
-                    // var_dump($xml->apiSubscriptions);
+                    echo $e->getMessage();
                 }
 
             }
