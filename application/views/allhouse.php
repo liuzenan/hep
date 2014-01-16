@@ -46,12 +46,12 @@
 						</div>
 						<div class="span3">
 							<strong class="muted">
-								<small>Daily Steps</small>
+								<small>Avg. Daily Steps</small>
 							</strong>
 						</div>
 						<div class="span3">
 							<strong class="muted">
-								<small>Daily Sleep</small>
+								<small>Avg. Daily Sleep</small>
 							</strong>
 						</div>
 						<div class="span4">
