@@ -45,6 +45,32 @@ class Checksubscribe extends CI_Controller
 
     }
 
+    public function checkuser($user_id= - 1) {
+        if ($user_id > 0) {
+            $query = $this->db->query("SELECT * FROM user WHERE id=" . $user_id);
+            if ($query->num_rows()) {
+                $result = $query->row();
+                $user_token = $result->oauth_token;
+                $user_secret = $result->oauth_secret;
+                $this->fitbitphp->setOAuthDetails($user_token, $user_secret);
+                try {
+                    $xml = $this->fitbitphp->getSubscriptions();
+                    foreach ($xml->apiSubscriptions->apiSubscription as $value) {
+                        var_dump((string)$value);
+                        echo '<br/>-----<br/>'
+                        $collectionType = (string)$value->collectionType;
+                        $subscriptionId = (string)$value->subscriptionId;
+                        //$this->fitbitphp->deleteSubscription($subscriptionId, "/" . $collectionType, $collectionType);
+
+                    }
+                } catch (Exception $e) {
+                    $xml = $this->fitbitphp->getSubscriptions();
+                    var_dump($xml->apiSubscriptions);
+                }
+
+            }
+        }
+    }
     public function subscribealluser()
     {
         $query = $this->db->query("SELECT * FROM user");
