@@ -93,6 +93,9 @@ class Mail_model extends My_Model
 
 		Because of your contribution, we now have in total <b>%dK</b> steps, <b>%d kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
 		That's awesome! Thanks! :)
+
+        <br/><br/>
+        You may unsubscribe from daily report from <a href=\"http://hep.d2.comp.nus.edu.sg/profile\">your profile settings</a> after logging in to HEP Platform.
 		<br><br>";
         $ci =& get_instance();
         $ci->load->model('Activity_model');
@@ -198,7 +201,7 @@ class Mail_model extends My_Model
     public function sendInvitation($name, $email, $code) {
         $msg = "Dear " . $name . ", <br/><br/>
         We noticed that you have either not signed up with HEP Platform, or have not 
-        filled in your information. <br/><br/>
+        filled in your information on the platform. <br/><br/>
 
         Your HEP registration code is:<br/>
         <p style=\"font-size:x-large\">".$code."</p><br/>
@@ -206,7 +209,8 @@ class Mail_model extends My_Model
         Please register on the <a href=\"http://hep.d2.comp.nus.edu.sg/\">HEP Platform</a> with
         your Fitbit account and fill in the relevant information as soon as possible.<br/><br/>
 
-        If you have any questions or encountered any issues, please email us at hep-support@googlegroups.com<br/>
+        If you have any questions or encountered any issues, please email us at <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
+        In particular, those who encountered \"your registration code has already been used\" error should now be able to register normally. <br/><br/>
 
         Health Enhancement Programme";
 
@@ -238,15 +242,28 @@ class Mail_model extends My_Model
 
     public function send($title, $msg, $to)
     {
+        $this->email->clear();
+
         $this->email->from(Mail_model::HepAccount, Mail_model::HepName);
         $this->email->to($to);
         $this->email->subject($title);
         $this->email->message($this->getFullHTML($msg));
         //$this->email->message($msg);
         if (! $this->email->send()) {
-            $data = array('message' => 'DeliveryFailed-'.$to.'-'.$title,
-                'content' =>$msg);
-            $this->db->insert('log', $data);
+            // try again
+            sleep(1);
+            $this->email->clear();
+
+            $this->email->from(Mail_model::HepAccount, Mail_model::HepName);
+            $this->email->to($to);
+            $this->email->subject($title);
+            $this->email->message($this->getFullHTML($msg));
+
+            if (! $this->email->send()) {
+                $data = array('message' => 'DeliveryFailed-'.$to.'-'.$title,
+                    'content' =>$msg);
+                $this->db->insert('log', $data);
+            }
         };
 
         //echo $this->email->print_debugger();
@@ -254,14 +271,27 @@ class Mail_model extends My_Model
 
     public function sendMessage($title, $msg, $bccs)
     {
+        $this->email->clear();
+
         $this->email->from(Mail_model::HepAccount, Mail_model::HepName);
         $this->email->bcc($bccs);
         $this->email->subject($title);
         $this->email->message($this->getAnnouncementHTML($msg));
         if (! $this->email->send()) {
-            $data = array('message' => 'DeliveryFailed-'.$title,
-                'content' =>implode(', ', $bccs) . '_END_OF_LIST_' . $msg);
-            $this->db->insert('log', $data);
+            // try again
+            sleep(1);
+            $this->email->clear();
+
+            $this->email->from(Mail_model::HepAccount, Mail_model::HepName);
+            $this->email->bcc($bccs);
+            $this->email->subject($title);
+            $this->email->message($this->getAnnouncementHTML($msg));
+
+            if (! $this->email->send()) {
+                $data = array('message' => 'DeliveryFailed-'.$title,
+                    'content' =>implode(', ', $bccs) . '_END_OF_LIST_' . $msg);
+                $this->db->insert('log', $data);
+            }
         };
         //echo $this->email->print_debugger();
     }
