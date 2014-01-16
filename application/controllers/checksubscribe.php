@@ -171,13 +171,17 @@ class Checksubscribe extends CI_Controller
                 $this->fitbitphp->setOAuthDetails($user_token, $user_secret);
                 try {
                     $subscriptionActivityId = $user_id . "-activities";
-                    $subscriptionSleepId = $user_id . "-sleep";
                     $this->fitbitphp->addSubscription($subscriptionActivityId, "/activities", "activities");
+                } catch (Exception $e) {
+                    echo "<p>activities error for user" . $user_id . ' '.$e->getMessage() ."</p>";
+                }
+
+                try {
+                    $subscriptionSleepId = $user_id . "-sleep";
                     $this->fitbitphp->addSubscription($subscriptionSleepId, "/sleep", "sleep");
                 } catch (Exception $e) {
-                    echo "<p>error for user" . $user_id . ' '.$e->getMessage() ."</p>";
+                    echo "<p>sleep error for user" . $user_id . ' '.$e->getMessage() ."</p>";
                 }
-            }
         }
     }
 

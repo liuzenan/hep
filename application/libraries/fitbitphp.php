@@ -2245,7 +2245,9 @@ class FitBitPHP
         } catch (Exception $E) {
         }
         $response = $this->oauth->getLastResponse();
+        var_dump($response);
         $responseInfo = $this->oauth->getLastResponseInfo();
+        var_dump($responseInfo);
         if (!strcmp($responseInfo['http_code'], '200')) {
             $xml = $this->fitbit_simplexml_load_string($response);
             if ($xml)
