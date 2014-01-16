@@ -56,10 +56,10 @@ class Checksubscribe extends CI_Controller
                 try {
                     $xml = $this->fitbitphp->getSubscriptions();
                     foreach ($xml->apiSubscriptions->apiSubscription as $value) {
-                        var_dump((string)$value);
+                        var_dump($value);
                         echo '<br/>-----<br/>';
-                        $collectionType = (string)$value->collectionType;
-                        $subscriptionId = (string)$value->subscriptionId;
+                        echo (string)$value->collectionType;
+                        echo '<br>' . (string)$value->subscriptionId;
                         //$this->fitbitphp->deleteSubscription($subscriptionId, "/" . $collectionType, $collectionType);
 
                     }
@@ -175,7 +175,7 @@ class Checksubscribe extends CI_Controller
                     $this->fitbitphp->addSubscription($subscriptionActivityId, "/activities", "activities");
                     $this->fitbitphp->addSubscription($subscriptionSleepId, "/sleep", "sleep");
                 } catch (Exception $e) {
-                    echo "<p>error for user" . $user_id . "</p>";
+                    echo "<p>error for user" . $user_id . ' '.$e->getMessage() ."</p>";
                 }
             }
         }
@@ -226,6 +226,7 @@ class Checksubscribe extends CI_Controller
                     $this->fitbitphp->addSubscription($subscriptionSleepId, "/sleep", "sleep");
                 } catch (Exception $e) {
                     echo "<p>error for user" . $user_id . "</p>";
+                    echo $e->getMessage() . '<br/>';
                     try {
                         $xml = $this->fitbitphp->getSubscriptions();
                         foreach ($xml->apiSubscriptions->apiSubscription as $value) {
@@ -248,6 +249,7 @@ class Checksubscribe extends CI_Controller
                         $xml = $this->fitbitphp->getSubscriptions();
                         var_dump($xml);
                     } catch (Exception $e) {
+                        echo $e->getMessage() . '<br/>';
                     }
 
                 }
