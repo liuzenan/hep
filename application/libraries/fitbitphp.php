@@ -2231,7 +2231,7 @@ class FitBitPHP
 
 
     /**
-     * Get list of user's subscriptions for this application
+     * Get list of user's subscriptions for this application.
      *
      * @throws FitBitException
      * @return

@@ -64,11 +64,31 @@ class Checksubscribe extends CI_Controller
 
                     }
                 } catch (Exception $e) {
-                    $xml = $this->fitbitphp->getSubscriptions();
-                    var_dump($xml->apiSubscriptions);
+                    echo $e->getMessage();
+                    //$xml = $this->fitbitphp->getSubscriptions();
+                    //var_dump($xml->apiSubscriptions);
                 }
 
             }
+        }
+    }
+
+    public function checkLimit($user_id) {
+        $query = $this->db->query("SELECT * FROM user WHERE id=" . $user_id);
+        if ($query->num_rows()) {
+            $result = $query->row();
+            $user_token = $result->oauth_token;
+            $user_secret = $result->oauth_secret;
+            $this->fitbitphp->setOAuthDetails($user_token, $user_secret);
+            try {
+                $xml = $this->fitbitphp->getRateLimit();
+                var_dump($xml);
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                //$xml = $this->fitbitphp->getSubscriptions();
+                //var_dump($xml->apiSubscriptions);
+            }
+
         }
     }
     public function subscribealluser()
