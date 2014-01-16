@@ -24,13 +24,13 @@ class Subscriber extends CI_Controller
             $uid = $row1->id;
 
             $date = date("Y-m-d", time() - 24 * 60 * 60);
-            // echo $uid.'-'.$date.'<br>';
+            //echo $uid.'-'.$date.'<br>';
             $this->getActivities($uid, $date);
             $this->getSleep($uid, $date);
         }
         $data = array('message' => 'Debug-EndDailyUpdate');
         $this->db->insert('log', $data);
-        // echo "finish";
+        echo "finish";
     }
 
     public function refresh()
