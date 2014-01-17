@@ -3,7 +3,6 @@
   <div class="span10">
     <div class="row-fluid">
       <h3 class="maintitle">HEP Challenge 2014 Rules</h3>
-      <h4>Subject to change</h4>
       <ol>
         <li><p>Official Period of contest: 10 March 2014 00:00 -- 27 April 2014 23:59</p></li>
         <li><p>Every week, the top ranking houses in terms of steps and sleep 
@@ -12,8 +11,8 @@
         of that amount based on their progress in steps and sleep clocked 
         respectively. Maximum points attainable is
         <?php echo WEEKLY_POINT_MAX ?>&nbsp;+&nbsp;<?php echo WEEKLY_POINT_MAX ?>&nbsp;=&nbsp;<strong><?php echo 2*WEEKLY_POINT_MAX ?></strong>
-        per week.</p> The points will be updated on Tuesday nights to ensure that data are synced from your devices.
-        
+        per week.</p> 
+
         <li><p> Weekly progress is calculated from total steps per person and number of hours of sleep per person to accomodate differences in 
         house sizes.</p></li>
         <li><p>To help the houses that are falling behind to catch up, a certain 
@@ -28,6 +27,17 @@ contributions weighted according to the period of participation. </p></li>
         <li><p>Contestants can opt out of the contest permanently or temporarily. For example,
 because of illness or because of a misplaced FitBit. They are to inform their House
 reps, who will in turn inform the contest organizers. </p></li>
+<h5>Timings</h5>
+        <li><p>A week is counted from Monday to Sunday. However, the points will not be tallied until Tuesday night on the next week. </p></li>
+        <li><p>Badges will be awarded two days later.</p></li> 
+        <li><p>This is to ensure that students have sufficient time to sync their data.</p></li>
+<h5>Final Race</h5>
+        <li><p> The last week of the contest, 21 April 2014 00:00 -- 27 April 2014 23:59 is the <em>Final Race</em> week. </p></li>
+        <li><p> The weekly cap of 50 points will be removed. Instead, we look at the houses that has the highest amount of steps and sleep,
+        and use their weekly average as a reference reference. </p></li>
+        <li><p> Houses that accumulated the same amount of steps or sleep as the reference value gets 50 points. More points can be earned if
+        the performance is better than the reference value<sup><a href="#footnote3" data-toggle="modal">?</a></sup>.</p></li>
+        <li><p> Multipliers will be reset to 100% for this week</p></li>
 <h5>House Contest</h5>
         <li><p>The winning House will be the one which has the highest points accrued at the end
         of the contest.
@@ -58,6 +68,20 @@ reps, who will in turn inform the contest organizers. </p></li>
       <p>The value is determined by the formula: 200%&nbsp;-&nbsp;<code style="color: black">last_week_my_house_performance</code>&nbsp;/&nbsp;<code style="color: black">last_week_best_record</code></p>
       <p>For example, last week's steps record was held by House 1 with 200000 steps per person. A house that clocked 100000 steps
       will receive a multiplier of 150%.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+
+    <div id="footnote3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="footnote3Header" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="footnote3Header">Final Race Week</h3>
+    </div>
+    <div class="modal-body">
+      <p>For example, the best performing houses in steps leaderboard earned an avergage of 20,0000 steps per person per week. That will be the reference value.</p>
+      <p>A house that accumulated 30,0000 steps during the final race week will earn 30,0000&nbsp;/&nbsp;20,0000&nbsp;&times;&nbsp;50&nbsp;=&nbsp;75 points.</p>
+      <p>A house that accumulated 10,0000 steps during the final race week will earn 10,0000&nbsp;/&nbsp;20,0000&nbsp;&times;&nbsp;50&nbsp;=&nbsp;25 points.</p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
