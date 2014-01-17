@@ -34,8 +34,8 @@ reps, who will in turn inform the contest organizers. </p></li>
 <h5>Final Race</h5>
         <li><p> The last week of the contest, 21 April 2014 00:00 -- 27 April 2014 23:59 is the <em>Final Race</em> week. </p></li>
         <li><p> The weekly cap of 50 points will be removed. Instead, we look at the houses that has the highest amount of steps and sleep,
-        and use their weekly average as a reference reference. </p></li>
-        <li><p> Houses that accumulated the same amount of steps or sleep as the reference value gets 50 points. More points can be earned if
+        and use their weekly average as a reference value. </p></li>
+        <li><p> Houses that accumulate the same amount of steps or sleep as the reference value get 50 points. More points can be earned if
         the performance is better than the reference value<sup><a href="#footnote3" data-toggle="modal">?</a></sup>.</p></li>
         <li><p> Multipliers will be reset to 100% for this week</p></li>
 <h5>House Contest</h5>
@@ -44,49 +44,52 @@ reps, who will in turn inform the contest organizers. </p></li>
         </p></li>
       </ol>
     </div>  
+
     <div id="footnote1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="footnote1Header" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="footnote1Header">Scoring</h3>
-    </div>
-    <div class="modal-body">
-      <p>For example, the record for steps and hours of sleep for a given week are 200000 steps and 50 hours respectively.
-        A house that has 100000 steps and 40 hours of sleep will earn 
-        100000&nbsp;/&nbsp;200000&nbsp;&times;&nbsp;<?php echo WEEKLY_POINT_MAX ?>&nbsp;+&nbsp;40&nbsp;/&nbsp;50&nbsp;&times;&nbsp;<?php echo WEEKLY_POINT_MAX ?>&nbsp;=&nbsp;65 points.</p></li>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="footnote1Header">Scoring</h3>
+      </div>
+      <div class="modal-body">
+        <p>For example, the record for steps and hours of sleep for a given week are 200,000 steps and 50 hours respectively.
+          A house that has 100,000 steps and 40 hours of sleep will earn 
+          100,000&nbsp;/&nbsp;200,000&nbsp;&times;&nbsp;<?php echo WEEKLY_POINT_MAX ?>&nbsp;+&nbsp;40&nbsp;/&nbsp;50&nbsp;&times;&nbsp;<?php echo WEEKLY_POINT_MAX ?>&nbsp;=&nbsp;65 points.</p></li>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
     </div>
 
     <div id="footnote2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="footnote2Header" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="footnote2Header">Multiplier</h3>
-    </div>
-    <div class="modal-body">
-      <p>Multipliers are calculated separately for steps and sleep.</p>
-      <p>The value is determined by the formula: 200%&nbsp;-&nbsp;<code style="color: black">last_week_my_house_performance</code>&nbsp;/&nbsp;<code style="color: black">last_week_best_record</code></p>
-      <p>For example, last week's steps record was held by House 1 with 200000 steps per person. A house that clocked 100000 steps
-      will receive a multiplier of 150%.</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="footnote2Header">Multiplier</h3>
+      </div>
+      <div class="modal-body">
+        <p>Multipliers are calculated separately for steps and sleep.</p>
+        <p>The value is determined by the formula: 200%&nbsp;-&nbsp;<code style="color: black">last_week_my_house_performance</code>&nbsp;/&nbsp;<code style="color: black">last_week_best_record</code></p>
+        <p>For example, last week's steps record was held by House 1 with 200,000 steps per person. A house that clocked 100,000 steps
+        will receive a multiplier of 150%.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
     </div>
 
     <div id="footnote3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="footnote3Header" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="footnote3Header">Final Race Week</h3>
-    </div>
-    <div class="modal-body">
-      <p>For example, the best performing houses in steps leaderboard earned an avergage of 20,0000 steps per person per week. That will be the reference value.</p>
-      <p>A house that accumulated 30,0000 steps during the final race week will earn 30,0000&nbsp;/&nbsp;20,0000&nbsp;&times;&nbsp;50&nbsp;=&nbsp;75 points.</p>
-      <p>A house that accumulated 10,0000 steps during the final race week will earn 10,0000&nbsp;/&nbsp;20,0000&nbsp;&times;&nbsp;50&nbsp;=&nbsp;25 points.</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="footnote3Header">Final Race Week</h3>
+      </div>
+      <div class="modal-body">
+        <p>For example, the best performing houses in steps leaderboard earned an avergage of 200,000 steps per person per week. That will be the reference value.</p>
+        <p>A house that accumulated 300,000 steps during the final race week will earn 300,000&nbsp;/&nbsp;200,000&nbsp;&times;&nbsp;50&nbsp;=&nbsp;75 points.</p>
+        <p>A house that accumulated 100,000 steps during the final race week will earn 100,000&nbsp;/&nbsp;200,000&nbsp;&times;&nbsp;50&nbsp;=&nbsp;25 points.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
     </div>
 
-  </div>
   </div>
 </div>
