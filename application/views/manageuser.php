@@ -82,22 +82,18 @@
 					<label for="invalid">Invalid Period</label>
 	<table class="table">
         <tbody>
-        	<?php foreach ($invalidperiod as $key => $period): ?>
+        	<?php foreach ($invalidperiod as $row): ?>
           <tr>
             <td><small>Start Date: </small></td>
             <td>
-            	<div class="date-picker input-append date" id="dp<?php echo $key ?>-1" data-date="13-02-2013" data-date-format="dd-mm-yyyy">
-					<input class="span8" size="16" type="text" value="13-02-2013">
-					<span class="add-on"><i class="icon-th"></i></span>
-				</div>
+            	<?php echo date('d-m-Y', strtotime($row->start_date)); ?>
             </td>
+          <tr>
             <td><small>End Date: </small></td>
             <td>
-            	<div class="date-picker input-append date" id="dp<?php echo $key ?>-2" data-date="22-02-2013" data-date-format="dd-mm-yyyy">
-					<input class="span8" size="16" type="text" value="22-02-2013">
-					<span class="add-on"><i class="icon-th"></i></span>
-				</div>
+            	<?php echo date('d-m-Y', strtotime($row->end_date)); ?>
             </td>
+            </tr>
           </tr>
           <?php endforeach ?>
         </tbody>
