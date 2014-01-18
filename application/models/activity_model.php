@@ -341,7 +341,7 @@ class Activity_model extends My_Model
                         $sql = "INSERT INTO intradayactivity(user_id, activity_time, steps, calories, calories_level, floors, elevation)
 					VALUES (" . $user_id . ", '" . $date . " " . $key . "', " . $value['steps'] . ", " .
                             $value['calories'] . ", " . $value['level'] . ", "
-                            . $value['floors'] . ", " . $value['elevation'] . ") ON DUPLICATE KEY UPDATE
+                            . 0 . ", " . 0 . ") ON DUPLICATE KEY UPDATE
 						steps = " . $value['steps'] . ", calories = " . $value['calories'] . ", calories_level= " . $value['level'] .
                             ", floors=" . 0 . ",elevation=" . 0;
 
