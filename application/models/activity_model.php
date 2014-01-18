@@ -530,17 +530,16 @@ LIMIT  1";
 
             $tracker_caloriesOut = $summary->caloriesOut;
             $tracker_steps = $summary->steps;
-            
-            foreach ($summary->distances as $distanceEntry) {
-                var_dump($distanceEntry->activityDistance);
-                if ($distanceEntry->activityDistance->activity == 'tracker') {
-                    $tracker_distance = $distanceEntry->activityDistance->distance;
+
+            foreach ($summary->distances->activityDistance as $distanceEntry) {
+                if ($distanceEntry->activity == 'tracker') {
+                    $tracker_distance = $distanceEntry->distance;
                     break;
-                } else if ($distanceEntry->activityDistance->activity == 'tracker') {
-                    $total_distance = $distanceEntry->activityDistance->distance;
+                } else if ($distanceEntry->activity == 'tracker') {
+                    $total_distance = $distanceEntry->distance;
                 }
             }
-
+            
             if (!isset($tracker_distance)) {
                 if (isset($total_distance)) {
                     $tracker_distance = $total_distance;
