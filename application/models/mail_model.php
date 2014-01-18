@@ -201,8 +201,10 @@ class Mail_model extends My_Model
 
     public function sendInvitation($name, $email, $code) {
         $msg = "Dear " . $name . ", <br/><br/>
-        We noticed that you have either not signed up with HEP Platform, or have not 
-        filled in your information on the platform. <br/><br/>
+        It seems that you either have not signed up with HEP Platform, or your information on the platform is incomplete.  
+        We will be starting data collection on Monday 20 Jan 2014, so we would be really grateful if you would register with
+        the HEP Platform with your Fitbit account and fill in the relevant information as soon as possible. If we do not have
+        everyone registered on time, our data collection would incomplete and this would have severe impact on the research study. <br/><br/>
 
         Your HEP registration code is:<br/>
         <p style=\"font-size:x-large\">".$code."</p><br/>
@@ -210,8 +212,11 @@ class Mail_model extends My_Model
         Please register on the <a href=\"http://hep.d2.comp.nus.edu.sg/\">HEP Platform</a> with
         your Fitbit account and fill in the relevant information as soon as possible.<br/><br/>
 
-        If you have any questions or encountered any issues, please email us at <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
-        In particular, those who encountered \"your registration code has already been used\" error should now be able to register normally. <br/><br/>
+        If you have any questions or encounter any issues, please email us at <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
+        Those of you who encountered a \"your registration code has already been used\" error would be pleased to know that the issue has been resolved.
+        <br/><br/>
+        Thank you for your cooperation.
+        <br/><br/>
 
         Health Enhancement Programme";
 
@@ -220,19 +225,21 @@ class Mail_model extends My_Model
 
     public function sendReminder($name, $email) {
         $msg = "Dear $name, <br/><br/>
-        We noticed that there are no recorded activity from your Fitbit account for the past few days.<br/><br/>
+        It seems that there have been no recorded activities on your Fitbit account for the past few days.<br/><br/>
 
         If you forgot to sync your device with Fitbit, please remember to do so. A daily sync is not required but recommended.<br/>
         Once your tracker is within range of your wireless sync dongle that is connected to a USB port, it will automatically 
         upload any stored data to your account.<br/>
         You can also sync your tracker using your <a href=\"http://www.fitbit.com/sg/devices\">smartphones</a>. 
         <br/><br/>
-        Remember that syncing regularly allows you to earn badges and contribute to your house!
+        Remember that syncing regularly allows you to earn badges and contribute to your house! :)
         <br/><br/>
 
         More information can be found on <a href=\"https://help.fitbit.com/customer/portal/topics/79805-syncing-your-data-/articles\">Fitbit Help</a>.
         <br/><br/>
-        If you misplaced your Fitbit tracker, or if it is damaged, please inform your House reps.
+        If you misplaced your Fitbit tracker, or if it is damaged, please inform your House reps and email us at <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
+        <br/><br/>
+        Thank you for your cooperation.
         <br/><br/>
 
         Health Enhancement Programme";
