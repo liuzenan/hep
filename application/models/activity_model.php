@@ -412,7 +412,7 @@ LIMIT  1";
             $tracker_distance = $this->fitbitphp->getTimeSeries('tracker_distance', $basedate, $period);
             //$tracker_floors = $this->fitbitphp->getTimeSeries('tracker_floors', $basedate, $period);
             //$tracker_elevation = $this->fitbitphp->getTimeSeries('tracker_elevation', $basedate, $period);
-            $tracker_activeScore = $this->fitbitphp->getTimeSeries('tracker_activeScore', $basedate, $period);
+            //$tracker_activeScore = $this->fitbitphp->getTimeSeries('tracker_activeScore', $basedate, $period);
             $tracker_activityCalories = $this->fitbitphp->getTimeSeries('tracker_activityCalories', $basedate, $period);
             $tracker_minutesSedentary = $this->fitbitphp->getTimeSeries('tracker_minutesSedentary', $basedate, $period);
             $tracker_minutesLightlyActive = $this->fitbitphp->getTimeSeries('tracker_minutesLightlyActive', $basedate, $period);
@@ -447,10 +447,10 @@ LIMIT  1";
             //     $activitiesData[$currentDate]['tracker_elevation'] = $value->value;
             // }
 
-            foreach ($tracker_activeScore as $value) {
-                $currentDate = $value->dateTime;
-                $activitiesData[$currentDate]['tracker_activeScore'] = $value->value;
-            }
+            // foreach ($tracker_activeScore as $value) {
+            //     $currentDate = $value->dateTime;
+            //     $activitiesData[$currentDate]['tracker_activeScore'] = $value->value;
+            // }
 
             foreach ($tracker_activityCalories as $value) {
                 $currentDate = $value->dateTime;
@@ -486,7 +486,7 @@ LIMIT  1";
                     . $value['tracker_steps'] . ", "
                     . 0 . ", "
                     . $value['tracker_caloriesOut'] . ", "
-                    . $value['tracker_activeScore'] . ", "
+                    . -1 . ", "
                     . $value['tracker_distance'] . ", "
                     . 0 . ", "
                     . $value['tracker_minutesSedentary'] . ", "
@@ -495,7 +495,7 @@ LIMIT  1";
                     . $value['tracker_minutesVeryActive'] . ", "
                     . $value['tracker_activityCalories'] . ")
 					ON DUPLICATE KEY UPDATE last_update=NOW(), steps= " . $value['tracker_steps'] . ", floors= " . 0
-                    . ", calories= " . $value['tracker_caloriesOut'] . ", active_score= " . $value['tracker_activeScore']
+                    . ", calories= " . $value['tracker_caloriesOut'] . ", active_score= " . -1
                     . ", distance= " . $value['tracker_distance'] . ", elevation= " . 0
                     . ", min_sedentary= " . $value['tracker_minutesSedentary'] . ", min_lightlyactive= "
                     . $value['tracker_minutesLightlyActive'] . ", min_fairlyactive= "
@@ -504,6 +504,81 @@ LIMIT  1";
                     . $value['tracker_activityCalories'];
                 $this->db->query($sql);
             }
+
+        } catch (Exception $e) {
+
+        }
+
+    }
+
+    function sync_activity_single_day($date, $user_id = NULL, $keypair = NULL)
+    {
+
+        try {
+
+            if ($keypair) {
+                $this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
+            } else if ($this->session->userdata('oauth_token') && $this->session->userdata('oauth_secret')) {
+                $this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
+                $user_id = $this->session->userdata('user_id');
+            } else {
+                throw new Exception("no keypair");
+            }
+
+            $activityResponse = $this->fitbitphp->getActivities($date, $date);
+            $summary = $activityResponse->summary;
+
+            $tracker_caloriesOut = $summary->caloriesOut;
+            $tracker_steps = $summary->steps;
+            
+            foreach ($summary->distances as $distanceEntry) {
+                var_dump($distanceEntry->activityDistance);
+                if ($distanceEntry->activityDistance->activity == 'tracker') {
+                    $tracker_distance = $distanceEntry->activityDistance->distance;
+                    break;
+                } else if ($distanceEntry->activityDistance->activity == 'tracker') {
+                    $total_distance = $distanceEntry->activityDistance->distance;
+                }
+            }
+
+            if (!isset($tracker_distance)) {
+                if (isset($total_distance)) {
+                    $tracker_distance = $total_distance;
+                } else {
+                    $tracker_distance = 0;
+                }
+            }
+
+            $tracker_activityCalories = $summary->activityCalories;
+            $tracker_minutesSedentary = $summary->sedentaryMinutes;
+            $tracker_minutesLightlyActive = $summary->lightlyActiveMinutes;
+            $tracker_minutesFairlyActive = $summary->fairlyActiveMinutes;
+            $tracker_minutesVeryActive = $summary->veryActiveMinutes;
+            //insert into database
+            
+            $sql = "INSERT INTO activity(user_id, date, steps, floors, calories, active_score, distance, elevation, min_sedentary,
+                min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
+            VALUES (" . $user_id . ", '" . $date . "', "
+                . $tracker_steps . ", "
+                . 0 . ", "
+                . $tracker_caloriesOut . ", "
+                . -1 . ", "
+                . $tracker_distance . ", "
+                . 0 . ", "
+                . $tracker_minutesSedentary . ", "
+                . $tracker_minutesLightlyActive . ", "
+                . $tracker_minutesFairlyActive . ", "
+                . $tracker_minutesVeryActive . ", "
+                . $tracker_activityCalories . ")
+                ON DUPLICATE KEY UPDATE last_update=NOW(), steps= " . $tracker_steps . ", floors= " . 0
+                . ", calories= " . $tracker_caloriesOut . ", active_score= " . -1
+                . ", distance= " . $tracker_distance . ", elevation= " . 0
+                . ", min_sedentary= " . $tracker_minutesSedentary . ", min_lightlyactive= "
+                . $tracker_minutesLightlyActive . ", min_fairlyactive= "
+                . $tracker_minutesFairlyActive . ", min_veryactive= "
+                . $tracker_minutesVeryActive . ", activity_calories= "
+                . $tracker_activityCalories;
+            $this->db->query($sql);
 
         } catch (Exception $e) {
 

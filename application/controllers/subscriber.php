@@ -399,7 +399,7 @@ class Subscriber extends CI_Controller
 
                 $this->load->model('Activity_model', 'activities');
                 $this->activities->insert_intraday_activity($user_id, $date, $keypair);
-                $this->activities->sync_activity($date, '1d', $user_id, $keypair);
+                $this->activities->sync_activity_single_day($date, $user_id, $keypair);
             } catch (Exception $e) {
 
             }
@@ -415,7 +415,7 @@ class Subscriber extends CI_Controller
 
                 $this->load->model('Activity_model', 'activities');
                 //$this->activities->insert_intraday_activity($user_id, $date, $keypair);
-                $this->activities->sync_activity($date, '1d', $user_id, $keypair);
+                $this->activities->sync_activity_single_day($date, $user_id, $keypair);
             } catch (Exception $e) {
 
             }
@@ -432,7 +432,7 @@ class Subscriber extends CI_Controller
                 try {
                     $this->load->model('Activity_model', 'activities');
                     $this->activities->insert_intraday_activity($user_id, $date, $keypair);
-                    $this->activities->sync_activity($date, '1d', $user_id, $keypair);
+                    $this->activities->sync_activity_single_day($date, $user_id, $keypair);
                     $this->getSleep($user_id, $date);
                     echo "updated for user" . $user_id . "\n";
                     flush();
