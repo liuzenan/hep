@@ -204,7 +204,7 @@ class Mail_model extends My_Model
         It seems that you either have not signed up with HEP Platform, or your information on the platform is incomplete.  
         We will be starting data collection on Monday 20 Jan 2014, so we would be really grateful if you would register with
         the HEP Platform with your Fitbit account and fill in the relevant information as soon as possible. If we do not have
-        everyone registered on time, our data collection would incomplete and this would have severe impact on the research study. <br/><br/>
+        everyone registered on time, our data collection would be incomplete and this would have severe impact on the research study. <br/><br/>
 
         Your HEP registration code is:<br/>
         <p style=\"font-size:x-large\">".$code."</p><br/>
@@ -223,27 +223,32 @@ class Mail_model extends My_Model
         $this->send(Mail_model::TitleInvitation, $msg, $email);
     }
 
-    public function sendReminder($name, $email) {
+    public function sendReminder($name, $email, $mode='activities') {
         $msg = "Dear $name, <br/><br/>
-        It seems that there have been no recorded activities on your Fitbit account for the past few days.<br/><br/>
+        It seems that there have been no recorded $mode on your Fitbit account for the past few days.<br/><br/>
 
         If you forgot to sync your device with Fitbit, please remember to do so. A daily sync is not required but recommended.<br/>
         Once your tracker is within range of your wireless sync dongle that is connected to a USB port, it will automatically 
         upload any stored data to your account.<br/>
-        You can also sync your tracker using your <a href=\"http://www.fitbit.com/sg/devices\">smartphones</a>. 
+        Alternatively, you can sync your tracker using your <a href=\"http://www.fitbit.com/sg/devices\">smartphones</a>. 
         <br/><br/>
-        Remember that syncing regularly allows you to earn badges and contribute to your house! :)
+        Without regular activity and sleep data from your tracker, the data collection would be incomplete and this would have severe impact on the
+        research study. Remember that tracking and syncing your activity and sleep data regularly also allows you to earn badges and, more importantly,
+        contribute to your house! :)
         <br/><br/>
 
-        More information can be found on <a href=\"https://help.fitbit.com/customer/portal/topics/79805-syncing-your-data-/articles\">Fitbit Help</a>.
+        If you need help on <a href=\"https://help.fitbit.com/customer/portal/topics/79805-syncing-your-data-/articles\">syncing your data</a> or 
+        <a href=\"https://help.fitbit.com/customer/portal/articles/176101-how-do-i-track-my-sleep-\">tracking your sleep</a>, information can be found
+        on <a href=\"https://help.fitbit.com/#product_flex\">Fitbit Help</a>.
         <br/><br/>
-        If you misplaced your Fitbit tracker, or if it is damaged, please inform your House reps and email us at <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
+        If you misplaced your Fitbit tracker, or if it is damaged, please inform your house reps and email us at
+        <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
         <br/><br/>
         Thank you for your cooperation.
         <br/><br/>
 
         Health Enhancement Programme";
-        $title = "Having trouble syncing?";
+        $title = "HEP - Having trouble syncing?";
 
         $this->send($title, $msg, $email);
     }
