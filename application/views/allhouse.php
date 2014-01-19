@@ -76,7 +76,7 @@
 					<div class="span4 house-pepople-badges">
 						<?php if (!empty($value['badge'])): ?>
 							<?php foreach ($value['badge'] as $badge): ?>
-								<img class="challengeTitleTooltip" data-original-title="<?php echo $badge->name ?>"  src="<?php echo $badge->badge_pic ?>" alt="">
+								<img class="challengeTitleTooltip" data-original-title="<?php echo $badge->name.'<br>Earned: '.$badge->count ?>"  src="<?php echo $badge->badge_pic ?>" alt="">
 							<?php endforeach ?>
 						<?php endif ?>
 					</div>

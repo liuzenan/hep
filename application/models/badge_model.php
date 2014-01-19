@@ -22,11 +22,12 @@ class Badge_model extends My_Model
 
     function getBadges($user_id)
     {
-        $sql = "SELECT b.*, ub.*
+        $sql = "SELECT b.*, ub.*, COUNT(*) as count
 		FROM badge AS b
 		INNER JOIN userbadge AS ub
 		ON b.id = ub.badge_id
-		WHERE ub.user_id = ?";
+		WHERE ub.user_id = ?
+    GROUP BY ub.badge_id, ub.user_id";
 
 
         $query = $this->db->query($sql, array($user_id));
@@ -47,11 +48,12 @@ class Badge_model extends My_Model
 
     function getHouseBadges($house_id)
     {
-        $sql = "SELECT b.*, ub.*
+        $sql = "SELECT b.*, ub.*, COUNT(*) as count
 		FROM badge AS b
 		INNER JOIN userbadge AS ub
 		ON b.id = ub.badge_id
-		WHERE ub.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0)";
+		WHERE ub.user_id IN (SELECT id FROM user WHERE house_id = ? AND phantom = 0)
+    GROUP BY ub.badge_id, ub.user_id";
 
 
         $query = $this->db->query($sql, array($house_id));

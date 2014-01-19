@@ -248,9 +248,9 @@ jQuery(document).ready(function($) {
 		});
 
 	});
-	$('.challengeTitleTooltip').tooltip();
+	$('.challengeTitleTooltip').tooltip({html:true});
 
-	$('.my-badges').tooltip();
+	$('.my-badges').tooltip({html: true});
 
 	$('.leaderboardTooltip').tooltip();
 

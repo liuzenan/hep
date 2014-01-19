@@ -482,7 +482,7 @@ td.forum-stats{
 }
 
 .house-pepople-badges>img{
-	width: 10%;
+	width: 20%;
 	height: auto;
 }
 
@@ -594,6 +594,10 @@ margin-bottom: 10px;
 	margin-top: -20px;
 }
 
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+
 .history-day{
 	margin-bottom: 50px;
 }
@@ -605,7 +609,9 @@ margin-bottom: 10px;
 
 .badges-list.thumbnails .badge-item
 {
-	height: 210px;
+	height: 250px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .progressChart {
