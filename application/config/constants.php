@@ -56,5 +56,7 @@ define('VALID_STATS_PERCENTAGE', 0.5);
 define('WEEKLY_POINT_MAX', 50);
 define('ACCESS_SECRET', 'root');
 define('NO_SYNC_REMINDER', '- 3 days');
+define('BADGE_DELAY_DAYS', 3);
+define('WEEKLY_BADGE_PROCESS_DAY', 2); // tuesday
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

@@ -11,12 +11,12 @@
 			} ?>
 					<li class="span4 pull-left">
 						<div class="thumbnail badge-item">
-							<img width="100" src="<?php echo base_url() . $badge->badge_pic ?>" alt="">
+							<img width="100" src="<?php echo base_url() . $badge['badge_pic'] ?>" alt="">
 
-							<p class="text-center"><strong class="text-info"><?php echo $badge->name ?></strong>
+							<p class="text-center"><strong class="text-info"><?php echo $badge['name'] ?></strong>
 							<br/>
-							<strong class="">Earned: 0</strong></p>
-							<p class="text-center"><?php echo $badge->description ?></p>
+							<strong class="">Earned: <?php echo $badge['count'] ?></strong></p>
+							<p class="text-center"><?php echo $badge['description'] ?></p>
 						</div>
 					</li>
 			<?php 

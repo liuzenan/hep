@@ -15,7 +15,7 @@ class Mail extends CI_Controller
         $data = array('message' => 'Debug-StartDailyReport-'.$this->input->ip_address());
         $this->db->insert('log', $data);
 
-        //$this->updateBadge();
+        $this->updateBadge();
         $this->checkSubscribe();
         $uids = $this->User_model->loadDailyReportUsers();
         foreach ($uids as $uid) {

@@ -4,7 +4,7 @@ class Badges extends MY_Controller
 {
     public function index()
     {
-        $badges = $this->Badge_model->getAllBadges();
+        $badges = $this->Badge_model->getAllBadges($this->uid);
         $data['badges'] = $badges;
         $this->loadPage($data);
     }

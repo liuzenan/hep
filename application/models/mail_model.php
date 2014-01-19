@@ -122,7 +122,7 @@ class Mail_model extends My_Model
         $data['avg_today'] = $this->Activity_model->getAverageActivityToday();
         $data['avg_sleep'] = $this->Activity_model->getAverageSleepToday();
         $data['max_today'] = $this->Activity_model->getMaxActivityToday();
-        $data['new_badge'] = $this->Badge_model->getBadgesByDate($user_id, date("Y-m-d ", time() - 60 * 60 * 24));
+        $data['new_badge'] = $this->Badge_model->getBadgesByDate($user_id, date("Y-m-d ", time() - 60 * 60 * 24 * BADGE_DELAY_DAYS));
 
         $new_badge = "";
         if (!empty($data['new_badge'])) {

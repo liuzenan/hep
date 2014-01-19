@@ -13,11 +13,25 @@ class Badge_model extends My_Model
         return $query->row();
     }
 
-    function getAllBadges()
+    function getAllBadges($user_id)
     {
         # code...
-        $query = $this->db->query("SELECT * FROM badge");
-        return $query->result();
+        $badges = $this->db->query("SELECT * FROM badge");
+        $result = array();
+        foreach ($badges->result() as $badge) {
+            $result[$badge->id] = array(
+                'name' => $badge->name,
+                'badge_pic' => $badge->badge_pic,
+                'description' => $badge->description,
+                'count' => 0);
+        }
+        $myBadge = $this->getBadges($user_id);
+        foreach ($myBadge as $badge) {
+            if (isset($result[$badge->id])) {
+                $result[$badge->id]['count'] = $badge->count;
+            }
+        }
+        return $result;
     }
 
     function getBadges($user_id)
@@ -68,58 +82,88 @@ class Badge_model extends My_Model
         return $res;
     }
 
-    function addBadge($user_id, $badge_id)
+    function addBadge($user_id, $badge_id, $date)
     {
         $data = array(
             'user_id' => $user_id,
-            'badge_id' => $badge_id
+            'badge_id' => $badge_id,
+            'date'  => $date
         );
         $query = $this->db->insert('userbadge', $data);
         return $this->db->insert_id();
     }
 
-    //1 beat personal best
-    //2 above personal average
+    // types include contributor, cohort, duel
     function scanBadge()
     {
-        $yest = date("Y-m-d", time() - 60 * 60 * 24);
+        $data = array('message' => 'scan-badge');
+        $this->db->insert('log', $data);
 
-        $sql = "INSERT IGNORE INTO userbadge
-            (badge_id,
-             user_id,
-             date)
-				SELECT a1.category,
-       					a1.user_id,
-       				DATE(a1.start_time)
-					FROM   challengeparticipant AS a1
-					WHERE  a1.challenge_id > (SELECT Max(a2.challenge_id)
-                   FROM   challengeparticipant AS a2
-                   WHERE  a1.user_id = a2.user_id
-                   	   AND a1.category = a2.category
-                   	   AND a2.progress >= 1
-                      AND DATE(a2.start_time) < DATE(a1.start_time))
-   						AND a1.progress >= 1
-   						AND (a1.category = 1 OR a1.category = 2)
-  						 AND DATE(a1.start_time) = ?";
-        $query = $this->db->query($sql, array($yest));
+        $target = date("Y-m-d", time() - 60 * 60 * 24 * BADGE_DELAY_DAYS);
+        $day = date( "w", time());
+        $houses = $this->db->get('house')->result();
+        // process contributor 
+        if ($day == WEEKLY_BADGE_PROCESS_DAY) {
+            $this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+            $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this_monday)));
+            $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this_monday)));
+            $badgeQuery = $this->db->get_where('badge', array('type' => 'contributor'));
+            foreach($badgeQuery->result() as $badge) {
+                $data = json_decode($badge->data);
+                $table = $data->table;
+                $column = $data->column;
+                foreach($houses as $house) {
+                    $house_id = $house->id;
 
+                    $sql = "SELECT u.id as uid
+                    FROM $table a
+                    JOIN user u on a.user_id=u.id
+                    WHERE u.phantom=0
+                    AND u.house_id = $house_id
+                    AND a.date BETWEEN '$last_monday' AND '$last_sunday'
+                    GROUP BY a.user_id
+                    ORDER BY SUM(a.$column) DESC
+                    LIMIT 0, 1";
 
-        // challenge count
-        $challenge_count_badge = array(3 => 10, 4 => 20, 5 => 50, 6 => 100, 7 => 200);
-        foreach ($challenge_count_badge as $badge_id => $challenge_count) {
-            $sql = sprintf("INSERT IGNORE INTO userbadge (badge_id,
-   				user_id,
-   				date)
-   			SELECT %d,
-   			cp.user_id,
-   			DATE(now())
-   			from challengeparticipant as cp where cp.progress>=1 
-   			and cp.user_id NOT IN (select user_id from userbadge where badge_id=%d) 
-   			group by cp.user_id having count(cp.id)>%d", $badge_id, $badge_id, $challenge_count);
-            //echo $sql;
-            $this->db->query($sql);
+                    $query = $this->db->query($sql);
+                    foreach ($query->result() as $row) {
+                        $this->addBadge($row->uid, $badge->id, $target);
+                    }
+                }
+            }
         }
 
+        // process cohort
+        $badgeQuery = $this->db->get_where('badge', array('type' => 'cohort'));
+        foreach($badgeQuery->result() as $badge) {
+            $data = json_decode($badge->data);
+            $table = $data->table;
+            $column = $data->column;
+            $percent = $data->percent;
+
+            $sql = "SELECT u.id as uid
+            FROM $table a
+            JOIN user u on a.user_id=u.id
+            WHERE u.phantom = 0
+            AND a.date = '$target'
+            ORDER BY a.$column DESC";
+
+            $query = $this->db->query($sql);
+            $limit = round($query->num_rows() * $percent);
+            foreach ($query->result() as $row) {
+                $this->addBadge($row->uid, $badge->id, $target);
+                $limit --;
+                if ($limit <= 0) {
+                    break;
+                }
+            }
+            
+        }
+
+        // process duel 
+        // TODO
+        $data = array('message' => 'scan-badge');
+        $this->db->insert('log', $data);
     }
 
 
