@@ -232,7 +232,7 @@ class Mail_model extends My_Model
         upload any stored data to your account.<br/>
         Alternatively, you can sync your tracker using your <a href=\"http://www.fitbit.com/sg/devices\">smartphones</a>. 
         <br/><br/>
-        Without regular activity and sleep data from your tracker, the data collection would be incomplete and this would have severe impact on the
+        Without regular activity and sleep data from your tracker, the data collection would be incomplete and this would have negative impact on the
         research study. Remember that tracking and syncing your activity and sleep data regularly also allows you to earn badges and, more importantly,
         contribute to your house! :)
         <br/><br/>

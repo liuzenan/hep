@@ -35,20 +35,63 @@ class Mail extends CI_Controller
         $today = date('Y-m-d', time());
         $ago = date('Y-m-d', strtotime(NO_SYNC_REMINDER, time()));
         
-        $query = "SELECT u.first_name as name, u.email as email 
+        $activityQuery = "SELECT u.id as uid, u.first_name as name, u.email as email 
         FROM user u
         JOIN activity a on a.user_id = u.id
         WHERE `date` BETWEEN '$ago' AND '$today'
         AND u.phantom = 0
         AND u.staff = 0
         AND u.email IS NOT NULL
+        AND a.user_id NOT IN (
+            SELECT i.user_id FROM invalidperiod AS i
+            WHERE (start_date < $ago AND end_date > $today)
+        )
         GROUP BY a.user_id
         HAVING SUM(a.steps) = 0";
 
-        $data = $this->db->query($query)->result();
-        foreach ($data as $row) {
-            $this->Mail_model->sendReminder($row->name, $row->email);
-            echo 'Sent to '.$row->name.' on '.$row->email;
+        $activityData = $this->db->query($activityQuery)->result();
+
+        $sleepQuery = "SELECT u.id as uid, u.first_name as name, u.email as email 
+        FROM user u
+        JOIN sleep s on s.user_id = u.id
+        WHERE `date` BETWEEN '$ago' AND '$today'
+        AND u.phantom = 0
+        AND u.staff = 0
+        AND u.email IS NOT NULL
+        AND s.user_id NOT IN (
+            SELECT i.user_id FROM invalidperiod AS i
+            WHERE (start_date < $ago AND end_date > $today)
+        )
+        GROUP BY s.user_id
+        HAVING SUM(s.total_time) = 0";
+
+        $sleepData = $this->db->query($activityQuery)->result();
+
+        $candidates = array();
+
+        $activity = 1;
+        $sleep = 2;
+        foreach ($activityData as $row) {
+            $candidates[$row->uid]['type'] = 'activities';
+            $candidates[$row->uid]['name'] = $row->name;
+            $candidates[$row->uid]['email'] = $row->email;
+        }
+        foreach ($sleepData as $row) {
+            if (isset($candidates[$row->uid]['type'])) {
+                $candidates[$row->uid]['type'] = 'activities and sleep';
+            } else {
+                $candidates[$row->uid]['type'] = 'sleep';
+            }
+
+            $candidates[$row->uid]['name'] = $row->name;
+            $candidates[$row->uid]['email'] = $row->email;
+        }
+        foreach ($candidates as $uid => $candidate) {
+            $this->Mail_model->sendReminder($candidate['name'], $candidate['email'], $candidate['type']);
+            echo '<br/>Sent to '. $uid . ' ' . $candidate['name'] . ' - ' . $candidate['email'];
+            $logEntry = array('message' => 'SyncReminder-'.$uid.'-'.$candidate['email'],
+                    'content' =>$candidate['type']);
+            $this->db->insert('log', $logEntry);
         }
 
     }
