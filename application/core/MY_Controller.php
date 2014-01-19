@@ -64,6 +64,10 @@ class My_Controller extends CI_Controller {
                     $this->today_end = "2013-03-10 23:59:59";
                 }
 
+                $this->this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+                $this->last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this->this_monday)));
+                $this->last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this->this_monday)));
+                
                 $this->loadUser($data);
             }
         }

@@ -422,13 +422,17 @@ class Challenge_model extends My_Model
     }
 
     function getWeeklyLeaderboardbySteps($last_week = false, $includeTutor = false) {
+        $this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+        $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this->this_monday)));
+        $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this->this_monday)));
+
         if ($last_week) {
-            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateYesterday())));
-            $today = date('Y-m-d', strtotime(parent::getDateYesterday()));
+            $start_of_week = $last_monday;
+            $today = $last_sunday;
             $day_of_week = 7;
         } else {
-            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
-            $today = date('Y-m-d', strtotime(parent::getDateToday()));
+            $start_of_week = $this_monday;
+            $today = parent::getDateToday();
             $day_of_week = date('w', strtotime(parent::getDateToday()));
                 if ($day_of_week == 0) {
                     $day_of_week = 7;
@@ -464,13 +468,17 @@ class Challenge_model extends My_Model
     }
 
     function getWeeklyLeaderboardbySleep($last_week = false, $includeTutor = false) {
+        $this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+        $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this_monday)));
+        $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this_monday)));
+        
         if ($last_week) {
-            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateYesterday())));
-            $today = date('Y-m-d', strtotime(parent::getDateYesterday()));
+            $start_of_week = $last_monday;
+            $today = $last_sunday;
             $day_of_week = 7;
         } else {
-            $start_of_week = date('Y-m-d', strtotime('last monday', strtotime(parent::getDateTomorrow())));
-            $today = date('Y-m-d', strtotime(parent::getDateToday()));
+            $start_of_week = $this_monday;
+            $today = parent::getDateToday();
             $day_of_week = date('w', strtotime(parent::getDateToday()));
             if ($day_of_week == 0) {
                 $day_of_week = 7;
