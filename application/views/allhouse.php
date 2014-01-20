@@ -38,7 +38,7 @@
 				<div class="house-people-name">
 					<div class="row-fluid">
 						<div class="span2">
-							<?php if (!empty($value['profile']): ?>
+							<?php if (!empty($value['profile'])): ?>
 								<a href="<?php echo base_url() . "stats/history/steps/week/" . $value['profile']->id; ?>">
 							<?php else: ?>
 								<a href="#">
