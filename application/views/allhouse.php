@@ -62,6 +62,9 @@
 				</div>
 				<div class="row-fluid house-people-stats">
 					<div class="span2">
+						<?php if(!empty($value['profile']) && $value['profile']->access == 0): ?>
+							<small class="muted">No access</small>
+						<?php endif ?>
 					</div>
 					<div class="span3 house-people-steps">
 						<span class="leaderboardTooltip" data-toggle="tooltip" data-placement="bottom" title="base on data collected from <?php empty($value['steps']->valid) ? print(0) : print(round($value['steps']->valid, 0)) ?> days">

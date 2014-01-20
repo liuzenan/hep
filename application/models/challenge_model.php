@@ -412,6 +412,7 @@ class Challenge_model extends My_Model
 	WHERE  u.house_id = h.id
 	AND u.phantom = 0
 	AND u.staff = 0
+    AND u.access = 1
 	AND u.house_id > 0
 	GROUP BY h.id
     ORDER BY h.score DESC
@@ -453,6 +454,7 @@ class Challenge_model extends My_Model
         )
         %s
         AND u.phantom = 0
+        AND u.access = 1
         GROUP BY u.house_id
         ORDER BY AVG(a.steps) DESC;
         ";
@@ -498,6 +500,7 @@ class Challenge_model extends My_Model
         )
         %s
         AND u.phantom = 0
+        AND u.access = 1
         GROUP BY u.house_id
         ORDER BY AVG(s.total_time) DESC;
         ";

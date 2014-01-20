@@ -22,6 +22,9 @@
 		<div class="row-fluid myhouse">
 			<?php if (!empty($data)): ?>
 			<?php foreach ($data as $value): ?>
+				<?php if (isset($value['profile']) && $value['profile']->access == 0) {
+					continue;
+				} ?>
 				<div class="house-people clearfix">
 					<a href="<?php if($value['profile']->fb==1) echo "http://www.facebook.com/" . $value['profile']->username; else echo "http://www.fitbit.com/user/" . $value['profile']->fitbit_id; ?>">
 						<div class="house-people-pic">

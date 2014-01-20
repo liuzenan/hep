@@ -1,16 +1,15 @@
 # min hour dom mon dow   command
 # run at 00:05 daily
-  5    0    *   *   *    wget -t 1 --read-timeout=3600 http://hep.d2.comp.nus.edu.sg/subscriber/update > /dev/null
+  5    0    *   *   *    wget -t 1 --read-timeout=8000 http://hep.d2.comp.nus.edu.sg/subscriber/update > /dev/null
 # run at 02:20 daily
   20   2    *   *   *    wget http://hep.d2.comp.nus.edu.sg/mail/dailyReport > /dev/null
 # run daily at 05:30
   30   5    *   *   *    wget http://hep.d2.comp.nus.edu.sg/subscriber/validateFitbitRecord > /dev/null
 # run at 01:00 Wednesdays
   0    1    *   *   3    wget http://hep.d2.comp.nus.edu.sg/subscriber/weeklyTally/root > /dev/null
-# run at 23:59 daily
-#  59   23   *   *   *    wget http://hep.d2.comp.nus.edu.sg/subscriber/updateTodayAllProgress > /dev/null
-# run at 06:00 daily
-#  0    6    *   *   *    wget http://hep.d2.comp.nus.edu.sg/mail/syncReminder/root > /dev/null
+# run at 06:00 on Tuesdays and Fridays
+  0    6    *   *   2    wget http://hep.d2.comp.nus.edu.sg/mail/syncReminder/root > /dev/null
+  0    6    *   *   5    wget http://hep.d2.comp.nus.edu.sg/mail/syncReminder/root > /dev/null
 # run hourly
   1    *    *   *   *    rm -rf validate*
 # run at 04:50 daily
@@ -20,3 +19,5 @@
 # run hourly
   1    *    *   *   *    rm -rf daily*
   
+# run at 23:59 daily
+#  59   23   *   *   *    wget http://hep.d2.comp.nus.edu.sg/subscriber/updateTodayAllProgress > /dev/null
