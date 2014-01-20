@@ -13,7 +13,7 @@
 						</a>
 						<div class="leaderboard-content">
 							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
-							<p>House <?php echo $row->house ?></p>
+							<div>House <?php echo $row->house ?></div>
 							<small >
 								<?php echo round($row->score, 0) ?> steps daily
 							</small>
@@ -36,7 +36,7 @@
 						</a>
 						<div class="leaderboard-content">
 							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
-							<p>House <?php echo $row->house ?></p>
+							<div>House <?php echo $row->house ?></div>
 							<small><?php echo round($row->score / 60, 1) ?> hours daily</small>
 						</div>
 					</div>

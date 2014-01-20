@@ -447,6 +447,7 @@ td.forum-stats{
 
 .leaderboard-content{
 	float: left;
+	width: 200px;
 }
 
 /*.media-list.current-challenge-list{
