@@ -12,8 +12,13 @@
 							<div class="leaderboard-profile-pic"><img src="<?php echo $row->avatar ?>" width="75" height="75"/></div>
 						</a>
 						<div class="leaderboard-content">
-							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
-							<div>House <?php echo $row->house ?></div>
+							<?php $name = $row->firstname . ' ' . $row->lastname; ?>
+							<?php if (strlen($name) > 20): ?> 
+								<a href="#"><strong style="font-size: 80%;"><?php echo  ?></strong></a>
+							<?php else: ?>
+								<a href="#"><strong><?php echo  ?></strong></a>
+							<?php endif ?> 
+							<p>House <?php echo $row->house ?></p>
 							<small >
 								<?php echo round($row->score, 0) ?> steps daily
 							</small>
@@ -35,8 +40,13 @@
 							<div class="leaderboard-profile-pic"><img src="<?php echo $row->avatar ?>" width="75" height="75"/></div>
 						</a>
 						<div class="leaderboard-content">
-							<a href="#"><strong><?php echo $row->firstname . ' ' . $row->lastname ?></strong></a>
-							<div>House <?php echo $row->house ?></div>
+							<?php $name = $row->firstname . ' ' . $row->lastname; ?>
+							<?php if (strlen($name) > 20): ?> 
+								<a href="#"><strong style="font-size: 80%;"><?php echo  ?></strong></a>
+							<?php else: ?>
+								<a href="#"><strong><?php echo  ?></strong></a>
+							<?php endif ?> 
+							<p>House <?php echo $row->house ?></p>
 							<small><?php echo round($row->score / 60, 1) ?> hours daily</small>
 						</div>
 					</div>
