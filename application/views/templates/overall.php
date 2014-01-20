@@ -18,7 +18,7 @@
 							<?php else: ?>
 								<a href="#"><strong><?php echo $name ?></strong></a>
 							<?php endif ?> 
-							<p>House <?php echo $row->house ?></p>
+							<div>House <?php echo $row->house ?></div>
 							<small >
 								<?php echo round($row->score, 0) ?> steps daily
 							</small>
@@ -46,7 +46,7 @@
 							<?php else: ?>
 								<a href="#"><strong><?php echo $name ?></strong></a>
 							<?php endif ?> 
-							<p>House <?php echo $row->house ?></p>
+							<div>House <?php echo $row->house ?></div>
 							<small><?php echo round($row->score / 60, 1) ?> hours daily</small>
 						</div>
 					</div>
