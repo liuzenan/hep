@@ -14,9 +14,9 @@
 						<div class="leaderboard-content">
 							<?php $name = $row->firstname . ' ' . $row->lastname; ?>
 							<?php if (strlen($name) > 20): ?> 
-								<a href="#"><strong style="font-size: 80%;"><?php echo  ?></strong></a>
+								<a href="#"><strong style="font-size: 80%;"><?php echo $name ?></strong></a>
 							<?php else: ?>
-								<a href="#"><strong><?php echo  ?></strong></a>
+								<a href="#"><strong><?php echo $name ?></strong></a>
 							<?php endif ?> 
 							<p>House <?php echo $row->house ?></p>
 							<small >
@@ -42,9 +42,9 @@
 						<div class="leaderboard-content">
 							<?php $name = $row->firstname . ' ' . $row->lastname; ?>
 							<?php if (strlen($name) > 20): ?> 
-								<a href="#"><strong style="font-size: 80%;"><?php echo  ?></strong></a>
+								<a href="#"><strong style="font-size: 80%;"><?php echo $name ?></strong></a>
 							<?php else: ?>
-								<a href="#"><strong><?php echo  ?></strong></a>
+								<a href="#"><strong><?php echo $name ?></strong></a>
 							<?php endif ?> 
 							<p>House <?php echo $row->house ?></p>
 							<small><?php echo round($row->score / 60, 1) ?> hours daily</small>
