@@ -424,8 +424,8 @@ class Challenge_model extends My_Model
 
     function getWeeklyLeaderboardbySteps($last_week = false, $includeTutor = false) {
         $this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
-        $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this->this_monday)));
-        $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this->this_monday)));
+        $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this_monday)));
+        $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this_monday)));
 
         if ($last_week) {
             $start_of_week = $last_monday;
