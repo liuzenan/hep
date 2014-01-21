@@ -9,6 +9,10 @@
 		<li><a href="<?php echo base_url() . "manage/invalid"; ?>">Invalid</a></li>
 		<li class="active"><a href="<?php echo base_url() . "manage/unregistered"; ?>">Unregistered</a></li>		</ul>
 		<div class="row-fluid">
+			<ol>
+				<li>Registered with access: <?php echo $registeredWithAccess ?></li>
+				<li>Registered without access: <?php echo $registeredWithoutAccess ?></li>
+			</ol>
 			<div style="text-align: center; margin-bottom: 1em;">
    				<a href="#" class="btn btn-primary" id="emailall">Email all unregistered students</a>
 			</div>

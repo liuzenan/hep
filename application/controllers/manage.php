@@ -139,9 +139,15 @@ class Manage extends Admin_Controller
         if ($this->session->userdata('isadmin')) {
             $data = array();
             $data['students'] = array();
+            $registeredWithAccess = $this->db->get_where('registration', array('used' => 1, 'supercode' => 0, 'access' => 1));
+
+            $registeredWithoutAccess = $this->db->get_where('registration', array('used' => 1, 'supercode' => 0, 'access' => 0));
+
+            $data['registeredWithAccess'] = $registeredWithAccess->num_rows();
+            $data['registeredWithoutAccess'] = $registeredWithoutAccess->num_rows();
 
             $this->db->order_by('supercode desc, name asc');
-            
+
             $query = $this->db->get_where('registration', array('used' => 0));
             foreach ($query->result_array() as $student) {
                 $data['students'][] = $student;
