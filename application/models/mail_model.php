@@ -87,7 +87,7 @@ class Mail_model extends My_Model
         $daily = "Good Morning %s, <br><br>
 		%s
 		Yesterday, you walked <b>%d steps (%s)</b>, 
-		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>. 
+		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b><br/><br/>. 
 
         %s<br/><br/>
 
@@ -126,7 +126,8 @@ class Mail_model extends My_Model
 
         $new_badge = "";
         if (!empty($data['new_badge'])) {
-            $new_badge .= "<u>Newly earned badges</u>: <br>";
+            $badge_date = date("j F, Y ", time() - 60 * 60 * 24 * BADGE_DELAY_DAYS);
+            $new_badge .= "<u>Newly earned badges for $badge_date</u>: <br>";
 
             foreach ($data['new_badge'] as $bd) {
                 $new_badge .= '<b>' . $bd->name . '</b><br>';
