@@ -55,6 +55,32 @@ class Subscriber extends CI_Controller
         echo json_encode($msg);
     }
 
+    public function refresh_user($user_id=NULL)
+    {
+        if (!$user_id) {
+            $msg = array(
+                "success" => false,
+                "login" => false
+            );
+        } else {
+            $date = date("Y-m-d", time());
+            $ysd = date("Y-m-d", time() - 24 * 60 * 60);
+            try {
+                $this->getActivities($user_id, $date, true);
+                $this->getSleep($user_id, $date, true);
+                $this->getActivities($user_id, $ysd, true);
+                $this->getSleep($user_id, $ysd, true);
+                $msg = array(
+                    "success" => true,
+                );
+                
+            } catch (Exception $e) {
+                echo $e->getMessage()
+            }
+        }
+        echo json_encode($msg);
+    }
+
     public function weeklyTally($secret='') {
         if ($secret != ACCESS_SECRET) {
             echo 'Unauthorised access';
@@ -390,7 +416,7 @@ class Subscriber extends CI_Controller
 
     }
 
-    public function getActivities($user_id, $date)
+    public function getActivities($user_id, $date, $debug = false)
     {
 
         $keypair = $this->getUserKeyPair($user_id);
@@ -401,7 +427,9 @@ class Subscriber extends CI_Controller
                 $this->activities->insert_intraday_activity($user_id, $date, $keypair);
                 $this->activities->sync_activity_single_day($date, $user_id, $keypair);
             } catch (Exception $e) {
-
+                if ($debug) {
+                    echo $e->getMessage();
+                }
             }
         }
     }

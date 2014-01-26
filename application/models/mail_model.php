@@ -275,7 +275,7 @@ class Mail_model extends My_Model
 
             if (! $this->email->send()) {
                 $data = array('message' => 'DeliveryFailed-'.$to.'-'.$title,
-                    'content' =>$msg);
+                    'content' =>$msg. '_END_OF_MSG_' . $this->email->print_debugger());
                 $this->db->insert('log', $data);
             }
         };
@@ -303,7 +303,7 @@ class Mail_model extends My_Model
 
             if (! $this->email->send()) {
                 $data = array('message' => 'DeliveryFailed-'.$title,
-                    'content' =>implode(', ', $bccs) . '_END_OF_LIST_' . $msg);
+                    'content' =>implode(', ', $bccs) . '_END_OF_LIST_' . $msg. '_END_OF_MSG_' . $this->email->print_debugger());
                 $this->db->insert('log', $data);
             }
         };
