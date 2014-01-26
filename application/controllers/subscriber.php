@@ -75,7 +75,7 @@ class Subscriber extends CI_Controller
                 );
                 
             } catch (Exception $e) {
-                echo $e->getMessage()
+                echo $e->getMessage();
             }
         }
         echo json_encode($msg);
