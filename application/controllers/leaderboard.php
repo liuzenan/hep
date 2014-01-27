@@ -88,6 +88,18 @@ AND date = ?";
         $this->loadPage($data);
     }
 
+    public function lastweek() {
+        $data['currentTab'] = "lastweek";
+        $me = $this->User_model->loadUser($this->uid);
+        $data['my_house'] = $me->house_id;
+
+        $data['steps'] = $this->Challenge_model->getWeeklyLeaderboardbySteps(true);
+        
+        $data['sleep'] = $this->Challenge_model->getWeeklyLeaderboardbySleep(true);
+        
+        $this->loadPage($data);
+    }
+
     private function loadPage($data)
     {
         $data['active'] = 'leaderboard';
