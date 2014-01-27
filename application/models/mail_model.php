@@ -89,7 +89,7 @@ class Mail_model extends My_Model
 		Yesterday, you walked <b>%d steps (%s)</b>, 
 		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>.<br/><br/> 
 
-        %s<br/><br/>
+        %s
 
         %s
 
@@ -97,19 +97,19 @@ class Mail_model extends My_Model
 		That's awesome! Thanks! :)
 
         <br/><br/>
-        You may unsubscribe from daily report from <a href=\"http://hep.d2.comp.nus.edu.sg/profile\">your profile settings</a> after logging in to HEP Platform.
+        Health Enhancement Programme
 		<br><br>
-        Health Enhancement Programme";
+        <small><a href=\"%s\">Click here</a> to unsubscribe from daily reports.</small>";
         $ci =& get_instance();
         $ci->load->model('Activity_model');
         $ci->load->model('Badge_model');
+        $me = $this->User_model->loadUser($user_id);
         $data = array();
 
         $day = date( "w", time());
         $house_stats = '';
         if ($day == WEEKLY_TALLY_PROCESS_DAY) {
-            $user_query = $this->db->get_where('user', array('id' => $user_id));
-            $house_id = $user_query->row()->house_id;
+            $house_id = $me->house_id;
             if ($house_id > 0) {
                 $house_info = $this->db->get_where('house', array('id' => $house_id))->row();
                 $house_msg = "Last week, your house was ranked #%s on the steps leaderboard earning %s points, and ranked
@@ -166,6 +166,8 @@ class Mail_model extends My_Model
             $data["emailmsg"] = nl2br($todayMsg).'<br/><br/>';
         }
 
+        $unsub_link = base_url() . 'mail/unsubDailyNotification/' . urlencode($me->email);
+
         $data['msg'] = sprintf($daily,
             $user->first_name . " " . $user->last_name,
             $data["emailmsg"],
@@ -182,7 +184,8 @@ class Mail_model extends My_Model
             $house_stats,
             $summary->steps,
             $summary->distance,
-            $summary->sleep
+            $summary->sleep,
+            $unsub_link
 
 
         );

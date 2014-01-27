@@ -156,11 +156,19 @@ AND id=?";
         $this->db->update('user', $data);
     }
 
-    public function unsubDailyNotification($user_id)
-    {
-        $data = array('daily_email_unsub' => 1);
-        $this->db->where('id', $user_id);
-        $this->db->update('user', $data);
+    public function unsubDailyNotification($email)
+    {   
+        $query = $this->db->get_where('user', array('email' => $email));
+
+        if ($query->num_rows() == 0) {
+            echo $email . ' is not found in the user database.';
+        } else {
+            $data = array('daily_email_unsub' => 1);
+            $this->db->where('email', $email);
+            $this->db->update('user', $data);
+            echo $email . " has been sucessfully unsubscribed from daily notification";
+        }
+            
     }
 
     public function unsubChallengeNotification($user_id)

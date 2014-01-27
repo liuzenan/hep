@@ -213,11 +213,9 @@ class Mail extends CI_Controller
         echo "You have been sucessfully unsubscribed from challenge notification";
     }
 
-    public function unsubDailyNotification($user_id)
+    public function unsubDailyNotification($email)
     {
-        $this->User_model->unsubDailyNotification($user_id);
-        echo "You have been sucessfully unsubscribed from daily notification";
+        $this->User_model->unsubDailyNotification(urldecode($email));
     }
-
 
 }
