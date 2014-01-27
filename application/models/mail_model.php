@@ -221,8 +221,14 @@ class Mail_model extends My_Model
 
     public function sendInvitation($name, $email, $code) {
         $msg = "Dear " . $name . ", <br/><br/>
-        It seems that you either have not signed up with HEP Platform, or your information on the platform is incomplete.  
-        We will be starting data collection on Monday 20 Jan 2014, so we would be really grateful if you would register with
+        It seems that you either have not signed up with HEP Platform, or your information on the platform is incomplete.  <br/><br/>
+
+        In particular, the registration process is only completed after you have entered your personal information (name, email and house)
+        on the HEP website. If you have not filled in those information, your registration is incomplete.
+
+        <br/><br/>
+
+        We have started data collection on Monday 20 Jan 2014, so we would be really grateful if you would register with
         the HEP Platform with your Fitbit account and fill in the relevant information as soon as possible. If we do not have
         everyone registered on time, our data collection would be incomplete and this would have severe impact on the research study. <br/><br/>
 
@@ -233,7 +239,7 @@ class Mail_model extends My_Model
         your Fitbit account and fill in the relevant information as soon as possible.<br/><br/>
 
         If you have any questions or encounter any issues, please email us at <a href=\"mailto:hep-support@googlegroups.com\">hep-support@googlegroups.com</a>.
-        Those of you who encountered a \"your registration code has already been used\" error would be pleased to know that the issue has been resolved.
+        
         <br/><br/>
         Thank you for your cooperation.
         <br/><br/>
