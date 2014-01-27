@@ -100,17 +100,25 @@ class Subscriber extends CI_Controller
 
         $cap = WEEKLY_POINT_MAX;
         $max = $stepsLeaderboard[0]->steps;
+        $steps_rank = 1;
         foreach($stepsLeaderboard as $row) {
             $current = &$houses[$row->house_id];
-            $current['new']['score'] = $current['old']['score'] + MIN($cap * $row->steps/$max * $current['old']['steps_multiplier'], $cap);
+            $current['new']['steps_rank'] = $steps_rank;
+            $current['new']['steps_score'] = MIN($cap * $row->steps/$max * $current['old']['steps_multiplier'], $cap);
+            $current['new']['score'] = $current['old']['score'] + $current['new']['steps_score'];
             $current['new']['steps_multiplier'] = 2 - $row->steps/$max;
+            $steps_rank ++;
         }
 
         $max = $sleepLeaderboard[0]->sleep;
+        $sleep_rank = 1;
         foreach($sleepLeaderboard as $row) {
             $current = &$houses[$row->house_id];
-            $current['new']['score'] = $current['new']['score'] + MIN($cap * $row->sleep/$max * $current['old']['sleep_multiplier'], $cap);
+            $current['new']['sleep_rank'] = $sleep_rank;
+            $current['new']['sleep_score'] = MIN($cap * $row->sleep/$max * $current['old']['sleep_multiplier'], $cap);
+            $current['new']['score'] = $current['new']['score'] + $current['new']['sleep_score'];
             $current['new']['sleep_multiplier'] = 2 - $row->sleep/$max;
+            $sleep_rank ++;
         }
 
         $data = array();
@@ -119,11 +127,15 @@ class Subscriber extends CI_Controller
                 'id' => $id,
                 'score' => empty($row['new']['score']) ? $row['old']['score'] : round($row['new']['score']),
                 'steps_multiplier' => empty($row['new']['steps_multiplier']) ? $row['old']['steps_multiplier'] : $row['new']['steps_multiplier'],
-                'sleep_multiplier' => empty($row['new']['sleep_multiplier']) ? $row['old']['sleep_multiplier'] : $row['new']['sleep_multiplier']
+                'sleep_multiplier' => empty($row['new']['sleep_multiplier']) ? $row['old']['sleep_multiplier'] : $row['new']['sleep_multiplier'],
+                'last_steps_rank' => empty($row['new']['steps_rank']) ? $steps_rank : $row['new']['steps_rank'],
+                'last_sleep_rank' => empty($row['new']['sleep_rank']) ? $sleep_rank : $row['new']['sleep_rank'],
+                'last_steps_score' => empty($row['new']['steps_score']) ? 0 : $row['new']['steps_score'],
+                'last_sleep_score' => empty($row['new']['sleep_score']) ? 0 : $row['new']['sleep_score']
             );
-            echo $id.': '. round($row['new']['score']).', '.$row['new']['steps_multiplier'].', '.$row['new']['sleep_multiplier'].'<br/>';
         }
         $this->db->update_batch('house', $data, 'id'); 
+        echo 'Done';
 
     }
 

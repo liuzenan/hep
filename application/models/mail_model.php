@@ -87,9 +87,11 @@ class Mail_model extends My_Model
         $daily = "Good Morning %s, <br><br>
 		%s
 		Yesterday, you walked <b>%d steps (%s)</b>, 
-		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b><br/><br/>. 
+		slept <b>%s hours (%s)</b> and burnt <b>%d calories (%s)</b>.<br/><br/> 
 
         %s<br/><br/>
+
+        %s
 
 		Because of your contribution, we now have in total <b>%sK</b> steps, <b>%s kilometers</b> of movement, <b>%sK hours</b> of sleep recorded with the system.  <br>
 		That's awesome! Thanks! :)
@@ -103,6 +105,19 @@ class Mail_model extends My_Model
         $ci->load->model('Badge_model');
         $data = array();
 
+        $day = date( "w", time());
+        $house_stats = '';
+        if ($day == WEEKLY_TALLY_PROCESS_DAY) {
+            $user_query = $this->db->get_where('user', array('id' => $user_id));
+            $house_id = $user_query->row()->house_id;
+            if ($house_id > 0) {
+                $house_info = $this->db->get_where('house', array('id' => $house_id))->row();
+                $house_msg = "Last week, your house was ranked #%s on the steps leaderboard earning %s points, and ranked
+                #%s on the sleep leaderboard, earning %s points.<br/><br/>";
+                $house_stats = sprintf($house_msg, $house_info->last_steps_rank, $house_info->last_steps_score, 
+                    $house_info->last_sleep_rank, $house_info->last_sleep_score);
+            }
+        }
 
         //$data['me_today'] = $this->Activity_model->getActivityToday($user_id);
         $data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
@@ -164,6 +179,7 @@ class Mail_model extends My_Model
             ($data['delta_calories'] > 0 ? "up by " : "down by ") . $data['delta_calories'] . "%",
 
             $new_badge,
+            $house_stats,
             $summary->steps,
             $summary->distance,
             $summary->sleep
