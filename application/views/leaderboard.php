@@ -11,7 +11,7 @@
 		<?php 
 			if ($currentTab == "overall" || $currentTab == "staff") {
 				$this->load->view('templates/'.$currentTab);
-			} else if ($currentTab == 'weekly' || $currentTab = 'lastweek') {
+			} else if ($currentTab == 'weekly' || $currentTab == 'lastweek') {
 				$this->load->view('templates/weekly');
 			} else {
 				$this->load->view('templates/house');
