@@ -247,7 +247,7 @@ class Subscriber extends CI_Controller
 			where temp.ifloors<temp.floors OR temp.isteps<temp.steps";
             $query = $this->db->query($uids_sql, array($date_row->date));
             foreach ($query->result() as $row) {
-                echo "refresh ". $row->user_id;
+                echo "refresh ". $row->user_id . ' intradaysteps: ' . $row->isteps . ' steps: ' . $row->steps . '<br/>';
                 $this->getActivities($row->user_id, $date_row->date);
             }
         }
