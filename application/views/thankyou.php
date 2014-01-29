@@ -13,6 +13,7 @@
       
       <div class="logincontrol well">
         <p class="text-info text-center">Thank you for registering with us.</p>
+        <p class="text-info text-center">As part of the research arrangement, only 100 students can access the platform at this moment.</p>
         <p class="text-info text-center">You will be notified when you can access the system in March.</p>
         <br/>
         <p class="text-center"><i class="icon-off"></i> <a href="<?php echo base_url() . 'logout' ?>">Logout</a></p>
