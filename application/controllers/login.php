@@ -81,14 +81,14 @@ class Login extends CI_Controller
 
     }
 
-    public function firstRun()
+    public function firstRun($uid = -1)
     {
         //get user tracker data from fitbit, this might be slow... need to optimize later
         try {
-            $this->getActivites();
-            $this->getSleep();
+            $this->getActivites($uid);
+            $this->getSleep($uid);
             //$this->initPosts();
-            $this->addSubscription();
+            $this->addSubscription($uid);
             $msg['success'] = true;
         } catch (Exception $E) {
             $msg['success'] = false;
@@ -97,14 +97,21 @@ class Login extends CI_Controller
         echo json_encode($msg);
     }
 
-    private function getActivites()
+    private function getActivites($uid=-1)
     {
-        $user_id = $this->session->userdata('user_id');
+
+        if ($uid > 0) {
+            $user_id = $uid;
+            $keypair = $this->User_model->getUserKeyPair($uid);
+        } else {
+            $user_id = $this->session->userdata('user_id');
+            $keypair = NULL;
+        }
         $this->load->model('Activity_model', 'activities');
-        $this->activities->sync_activity('today', BASELINE, $user_id);
+        $this->activities->sync_activity('today', BASELINE, $user_id, $keypair);
     }
 
-    private function getSleep()
+    private function getSleep($uid=-1)
     {
 
         /**
@@ -114,8 +121,19 @@ class Login extends CI_Controller
          *   'efficiency'
          *
          */
-        if ($this->session->userdata('oauth_token') && $this->session->userdata('oauth_secret')) {
-            $this->fitbitphp->setOAuthDetails($this->session->userdata('oauth_token'), $this->session->userdata('oauth_secret'));
+        
+
+        if ($uid > 0) {
+            $keypair = $this->User_model->getUserKeyPair($uid);
+            $token = $keypair['token'];
+            $secret = $keypair['secret'];
+        } else {
+            $uid = $this->session->userdata('user_id');
+            $token = $this->session->userdata('oauth_token');
+            $secret = $this->session->userdata('oauth_secret');
+        }
+        if ($token && $secret) {
+            $this->fitbitphp->setOAuthDetails($token, $secret);
             $basedate = 'today';
             $period = BASELINE;
 
@@ -170,7 +188,7 @@ class Login extends CI_Controller
             //insert into database
             foreach ($sleepData as $key => $value) {
                 $sql = "INSERT INTO sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
-				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', "
+				VALUES (" . $uid . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', "
                     . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] .
                     ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] . ")
 
@@ -269,11 +287,15 @@ class Login extends CI_Controller
         echo json_encode($msg);
     }
 
-    private function addSubscription()
+    private function addSubscription($uid = -1)
     {
 
         try {
-            $user_id = (string)$this->session->userdata('user_id');
+            if ($uid > 0) {
+                $user_id = $uid;
+            } else {
+                $user_id = (string)$this->session->userdata('user_id');
+            }
             $activity_id = $user_id . "-activities";
             $sleep_id = $user_id . "-sleep";
             $this->fitbitphp->addSubscription($activity_id, "/activities", "activities");
