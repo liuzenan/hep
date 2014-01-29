@@ -228,9 +228,13 @@ class Subscriber extends CI_Controller
         }
     }
 
-    public function validateFitbitRecord()
+    public function validateFitbitRecord($date=null)
     {
-        $ysd = date("Y-m-d", time() - 24 * 60 * 60);
+        if ($date) {
+            $ysd = $date;
+        } else {
+            $ysd = date("Y-m-d", time() - 24 * 60 * 60);
+        }
         $dates_sql = "SELECT DISTINCT date from activity where date = '" . $ysd . "' ORDER BY date DESC";
         $dquery = $this->db->query($dates_sql);
         foreach ($dquery->result() as $date_row) {
