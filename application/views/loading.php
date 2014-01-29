@@ -9,11 +9,12 @@
 <!-- Modal -->
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
-        <h3 id="myModalLabel">Please Do Not Close This Window</h3>
+        <h3 id="myModalLabel">Please wait...</h3>
       </div>
       <div class="modal-body">
         <p>Please wait while the application is getting your information from Fitbit. This may take a few minutes...</p>
         <p>Please do not close this window...</p>
+        <p>If this page does not refresh after a long time, you may click <a href="<?php echo base_url() . 'home' ?>">here</a> to try again</p>
       </div>
     </div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>

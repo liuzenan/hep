@@ -172,7 +172,11 @@ class Login extends CI_Controller
                 $sql = "INSERT INTO sleep(user_id, date, total_time, time_asleep, start_time, awaken_count, min_awake, min_to_asleep, min_after_wakeup, efficiency)
 				VALUES (" . $this->session->userdata('user_id') . ", '" . $key . "', " . $value['timeInBed'] . ", " . $value['minutesAsleep'] . ", '" . $value['startTime'] . "', "
                     . $value['awakeningsCount'] . ", " . $value['minutesAwake'] . ", " . $value['minutesToFallAsleep'] .
-                    ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] . ")";
+                    ", " . $value['minutesAfterWakeup'] . ", " . $value['efficiency'] . ")
+
+                ON DUPLICATE KEY UPDATE total_time=".$value['timeInBed'] . ", time_asleep=" . $value['minutesAsleep'] . ", start_time='" . $value['startTime'] . "', awaken_count="
+                    . $value['awakeningsCount'] . ", min_awake=" . $value['minutesAwake'] . ", min_to_asleep=" . $value['minutesToFallAsleep'] .
+                    ", min_after_wakeup=" . $value['minutesAfterWakeup'] . ", efficiency=" . $value['efficiency'];
                 $this->db->query($sql);
             }
         } else {
