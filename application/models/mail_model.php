@@ -111,10 +111,13 @@ class Mail_model extends My_Model
         if ($day == WEEKLY_TALLY_PROCESS_DAY) {
             $house_id = $me->house_id;
             if ($house_id > 0) {
+                $last_week_steps = (string)$this->Activity_model->getActivityLastWeek($user_id);
+                $last_week_sleep = (string)round($this->Activity_model->getSleepLastWeek($user_id) / 60, 1);
                 $house_info = $this->db->get_where('house', array('id' => $house_id))->row();
-                $house_msg = "Last week, your house was ranked #%s on the steps leaderboard earning %s points, and ranked
-                #%s on the sleep leaderboard, earning %s points.<br/><br/>";
-                $house_stats = sprintf($house_msg, $house_info->last_steps_rank, $house_info->last_steps_score, 
+                $house_msg = "Last week, you contributed %s steps and %s hours of sleep. Your house was ranked #%s on the 
+                steps leaderboard, earning %s points, and ranked #%s on the sleep leaderboard, earning %s points.<br/><br/>";
+                $house_stats = sprintf($house_msg, $last_week_steps, $last_week_sleep, $house_info->last_steps_rank,
+                    $house_info->last_steps_score, 
                     $house_info->last_sleep_rank, $house_info->last_sleep_score);
             }
         }

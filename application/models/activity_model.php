@@ -27,6 +27,38 @@ class Activity_model extends My_Model
         return $this->getActivityOnDate($user_id, parent::getDateToday());
 
     }
+    function getActivityLastWeek($user_id) {
+        $this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+        $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this_monday)));
+        $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this_monday)));
+
+        $sql = "SELECT SUM(steps) as steps FROM activity
+        WHERE user_id = $user_id
+        AND DATE BETWEEN '$last_monday' AND '$last_sunday' ";
+
+        $query = $this->db->query($sql);
+        if ($query->num_rows() > 0) {
+            return $query->row()->steps;
+        } else {
+            return 0;
+        }
+    }
+
+    function getSleepLastWeek($user_id) {
+        $this_monday = date('Y-m-d', strtotime('last monday', strtotime('tomorrow')));
+        $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this_monday)));
+        $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this_monday)));
+
+        $sql = "SELECT SUM(total_time) as sleep FROM sleep
+        WHERE user_id = $user_id
+        AND DATE BETWEEN '$last_monday' AND '$last_sunday' ";
+        $query = $this->db->query($sql);
+        if ($query->num_rows() > 0) {
+            return $query->row()->sleep;
+        } else {
+            return 0;
+        }
+    }
 
     function getActivityYesterday($user_id)
     {
