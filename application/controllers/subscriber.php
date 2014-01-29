@@ -231,7 +231,7 @@ class Subscriber extends CI_Controller
     public function validateFitbitRecord()
     {
         $ysd = date("Y-m-d", time() - 24 * 60 * 60);
-        $dates_sql = "SELECT DISTINCT date from activity where date = " . $ysd . " ORDER BY date DESC";
+        $dates_sql = "SELECT DISTINCT date from activity where date = '" . $ysd . "' ORDER BY date DESC";
         $dquery = $this->db->query($dates_sql);
         foreach ($dquery->result() as $date_row) {
             echo '<p>start validation</p>';
@@ -244,7 +244,7 @@ class Subscriber extends CI_Controller
             $query = $this->db->query($uids_sql, array($date_row->date));
             foreach ($query->result() as $row) {
                 echo "refresh ". $row->user_id;
-                $this->getActivities($row->user_id, $date_row->date);
+                //$this->getActivities($row->user_id, $date_row->date);
             }
         }
     }

@@ -12,9 +12,10 @@
         <h3 id="myModalLabel">Please wait...</h3>
       </div>
       <div class="modal-body">
-        <p>Please wait while the application is getting your information from Fitbit. This may take a few minutes...</p>
+        <p>Please wait while the application is getting your information from Fitbit.com. This may take a few minutes...</p>
+        <p>You will fill in your house and basic contact information on the next step.</p>
         <p>Please do not close this window...</p>
-        <p>If this page does not refresh after a long time, you may click <a href="<?php echo base_url() . 'home' ?>">here</a> to try again</p>
+        <p>If this page does not refresh after a long time, you may click <a href="<?php echo base_url() . 'home' ?>">here</a> to try again.</p>
       </div>
     </div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
