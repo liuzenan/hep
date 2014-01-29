@@ -228,7 +228,7 @@ class Subscriber extends CI_Controller
         }
     }
 
-    public function validateFitbitRecord($date=null)
+    public function validateFitbitRecord($action='update', $date=null)
     {
         if ($date) {
             $ysd = $date;
@@ -248,7 +248,9 @@ class Subscriber extends CI_Controller
             $query = $this->db->query($uids_sql, array($date_row->date));
             foreach ($query->result() as $row) {
                 echo "refresh ". $row->user_id . ' intradaysteps: ' . $row->isteps . ' steps: ' . $row->steps . '<br/>';
-                $this->getActivities($row->user_id, $date_row->date);
+                if ($action == 'update') {
+                    $this->getActivities($row->user_id, $date_row->date);
+                }
             }
         }
     }
