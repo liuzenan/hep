@@ -271,19 +271,21 @@ class Checksubscribe extends CI_Controller
         $today_string = date('Y-m-d');
         $now = time(); // or your date as well
         $base = strtotime(BASELINE);
-        $base_string = BASELINE:
+        $base_string = BASELINE;
         $datediff = $now - $base;
         $days = floor($datediff/(60*60*24));
-
+        echo '<p>required: '.$days.'</p>';
         $sql = "SELECT COUNT(*) as count, user_id FROM activity
-                WHERE date >= '$BASELINE'
+                WHERE date >= '$base_string'
                 AND date < '$today_string'
                 GROUP BY user_id
                 HAVING COUNT(*) < $days";
         $query = $this->db->query($sql);
-        echo '<table><tr><td>ID</td><td>count</td></tr>';
+
+        echo '<table><tr><td>ID</td><td>missing</td></tr>';
         foreach($query->result() as $row) {
-            echo '<tr><td>'.$row->id.'<td><td>'.$row->count.'<td></tr>';
+            echo '<tr><td>'.$row->user_id.'</td>';
+            echo '<td>'.($days - $row->count).'</td></tr>';
         }
         echo '</table>';
     }
