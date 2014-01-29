@@ -266,4 +266,26 @@ class Checksubscribe extends CI_Controller
 
     }
 
+
+    function checkMissingData() {
+        $today_string = date('Y-m-d');
+        $now = time(); // or your date as well
+        $base = strtotime(BASELINE);
+        $base_string = BASELINE:
+        $datediff = $now - $base;
+        $days = floor($datediff/(60*60*24));
+
+        $sql = "SELECT COUNT(*) as count, user_id FROM activity
+                WHERE date >= '$BASELINE'
+                AND date < '$today_string'
+                GROUP BY user_id
+                HAVING COUNT(*) < $days";
+        $query = $this->db->query($sql);
+        echo '<table><tr><td>ID</td><td>count</td></tr>';
+        foreach($query->result() as $row) {
+            echo '<tr><td>'.$row->id.'<td><td>'.$row->count.'<td></tr>';
+        }
+        echo '</table>';
+    }
+
 }
