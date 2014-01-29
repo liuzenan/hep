@@ -551,24 +551,7 @@ class Subscriber extends CI_Controller
 
     private function getUserKeyPair($userId)
     {
-        if ($userId) {
-            try {
-                $sql = "SELECT oauth_token, oauth_secret FROM user
-				WHERE id=" . $userId;
-                $query = $this->db->query($sql);
-
-                if ($query->num_rows() > 0) {
-                    $row = $query->row();
-                    $keypair['token'] = $row->oauth_token;
-                    $keypair['secret'] = $row->oauth_secret;
-
-                    return $keypair;
-                }
-
-            } catch (Exception $e) {
-
-            }
-        }
+        return $this->User_model->getUserKeyPair($userId);
     }
 
     private function getNotification()

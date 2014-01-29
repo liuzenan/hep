@@ -8,6 +8,28 @@ class User_model extends My_Model
         parent::__construct();
     }
 
+    function getUserKeyPair($userId)
+    {
+        if ($userId) {
+            try {
+                $sql = "SELECT oauth_token, oauth_secret FROM user
+                WHERE id=" . $userId;
+                $query = $this->db->query($sql);
+
+                if ($query->num_rows() > 0) {
+                    $row = $query->row();
+                    $keypair['token'] = $row->oauth_token;
+                    $keypair['secret'] = $row->oauth_secret;
+
+                    return $keypair;
+                }
+
+            } catch (Exception $e) {
+
+            }
+        }
+    }
+    
     function validateUserInfo($user_id)
     {
         $sql = "SELECT id
