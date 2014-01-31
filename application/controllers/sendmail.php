@@ -70,11 +70,11 @@ class Sendmail extends Admin_Controller
         $count = 0;
         $tos = array();
         foreach ($emails as $row) {
-            if ($count % 100 == 0) {
-                $tos[$count / 100] = array();
+            if ($count % 70 == 0) {
+                $tos[$count / 70] = array();
             }
 
-            $tos[floor($count / 100)][] = $row->email;
+            $tos[floor($count / 70)][] = $row->email;
             $count += 1;
         }
 
@@ -104,11 +104,11 @@ class Sendmail extends Admin_Controller
         $count = 0;
         $tos = array();
         foreach ($emails as $row) {
-            if ($count % 100 == 0) {
-                $tos[$count / 100] = array();
+            if ($count % 70 == 0) {
+                $tos[$count / 70] = array();
             }
 
-            $tos[floor($count / 100)][] = $row->email;
+            $tos[floor($count / 70)][] = $row->email;
             $count += 1;
         }
 

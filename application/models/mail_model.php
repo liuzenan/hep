@@ -4,7 +4,7 @@ class Mail_model extends My_Model
 {
     //const HepAccount = 'hepnusmedical@gmail.com';
 
-    const HepAccount = 'hep-support@googlegroups.com';
+    const HepAccount = 'noreply@nushep.com';
     const HepName = 'Health Enhancement Programme';
     const TitleBadgeEarned = 'Congrats for earning %s badge!';
     const TitleDailyReport = 'HEP Daily Report';
