@@ -369,7 +369,7 @@ $config['proxy_ips'] = '';
 */
 function __autoload($class)
 {
-    if(strpos($class, 'CI_') !== 0 && strpos($class, 'MY_Fitbitphp') !== 0 && strpos($class, 'MY_Ga_api') !== 0  )
+    if(strpos($class, 'CI_') !== 0 && !strpos($class, 'itbitphp') && !strpos($class, 'a_api') )
     {
         @include_once( APPPATH . 'core/'. $class . EXT );
     }
