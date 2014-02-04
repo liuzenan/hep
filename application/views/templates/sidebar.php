@@ -17,8 +17,8 @@
 			<li class="<?php if($active=='manage') echo "active" ?>"><a href="<?php echo base_url() . 'manage'?>">Manage Users</a></li>
 			<li class="<?php if($active=='masquerade') echo "active" ?>"><a href="<?php echo base_url() . 'masquerade'?>">Masquerade</a></li>
 			<li ><a href="<?php echo base_url() . 'masquerade/unmasquerade'?>">Unmasquerade</a></li>
-			<li class="<?php if($active=='mail') echo "active" ?>"><a href="<?php echo base_url() . 'editmail'?>">Schedule Mail</a></li>
-			<li class="<?php if($active=='sendmail') echo "active" ?>"><a href="<?php echo base_url() . 'sendmail'?>">Send Email</a></li>
+<!-- 			<li class="<?php if($active=='mail') echo "active" ?>"><a href="<?php echo base_url() . 'editmail'?>">Schedule Mail</a></li>
+ -->			<li class="<?php if($active=='sendmail') echo "active" ?>"><a href="<?php echo base_url() . 'sendmail'?>">Send Email</a></li>
 			<li class="<?php if($active=='surveyresult') echo "active" ?>"><a href="<?php echo base_url() . 'surveyresult'?>">Survey Result</a></li>
 			<?php } ?>
 		</ul>

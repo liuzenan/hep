@@ -10,12 +10,14 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#sendReminder").click(function(event){
-		if (($this).hasClass('disabled')) {
+		if (($(this)).hasClass('disabled')) {
 			return;
 		}
 		var emailMsg = $("#mailMsg").val();
 		var title = $("#mailTitle").val();
-		($this).addClass('disabled');
+		($(this)).addClass('disabled');
+		($(this)).text('Sending... Do not close this page');
+		var that = $(this);
 		$("#sending-indicator").show();
 		$.ajax({
 			type:"POST",
@@ -29,6 +31,7 @@ jQuery(document).ready(function($) {
 			$("#sending-indicator").hide();
 			if (msg.success) {
 				alert("Email message sent!");
+				that.text('Sent!');
 				window.location.reload();
 			} else {
 				alert("Something went wrong...");
@@ -37,12 +40,15 @@ jQuery(document).ready(function($) {
 	});
 
 	$("#sendMail").click(function(event){
-		if (($this).hasClass('disabled')) {
+		if (($(this)).hasClass('disabled')) {
 			return;
 		}
 		var emailMsg = $("#mailMsg").val();
 		var title = $("#mailTitle").val();
-		($this).addClass('disabled');
+		($(this)).addClass('disabled');
+		($(this)).text('Sending... Do not close this page');
+		$("#sending-indicator").show();
+		var that = $(this);
 		$.ajax({
 			type:"POST",
 			url:base_url+'sendmail/sendMailMessage',
@@ -54,6 +60,8 @@ jQuery(document).ready(function($) {
 		}).done(function(msg){
 			if (msg.success) {
 				alert("Email message sent!");
+				that.text('Sent!');
+				$("#sending-indicator").hide();
 				window.location.reload();
 			} else {
 				alert("Something went wrong...");
