@@ -48,7 +48,7 @@ class Mail extends CI_Controller
         AND u.email IS NOT NULL
         AND a.user_id NOT IN (
             SELECT i.user_id FROM invalidperiod AS i
-            WHERE (start_date < $ago AND end_date > $today)
+            WHERE (start_date < $today AND end_date > $today)
         )
         GROUP BY a.user_id
         HAVING SUM(a.steps) = 0";
@@ -64,7 +64,7 @@ class Mail extends CI_Controller
         AND u.email IS NOT NULL
         AND s.user_id NOT IN (
             SELECT i.user_id FROM invalidperiod AS i
-            WHERE (start_date < $ago AND end_date > $today)
+            WHERE (start_date < $today AND end_date > $today)
         )
         GROUP BY s.user_id
         HAVING SUM(s.total_time) = 0";
