@@ -30,7 +30,7 @@ class Mail extends CI_Controller
 
     }
 
-    public function syncReminder($secret='') {
+    public function syncReminder($secret='', $send = 'true') {
         if ($secret != ACCESS_SECRET) {
             echo 'Unauthorised access';
             return;
@@ -69,19 +69,16 @@ class Mail extends CI_Controller
         GROUP BY s.user_id
         HAVING SUM(s.total_time) = 0";
 
-        $sleepData = $this->db->query($activityQuery)->result();
+        $sleepData = $this->db->query($sleepQuery)->result();
 
         $candidates = array();
-
-        $activity = 1;
-        $sleep = 2;
         foreach ($activityData as $row) {
             $candidates[$row->uid]['type'] = 'activities';
             $candidates[$row->uid]['name'] = $row->name;
             $candidates[$row->uid]['email'] = $row->email;
         }
         foreach ($sleepData as $row) {
-            if (isset($candidates[$row->uid]['type'])) {
+            if (!empty($candidates[$row->uid])) {
                 $candidates[$row->uid]['type'] = 'activities and sleep';
             } else {
                 $candidates[$row->uid]['type'] = 'sleep';
@@ -91,8 +88,11 @@ class Mail extends CI_Controller
             $candidates[$row->uid]['email'] = $row->email;
         }
         foreach ($candidates as $uid => $candidate) {
+            echo '<br/>Sent to '. $uid . ' ' . $candidate['name'] . ' - ' . $candidate['email'] . ' - ' . $candidate['type'];
+            if ($send != 'true') {
+                continue;
+            }
             $this->Mail_model->sendReminder($candidate['name'], $candidate['email'], $candidate['type']);
-            echo '<br/>Sent to '. $uid . ' ' . $candidate['name'] . ' - ' . $candidate['email'];
             $logEntry = array('message' => 'SyncReminder-'.$uid.'-'.$candidate['email'],
                     'content' =>$candidate['type']);
             $this->db->insert('log', $logEntry);
