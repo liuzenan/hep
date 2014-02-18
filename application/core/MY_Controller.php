@@ -37,7 +37,7 @@ class My_Controller extends CI_Controller {
             $validInfo = $this->User_model->validateUserInfo($this->session->userdata('user_id'));
             if (!$validUser) {
                 redirect(base_url() . 'logout');
-            } else if (!empty($valid)) {
+            } else if (!empty($validInfo)) {
                 redirect(base_url() . "signup");
             } else if (! $this->User_model->hasAccess($this->session->userdata('user_id'))) {
                 redirect(base_url() . 'welcome/thankyou');
