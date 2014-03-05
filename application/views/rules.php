@@ -4,7 +4,7 @@
     <div class="row-fluid">
       <h3 class="maintitle">HEP Challenge 2014 Rules</h3>
       <ol>
-        <li><p>Official Period of contest: 10 March 2014 00:00 -- 27 April 2014 23:59</p></li>
+        <li><p>Official Period of contest: 17 March 2014 00:00 -- 20 April 2014 23:59</p></li>
         <li><p>Every week, the top ranking houses in terms of steps and sleep 
         for that week will receive <strong><?php echo WEEKLY_POINT_MAX ?></strong> points each. All other
         houses will receive a fraction<sup><a href="#footnote1" data-toggle="modal">?</a></sup>
@@ -32,7 +32,7 @@ reps, who will in turn inform the contest organizers. </p></li>
         <li><p>Badges will be awarded two days later.</p></li> 
         <li><p>This is to ensure that students have sufficient time to sync their data.</p></li>
 <h5>Final Race</h5>
-        <li><p> The last week of the contest, 21 April 2014 00:00 -- 27 April 2014 23:59 is the <em>Final Race</em> week. </p></li>
+        <li><p> The last week of the contest is the <em>Final Race</em> week. </p></li>
         <li><p> The weekly cap of 50 points will be removed. Instead, we look at the houses that has the highest amount of steps and sleep,
         and use their weekly average as a reference value. </p></li>
         <li><p> Houses that accumulate the same amount of steps or sleep as the reference value get 50 points. More points can be earned if
