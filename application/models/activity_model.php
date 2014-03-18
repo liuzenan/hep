@@ -319,13 +319,13 @@ class Activity_model extends My_Model
                 $this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
                 $calories = $this->fitbitphp->getIntradayTimeSeries("calories", $date);
                 $steps = $this->fitbitphp->getIntradayTimeSeries("steps", $date);
-                //$floors = $this->fitbitphp->getIntradayTimeSeries("floors", $date);
-                //$elevation = $this->fitbitphp->getIntradayTimeSeries("elevation", $date);
+                $floors = $this->fitbitphp->getIntradayTimeSeries("floors", $date);
+                $elevation = $this->fitbitphp->getIntradayTimeSeries("elevation", $date);
 
                 $intradayCalories = $calories->{'activities-calories-intraday'};
                 $intradaySteps = $steps->{'activities-steps-intraday'};
-                //$intradayFloors = $floors->{'activities-floors-intraday'};
-                //$intradayElevation = $elevation->{'activities-elevation-intraday'};
+                $intradayFloors = $floors->{'activities-floors-intraday'};
+                $intradayElevation = $elevation->{'activities-elevation-intraday'};
                 //var_dump($steps);
                 $intradayActivityData = array();
 
@@ -347,22 +347,22 @@ class Activity_model extends My_Model
                     }
                 }
 
-                // foreach ($intradayFloors->dataset->intradayData as $value) {
-                //     $currentTime = (string)$value->time;
-                //     if (!empty($intradayActivityData[$currentTime])) {
-                //         $intradayActivityData[$currentTime]['floors'] = $value->value;
-                //     }
+                foreach ($intradayFloors->dataset->intradayData as $value) {
+                    $currentTime = (string)$value->time;
+                    if (!empty($intradayActivityData[$currentTime])) {
+                        $intradayActivityData[$currentTime]['floors'] = $value->value;
+                    }
 
 
-                // }
+                }
 
-                // foreach ($intradayElevation->dataset->intradayData as $value) {
-                //     $currentTime = (string)$value->time;
-                //     if (!empty($intradayActivityData[$currentTime])) {
-                //         $intradayActivityData[$currentTime]['elevation'] = $value->value;
-                //     }
+                foreach ($intradayElevation->dataset->intradayData as $value) {
+                    $currentTime = (string)$value->time;
+                    if (!empty($intradayActivityData[$currentTime])) {
+                        $intradayActivityData[$currentTime]['elevation'] = $value->value;
+                    }
 
-                // }
+                }
                 // var_dump($intradayActivityData);
                 foreach ($intradayActivityData as $key => $value) {
                     # code...
@@ -375,7 +375,7 @@ class Activity_model extends My_Model
                             $value['calories'] . ", " . $value['level'] . ", "
                             . 0 . ", " . 0 . ") ON DUPLICATE KEY UPDATE
 						steps = " . $value['steps'] . ", calories = " . $value['calories'] . ", calories_level= " . $value['level'] .
-                            ", floors=" . 0 . ",elevation=" . 0;
+                            ", floors=" . $value['floors'] . ",elevation=" . $value['elevation'];
 
                         $this->db->query($sql);
                     }
@@ -442,8 +442,8 @@ LIMIT  1";
             $tracker_caloriesOut = $this->fitbitphp->getTimeSeries('tracker_caloriesOut', $basedate, $period);
             $tracker_steps = $this->fitbitphp->getTimeSeries('tracker_steps', $basedate, $period);
             $tracker_distance = $this->fitbitphp->getTimeSeries('tracker_distance', $basedate, $period);
-            //$tracker_floors = $this->fitbitphp->getTimeSeries('tracker_floors', $basedate, $period);
-            //$tracker_elevation = $this->fitbitphp->getTimeSeries('tracker_elevation', $basedate, $period);
+            $tracker_floors = $this->fitbitphp->getTimeSeries('tracker_floors', $basedate, $period);
+            $tracker_elevation = $this->fitbitphp->getTimeSeries('tracker_elevation', $basedate, $period);
             //$tracker_activeScore = $this->fitbitphp->getTimeSeries('tracker_activeScore', $basedate, $period);
             $tracker_activityCalories = $this->fitbitphp->getTimeSeries('tracker_activityCalories', $basedate, $period);
             $tracker_minutesSedentary = $this->fitbitphp->getTimeSeries('tracker_minutesSedentary', $basedate, $period);
@@ -469,15 +469,15 @@ LIMIT  1";
                 $activitiesData[$currentDate]['tracker_distance'] = $value->value;
             }
 
-            // foreach ($tracker_floors as $value) {
-            //     $currentDate = $value->dateTime;
-            //     $activitiesData[$currentDate]['tracker_floors'] = $value->value;
-            // }
+            foreach ($tracker_floors as $value) {
+                $currentDate = $value->dateTime;
+                $activitiesData[$currentDate]['tracker_floors'] = $value->value;
+            }
 
-            // foreach ($tracker_elevation as $value) {
-            //     $currentDate = $value->dateTime;
-            //     $activitiesData[$currentDate]['tracker_elevation'] = $value->value;
-            // }
+            foreach ($tracker_elevation as $value) {
+                $currentDate = $value->dateTime;
+                $activitiesData[$currentDate]['tracker_elevation'] = $value->value;
+            }
 
             // foreach ($tracker_activeScore as $value) {
             //     $currentDate = $value->dateTime;
@@ -516,19 +516,19 @@ LIMIT  1";
 					min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
 				VALUES (" . $user_id . ", '" . $key . "', "
                     . $value['tracker_steps'] . ", "
-                    . 0 . ", "
+                    . $value['tracker_floors'] . ", "
                     . $value['tracker_caloriesOut'] . ", "
                     . -1 . ", "
                     . $value['tracker_distance'] . ", "
-                    . 0 . ", "
+                    . $value['tracker_elevation'] . ", "
                     . $value['tracker_minutesSedentary'] . ", "
                     . $value['tracker_minutesLightlyActive'] . ", "
                     . $value['tracker_minutesFairlyActive'] . ", "
                     . $value['tracker_minutesVeryActive'] . ", "
                     . $value['tracker_activityCalories'] . ")
-					ON DUPLICATE KEY UPDATE last_update=NOW(), steps= " . $value['tracker_steps'] . ", floors= " . 0
+					ON DUPLICATE KEY UPDATE last_update=NOW(), steps= " . $value['tracker_steps'] . ", floors= " . $value['tracker_floors']
                     . ", calories= " . $value['tracker_caloriesOut'] . ", active_score= " . -1
-                    . ", distance= " . $value['tracker_distance'] . ", elevation= " . 0
+                    . ", distance= " . $value['tracker_distance'] . ", elevation= " . $value['tracker_elevation']
                     . ", min_sedentary= " . $value['tracker_minutesSedentary'] . ", min_lightlyactive= "
                     . $value['tracker_minutesLightlyActive'] . ", min_fairlyactive= "
                     . $value['tracker_minutesFairlyActive'] . ", min_veryactive= "
@@ -562,7 +562,7 @@ LIMIT  1";
 
             $tracker_caloriesOut = $summary->caloriesOut;
             $tracker_steps = $summary->steps;
-
+            $tracker_floors = $summary->floors;
             foreach ($summary->distances->activityDistance as $distanceEntry) {
                 if ($distanceEntry->activity == 'tracker') {
                     $tracker_distance = $distanceEntry->distance;
@@ -579,7 +579,7 @@ LIMIT  1";
                     $tracker_distance = 0;
                 }
             }
-
+            $tracker_elevation = $summary->tracker_elevation;
             $tracker_activityCalories = $summary->activityCalories;
             $tracker_minutesSedentary = $summary->sedentaryMinutes;
             $tracker_minutesLightlyActive = $summary->lightlyActiveMinutes;
@@ -591,19 +591,19 @@ LIMIT  1";
                 min_lightlyactive, min_fairlyactive, min_veryactive, activity_calories)
             VALUES (" . $user_id . ", '" . $date . "', "
                 . $tracker_steps . ", "
-                . 0 . ", "
+                . $tracker_floors . ", "
                 . $tracker_caloriesOut . ", "
                 . -1 . ", "
                 . $tracker_distance . ", "
-                . 0 . ", "
+                . $tracker_elevation . ", "
                 . $tracker_minutesSedentary . ", "
                 . $tracker_minutesLightlyActive . ", "
                 . $tracker_minutesFairlyActive . ", "
                 . $tracker_minutesVeryActive . ", "
                 . $tracker_activityCalories . ")
-                ON DUPLICATE KEY UPDATE last_update=NOW(), steps= " . $tracker_steps . ", floors= " . 0
+                ON DUPLICATE KEY UPDATE last_update=NOW(), steps= " . $tracker_steps . ", floors= " . $tracker_floors
                 . ", calories= " . $tracker_caloriesOut . ", active_score= " . -1
-                . ", distance= " . $tracker_distance . ", elevation= " . 0
+                . ", distance= " . $tracker_distance . ", elevation= " . $tracker_elevation
                 . ", min_sedentary= " . $tracker_minutesSedentary . ", min_lightlyactive= "
                 . $tracker_minutesLightlyActive . ", min_fairlyactive= "
                 . $tracker_minutesFairlyActive . ", min_veryactive= "
