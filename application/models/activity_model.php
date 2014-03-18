@@ -579,7 +579,7 @@ LIMIT  1";
                     $tracker_distance = 0;
                 }
             }
-            $tracker_elevation = $summary->trackerElevation;
+            $tracker_elevation = $summary->elevation;
             $tracker_activityCalories = $summary->activityCalories;
             $tracker_minutesSedentary = $summary->sedentaryMinutes;
             $tracker_minutesLightlyActive = $summary->lightlyActiveMinutes;
