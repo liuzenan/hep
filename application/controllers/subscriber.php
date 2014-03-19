@@ -11,7 +11,7 @@ class Subscriber extends CI_Controller
 
     }
 
-    public function update()
+    public function update($date=null)
     {
         $data = array('message' => 'Debug-StartDailyUpdate-'.$this->input->ip_address());
         $this->db->insert('log', $data);
@@ -22,8 +22,11 @@ class Subscriber extends CI_Controller
         $query1 = $this->db->query($sql1);
         foreach ($query1->result() as $row1) {
             $uid = $row1->id;
-
-            $date = date("Y-m-d", time() - 24 * 60 * 60);
+            if ($date) {
+            	$date = date("Y-m-d", strtotime($date));
+            } else {
+				$date = date("Y-m-d", time() - 24 * 60 * 60);
+            }
             //echo $uid.'-'.$date.'<br>';
             $this->getActivities($uid, $date);
             $this->getSleep($uid, $date);
