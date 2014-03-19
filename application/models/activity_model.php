@@ -585,6 +585,11 @@ LIMIT  1";
             } else {
             	$tracker_elevation = 0;
             }
+            if ($tracker_floors) {
+
+            } else {
+            	$tracker_floors = 0;
+            }
             $tracker_activityCalories = $summary->activityCalories;
             $tracker_minutesSedentary = $summary->sedentaryMinutes;
             $tracker_minutesLightlyActive = $summary->lightlyActiveMinutes;
