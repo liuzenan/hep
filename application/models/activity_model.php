@@ -324,8 +324,8 @@ class Activity_model extends My_Model
 
                 $intradayCalories = $calories->{'activities-calories-intraday'};
                 $intradaySteps = $steps->{'activities-steps-intraday'};
-                $intradayFloors = $floors->{'activities-floors-intraday'};
-                $intradayElevation = $elevation->{'activities-elevation-intraday'};
+                // $intradayFloors = $floors->{'activities-floors-intraday'};
+                // $intradayElevation = $elevation->{'activities-elevation-intraday'};
                 //var_dump($steps);
                 $intradayActivityData = array();
 
