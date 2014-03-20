@@ -49,7 +49,7 @@ class Activity_model extends My_Model
         $last_monday = date('Y-m-d', strtotime('- 7 days', strtotime($this_monday)));
         $last_sunday = date('Y-m-d', strtotime('- 1 day', strtotime($this_monday)));
 
-        $sql = "SELECT SUM(total_time) as sleep FROM sleep
+        $sql = "SELECT SUM(time_asleep) as sleep FROM sleep
         WHERE user_id = $user_id
         AND DATE BETWEEN '$last_monday' AND '$last_sunday' ";
         $query = $this->db->query($sql);
@@ -129,7 +129,7 @@ class Activity_model extends My_Model
 
     function getSleepData($user_id, $date)
     {
-        $sql = "SELECT Sum(time_asleep) AS total_time,
+        $sql = "SELECT Sum(time_asleep) AS time_asleep,
 		date
 		FROM   sleep
 		WHERE  user_id = ?
@@ -141,7 +141,7 @@ class Activity_model extends My_Model
             $vars = new StdClass();
             $vars->user_id = $user_id;
             $vars->date = $date;
-            $vars->total_time = 0;
+            $vars->time_asleep = 0;
         }
         return $vars;
     }

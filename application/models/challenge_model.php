@@ -550,12 +550,12 @@ class Challenge_model extends My_Model
 
     function getHouseSleepStats($house_id) {
         $sql = "SELECT u.id as id,
-            AVG(s.total_time)  AS score,
-            COUNT(s.total_time) AS valid
+            AVG(s.time_asleep)  AS score,
+            COUNT(s.time_asleep) AS valid
             FROM   user AS u,
             sleep AS s
             WHERE s.user_id = u.id
-            AND s.total_time > 0
+            AND s.time_asleep > 0
             AND u.house_id = ".$house_id."
             AND u.phantom = 0
             AND s.date >= '".VALID_STATS_BASELINE."'

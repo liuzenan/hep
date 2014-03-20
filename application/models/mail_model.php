@@ -126,11 +126,11 @@ class Mail_model extends My_Model
         $data['me_yesterday'] = $this->Activity_model->getActivityYesterday($user_id);
         $data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ", time() - 60 * 60 * 24));
         //var_dump($data['me_sleep_yesterday']);
-        $data['me_yesterday']->sleep = number_format((float)$data['me_sleep_yesterday']->total_time / 60, 2);
+        $data['me_yesterday']->sleep = number_format((float)$data['me_sleep_yesterday']->time_asleep / 60, 2);
 
         $data['me_two_days_ago'] = $this->Activity_model->getActivityOnDate($user_id, date("Y-m-d ", time() - 2 * 60 * 60 * 24));
         $data['me_sleep_two_days_ago'] = $this->Activity_model->getSleepData($user_id, date("Y-m-d ", time() - 2 * 60 * 60 * 24));
-        $data['me_two_days_ago']->sleep = number_format((float)$data['me_sleep_two_days_ago']->total_time / 60, 2);
+        $data['me_two_days_ago']->sleep = number_format((float)$data['me_sleep_two_days_ago']->time_asleep / 60, 2);
 
         $data['delta_steps'] = number_format($this->cauculateDelta($data['me_yesterday']->steps, $data['me_two_days_ago']->steps), 2);
         $data['delta_calories'] = number_format($this->cauculateDelta($data['me_yesterday']->calories, $data['me_two_days_ago']->calories), 2);

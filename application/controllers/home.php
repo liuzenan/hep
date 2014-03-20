@@ -124,12 +124,12 @@ class Home extends MY_Controller
         $data['me_yesterday'] = $this->Activity_model->getActivityYesterday($this->uid);
         $timestr .= microtime() . "<br>";
 
-        $data['me_today']->sleep = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ", time()))->total_time;
+        $data['me_today']->sleep = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ", time()))->time_asleep;
         $data['me_today']->sleep = number_format($data['me_today']->sleep / 60, 2);
         $timestr .= microtime() . "<br>";
 
         $data['me_sleep_yesterday'] = $this->Activity_model->getSleepData($this->uid, date("Y-m-d ", time() - 60 * 60 * 24));
-        $data['me_yesterday']->sleep = $data['me_sleep_yesterday']->total_time;
+        $data['me_yesterday']->sleep = $data['me_sleep_yesterday']->time_asleep;
         $data['me_yesterday']->sleep = number_format($data['me_yesterday']->sleep / 60, 2);
 
         $timestr .= microtime() . "<br>";
