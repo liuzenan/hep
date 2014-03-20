@@ -279,21 +279,21 @@ class Challenge_model extends My_Model
     u.profile_pic AS avatar,
     u.house_id    AS house_id,
     h.name        AS house,
-    AVG(s.total_time)  AS score,
-    COUNT(s.total_time) AS valid
+    AVG(s.time_asleep)  AS score,
+    COUNT(s.time_asleep) AS valid
     FROM   user AS u,
     sleep AS s,
     house AS h
     WHERE s.user_id = u.id
-    AND s.total_time > 0
-    AND s.total_time < 60 * 12
+    AND s.time_asleep > 0
+    AND s.time_asleep < 60 * 12
     AND u.house_id = h.id
     AND u.phantom = 0
     AND u.staff = 0
     AND s.date >= '".VALID_STATS_BASELINE."'
     GROUP BY u.id
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
-    ORDER BY AVG(s.total_time) DESC LIMIT 0, 10";
+    ORDER BY AVG(s.time_asleep) DESC LIMIT 0, 10";
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -357,11 +357,11 @@ class Challenge_model extends My_Model
     u.fb AS fb,
     u.profile_pic AS avatar,
     u.house_id    AS house_id,
-    AVG(s.total_time)  AS score,
-    COUNT(s.total_time) AS valid
+    AVG(s.time_asleep)  AS score,
+    COUNT(s.time_asleep) AS valid
     FROM   user AS u,
     sleep AS s
-    WHERE s.total_time > 0
+    WHERE s.time_asleep > 0
     AND s.user_id = u.id
     AND u.phantom = 0
     AND u.hide_progress = 0
@@ -369,7 +369,7 @@ class Challenge_model extends My_Model
     AND s.date >= '".VALID_STATS_BASELINE."'
     GROUP BY u.id
     HAVING COUNT(*) >= ".$this->minimumValidDays()."
-    ORDER BY AVG(s.total_time) DESC LIMIT 0, 10";
+    ORDER BY AVG(s.time_asleep) DESC LIMIT 0, 10";
         $query = $this->db->query($sql);
         return $query->result();
     }
@@ -488,7 +488,7 @@ class Challenge_model extends My_Model
             }   
         }
         $sql = "SELECT 
-        AVG(s.total_time) / 60 * %d AS sleep,
+        AVG(s.time_asleep) / 60 * %d AS sleep,
         h.name AS house,
         h.id AS house_id
         FROM sleep AS s
@@ -502,9 +502,9 @@ class Challenge_model extends My_Model
         %s
         AND u.phantom = 0
         AND u.access = 1
-        AND s.total_time < 60 * 12
+        AND s.time_asleep < 60 * 12
         GROUP BY u.house_id
-        ORDER BY AVG(s.total_time) DESC;
+        ORDER BY AVG(s.time_asleep) DESC;
         ";
         if ($includeTutor) {
             $tutorClause = '';
