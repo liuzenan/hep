@@ -286,6 +286,7 @@ class Challenge_model extends My_Model
     house AS h
     WHERE s.user_id = u.id
     AND s.total_time > 0
+    AND s.total_time < 60 * 12
     AND u.house_id = h.id
     AND u.phantom = 0
     AND u.staff = 0
@@ -501,6 +502,7 @@ class Challenge_model extends My_Model
         %s
         AND u.phantom = 0
         AND u.access = 1
+        AND s.total_time < 60 * 12
         GROUP BY u.house_id
         ORDER BY AVG(s.total_time) DESC;
         ";
