@@ -87,7 +87,7 @@ $(function() {
 			type: 'bar'
 		},
 		title: {
-			text: 'Steps Per Person'
+			text: 'Weekly Total Steps Per Person'
 		},
 		yAxis: {
 			type:'linear',
@@ -136,7 +136,7 @@ $(function() {
 			type: 'bar'
 		},
 		title: {
-			text: 'Sleep Per Person'
+			text: 'Weekly Total Sleep Per Person'
 		},
 		yAxis: {
 			type:'linear',
