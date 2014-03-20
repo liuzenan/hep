@@ -626,7 +626,7 @@ class Challenge_model extends My_Model
          $now = time(); // or your date as well
          $base = strtotime(VALID_STATS_BASELINE);
          $datediff = $now - $base;
-         return floor(VALID_STATS_PERCENTAGE * $datediff/(60*60*24));
+         return ceil(VALID_STATS_PERCENTAGE * $datediff/(60*60*24));
     }
 
 }
