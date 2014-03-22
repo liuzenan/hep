@@ -601,14 +601,14 @@ class Subscriber extends CI_Controller
                     }
                 }
             } else {
-                $sql = "INSERT INTO Updates(`update`)
+                $sql = "INSERT INTO updates(`update`)
 				VALUES ('empty contents, IP: " . $this->input->ip_address() . "')";
                 $this->db->query($sql);
             }
 
 
         } catch (Exception $e) {
-            $sql = "INSERT INTO Updates(`update`)
+            $sql = "INSERT INTO updates(`update`)
 			VALUES ('Error, IP: " . $this->input->ip_address() . "')";
             $this->db->query($sql);
         }

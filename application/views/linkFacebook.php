@@ -3,8 +3,8 @@
   <head>
     <title>Fitbit App</title>
     <!-- Bootstrap -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-     <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+     <link rel="stylesheet" href="<?php echo base_url(); ?>/css/style.css">
   </head>
   <body>
   <div id="fb-root"></div>
@@ -13,7 +13,7 @@
       // init the FB JS SDK
       FB.init({
         appId      : '590330994347289', // App ID from the App Dashboard
-        channelUrl : '//hep.d2.comp.nus.edu.sg/fitbit/channel.php', // Channel File for x-domain communication
+        channelUrl : '<?php echo substr(base_url(), strpos(base_url(), '//')); ?>fitbit/channel.php', // Channel File for x-domain communication
         status     : true, // check the login status upon init?
         cookie     : true, // set sessions cookies to allow your server to access the session?
         xfbml      : true  // parse XFBML tags on this page?
@@ -103,7 +103,7 @@
       <?php endif ?>
     </div>
   </div>
-    <script src="/assets/js/jquery-1.9.1.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery-1.9.1.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
   </body>
 </html>

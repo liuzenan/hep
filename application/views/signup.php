@@ -3,9 +3,9 @@
   <head>
     <title>Fitbit App</title>
     <!-- Bootstrap -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-     <link rel="stylesheet" href="/assets/css/style.css">
-    <script src="/assets/js/jquery-1.9.1.min.js"></script>
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
+    <script src="<?php echo base_url(); ?>assets/js/jquery-1.9.1.min.js"></script>
   </head>
   <body>
   	<div class="container">
@@ -28,7 +28,7 @@
 							<?php } ?>
 						</select>
 						<label for="registrationcode">Registration Code</label>
-						<input id="registrationcode" type="text" name="registrationcode">
+						<input id="registrationcode" type="text" name="registrationcode" value="<?php echo $defaultCode; ?>">
 						<button id="submitbtn" class="btn btn-large btn-block">Next</button>
             <p><a href='mailto:hep-support@googlegroups.com'>Contact us</a> if you encountered problems.</p>
 					</fieldset>
@@ -36,7 +36,7 @@
 			</div>
 		</div>
   	</div>
-    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script>
     	jQuery(document).ready(function($) {
     		$("#submitbtn").attr('disabled','disabled');
