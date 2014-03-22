@@ -9,7 +9,7 @@
   <body>
   <div id="fb-root"></div>
   <script>
-    var base_url = <?php echo base_url(); ?>;
+    var base_url = '<?php echo base_url(); ?>';
     window.fbAsyncInit = function() {
       // init the FB JS SDK
       FB.init({
