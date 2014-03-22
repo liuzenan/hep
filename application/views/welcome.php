@@ -3,8 +3,8 @@
   <head>
     <title>Fitbit App</title>
     <!-- Bootstrap -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link href="<?php echo base_url(); ?>/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>/css/style.css">
   </head>
   <body>
   <div id="fb-root"></div>
@@ -185,7 +185,7 @@
       </p>
     </div>
 </div>
-    <script src="/assets/js/jquery-1.9.1.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>/js/jquery-1.9.1.min.js"></script>
+    <script src="<?php echo base_url(); ?>/js/bootstrap.min.js"></script>
   </body>
 </html>
