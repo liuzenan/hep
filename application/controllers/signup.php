@@ -28,7 +28,7 @@ class Signup extends CI_Controller
                 $houses[$row->id] = $row->name;
             }
             $data['houses'] = $houses;
-            $data['defaultCode'] = defined(DEFAULT_REGISTRATION_CODE) ? DEFAULT_REGISTRATION_CODE : '';
+            $data['defaultCode'] = defined('DEFAULT_REGISTRATION_CODE') ? DEFAULT_REGISTRATION_CODE : '';
             $this->load->view('signup', $data);
         }
 
