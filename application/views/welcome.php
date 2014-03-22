@@ -158,7 +158,8 @@
 <div class="wrapper welcome">
     <div class="container">
       <h3 class="maintitle">Health Enhancement Programme</h3>
-      
+      <h3 class="maintitle">School of Medicine</h3>
+      <p class="text-center">If you are from Faculty of Dentistry, <a href="./dentistry">please visit this version</a> instead.</p>
       <div class="logincontrol well">
         <p class="registerbtn">
           <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Register</a>
