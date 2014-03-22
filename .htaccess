@@ -3,9 +3,12 @@
     RewriteEngine on
 
     # If the start of the URL doesn't match one of these...
-    RewriteCond $1 !^(index\.php|robots\.txt|assets|cache|themes|uploads)
+    RewriteCond $1 !^(index\.php|robots\.txt|assets|cache|themes|uploads|dentistry)
 
     # Route through index.php
     RewriteRule ^(.*)$ index.php/$1 [L]
 
+    # for medicine
+    RewriteCond $1 ^(dentistry)
+    RewriteRule ^(.*)$ dentistry/index.php/$1 [L]
 </IfModule>
