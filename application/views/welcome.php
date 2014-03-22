@@ -163,7 +163,7 @@
         <p class="registerbtn">
           <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Register</a>
         </p>
-        <p class="muted text-center">or</p>
+        <p class="muted text-center"> or </p>
         <p class="loginbtn">
           <a href="<?php echo base_url() . 'login'?>" id="fitbitlogin" class="btn btn-primary">Login with Fitbit</a>
           <a href="javascript:void(0);" id="facebooklogin" class="btn btn-primary">Login with Facebook</a>
