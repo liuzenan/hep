@@ -7,8 +7,4 @@
 
     # Route through index.php
     RewriteRule ^(.*)$ index.php/$1 [L]
-
-    # for medicine
-    RewriteCond $1 ^(dentistry)
-    RewriteRule ^(.*)$ dentistry/index.php/$1 [L]
 </IfModule>
