@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <title>HEP Platform</title>
     <!-- Bootstrap -->
-    <link href="<?php echo base_url(); ?>/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>/css/font-awesome.min.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>/css/style.css">
-    <link rel="stylesheet" href="<?php echo base_url(); ?>/css/datepicker.css">
-    <script src="<?php echo base_url(); ?>/js/jquery-1.9.1.min.js"></script>
-    <script src="<?php echo base_url(); ?>/js/highcharts.js"></script>
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/datepicker.css">
+    <script src="<?php echo base_url(); ?>assets/js/jquery-1.9.1.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/highcharts.js"></script>
   </head>
   <body>
   <div id="fb-root"></div>

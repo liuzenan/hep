@@ -7,19 +7,19 @@
 							<div class="span4">
 								<div class="row-fluid">
 									<div class="span5 offset2"><img src="<?php if($me_today->steps<$max_today->max_steps) echo "/assets/img/pixelred.gif"; else echo "/assets/img/pixelorange.gif" ?>" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "You: ".$me_today->steps ?>" alt="" style="width:40px; height:<?php echo $max_today->max_steps==0?0:$me_today->steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo ($max_today->max_steps==0?0:100 - $me_today->steps/$max_today->max_steps*100) ?>px"></div>
-									<div class="span5"><img src="<?php echo base_url(); ?>/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_steps ?>" alt="" style="width:40px; height:<?php echo $max_today->max_steps==0?0:$avg->avg_steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo $max_today->max_steps==0?0:100 - $avg->avg_steps/$max_today->max_steps*100 ?>px"></div>
+									<div class="span5"><img src="<?php echo base_url(); ?>assets/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_steps ?>" alt="" style="width:40px; height:<?php echo $max_today->max_steps==0?0:$avg->avg_steps/$max_today->max_steps*100 ?>px !important; margin-top:<?php echo $max_today->max_steps==0?0:100 - $avg->avg_steps/$max_today->max_steps*100 ?>px"></div>
 								</div>
 							</div>
 							<div class="span4">
 								<div class="row-fluid">
 									<div class="span5 offset2"><img src="<?php if($me_today->distance<$max_today->max_distance) echo "/assets/img/pixelred.gif"; else echo "/assets/img/pixelorange.gif" ?>" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "You: ".$me_today->distance ?>" alt="" style="width:40px; height:<?php echo $max_today->max_distance==0?0:$me_today->distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo $max_today->max_distance==0?0:100 - $me_today->distance/$max_today->max_distance*100 ?>px"></div>
-									<div class="span5"><img src="<?php echo base_url(); ?>/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_distance ?>" alt="" style="width:40px; height:<?php echo $max_today->max_distance==0?0:$avg->avg_distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo ($max_today->max_distance==0 ? 1 : 100 - $avg->avg_distance/$max_today->max_distance*100) ?>px"></div>
+									<div class="span5"><img src="<?php echo base_url(); ?>assets/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_distance ?>" alt="" style="width:40px; height:<?php echo $max_today->max_distance==0?0:$avg->avg_distance/$max_today->max_distance*100 ?>px !important; margin-top:<?php echo ($max_today->max_distance==0 ? 1 : 100 - $avg->avg_distance/$max_today->max_distance*100) ?>px"></div>
 								</div>
 							</div>
 							<div class="span4">
 								<div class="row-fluid">
 									<div class="span5 offset2"><img src="<?php if($me_today->sleep<$max_today->max_sleep) echo "/assets/img/pixelred.gif"; else echo "/assets/img/pixelorange.gif" ?>" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "You: ".$me_today->sleep ?>" alt="" style="width:40px; height:<?php echo $max_today->max_sleep==0?0:$me_today->sleep/$max_today->max_sleep*100 ?>px !important; margin-top:<?php echo $max_today->max_sleep==0?0:100 - $me_today->sleep/$max_today->max_sleep*100 ?>px"></div>
-									<div class="span5"><img src="<?php echo base_url(); ?>/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_sleep ?>" alt="" style="width:40px; height:<?php echo $max_today->max_sleep==0?0:$avg->avg_sleep/$max_today->max_sleep*100 ?>px !important; margin-top:<?php echo $max_today->max_sleep==0?0:100 - $avg->avg_sleep/$max_today->max_sleep*100 ?>px"></div>
+									<div class="span5"><img src="<?php echo base_url(); ?>assets/img/pixelgreendark.gif" class="image-fix challengeTitleTooltip" data-original-title="<?php echo "Everybody: ".$avg->avg_sleep ?>" alt="" style="width:40px; height:<?php echo $max_today->max_sleep==0?0:$avg->avg_sleep/$max_today->max_sleep*100 ?>px !important; margin-top:<?php echo $max_today->max_sleep==0?0:100 - $avg->avg_sleep/$max_today->max_sleep*100 ?>px"></div>
 								</div>
 							</div>
 						</div>

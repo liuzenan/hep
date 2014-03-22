@@ -3,7 +3,7 @@
   <head>
     <title>Fitbit App</title>
     <!-- Bootstrap -->
-    <link href="<?php echo base_url(); ?>/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
      <link rel="stylesheet" href="<?php echo base_url(); ?>/css/style.css">
   </head>
   <body>
@@ -103,7 +103,7 @@
       <?php endif ?>
     </div>
   </div>
-    <script src="<?php echo base_url(); ?>/js/jquery-1.9.1.min.js"></script>
-    <script src="<?php echo base_url(); ?>/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery-1.9.1.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
   </body>
 </html>
