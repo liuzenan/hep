@@ -8,7 +8,7 @@ $(document).ready(function() {
 		$( "#autocomplete" ).autocomplete({
 			source: function(request, response) {
 				$.ajax({ 
-					url: 'http://hep.d2.comp.nus.edu.sg/masquerade/suggestions',
+					url: '<?php echo base_url(); ?>masquerade/suggestions',
 					data: { term: $("#autocomplete").val()},
 					dataType: "json",
 					type: "POST",
@@ -25,7 +25,7 @@ $(document).ready(function() {
 			console.log(name);
 			if(name.trim().length>0) {
 				$.ajax({ 
-					url: 'http://hep.d2.comp.nus.edu.sg/masquerade/switchUser',
+					url: '<?php echo base_url(); ?>masquerade/switchUser',
 					data: { term: name},
 					dataType: "json",
 					type: "POST",
@@ -38,7 +38,7 @@ $(document).ready(function() {
 		});
 		$("#switchback").click(function(e){
 			$.ajax({ 
-					url: 'http://hep.d2.comp.nus.edu.sg/masquerade/switchBack',
+					url: '<?php echo base_url(); ?>masquerade/switchBack',
 					data: { term: name},
 					dataType: "json",
 					type: "POST",

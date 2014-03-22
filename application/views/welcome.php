@@ -9,12 +9,12 @@
   <body>
   <div id="fb-root"></div>
   <script>
-    var base_url = 'http://hep.d2.comp.nus.edu.sg/';
+    var base_url = <?php echo base_url(); ?>;
     window.fbAsyncInit = function() {
       // init the FB JS SDK
       FB.init({
         appId      : '590330994347289', // App ID from the App Dashboard
-        channelUrl : '//hep.d2.comp.nus.edu.sg/fitbit/channel.php', // Channel File for x-domain communication
+        channelUrl : '<?php echo substr(base_url(), strpos(base_url(), '//')); ?>fitbit/channel.php', // Channel File for x-domain communication
         status     : true, // check the login status upon init?
         cookie     : true, // set sessions cookies to allow your server to access the session?
         xfbml      : true  // parse XFBML tags on this page?
