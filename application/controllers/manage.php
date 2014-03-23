@@ -14,14 +14,6 @@ class Manage extends Admin_Controller
         if ($this->session->userdata('isadmin')) {
 
             $data['students'] = $this->getAllUsers($house_id);
-            foreach ($data['students'] as $student) {
-                # code...
-                $sql = "SELECT * FROM survey WHERE userid = " . $student->id;
-                $query = $this->db->query($sql);
-                if ($query->num_rows() > 0) {
-                    $data['survey'][$student->id] = 1;
-                }
-            }
             $data['house_id'] = $house_id;
             $this->loadPage($data, "admin");
         } else {

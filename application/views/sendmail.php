@@ -27,8 +27,6 @@
 			<div class="pull-right" id="sending-indicator" style="display:none;">Sending...</div>
 			<textarea id="mailMsg" class="span12" rows="20"><?php if(!empty($today))echo nl2br($today); ?></textarea>
 			<button id="sendMail" class="btn btn-primary pull-right">Send Email to All</button>
-			<div class="pull-right or"><p> or </p></div>
-			<button id="sendReminder" class="btn btn-primary pull-right">Send Reminder to Complete Survey</button>
 		</div>
 	</div>
 </div>

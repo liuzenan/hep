@@ -9,6 +9,7 @@ jQuery(document).ready(function($) {
 		trigger: 'hover'
 	});
 
+	// deprecated
 	$("#sendReminder").click(function(event){
 		if (($(this)).hasClass('disabled')) {
 			return;
