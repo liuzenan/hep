@@ -19,11 +19,6 @@ class Survey extends My_Controller
         $this->loadPage($data, 'survey_list');
     }
 
-    public function old() {
-        $this->loadPage(array(), 'survey');
-
-    }
-
     function authorise($survey_id) {
         $this->load->model('Survey_model', 'survey');
 
