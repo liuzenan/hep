@@ -24,12 +24,6 @@ body{
 	background: url(../img/brillant.png);
 }
 
-input[type="radio"]{
-	margin-right: 10px;
-	margin-left: 20px;
-	margin-top: -5px;
-}
-
 ul.survey-result>li{
 	list-style: none;
 }
@@ -613,6 +607,11 @@ margin-bottom: 10px;
 	height: 250px;
 	padding-left: 10px;
 	padding-right: 10px;
+}
+
+.survey-item {
+	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
 .progressChart {

@@ -9,6 +9,7 @@ jQuery(document).ready(function($) {
 		trigger: 'hover'
 	});
 
+	// deprecated
 	$("#sendReminder").click(function(event){
 		if (($(this)).hasClass('disabled')) {
 			return;
@@ -71,26 +72,7 @@ jQuery(document).ready(function($) {
 
 	$("#survey_form").submit(function(event){
 
-		var num_selected = $("input[type='radio']:checked").length;
-		var finished = true;
-		console.log(num_selected);
-
-		if (num_selected != 7) {
-			finished = false;
-		};
-
-		var texts = $("#survey_form>textarea");
-		$.each(texts, function(index, value){
-			console.log($(value).val());
-			if ($(value).val() == "") {
-				finished = false;
-			};
-		})
-
-		if (!finished) {
-			alert("please finish all questions, thanks!");
-			return false;
-		}
+		
 	});
 
 	$("#updateMail").click(function(event){

@@ -130,6 +130,7 @@ AND id=?";
         return $query->result();
     }
 
+    // deprecated
     function loadStudentDidntCompleteSurvey()
     {
         $sql = "SELECT email FROM user

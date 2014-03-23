@@ -83,6 +83,7 @@ class Sendmail extends Admin_Controller
         echo json_encode($msg);
     }
 
+    // deprecated
     public function sendReminder()
     {
         $title = $this->input->post("title");
