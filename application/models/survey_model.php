@@ -109,6 +109,7 @@ class Survey_model extends My_Model
             ->where('user.phantom', 0)
             ->where('user.email IS NOT NULL')
             ->where('usersurvey.survey_id', $survey_id)
+            ->where('completed', 1)
             ->get();
 
         $tallied = array();

@@ -13,7 +13,9 @@
 		<table class='table table-bordered'>
 		<thead><tr><th>Response</th><th style="width: 100px;">Frequency</th></tr></thead>
 		<tbody>
-			<?php if ($question['type'] == 'radio' || $question['type'] == 'checkbox'): ?>
+			<?php 
+				$answered = 0; 
+				if ($question['type'] == 'radio' || $question['type'] == 'checkbox'): ?>
 				<?php foreach (json_decode($question['content']) as $val => $text): ?>
 					<tr>
 						<td>
@@ -22,6 +24,7 @@
 						<td>
 							<?php 
 								$freq = isset($tallied[$question['id']][$val]) ? $tallied[$question['id']][$val] : 0;
+								$answered += $freq;
 								echo $freq; 
 							?>
 							&nbsp;(<?php echo round($freq / $completed * 100, 2); ?>%)
@@ -32,13 +35,28 @@
 				<?php foreach ($tallied[$question['id']] as $option => $freq): ?>
 					<tr>
 						<td>
-							<?php echo nl2br(htmlspecialchars($option)); ?> 
+							<?php $answered += $freq; echo nl2br(htmlspecialchars($option)); ?> 
 						</td>
 						<td>
 							<?php echo $freq; ?>&nbsp;(<?php echo round($freq / $completed * 100, 2); ?>%)
 						</td>
 					</tr>
 				<?php endforeach ?>
+			<?php endif ?>
+			<!-- skipped count -->
+			<?php if ($question['type'] != 'checkbox'): ?>
+			<tr>
+				<td>
+					Skipped
+				</td>
+				<td>
+					<?php 
+							$skipped = $completed < 0 ? 0 : $completed - $answered;
+							echo $skipped; 
+						?>
+						&nbsp;(<?php echo round($skipped / $completed * 100, 2); ?>%)
+				</td>
+			</tr>
 			<?php endif ?>
 		</tbody>
 		</table>
