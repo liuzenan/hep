@@ -22,6 +22,7 @@ class Surveyresult extends Admin_Controller
     public function incomplete($survey_id) {
         $this->load->model('Survey_model', 'survey');
         $data['students'] = $this->survey->incompleteStudents($survey_id);
+        $data['survey'] = $this->survey->loadSurvey($survey_id, -1)['survey']->row();
         $data['survey_id'] = $survey_id;
         $data['currentTab'] = 'incomplete';
         $this->loadPage($data);
