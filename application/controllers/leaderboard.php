@@ -89,17 +89,16 @@ AND date = ?";
     }
 
     public function lastweek() {
-        redirect(base_url() . "leaderboard/weekly");
         
-        // $data['currentTab'] = "lastweek";
-        // $me = $this->User_model->loadUser($this->uid);
-        // $data['my_house'] = $me->house_id;
+        $data['currentTab'] = "lastweek";
+        $me = $this->User_model->loadUser($this->uid);
+        $data['my_house'] = $me->house_id;
 
-        // $data['steps'] = $this->Challenge_model->getWeeklyLeaderboardbySteps(true);
+        $data['steps'] = $this->Challenge_model->getWeeklyLeaderboardbySteps(true);
         
-        // $data['sleep'] = $this->Challenge_model->getWeeklyLeaderboardbySleep(true);
+        $data['sleep'] = $this->Challenge_model->getWeeklyLeaderboardbySleep(true);
         
-        // $this->loadPage($data);
+        $this->loadPage($data);
     }
 
     private function loadPage($data)
