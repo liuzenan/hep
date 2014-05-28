@@ -456,7 +456,7 @@ class Subscriber extends CI_Controller
     }
 
     public function syncAll($cgroup) {
-        //ignore_user_abort(true);
+        ignore_user_abort(true);
         set_time_limit(0);
         // Start date
         if ($cgroup == 3) {
@@ -465,11 +465,11 @@ class Subscriber extends CI_Controller
             $date = '2014-01-16';
         }
         // End date
-        $end_date = '2014-01-17';
+        $end_date = '2014-04-28';
         while (strtotime($date) <= strtotime($end_date)) {
             $query = $this->db->query("SELECT user_id from target WHERE cgroup = ?", array($cgroup));
             foreach ($query->result() as $usr) {
-                $this->syncAgain($usr->user_id, $date, true);
+                $this->syncAgain($usr->user_id, $date);
             }
             $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
         }
