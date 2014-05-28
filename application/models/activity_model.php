@@ -618,4 +618,90 @@ LIMIT  1";
 
     }
 
+
+    function insert_intraday_activity_full($user_id, $date, $keypair)
+    {
+        // echo "insert intraday activity\n";
+        // var_dump($user_id);
+        // var_dump($date);
+        try {
+            if ($keypair) {
+                $this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
+                $calories = $this->fitbitphp->getIntradayTimeSeries("calories", $date);
+                $steps = $this->fitbitphp->getIntradayTimeSeries("steps", $date);
+                //$floors = $this->fitbitphp->getIntradayTimeSeries("floors", $date);
+                //$elevation = $this->fitbitphp->getIntradayTimeSeries("elevation", $date);
+
+                $intradayCalories = $calories->{'activities-calories-intraday'};
+                $intradaySteps = $steps->{'activities-steps-intraday'};
+                // $intradayFloors = $floors->{'activities-floors-intraday'};
+                // $intradayElevation = $elevation->{'activities-elevation-intraday'};
+                //var_dump($steps);
+                $intradayActivityData = array();
+
+                foreach ($intradaySteps->dataset->intradayData as $value) {
+                    $currentTime = (string)$value->time;
+                    $intradayActivityData[$currentTime]['steps'] = $value->value;
+
+                }
+
+                foreach ($intradayCalories->dataset->intradayData as $value) {
+                    $currentTime = (string)$value->time;
+                    if (!empty($intradayActivityData[$currentTime])) {
+                        # code...
+                        $intradayActivityData[$currentTime]['calories'] = $value->value;
+                        $intradayActivityData[$currentTime]['level'] = $value->level;
+                    }
+                }
+
+                // foreach ($intradayFloors->dataset->intradayData as $value) {
+                //     $currentTime = (string)$value->time;
+                //     if (!empty($intradayActivityData[$currentTime])) {
+                //         $intradayActivityData[$currentTime]['floors'] = $value->value;
+                //     }
+
+
+                // }
+
+                // foreach ($intradayElevation->dataset->intradayData as $value) {
+                //     $currentTime = (string)$value->time;
+                //     if (!empty($intradayActivityData[$currentTime])) {
+                //         $intradayActivityData[$currentTime]['elevation'] = $value->value;
+                //     }
+
+                // }
+                // var_dump($intradayActivityData);
+                $sql = "INSERT INTO intradayactivity_full(user_id, activity_time, steps, calories, calories_level, floors, elevation)
+                    VALUES ";
+                $not_first = false;
+                foreach ($intradayActivityData as $key => $value) {
+                    # code...
+
+                    if (empty($value['steps']) || empty($value['calories']) || empty($value['level'])) {
+                        # code...
+                    } else {
+                        if ($not_first) {
+                            $sql .= ', ';
+                        } else {
+                            $not_first = true;
+                        }
+                        $sql .= "(" . $user_id . ", '" . $date . " " . $key . "', " . $value['steps'] . ", " .
+                            $value['calories'] . ", " . $value['level'] . ", "
+                            . 0 . ", " . 0 . ")";
+                    }
+                }
+                $sql .=" ON DUPLICATE KEY UPDATE
+                        steps = VALUES(steps), calories = VALUES(calories), calories_level=VALUES(calories_level), floors=" . 0 . ",elevation=" . 0;
+
+                $this->db->query($sql);
+            } else {
+
+            }
+        } catch (Exception $e) {
+            throw $e;
+            
+        }
+    }
+
+
 }

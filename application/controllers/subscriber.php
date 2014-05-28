@@ -455,6 +455,46 @@ class Subscriber extends CI_Controller
         }
     }
 
+    public function syncAll($cgroup) {
+        //ignore_user_abort(true);
+        set_time_limit(0);
+        // Start date
+        if ($cgroup == 3) {
+            $date = '2014-03-04';
+        } else {
+            $date = '2014-01-16';
+        }
+        // End date
+        $end_date = '2014-01-17';
+        while (strtotime($date) <= strtotime($end_date)) {
+            $query = $this->db->query("SELECT user_id from target WHERE cgroup = ?", array($cgroup));
+            foreach ($query->result() as $usr) {
+                $this->syncAgain($usr->user_id, $date, true);
+            }
+            $date = date ("Y-m-d", strtotime("+1 day", strtotime($date)));
+        }
+        
+    }
+
+    public function syncAgain($user_id, $date, $debug = false) {
+        $keypair = $this->getUserKeyPair($user_id);
+        if ($keypair) {
+            try {
+
+                $this->load->model('Activity_model', 'activities');
+                $this->activities->insert_intraday_activity_full($user_id, $date, $keypair);
+                $sql = "insert into log (message, content) values ('success', ?)";
+                $this->db->query($sql, array($user_id."-" .$date));
+            } catch (Exception $e) {
+                if ($debug) {
+                    echo $e->getMessage();
+                }
+                $sql = "insert into log (message, content) values ('fail', ?)";
+                $this->db->query($sql, array($user_id."-" .$date));
+            }
+        }
+    }
+
     public function getFullDayActivities($user_id, $date)
     {
 
