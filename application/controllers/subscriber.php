@@ -659,7 +659,7 @@ class Subscriber extends CI_Controller
         return $notifications;
     }
 
-    function getUserInfo() {
+    public function getUserInfo() {
         $query = $this->db->query("SELECT id from user WHERE house_id > 0");
         foreach ($query->result() as $value) {
             $keypair = $this->getUserKeyPair($value->id);
