@@ -661,17 +661,24 @@ class Subscriber extends CI_Controller
 
     public function getUserInfo() {
         $query = $this->db->query("SELECT id from user WHERE house_id > 0");
+        ob_end_flush();
         foreach ($query->result() as $value) {
             $keypair = $this->getUserKeyPair($value->id);
             if ($keypair) {
+                ob_start();
                 try {
                     $this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
                     $profile = $this->fitbitphp->getProfile();
-                    echo $id.','.$profile->user->dateOfBirth.','.$profile->user->gender."\n";
-                catch(Exception $e) {
-                    echo $id . ' ' . $e;
+                    echo $value->id.','.$profile->user->dateOfBirth.','.$profile->user->gender."<br>";
+                } catch (Exception $e) {
+                    echo $value->id . ' ' . $e;
                 }
+            } else {
+                echo $value->id . ' no key';
             }
+            ob_flush();
+            flush();
+            ob_end_flush();
         }
     }
 }
