@@ -658,4 +658,20 @@ class Subscriber extends CI_Controller
         flush();
         return $notifications;
     }
+
+    function getUserInfo() {
+        $query = $this->db->query("SELECT id from user WHERE house_id > 0");
+        foreach ($query->result() as $value) {
+            $keypair = $this->getUserKeyPair($value->id);
+            if ($keypair) {
+                try {
+                    $this->fitbitphp->setOAuthDetails($keypair['token'], $keypair['secret']);
+                    $profile = $this->fitbitphp->getProfile();
+                    echo $id.','.$profile->user->dateOfBirth.','.$profile->user->gender."\n";
+                catch(Exception $e) {
+                    echo $id . ' ' . $e;
+                }
+            }
+        }
+    }
 }
