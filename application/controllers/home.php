@@ -101,17 +101,6 @@ class Home extends MY_Controller
         return $data;
     }
 
-    /*
-        public function email() {
-
-            $data = $this->loadData();
-            $str = $this->load->view('templates/header', $data, true);
-            $str .= $this->load->view('home', $data, true);
-            $str .= $this->load->view('templates/footer', true);
-            $this->Mail_model->send("hello", $str, "wangshasg@gmail.com");
-            echo $str;
-        }
-    */
     public function data()
     {
         echo "<pre>";
